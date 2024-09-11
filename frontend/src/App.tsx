@@ -1,10 +1,10 @@
 import React from 'react';
-import MainPage from './components/pages/MainPage';
+import { Survey } from './components/pages/Survey.tsx';
 
 const App: React.FC = () => {
   return (
     <>
-      <MainPage />
+      <Survey />
     </>
   );
 }
