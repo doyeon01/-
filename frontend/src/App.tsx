@@ -1,12 +1,12 @@
-import { useState } from 'react'
+import React from 'react';
+import MainPage from './components/pages/MainPage';
 
-function App() {
-
+const App: React.FC = () => {
   return (
     <>
-      메인페이지
+      <MainPage />
     </>
-  )
+  );
 }
 
-export default App
+export default App;
