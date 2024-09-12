@@ -50,3 +50,33 @@ tasks.named('asciidoctor') {
 	inputs.dir snippetsDir
 	dependsOn test
 }
+
+test {
+    outputs.dir snippetsDir
+    useJUnitPlatform()
+}
+
+asciidoctor {
+    inputs.dir snippetsDir // 스니펫 경로 설정
+    attributes 'snippets': snippetsDir // Asciidoctor가 스니펫 경로를 인식하도록 설정
+    sources {
+        include 'index.adoc'
+    }
+    outputDir = file('build/docs/asciidoc')
+}
+
+tasks.register("copyDocs", Copy) {
+    from('build/docs/asciidoc')
+    into('src/main/resources/static/docs')
+}
+
+tasks.named('asciidoctor').configure {
+    finalizedBy(tasks.named('copyDocs'))
+}
+
+bootJar {
+	dependsOn asciidoctor
+	from("${asciidoctor.outputDir}") {
+		into "static/docs"
+	}
+}

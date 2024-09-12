@@ -1,0 +1,8 @@
+= API Documentation
+
+== 동행 게시판 API
+
+include::{snippets}/get-article/http-request.adoc[]
+include::{snippets}/get-article/http-response.adoc[]
+include::{snippets}/get-article/path-parameters.adoc[]
+include::{snippets}/get-article/response-fields.adoc[]

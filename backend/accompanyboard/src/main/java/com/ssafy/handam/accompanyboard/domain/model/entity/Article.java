@@ -1,5 +1,8 @@
-package com.ssafy.handam.accompanyboard.domain.model;
+package com.ssafy.handam.accompanyboard.domain.model.entity;
 
+import lombok.Data;
+
+@Data
 public class Article {
 
     private Long id;
@@ -8,6 +11,8 @@ public class Article {
     private String title;
     private String description;
 
+    public Article() {}
+
     public Article(Long id, Long user_id, Long schedule_id, String title, String description) {
         this.id = id;
         this.user_id = user_id;
@@ -15,7 +20,4 @@ public class Article {
         this.title = title;
         this.description = description;
     }
-
-
-
 }
