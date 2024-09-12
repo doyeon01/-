@@ -4,7 +4,9 @@ import { Survey } from './components/pages/Survey.tsx';
 const App: React.FC = () => {
   return (
     <>
-      <Survey />
+      <div className='w-screen h-screen bg-[#F4F4EE]'>
+        <Survey />
+      </div>
     </>
   );
 }
