@@ -23,7 +23,7 @@ const App: React.FC = () => {
         </div> 
       */}
 
-      {location.pathname !== '/' && <Navbar className="fixed top-0 w-full" />}
+      {location.pathname !== '/' && location.pathname != '/survey' && <Navbar className="fixed top-0 w-full" />}
       <Routes>
         <Route path="/" element={<LandingPage />} />          
         <Route path="/survey" element={null} />
