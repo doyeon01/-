@@ -1,0 +1,13 @@
+= API Documentation
+
+== id로 사용자 정보 조회
+Header
+include::{snippets}/get-user-info/http-request.adoc[]
+Request
+
+include::{snippets}/get-user-info/path-parameters.adoc[]
+
+Response
+include::{snippets}/get-user-info/response-fields.adoc[]
+
+== 설문조사 결과 제출
