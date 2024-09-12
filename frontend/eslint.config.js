@@ -22,7 +22,17 @@ export default tseslint.config(
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
+        
       ],
+      "import/no-extraneous-dependencies": [
+      "error",
+      {
+        "devDependencies": [
+          "**/stories/**",
+        ],
+        "optionalDependencies": false
+      }
+    ]
     },
   },
 )
