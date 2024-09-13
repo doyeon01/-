@@ -1,6 +1,5 @@
 import React from 'react';
 import CarouselMain from '../organisms/Carousel/CarouselMain';
-import CardSetMainRecommend from '../molecules/Card/CardSetMainRec';
 import CardSetMainRec from '../molecules/Card/CardSetMainRec';
 import ButtonRefresh from '../atoms/button/ButtonRefresh';
 
