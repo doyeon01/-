@@ -1,3 +1,40 @@
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil1Thin.ttf') format('truetype');
+    font-weight: 100; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil2Light.ttf') format('truetype');
+    font-weight: 300; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil3Regular.ttf') format('truetype');
+    font-weight: 400; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil4Medium.ttf') format('truetype');
+    font-weight: 500; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil5Bold.ttf') format('truetype');
+    font-weight: 700; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'TheJamsil';
+    src: url('./assets/fonts/TheJamsil6ExtraBold.ttf') format('truetype');
+    font-weight: 800; 
+    font-style: normal;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

@@ -6,7 +6,11 @@ module.exports = {
 
   ],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily:{
+        TheJamsil: ['TheJamsil','snas-serif'],
+      }
+    },
   },
   plugins: [],
 }
