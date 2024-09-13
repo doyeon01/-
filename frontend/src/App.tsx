@@ -10,6 +10,7 @@ import { YourPage } from './components/pages/YourPage';
 import { ScheduleDetail } from './components/pages/ScheduleDetail'
 import { PocaPage } from './components/pages/PocaPage';
 import { Navbar } from './components/organisms/Navbar';
+import MainPage from './components/pages/MainPage';
 
 const App: React.FC = () => {
 
@@ -23,11 +24,11 @@ const App: React.FC = () => {
         </div> 
       */}
 
-      {location.pathname !== '/' && location.pathname != '/survey' && <Navbar className="fixed top-0 w-full" />}
+      {location.pathname !== '/' && location.pathname != '/survey' && <Navbar className="fixed top-0 w-full z-10" />}
       <Routes>
         <Route path="/" element={<LandingPage />} />          
         <Route path="/survey" element={null} />
-        <Route path="/main" element={null} />
+        <Route path="/main" element={<MainPage/>} />
         <Route path="/search" element={<SearchPage/>} />
         <Route path="/plan" element={<PlanPage/>} />
         <Route path="/companion" element={<CompanionPage/>} />
