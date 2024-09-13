@@ -5,12 +5,13 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor
 public class User {
 
     @Id
@@ -21,13 +22,24 @@ public class User {
     private String birth;
     private Gender gender;
     private String residence;
+    private String introduction;
+    private double accompanyTemperature;
 
-    public User() {}
 
-    public User(String username, String email, Gender gender, String residence) {
+    @Builder
+    public User(Long id, String username, String birth, Gender gender, String residence,
+                 String introduction, double accompanyTemperature) {
+        this.id = id;
         this.username = username;
         this.birth = birth;
         this.gender = gender;
         this.residence = residence;
+        this.introduction = introduction;
+        this.accompanyTemperature = accompanyTemperature;
     }
+
+
+
+
+
 }

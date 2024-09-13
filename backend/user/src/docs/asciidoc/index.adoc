@@ -1,13 +1,38 @@
 = API Documentation
 
-== id로 사용자 정보 조회
+== 설문조사 결과 제출
+
 Header
+
+include::{snippets}/post-survey/http-request.adoc[]
+
+
+include::{snippets}/post-survey/request-fields.adoc[]
+
+
+include::{snippets}/post-survey/response-fields.adoc[]
+
+== id로 사용자 정보 조회
+
+Header
+
 include::{snippets}/get-user-info/http-request.adoc[]
-Request
+
+Path Parameter
 
 include::{snippets}/get-user-info/path-parameters.adoc[]
 
-Response
 include::{snippets}/get-user-info/response-fields.adoc[]
 
-== 설문조사 결과 제출
+
+
+== keyword로 사람 검색
+
+Header
+include::{snippets}/get-user-search/http-request.adoc[]
+
+Query Parameter
+
+include::{snippets}/get-user-search/query-parameters.adoc[]
+
+include::{snippets}/get-user-search/response-fields.adoc[]

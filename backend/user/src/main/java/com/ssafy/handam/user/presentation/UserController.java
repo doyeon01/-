@@ -3,29 +3,46 @@ package com.ssafy.handam.user.presentation;
 import static com.ssafy.handam.user.application.common.ApiUtils.success;
 
 import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
-import com.ssafy.handam.user.domain.model.valueobject.response.UserInitSettingResponse;
-import com.ssafy.handam.user.presentation.request.UserInitSettingRequest;
+
+import com.ssafy.handam.user.domain.model.entity.User;
+import com.ssafy.handam.user.domain.model.valueobject.Gender;
+import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
+import com.ssafy.handam.user.domain.model.valueobject.response.UserListResponse;
+import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
+
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
-@RequestMapping("/api/user")
+@RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
 public class UserController {
 
-    @GetMapping("/users/{id}")
-    public ApiResult<UserInitSettingResponse> getUserInfo(@PathVariable("id") Long id) {
-        // 하드코딩된 요청 데이터를 사용하여 UserInitSettingRequest 생성
-        UserInitSettingRequest request = UserInitSettingRequest.defaultRequest();
-        request.setId(id);
+    @PostMapping("/{id}/survey")
+    public ApiResult<Void> submitUserSurvey(@PathVariable("id") Long id, @RequestBody UserSurveyRequest request) {
 
-        // 요청 데이터를 사용하여 응답 생성
-        UserInitSettingResponse response = UserInitSettingResponse.of(request.getId());
+        return success(null);
+    }
 
-        // 성공적인 응답 반환
+    @Valid
+    @GetMapping("/{id}")
+    public ApiResult<UserInfoResponse> getUserInfo(@NotNull @PathVariable("id") Long id) {
+        User user = User.builder()
+                .id(id)
+                .username("고도연")
+                .birth("2000.01.09")
+                .gender(Gender.FEMALE)
+                .residence("싸피")
+                .introduction("안녕하세요 개발자 입니다.")
+                .accompanyTemperature(36.5)
+                .build();
+        UserInfoResponse response = UserInfoResponse.of(user);
         return success(response);
     }
 }

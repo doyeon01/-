@@ -23,8 +23,8 @@ ext {
 }
 
 asciidoctor {
-    inputs.dir snippetsDir // 스니펫 경로 설정
-    attributes 'snippets': snippetsDir // Asciidoctor가 스니펫 경로를 인식하도록 설정
+    inputs.dir snippetsDir
+    attributes 'snippets': snippetsDir
     sources {
         include 'index.adoc'
     }
