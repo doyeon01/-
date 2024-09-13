@@ -5,7 +5,7 @@ import MainPage from './components/pages/MainPage.tsx';
 const App: React.FC = () => {
   return (
     <>
-      <div className='w-screen h-screen bg-[#F4F4EE]'>
+      <div className='w-full h-full bg-[#F4F4EE]'>
         <MainPage />
       </div>
     </>
