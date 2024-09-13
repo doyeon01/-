@@ -98,5 +98,31 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             )
                     ));
         }
+        @Test
+        @DisplayName("keyword로 사람 검색")
+        void searchUsers() throws Exception {
 
+            mockMvc.perform(get("/api/v1/user/search")
+                            .param("keyword", "도연")  // 쿼리 파라미터로 keyword 전달
+                            .contentType(MediaType.APPLICATION_JSON))
+                    .andExpect(status().isOk())
+                    .andDo(print())
+                    .andDo(document("get-user-search",
+                            // 쿼리 파라미터를 명시
+                            queryParameters(
+                                    parameterWithName("keyword").description("검색할 사용자 이름의 키워드")
+                            ),
+                            // 응답 필드 문서화
+                            responseFields(
+                                    fieldWithPath("success").description("응답의 성공 여부 (true 또는 false)"),
+                                    fieldWithPath("response[].username").description("사용자의 이름"),
+                                    fieldWithPath("response[].birth").description("사용자의 생년월일"),
+                                    fieldWithPath("response[].gender").description("사용자의 성별 ENUM타입:(F 또는 M))"),
+                                    fieldWithPath("response[].residence").description("사용자의 거주지"),
+                                    fieldWithPath("response[].introduction").description("사용자의 자기소개"),
+                                    fieldWithPath("response[].accompanyTemperature").description("동행온도"),
+                                    fieldWithPath("error").description("오류 정보 (있다면, null일 수 있음)")
+                            )
+                    ));
+        }
     }
