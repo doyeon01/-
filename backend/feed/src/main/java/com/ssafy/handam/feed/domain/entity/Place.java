@@ -4,6 +4,8 @@ import com.ssafy.handam.feed.domain.PlaceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -16,6 +18,7 @@ import lombok.NoArgsConstructor;
 public class Place extends BaseEntity {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     private String name;
