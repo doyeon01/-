@@ -34,7 +34,23 @@
     font-weight: 800; 
     font-style: normal;
 }
+@font-face {
+    font-family: 'Arita';
+    src: url('./assets/fonts/Arita_Medium.ttf') format('truetype');
+    font-weight: 500; 
+    font-style: normal;
+}
+@font-face {
+    font-family: 'Arita';
+    src: url('./assets/fonts/Arita_SemiBold.ttf') format('truetype');
+    font-weight: 600; 
+    font-style: normal;
+}
 
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+
+  
