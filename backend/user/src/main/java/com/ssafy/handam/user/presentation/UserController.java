@@ -1,21 +1,16 @@
 package com.ssafy.handam.user.presentation;
 
 import static com.ssafy.handam.user.application.common.ApiUtils.success;
-
 import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
-
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.Gender;
 import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.model.valueobject.response.UserListResponse;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
-
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,7 +20,7 @@ import java.util.List;
 public class UserController {
 
     @PostMapping("/{id}/survey")
-    public ApiResult<Void> submitUserSurvey(@PathVariable("id") Long id, @RequestBody UserSurveyRequest request) {
+    public ApiResult<Void> submitUserSurvey(@AuthenticationPrincipal JwtAuthentication User, @RequestBody UserSurveyRequest request) {
 
         return success(null);
     }
@@ -70,5 +65,10 @@ public class UserController {
 
         List<UserInfoResponse> response = UserListResponse.of(users);
         return success(response);
+    }
+    @PostMapping("/toggle-follow")
+    public ApiResult<Void> toggleFollow(@RequestParam Long userId) {
+
+        return success(null);
     }
 }
