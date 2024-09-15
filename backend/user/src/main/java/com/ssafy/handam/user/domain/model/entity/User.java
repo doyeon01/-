@@ -8,6 +8,7 @@ import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -18,8 +19,8 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String birth;
+    private String nickname;
+    private LocalDate birth;
     private Gender gender;
     private String residence;
     private String introduction;
@@ -27,10 +28,9 @@ public class User {
 
 
     @Builder
-    public User(Long id, String username, String birth, Gender gender, String residence,
+    private User(Long id, String nickname, LocalDate birth, Gender gender, String residence,
                  String introduction, double accompanyTemperature) {
-        this.id = id;
-        this.username = username;
+        this.nickname = nickname;
         this.birth = birth;
         this.gender = gender;
         this.residence = residence;
