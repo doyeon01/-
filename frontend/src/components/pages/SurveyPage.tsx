@@ -2,13 +2,16 @@ import React, {useState} from 'react'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
+import IMG_STEP01 from '../../assets/statics/survey_step01.png'
 import VID_start from '../../assets/statics/survey_strart.mp4'
 
-
+import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
+import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
+  const [Gender,setGender] = useState('')
 
   const handlePageNum =()=>{
     setPageNum(PageNum=>PageNum+1)
@@ -18,13 +21,19 @@ export const SurveyPage: React.FC = () => {
     setIsHide(IsHide=>!IsHide)
   }
 
+  const handleGender = (e:React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setGender(value);
+    console.log('Current Gender:', value);
+  };
+
   return (
     <>
       <div data-label='배경이미지[수정필요]'
       style={{ backgroundImage: `url(${IMG_BG})` }}
       className='w-full h-screen bg-contain bg-no-repeat bg-center relative'>
         <div data-label='MBTI레이아웃'
-        className='bg-white w-[452px] max-h-full h-[975px] fixed right-1/4 rounded-[15px] top-1/2 transform -translate-y-1/2 overflow-hidden'>
+        className='bg-white w-[452px] max-h-full h-[975px] fixed right-1/4 rounded-[15px] top-1/2 transform -translate-y-1/2 overflow-hidden leading-tight'>
           {PageNum === 0 && (
             //시작페이지
             <>
@@ -39,30 +48,41 @@ export const SurveyPage: React.FC = () => {
                   </button>
                 </>
               ):(
+                //정보입력페이지
                 <>
+                  <div className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
+                    {PageNum+1}/11
+                  </div>
+                  <div className='right-[10px] top-[11px] absolute'>
+                  <ButtonNext OnChange={handlePageNum}/>
+                  </div>
+                  <span className='block mt-[137px] mb-[47px] text-[30px] whitespace-nowrap text-center'>여행을 떠나기 전에 <br/>간단한 소개를 부탁드려요</span>
                   <div className='gap-6 mb-6 flex flex-col items-center'>
-                    <textarea id='nickname' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='닉네임'/>
-                    <textarea id='birth' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='생년월일'/>
-                    <div className='flex justify-center items-center gap-[10px]'>
-                      <label htmlFor='gender1' className='w-[175px] h-[88px] rounded-[20px] bg-white flex flex-row justify-center items-center cursor-pointer'>
-                        <input type='radio' id='gender1' className='hidden' value='MALE'/>
-                        <span>옵1</span>
-                      </label>
-                      <label htmlFor='gender2' className='w-[175px] h-[88px] rounded-[20px] bg-white flex flex-row justify-center items-center cursor-pointer'>
-                        <input type='radio' id='gender2' className='hidden' value='FEMALE'/>
-                        <span>옵2</span>
-                      </label>
-                    </div>
+                    <input type='text' id='nickname' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='닉네임'/>
+                    <input type='text' id='birth' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='생년월일'/>
+                    <GenderSelector Gender={Gender} OnGenderChange={handleGender}/>
                     <textarea id='address' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='거주지'/>
                     <textarea id='introduce' className='w-[360px] h-[176px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='자기소개'/>
                   </div>
                 </>
               )}
-              
             </>
           )}
           {PageNum === 1 &&(
-            //인적사항
+            //설문페이지_STEP1
+            <>
+            <img src={IMG_STEP01} alt="" />
+              <div className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
+                {PageNum+1}/11
+              </div>
+            </>
+          )}
+          {PageNum === 2 &&(
+            <>
+            
+            </>
+          )}
+          {PageNum === 3 &&(
             <>
             
             </>
