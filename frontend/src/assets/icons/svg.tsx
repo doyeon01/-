@@ -25,7 +25,7 @@ export function UserIcon(): JSX.Element {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="w-[150px] h-[150px] text-[#424242]"  
+      className="w-[150px] h-[150px] text-[#645E59]"  
     >
       <path
         fillRule="evenodd"

@@ -49,9 +49,9 @@
 
 
 html, body {
-    @apply bg-gray-100;
+    background-color: #F4F4EE;
     min-height: 100vh;
-  }
+}
 
   
 @tailwind base;

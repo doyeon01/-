@@ -17,9 +17,9 @@ export const PersonalInfo = () => {
           </div>
           <div className="text-base text-gray-500 pt-4 font-semibold">자기소개</div>
           <div className="mt-4">
-            <span className="text-gray-500 text-base font-light mr-1">동행온도 </span><span className="font-bold mr-6">36.5</span>
-            <span className="text-gray-500 text-base font-light mr-1">팔로워 </span><span className="font-bold mr-6">200</span>
-            <span className="text-gray-500 text-base font-light mr-1">팔로잉 </span><span className="font-bold mr-6">200</span>
+            <span className="text-base font-light mr-1">동행온도 </span><span className="font-bold mr-6">36.5</span>
+            <span className="text-base font-light mr-1">팔로워 </span><span className="font-bold mr-6">200</span>
+            <span className="text-base font-light mr-1">팔로잉 </span><span className="font-bold mr-6">200</span>
           </div>
         </div>
       </div>
