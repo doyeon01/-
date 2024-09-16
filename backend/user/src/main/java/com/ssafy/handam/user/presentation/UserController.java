@@ -34,4 +34,30 @@ public class UserController {
         UserInfoResponse response = UserInfoResponse.of(user);
         return success(response);
     }
+
+    @GetMapping("/search")
+    public ApiResult<List<UserInfoResponse>> searchUsers(@RequestParam("keyword") String keyword) {
+        List<User> users = new ArrayList<>();
+        users.add(User.builder()
+                .username("고도연")
+                .birth("2000.01.09")
+                .gender(Gender.FEMALE)
+                .residence("싸피")
+                .introduction("안녕하세요 개발자 입니다.")
+                .accompanyTemperature(36.5)
+                .build());
+
+        users.add(User.builder()
+                .username("김도연")
+                .birth("1998.02.12")
+                .gender(Gender.MALE)
+                .residence("서울")
+                .introduction("안녕하세요 개 입니다.")
+                .accompanyTemperature(36.5)
+                .build());
+
+
+        List<UserInfoResponse> response = UserListResponse.of(users);
+        return success(response);
+    }
 }
