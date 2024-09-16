@@ -1,7 +1,11 @@
 import React from 'react'
+import { PersonalDetailTab } from '../Tab/PersonalDetailTab'
 
 export const PersonalDetail = () => {
   return (
-    <div>PersonalDetail</div>
+    <div>
+      <PersonalDetailTab/>
+
+    </div>
   )
 }

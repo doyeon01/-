@@ -4,7 +4,6 @@ import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
 
 export const PersonalInfo = () => {
   return (
-    <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-40 mb-20">
       <div className='flex justify-center pb-8'>
         <div className='flex justify-center pt-14 gap-8'>
           <UserIcon />
@@ -25,6 +24,5 @@ export const PersonalInfo = () => {
           </div>
         </div>
       </div>
-    </div>
   );
 };
