@@ -24,4 +24,7 @@ public class AccompanyBoardController {
 
         return success(response);
     }
+
+//    @GetMapping("/articles")
+//    public ApiResult<>
 }
