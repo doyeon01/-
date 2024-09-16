@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
 import IMG_STEP01 from '../../assets/statics/survey_step01.png'
+import IMG_STEP02 from '../../assets/statics/survey_step02.png'
 import VID_start from '../../assets/statics/survey_strart.mp4'
 
 import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
@@ -12,6 +13,7 @@ export const SurveyPage: React.FC = () => {
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
   const [Gender,setGender] = useState('')
+  const [MBTI,setMBTI] = useState('')
 
   const handlePageNum =()=>{
     setPageNum(PageNum=>PageNum+1)
@@ -24,8 +26,15 @@ export const SurveyPage: React.FC = () => {
   const handleGender = (e:React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setGender(value);
-    console.log('Current Gender:', value);
+    console.log('Current Gender : ', value);
   };
+
+  const handleMBTI = (e:React.MouseEvent<HTMLButtonElement>)=> {
+    const value = MBTI + e.currentTarget.value
+    setMBTI(value)
+    setPageNum(PageNum=>PageNum+1)
+    console.log('Current MBTI : ', value)
+  }
 
   return (
     <>
@@ -72,14 +81,47 @@ export const SurveyPage: React.FC = () => {
             //설문페이지_STEP1
             <>
             <img src={IMG_STEP01} alt="" />
-              <div className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
+              <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
                 {PageNum+1}/11
-              </div>
+              </span>
+              <span className='text-[20px] top-[136px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
+                좋은 아침이에요!<br/>
+                창밖을 바라보니 풍경이 너무 좋네요!<br/>
+                밖이 어떤 풍경인가요?
+              </span>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[254px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI} value={'N'}>
+                <span className='text-white font-medium text-[20px]'>
+                나무가 우거진 숲
+                </span>
+              </button>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[404px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI} value={'C'}>
+                <span className='text-white font-medium text-[20px]'>
+                세련미가 넘치는 도시
+                </span>
+              </button>
             </>
           )}
           {PageNum === 2 &&(
+            //설문페이지_STEP2
             <>
-            
+            <img src={IMG_STEP02} alt="" />
+              <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
+                {PageNum+1}/11
+              </span>
+              <span className='text-[20px] top-[136px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
+                출근하는 길에<br/>
+                문득 예쁜 풍경을 발견한 당신은
+              </span>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[254px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI} value={'K'}>
+                <span className='text-white font-medium text-[20px]'>
+                당장 핸드폰을 들어 사진을 찍는다.
+                </span>
+              </button>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[404px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI} value={'U'}>
+                <span className='text-white font-medium text-[20px]'>
+                잠시 눈에 담은 뒤 시선을 거둔다.
+                </span>
+              </button>
             </>
           )}
           {PageNum === 3 &&(
