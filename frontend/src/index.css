@@ -47,6 +47,13 @@
     font-style: normal;
 }
 
+
+html, body {
+    @apply bg-gray-100;
+    min-height: 100vh;
+  }
+
+  
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
