@@ -1,5 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
+import { SurveyPage } from './components/pages/SurveyPage';
 import { LandingPage } from './components/pages/LandingPage';
 import { SearchPage } from './components/pages/SearchPage';
 import { PlanPage } from './components/pages/PlanPage';
@@ -16,21 +17,21 @@ const App: React.FC = () => {
 
   return (
     <>
-      {location.pathname !== '/' && location.pathname !== '/survey' && (
-        <Navbar className="fixed top-0 w-full z-50" />
-      )}
+      <div className='w-full h-full bg-[#F4F4EE] font-TheJamsil'>
+      {location.pathname !== '/' && location.pathname != '/survey' && <Navbar className="fixed top-0 w-full" />}
       <Routes>
-        <Route path="/" element={<LandingPage />} />
-        <Route path="/survey" element={null} />
-        <Route path="/main" element={<MainPage />} />
-        <Route path="/search" element={<SearchPage />} />
-        <Route path="/plan" element={<PlanPage />} />
-        <Route path="/companion" element={<CompanionPage />} />
-        <Route path="/my" element={<MyPage />} />
-        <Route path="/your" element={<YourPage />} />
-        <Route path="/schedule" element={<ScheduleDetail />} />
-        <Route path="/poca" element={<PocaPage />} />
+        <Route path="/" element={<LandingPage />} />          
+        <Route path="/survey" element={<SurveyPage/>} />
+        <Route path="/main" element={<MainPage/>} />
+        <Route path="/search" element={<SearchPage/>} />
+        <Route path="/plan" element={<PlanPage/>} />
+        <Route path="/companion" element={<CompanionPage/>} />
+        <Route path="/my" element={<MyPage/>} /> 
+        <Route path="/your" element={<YourPage/>} /> 
+        <Route path="/schedule" element={<ScheduleDetail/>} /> 
+        <Route path="/poca" element={<PocaPage/>} /> 
       </Routes>
+      </div> 
     </>
   );
 };
