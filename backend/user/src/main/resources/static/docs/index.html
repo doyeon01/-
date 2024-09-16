@@ -453,11 +453,11 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">POST /api/v1/user/1/survey HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Content-Length: 107
+Content-Type: application/json
+Content-Length: 123
 Host: localhost:8080
 
-{"questions":{"1":"A","2":"B","3":"A","4":"B"},"photoSelections":{"1":[101],"2":[102],"3":[103],"4":[104]}}</code></pre>
+{"questions":{"1":"A","2":"B","3":"A","4":"B"},"photoSelections":{"1":[101,102],"2":[103,104],"3":[105,106],"4":[107,108]}}</code></pre>
 </div>
 </div>
 <div class="sect4">
@@ -574,12 +574,12 @@ Host: localhost:8080
 <div class="listingblock">
 <div class="content">
 <pre class="highlight nowrap"><code class="language-http" data-lang="http">GET /api/v1/user/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
+Content-Type: application/json
 Host: localhost:8080</code></pre>
 </div>
 </div>
 <div class="paragraph">
-<p>Parameter</p>
+<p>Path Parameter</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <caption class="title">Table 1. /api/v1/user/{id}</caption>
@@ -627,7 +627,12 @@ Host: localhost:8080</code></pre>
 <td class="tableblock halign-left valign-top"><p class="tableblock">응답 객체</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.username</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.id</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Null</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 id</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.nickname</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 이름</p></td>
 </tr>
@@ -639,7 +644,7 @@ Host: localhost:8080</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.gender</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 성별 ENUM타입: [MALE, FEMALE]</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">사용자의 성별 ENUM타입:(F 또는 M))</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.residence</code></p></td>
@@ -670,7 +675,7 @@ Host: localhost:8080</code></pre>
 <h2 id="_keyword로_사람_검색">keyword로 사람 검색</h2>
 <div class="sectionbody">
 <div class="paragraph">
-<p>Parameter</p>
+<p>Header</p>
 </div>
 <div class="listingblock">
 <div class="content">
@@ -678,6 +683,9 @@ Host: localhost:8080</code></pre>
 Content-Type: application/json;charset=UTF-8
 Host: localhost:8080</code></pre>
 </div>
+</div>
+<div class="paragraph">
+<p>Query Parameter</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
@@ -762,7 +770,7 @@ Host: localhost:8080</code></pre>
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-09-13 17:55:58 +0900
+Last updated 2024-09-13 18:01:31 +0900
 </div>
 </div>
 </body>

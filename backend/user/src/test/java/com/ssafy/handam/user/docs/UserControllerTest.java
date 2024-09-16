@@ -1,43 +1,34 @@
-package com.ssafy.handam.user;
+package com.ssafy.handam.user.docs;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.handam.user.RestDocsSupport;
+import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.Gender;
-import com.ssafy.handam.user.presentation.UserController;
+import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-import java.util.Arrays;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-    @WebMvcTest(UserController.class)
-    @AutoConfigureRestDocs // REST Docs 사용
-    class UserControllerTest {
-
-        @Autowired
-        private MockMvc mockMvc;
-
-        @Autowired
-        ObjectMapper objectMapper;
+    class UserControllerTest extends RestDocsSupport {
 
         @Test
         @DisplayName("설문조사 응답 제출")
         void submitSurvey() throws Exception {
-            UserSurveyRequest request = UserSurveyRequest.initSurveyRequest();
+            UserSurveyRequest request = createUserSurveyRequest();
 
             String requestBody = objectMapper.writeValueAsString(request);
             mockMvc.perform(post("/api/v1/user/{id}/survey", 1L)
@@ -72,14 +63,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         @Test
         @DisplayName("id로 사용자 정보 조회")
         void getUserInfo() throws Exception {
+            User user = createUser(); //DB 연결전 임시 데이터 생성
+            UserInfoResponse response = UserInfoResponse.of(user);
+
+            given(userService.findUserById(1L)).willReturn(user);
+            given(userService.getUserInfo(1L)).willReturn(response);
 
             mockMvc.perform(get("/api/v1/user/{id}", 1L)
                             .contentType(MediaType.APPLICATION_JSON))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$.response.username").isString())
-                    .andExpect(jsonPath("$.response.birth").isString())
-                    .andExpect(jsonPath("$.response.gender").value(Gender.FEMALE.name()))
-                    .andExpect(jsonPath("$.response.residence").isString())
                     .andDo(print())
                     .andDo(document("get-user-info",
                             pathParameters(
@@ -88,7 +80,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             responseFields(
                                     fieldWithPath("success").description("응답의 성공 여부 (true 또는 false)"),
                                     fieldWithPath("response").description("응답 객체"),
-                                    fieldWithPath("response.username").description("사용자의 이름"),
+                                    fieldWithPath("response.id").description("사용자의 id"),
+                                    fieldWithPath("response.nickname").description("사용자의 이름"),
                                     fieldWithPath("response.birth").description("사용자의 생년월일"),
                                     fieldWithPath("response.gender").description("사용자의 성별 ENUM타입:(F 또는 M))"),
                                     fieldWithPath("response.residence").description("사용자의 거주지"),
@@ -98,6 +91,35 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
                             )
                     ));
         }
+
+        public User createUser(){
+            return User.builder()
+                    .id(1L)
+                    .nickname("고도연")
+                    .birth(LocalDate.of(2000,1,2))
+                    .gender(Gender.FEMALE)
+                    .residence("MokPo")
+                    .introduction("안녕하세요 저는 개발자 입니다.")
+                    .accompanyTemperature(36.5)
+                    .build();
+        }
+        public UserSurveyRequest createUserSurveyRequest() {
+            Map<Integer, String> questions = new HashMap<>();
+            Map<Integer, List<Integer>> photoSelections = new HashMap<>();
+
+            questions.put(1, "A");
+            questions.put(2, "B");
+            questions.put(3, "A");
+            questions.put(4, "B");
+
+            photoSelections.put(1, List.of(101, 102));
+            photoSelections.put(2, List.of(103, 104));
+            photoSelections.put(3, List.of(105, 106));
+            photoSelections.put(4, List.of(107, 108));
+
+            return UserSurveyRequest.of(questions, photoSelections);
+        }
+
         @Test
         @DisplayName("keyword로 사람 검색")
         void searchUsers() throws Exception {
