@@ -1,0 +1,11 @@
+[[place-detail]]
+=== Place Detail
+
+==== HTTP Request
+
+include::{snippets}/place-detail/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/place-detail/http-response.adoc[]
+include::{snippets}/place-detail/response-fields.adoc[]

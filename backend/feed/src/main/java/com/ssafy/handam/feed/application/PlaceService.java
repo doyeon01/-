@@ -1,6 +1,5 @@
 package com.ssafy.handam.feed.application;
 
-import com.ssafy.handam.feed.application.dto.PlaceDetailServiceRequest;
 import com.ssafy.handam.feed.common.error.place.PlaceNotFoundException;
 import com.ssafy.handam.feed.domain.entity.Place;
 import com.ssafy.handam.feed.domain.repository.PlaceRepository;

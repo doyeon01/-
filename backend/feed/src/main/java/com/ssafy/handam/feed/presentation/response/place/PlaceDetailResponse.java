@@ -10,7 +10,8 @@ public record PlaceDetailResponse(Long id,
                                   String imageUrl,
                                   Double longitude,
                                   Double latitude,
-                                  PlaceType placeType) {
+                                  PlaceType placeType,
+                                  int likeCount) {
 
     public static PlaceDetailResponse of(Place place) {
         return new PlaceDetailResponse(place.getId(),
@@ -20,6 +21,9 @@ public record PlaceDetailResponse(Long id,
                 place.getImageUrl(),
                 place.getLongitude(),
                 place.getLatitude(),
-                place.getPlaceType());
+                place.getPlaceType(),
+                place.getLikeCount())
+                ;
+
     }
 }
