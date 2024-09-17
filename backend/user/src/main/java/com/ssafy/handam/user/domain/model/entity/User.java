@@ -1,13 +1,12 @@
 package com.ssafy.handam.user.domain.model.entity;
 
 import com.ssafy.handam.user.domain.model.valueobject.Gender;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -18,19 +17,24 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String username;
-    private String birth;
+    private String nickname;
+    private LocalDate birth;
     private Gender gender;
     private String residence;
     private String introduction;
     private double accompanyTemperature;
 
+    @OneToMany(mappedBy = "follower")
+    private Set<Follow> following;
+
+    @OneToMany(mappedBy = "following")
+    private Set<Follow> followers;
+
 
     @Builder
-    public User(Long id, String username, String birth, Gender gender, String residence,
+    private User(String nickname, LocalDate birth, Gender gender, String residence,
                  String introduction, double accompanyTemperature) {
-        this.id = id;
-        this.username = username;
+        this.nickname = nickname;
         this.birth = birth;
         this.gender = gender;
         this.residence = residence;
@@ -38,8 +42,8 @@ public class User {
         this.accompanyTemperature = accompanyTemperature;
     }
 
-
-
-
+    public void setId(Long id) {
+        this.id = id;
+    }
 
 }

@@ -25,6 +25,7 @@ ext {
 asciidoctor {
     inputs.dir snippetsDir
     attributes 'snippets': snippetsDir
+    attributes 'encoding': 'UTF-8'
     sources {
         include 'index.adoc'
     }

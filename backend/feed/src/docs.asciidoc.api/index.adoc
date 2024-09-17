@@ -1,0 +1,16 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+endif::snippets[]
+
+= 여행한담 Rest API 문서
+[[place-detail]]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 장소 상세 정보 API
+
+include::place-detail.adoc[]
