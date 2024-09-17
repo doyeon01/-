@@ -9,7 +9,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.handam.feed.RestDocsSupport;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
-import com.ssafy.handam.feed.presentation.response.feed.BestFeedsForUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
+import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,11 @@ class FeedControllerDocsTest extends RestDocsSupport {
 
     @DisplayName("사용자 맞춤형 Best 피드 조회 API")
     @Test
-    void getBestFeedsForUser() throws Exception {
+    void getRecommendedFeedsForUser() throws Exception {
         // Mock 응답 생성
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "image-url", 1L, 10);
 
-        BestFeedsForUserResponse response = BestFeedsForUserResponse.of(List.of(feedPreviewDto));
+        RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
 
         // Mock 서비스 호출 설정
         given(feedService.getBestFeedsForUser(any())).willReturn(response);
@@ -40,13 +41,13 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 """;
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/feeds/user/best-feeds")
+                        MockMvcRequestBuilders.post("/api/v1/feeds/user/recommended")
                                 .content(requestBody)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                 )
                 .andExpect(status().isOk())
-                .andDo(document("best-feeds-for-user",
+                .andDo(document("recommended-feeds-for-user",
                         preprocessRequest(prettyPrint()),  // 요청 본문 정
                         preprocessResponse(prettyPrint()),
                         requestFields(
@@ -56,16 +57,84 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
-                                fieldWithPath("response.feedsBest[].id").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feedsBest[].userId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("response.feedsBest[].imageUrl").type(JsonFieldType.STRING)
+                                fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
                                         .description("피드 이미지 URL"),
-                                fieldWithPath("response.feedsBest[].likeCount").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
     }
+
+    @DisplayName("필터링된 피드 조회 API")
+    @Test
+    void getFeedsByFilters() throws Exception {
+
+        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "image-url", 1L, 10);
+        FeedsByFiltersResponse response = FeedsByFiltersResponse.of(List.of(feedPreviewDto));
+
+        given(feedService.getFeedsByFilters(any())).willReturn(response);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/feeds/filter")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content("""
+                                            {
+                                                "placeType": "CAFE",
+                                                "ageRange": 20,
+                                                "gender": "M",
+                                                "latitude": 37.7749,
+                                                "longitude": 122.4194,
+                                                "keyword": "coffee",
+                                                "sortBy": ["likeCount", "distance"],
+                                                "page": 0,
+                                                "size": 10
+                                            }
+                                        """)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-feeds-by-filter",
+                        preprocessRequest(prettyPrint()),  // 요청 본문을 보기 좋게 출력
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("placeType").type(JsonFieldType.STRING).optional()
+                                        .description(
+                                                "장소 타입 (CAFE, RESTAURANT, ACCOMMODATION, TOURIST_ATTRACTION, ETC 또는 null 가능)"),
+                                fieldWithPath("ageRange").type(JsonFieldType.NUMBER).optional()
+                                        .description("연령대 (10, 20, 30, ... 100 또는 null 가능)"),
+                                fieldWithPath("gender").type(JsonFieldType.STRING).optional()
+                                        .description("성별 (MALE, FEMALE 또는 null 가능)"),
+                                fieldWithPath("latitude").type(JsonFieldType.NUMBER).optional()
+                                        .description("위도 (null 가능)"),
+                                fieldWithPath("longitude").type(JsonFieldType.NUMBER).optional()
+                                        .description("경도 (null 가능)"),
+                                fieldWithPath("keyword").type(JsonFieldType.STRING).optional()
+                                        .description("검색어 (null 가능)"),
+                                fieldWithPath("sortBy").type(JsonFieldType.ARRAY).optional()
+                                        .description("정렬 기준 (likeCount , distance 는 위도 경도 있을 때"),
+                                fieldWithPath("page").type(JsonFieldType.NUMBER)
+                                        .description("페이지 번호 (0부터 시작)"),
+                                fieldWithPath("size").type(JsonFieldType.NUMBER)
+                                        .description("페이지 당 항목 수")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 좋아요 수"),
+                                fieldWithPath("error").description("에러 메시지 (성공 시 null)")
+                        )
+                ));
+    }
 }
+
