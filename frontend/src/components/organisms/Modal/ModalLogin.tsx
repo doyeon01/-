@@ -1,5 +1,5 @@
 import React from 'react';
-import CloseIcon from '../../../assets/icons/svg';
+import {CloseIcon} from '../../../assets/icons/svg';
 import logo from './../../../assets/statics/logo.png';
 import google from './../../../assets/statics/google.png'
 import naver from './../../../assets/statics/naver.png'

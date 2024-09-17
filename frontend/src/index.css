@@ -47,6 +47,13 @@
     font-style: normal;
 }
 
+
+html, body {
+    background-color: #F4F4EE;
+    min-height: 100vh;
+}
+
+  
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
