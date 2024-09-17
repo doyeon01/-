@@ -34,7 +34,7 @@ class AccompanyboardApplicationTest {
 	@DisplayName("id로 동행 게시글 상세 조회")
 	void getArticle() throws Exception {
 
-		mockMvc.perform(get("/api/accompanyboard/articles/{id}", 1L)
+		mockMvc.perform(get("/api/v1/accompanyboard/articles/{id}", 1L)
 						.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.response.id").isNumber())
@@ -57,6 +57,30 @@ class AccompanyboardApplicationTest {
 								fieldWithPath("response.schedule_id").description("여행일정 ID"),
 								fieldWithPath("response.title").description("제목"),
 								fieldWithPath("response.description").description("설명"),
+								fieldWithPath("error").description("오류 정보 (있다면, null일 수 있음)")
+						)
+				));
+	}
+
+	@Test
+	@DisplayName("모든 동행 게시글 조회")
+	void getArticles() throws Exception {
+
+		mockMvc.perform(get("/api/v1/accompanyboard/articles")
+						.contentType(MediaType.APPLICATION_JSON))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("get-articles",
+						getDocumentRequest(),
+						getDocumentResponse(),
+						responseFields(
+								fieldWithPath("success").description("응답의 성공 여부 (true 또는 false"),
+								fieldWithPath("response[]").description("응답 객체"),
+								fieldWithPath("response[].id").description("동행게시글 ID"),
+								fieldWithPath("response[].user_id").description("유저 ID"),
+								fieldWithPath("response[].schedule_id").description("여행일정 ID"),
+								fieldWithPath("response[].title").description("제목"),
+								fieldWithPath("response[].description").description("설명"),
 								fieldWithPath("error").description("오류 정보 (있다면, null일 수 있음)")
 						)
 				));

@@ -1,16 +1,20 @@
 package com.ssafy.handam.accompanyboard.domain.model.entity;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
 import lombok.Builder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+@Entity
 @Getter
 @Setter
 @NoArgsConstructor
 public class Article extends BaseEntity{
 
+    @Id
     private Long id;
     private Long user_id;
     private Long schedule_id;

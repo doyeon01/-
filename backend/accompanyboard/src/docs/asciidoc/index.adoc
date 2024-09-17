@@ -6,3 +6,7 @@ include::{snippets}/get-article/http-request.adoc[]
 include::{snippets}/get-article/http-response.adoc[]
 include::{snippets}/get-article/path-parameters.adoc[]
 include::{snippets}/get-article/response-fields.adoc[]
+
+include::{snippets}/get-articles/http-request.adoc[]
+include::{snippets}/get-articles/http-response.adoc[]
+include::{snippets}/get-articles/response-fields.adoc[]
