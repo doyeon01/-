@@ -1,0 +1,12 @@
+[[feeds-by-filter]]
+=== 필터 기반 피드 조회
+
+==== HTTP Request
+
+include::{snippets}/get-feeds-by-filter/http-request.adoc[]
+include::{snippets}/get-feeds-by-filter/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-feeds-by-filter/http-response.adoc[]
+include::{snippets}/get-feeds-by-filter/response-fields.adoc[]

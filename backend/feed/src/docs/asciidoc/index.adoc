@@ -18,4 +18,5 @@ include::api/place/place-detail.adoc[]
 
 == 피드 API
 
-include::api/feed/best-feeds-for-user.adoc[]
+include::api/feed/recommended-feeds-for-user.adoc[]
+include::api/feed/get-feeds-by-filter.adoc[]
