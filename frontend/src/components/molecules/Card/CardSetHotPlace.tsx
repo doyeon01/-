@@ -10,7 +10,7 @@ interface TestArr {
   title: string;
   address: string;
   testimg: string;
-  category: string; // 카테고리 추가
+  category: string; 
 }
 
 const testArr: TestArr[] = [
@@ -36,8 +36,8 @@ const CardSetHotPlace: React.FC = () => {
             className={classNames(
               'px-4 py-2 rounded border-b-2 transition-all',
               {
-                'text-black border-black': category === cat, // 클릭된 버튼의 스타일
-                'text-gray-500 border-transparent': category !== cat, // 기본 상태의 스타일
+                'text-black border-black': category === cat, 
+                'text-gray-500 border-transparent': category !== cat, 
               }
             )}
           >

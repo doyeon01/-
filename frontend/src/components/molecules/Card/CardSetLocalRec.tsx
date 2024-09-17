@@ -35,7 +35,6 @@ const CardSetHotPlace: React.FC = () => {
 
   return (
     <div className="flex flex-col items-center p-5">
-      {/* 상단 버튼 */}
       <div className="flex flex-wrap justify-center">
         {regionsTop.map(region => (
           <button
@@ -48,7 +47,6 @@ const CardSetHotPlace: React.FC = () => {
         ))}
       </div>
       
-      {/* 하단 버튼 */}
       <div className="flex flex-wrap justify-center mb-4">
         {regionsBottom.map(region => (
           <button
@@ -61,7 +59,6 @@ const CardSetHotPlace: React.FC = () => {
         ))}
       </div>
 
-      {/* 선택된 지역의 이미지 그리드 */}
       <div className="grid grid-cols-5 gap-4">
         {filteredImages.map((item, index) => (
           <div
