@@ -28,7 +28,9 @@ class PlaceControllerDocsTest extends RestDocsSupport {
 
         given(placeService.getPlaceDetail(any())).willReturn(response);
 
-        mockMvc.perform(get("/api/v1/place/{id}", 1L).contentType(MediaType.APPLICATION_JSON))
+        mockMvc.perform(get("/api/v1/places")
+                        .param("id", "1")
+                        .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(document("place-detail", preprocessResponse(prettyPrint()),
                         responseFields(
@@ -50,6 +52,8 @@ class PlaceControllerDocsTest extends RestDocsSupport {
                                         .description("장소 경도"),
                                 fieldWithPath("response.latitude").type(JsonFieldType.NUMBER)
                                         .description("장소 위도"),
+                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
+                                        .description("좋아요 수"),
                                 fieldWithPath("response.placeType").type(JsonFieldType.STRING)
                                         .description("장소 타입"),
                                 fieldWithPath("error").type(JsonFieldType.NULL)

@@ -3,10 +3,10 @@ package com.ssafy.handam.feed.common.error;
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.error;
 import com.ssafy.handam.feed.common.error.place.PlaceNotFoundException;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
-import jakarta.validation.ConstraintViolationException;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.context.MessageSource;
 import org.springframework.context.NoSuchMessageException;
 import org.springframework.data.crossstore.ChangeSetPersister.NotFoundException;
@@ -14,8 +14,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.HttpMediaTypeException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
@@ -49,14 +47,6 @@ public class GeneralExceptionHandler {
     @ExceptionHandler(PlaceNotFoundException.class)
     public ResponseEntity<?> handlePlaceNotFoundException(PlaceNotFoundException e) {
         return newResponse("장소를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler({
-            UsernameNotFoundException.class,
-            BadCredentialsException.class
-    })
-    public ResponseEntity<?> handleLoginException(Exception e) {
-        return newResponse("Bad Credential", HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler({

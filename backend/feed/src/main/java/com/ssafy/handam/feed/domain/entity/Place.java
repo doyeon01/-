@@ -12,9 +12,10 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
+@Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Entity
 public class Place extends BaseEntity {
 
     @Id
@@ -27,19 +28,22 @@ public class Place extends BaseEntity {
     private String imageUrl;
     private Double longitude;
     private Double latitude;
+    private int likeCount;
 
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;
 
     @Builder
-    private Place(Long id,
-                  String name,
+    private Place(
+            Long id,
+            String name,
                   String address1,
                   String address2,
                   String imageUrl,
                   Double longitude,
                   Double latitude,
-                  PlaceType placeType) {
+                  PlaceType placeType
+    ) {
         this.id = id;
         this.name = name;
         this.address1 = address1;
@@ -48,6 +52,16 @@ public class Place extends BaseEntity {
         this.longitude = longitude;
         this.latitude = latitude;
         this.placeType = placeType;
+        this.likeCount = 0;
     }
 
+    public void incrementLikeCount() {
+        this.likeCount++;
+    }
+
+    public void decrementLikeCount() {
+        if (this.likeCount > 0) {
+            this.likeCount--;
+        }
+    }
 }

@@ -1,0 +1,12 @@
+[[best-feeds-for-user]]
+=== 사용자 맞춤 피드 조회
+
+==== HTTP Request
+
+include::{snippets}/best-feeds-for-user/http-request.adoc[]
+include::{snippets}/best-feeds-for-user/request-fields.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/best-feeds-for-user/http-response.adoc[]
+include::{snippets}/best-feeds-for-user/response-fields.adoc[]
