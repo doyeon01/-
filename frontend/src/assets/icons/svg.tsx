@@ -146,3 +146,21 @@ export function RedHeartIcon(): JSX.Element {
   );
 }
 
+export function SearchIcon(): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      className="h-5 w-5"
+      viewBox="0 0 512 512"
+      fill="none"
+      stroke="#B6AFA9"  
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="64"
+    >
+      <path d="M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64Z"/>
+      <path d="M338.29 338.29L448 448"/>
+    </svg>
+  );
+}
+
