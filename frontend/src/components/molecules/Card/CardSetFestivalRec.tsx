@@ -43,7 +43,7 @@ const festivals = [
 const FestivalCard: React.FC<{ festival: typeof festivals[0] }> = ({ festival }) => (
   <div className="max-w-sm rounded overflow-hidden shadow-lg">
     <img
-      className="w-full h-48 object-cover" // 높이를 고정하고 비율에 맞게 조정
+      className="w-full h-48 object-cover"
       src={festival.image}
       alt={festival.title}
     />
