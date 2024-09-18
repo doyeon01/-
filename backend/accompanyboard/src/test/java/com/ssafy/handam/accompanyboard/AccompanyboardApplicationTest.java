@@ -4,6 +4,7 @@ import static com.ssafy.handam.accompanyboard.ApiDocumentUtils.getDocumentReques
 import static com.ssafy.handam.accompanyboard.ApiDocumentUtils.getDocumentResponse;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
@@ -13,22 +14,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.handam.accompanyboard.presentation.AccompanyBoardController;
+import com.ssafy.handam.RestDocsSupport;
+import com.ssafy.handam.accompanyboard.presentation.request.AccompanyBoardArticleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.web.servlet.MockMvc;
 
-@WebMvcTest(AccompanyBoardController.class)
-@AutoConfigureRestDocs
-class AccompanyboardApplicationTest {
-
-	@Autowired
-	private MockMvc mockMvc;
+class AccompanyboardApplicationTest extends RestDocsSupport {
 
 	@Test
 	@DisplayName("id로 동행 게시글 상세 조회")
@@ -85,4 +77,45 @@ class AccompanyboardApplicationTest {
 						)
 				));
 	}
+
+	@Test
+	@DisplayName("동행 게시글 작성")
+	void postArticle() throws Exception {
+
+		AccompanyBoardArticleRequest request = createAccompanyBoardArticleRequest();
+		String requestBody = objectMapper.writeValueAsString(request);
+
+		mockMvc.perform(post("/api/v1/accompanyboard/article")
+						.contentType(MediaType.APPLICATION_JSON)
+						.content(requestBody))
+				.andExpect(status().isOk())
+				.andDo(print())
+				.andDo(document("post-article",
+						getDocumentRequest(),
+						getDocumentResponse(),
+						requestFields(
+                                    fieldWithPath("user_id").description("동행 게시글을 올린 사용자의 id"),
+                                    fieldWithPath("schedule_id").description("사용자가 동행을 구할 여행 일정의 id"),
+                                    fieldWithPath("title").description("동행 게시글의 제목"),
+                                    fieldWithPath("description").description("동행 게시글의 내용")
+						),
+						responseFields(
+								fieldWithPath("success").description("응답의 성공 여부 (true 또는 false)"),
+								fieldWithPath("response").description("응답 데이터 (이 경우 null일 수 있음)"),
+								fieldWithPath("error").description("오류 정보 (null일 수 있음)")
+						)
+				));
+
+	}
+
+	public AccompanyBoardArticleRequest createAccompanyBoardArticleRequest() {
+
+		Long user_id = 1L;
+		Long schedule_id = 1L;
+		String title = "작성한 동행 게시글 제목";
+		String description = "작성한 동행 게시글 내용";
+
+		return AccompanyBoardArticleRequest.of(user_id, schedule_id, title, description);
+	}
+
 }

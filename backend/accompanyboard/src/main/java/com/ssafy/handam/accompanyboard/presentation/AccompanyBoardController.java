@@ -6,11 +6,14 @@ import com.ssafy.handam.accompanyboard.domain.model.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.model.valueobject.response.ArticleInfoResponse;
 import com.ssafy.handam.accompanyboard.domain.model.valueobject.response.ArticleListResponse;
 import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
+import com.ssafy.handam.accompanyboard.presentation.request.AccompanyBoardArticleRequest;
 import com.ssafy.handam.accompanyboard.presentation.request.ArticleInitSettingRequest;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,5 +65,10 @@ public class AccompanyBoardController {
 
         List<ArticleInfoResponse> response = ArticleListResponse.of(articles);
         return success(response);
+    }
+
+    @PostMapping("/article")
+    public ApiResult<Void> postArticle(@RequestBody AccompanyBoardArticleRequest request) {
+        return success(null);
     }
 }
