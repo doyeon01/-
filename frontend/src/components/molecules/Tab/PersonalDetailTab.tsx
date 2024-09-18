@@ -21,11 +21,11 @@ export const PersonalDetailTab: React.FC = () => {
   const location = useLocation();
 
   const tabs = [
-    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail/> },
-    { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail/> },
-    { id: 'tab3', label: '여행일정', icon: <RouteIcon active={fillActive === 'tab3'} />, content: <PersonalCompanionDetail/> },
-    { id: 'tab4', label: '게시글', icon: <UsersIcon active={fillActive === 'tab4'} />, content: <PersonalPlanDetail/> },
-    { id: 'tab5', label: '포토카드', icon: <CameraIcon active={fillActive === 'tab5'} />, content: <PersonalPhotoDetail/> },
+    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail /> },
+    { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail resetSelectedButton={fillActive === 'tab2'} /> },
+    { id: 'tab3', label: '여행일정', icon: <RouteIcon active={fillActive === 'tab3'} />, content: <PersonalCompanionDetail /> },
+    { id: 'tab4', label: '게시글', icon: <UsersIcon active={fillActive === 'tab4'} />, content: <PersonalPlanDetail /> },
+    { id: 'tab5', label: '포토카드', icon: <CameraIcon active={fillActive === 'tab5'} />, content: <PersonalPhotoDetail /> },
   ];
 
   useEffect(() => {
@@ -35,12 +35,6 @@ export const PersonalDetailTab: React.FC = () => {
       setFillActive('tab1');
     }
   }, [location.state]);
-
-  useEffect(() => {
-    if (['tab2', 'tab3', 'tab4', 'tab5'].includes(fillActive)) {
-      window.scrollTo(0, document.body.scrollHeight);
-    }
-  }, [fillActive]);
 
   const handleFillClick = (tabId: string) => {
     if (tabId === fillActive) return;
@@ -56,11 +50,7 @@ export const PersonalDetailTab: React.FC = () => {
             key={tab.id}
             onClick={() => handleFillClick(tab.id)}
             active={fillActive === tab.id}
-            className={`pb-4 !text-base flex items-center justify-center gap-2 h-full  ${
-              fillActive === tab.id
-                ? 'border-b-2 border-[#645E59] text-[#645E59]' // 활성화 상태
-                : 'text-[#645E59]/50 !text-[#645E59]/50' // 비활성화 상태 (연하게)
-            }`}
+            className={`pb-4 !text-base flex items-center justify-center gap-2 h-full  ${fillActive === tab.id ? 'border-b-2 border-[#645E59] text-[#645E59]' : 'text-[#645E59]/50 !text-[#645E59]/50'}`}
           >
             {tab.icon && <span className="icon">{tab.icon}</span>}
             <span className="text-center">{tab.label}</span>
@@ -71,9 +61,10 @@ export const PersonalDetailTab: React.FC = () => {
       <TETabsContent>
         {tabs.map((tab) => (
           <TETabsPane
-           key={tab.id}
-           show={fillActive === tab.id}
-           className='pt-5'>
+            key={tab.id}
+            show={fillActive === tab.id}
+            className='pt-5'
+          >
             {tab.content}
           </TETabsPane>
         ))}
