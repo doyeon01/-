@@ -10,14 +10,12 @@ import testImg5 from './../../../assets/statics/test5.jpg';
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
   const [selectedButton, setSelectedButton] = useState(0);
 
-  // 탭이 변경될 때마다 selectedButton을 0으로 설정
   useEffect(() => {
     if (resetSelectedButton) {
       setSelectedButton(0);
     }
   }, [resetSelectedButton]);
 
-  // 버튼 목록 ->  데이터 받아서 카테고리 별로 분류하기 !!
   const buttons = [
     {
       label: '전체', content: [
