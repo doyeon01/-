@@ -58,7 +58,7 @@ export const SearchPage: React.FC = () => {
           placeholder="검색"
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
-          className="w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+          className="w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
         <button
           onClick={handleSearch}

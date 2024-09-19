@@ -12,11 +12,11 @@ export interface CardProps {
 
 export const FeedCard: React.FC<CardProps> = ({ title, content, createdDate, comment, like, image }) => {
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg">
+    <div className="max-w-sm rounded overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
       <img className="w-full h-48 object-cover" src={image} alt={title} />
       <div className="px-6 py-4">
-        <div className="font-medium text-xl mb-2">{title}</div>
-        <p className="font-normal text-gray-700 text-base mb-2">{content}</p>
+        <div className="font-medium text-lg mb-2">{title}</div>
+        <p className="font-normal text-gray-700 text-sm mb-2">{content}</p>
         <div className="flex justify-between items-center">
           <span className="flex gap-1">
             <p className="font-normal text-gray-400 text-xs">{createdDate} ·</p>
