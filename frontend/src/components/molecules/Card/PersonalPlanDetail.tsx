@@ -1,11 +1,10 @@
-import React from 'react';
 import testImg1 from './../../../assets/statics/test1.jpg';
 import testImg2 from './../../../assets/statics/test2.jpg';
 import testImg3 from './../../../assets/statics/test3.png';
 import testImg4 from './../../../assets/statics/test4.jpg';
 import testImg5 from './../../../assets/statics/test5.jpg';
-import PersonalSearch from '../../atoms/input/PersonalSearch'; // PersonalSearch 컴포넌트
-import { useSearchAndSort } from '../../../hooks/useSearchAndSort'; // 커스텀 훅
+import PersonalSearch from '../../atoms/input/PersonalSearch';
+import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 
 interface TestArr {
   title: string;
@@ -24,16 +23,15 @@ const testArr: TestArr[] = [
 
 export const PersonalPlanDetail: React.FC = () => {
   const { filteredArr, onSearch, onSortChange, showAllItems } = useSearchAndSort<TestArr>(
-    testArr, // 데이터 배열
+    testArr, 
     ['title', 'address'], // 검색에 사용할 필드
-    'createdDate', // 정렬 필드
-    'createdDate' // 날짜 필드
+    'createdDate'         // 정렬에 사용할 날짜 필드
   );
 
   return (
     <>
       <div className="flex justify-end items-center mb-5">
-        <PersonalSearch
+        <PersonalSearch 
           onSearch={onSearch} 
           showAllItems={showAllItems} 
           onSortChange={onSortChange} 

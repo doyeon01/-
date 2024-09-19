@@ -1,50 +1,48 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
+import { useRecoilState } from 'recoil'; // Recoil 훅
+import { PlanInputState, PlanSortState } from '../../../Recoil/atoms/MyPage';
 
 interface PersonalSearchProps {
-  onSearch: (searchTerm: string) => void;  // 검색 처리 함수
-  showAllItems: () => void;                // 모든 항목 보여주기 함수
+  onSearch: (searchTerm: string) => void; // 검색 처리 함수
+  showAllItems: () => void; // 모든 항목 보여주기 함수
   onSortChange: (sortOrder: '최신순' | '오래된순') => void; // 정렬 변경 함수
-  defaultSearchTerm?: string;              // 기본 검색어
-  defaultSortOrder?: '최신순' | '오래된순'; // 기본 정렬 순서
 }
 
 const PersonalSearch: React.FC<PersonalSearchProps> = ({
   onSearch,
   showAllItems,
   onSortChange,
-  defaultSearchTerm = '',          // 기본 검색어 설정
-  defaultSortOrder = '최신순',      // 기본 정렬 순서 설정
 }) => {
-  const [inputValue, setInputValue] = useState(defaultSearchTerm);
-  const [selectedSort, setSelectedSort] = useState<'최신순' | '오래된순'>(defaultSortOrder);
+  const [inputValue, setInputValue] = useRecoilState(PlanInputState); 
+  const [selectedSort, setSelectedSort] = useRecoilState(PlanSortState);
 
   useEffect(() => {
     if (inputValue === '') {
-      showAllItems(); // 입력값이 없으면 모든 아이템을 보여줌
+      showAllItems(); 
     }
   }, [inputValue, showAllItems]);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && inputValue !== '') {
-      onSearch(inputValue); // 엔터키를 누르면 검색 수행
+      onSearch(inputValue); 
     }
   };
 
   const handleSearchClick = () => {
     if (inputValue !== '') {
-      onSearch(inputValue); // 검색 버튼을 클릭하면 검색 수행
+      onSearch(inputValue); 
     }
   };
 
   const handleSortChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const sortOrder = event.target.value as '최신순' | '오래된순';
-    setSelectedSort(sortOrder); 
-    onSortChange(sortOrder);    
+    setSelectedSort(sortOrder);
+    onSortChange(sortOrder);
   };
 
   return (
-    <div className="flex justify-center items-center space-x-4">
-      <div className="flex items-center space-x-2">
+    <div className="flex items-center space-x-4">
+      <div className="flex space-x-4">
         <label className="flex items-center space-x-1">
           <input
             type="radio"
@@ -71,7 +69,6 @@ const PersonalSearch: React.FC<PersonalSearchProps> = ({
         <input
           type="text"
           value={inputValue}
-          spellCheck='false'
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="검색어를 입력하세요."

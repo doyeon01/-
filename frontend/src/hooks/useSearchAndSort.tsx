@@ -1,60 +1,38 @@
-import { useState, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 
-export const useSearchAndSort = <T,>(
-  initialData: T[],
-  searchFields: (keyof T)[], // 검색에 사용할 필드 리스트
-  sortField: keyof T,        // 정렬에 사용할 필드
-  dateField: keyof T         // 날짜 기반으로 정렬할 필드
-) => {
-  const [filteredArr, setFilteredArr] = useState<T[]>([]);
+export function useSearchAndSort<T>(
+  data: T[],
+  searchFields: (keyof T)[],  // 검색에 사용할 필드 배열
+  dateField: keyof T          // 정렬에 사용할 필드 (날짜 필드)
+) {
+  const [filteredArr, setFilteredArr] = useState<T[]>(data);
   const [sortOrder, setSortOrder] = useState<'최신순' | '오래된순'>('최신순');
 
-  useEffect(() => {
-    // 초기 데이터 정렬 (기본값: 최신순)
-    const sortedArr = [...initialData].sort((a, b) => {
-      const dateA = new Date(b[dateField] as any); // dateField에 해당하는 필드값을 Date로 변환
-      const dateB = new Date(a[dateField] as any);
-      return dateB.getTime() - dateA.getTime();
-    });
-    setFilteredArr(sortedArr);
-  }, [initialData, dateField]);
+  // 전체 항목을 표시하는 함수
+  const showAllItems = useCallback(() => {
+    setFilteredArr(data);  // 초기 데이터를 설정
+  }, [data]);
 
-  // 검색 및 정렬 함수
-  const onSearch = (searchTerm: string) => {
-    const filtered = initialData.filter((item) =>
-      searchFields.some((field) => {
-        const value = item[field] as unknown as string; // 검색 필드 값을 string으로 변환
-        return value.toLowerCase().includes(searchTerm.toLowerCase());
-      })
+  // 검색 기능
+  const onSearch = useCallback((searchTerm: string) => {
+    const filtered = data.filter(item =>
+      searchFields.some(field =>
+        String(item[field]).toLowerCase().includes(searchTerm.toLowerCase())
+      )
     );
+    setFilteredArr(filtered);
+  }, [data, searchFields]);
 
-    const sortedArr = [...filtered].sort((a, b) => {
-      const dateA = new Date(b[dateField] as any);
-      const dateB = new Date(a[dateField] as any);
-      return sortOrder === '최신순' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
-    });
-    setFilteredArr(sortedArr);
-  };
-
-  const onSortChange = (newSortOrder: '최신순' | '오래된순') => {
-    setSortOrder(newSortOrder);
+  // 정렬 기능 (최신순, 오래된순)
+  const onSortChange = useCallback((sortOrder: '최신순' | '오래된순') => {
+    setSortOrder(sortOrder);
     const sortedArr = [...filteredArr].sort((a, b) => {
-      const dateA = new Date(b[dateField] as any);
-      const dateB = new Date(a[dateField] as any);
-      return newSortOrder === '최신순' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
+      const dateA = new Date(a[dateField] as unknown as string).getTime();
+      const dateB = new Date(b[dateField] as unknown as string).getTime();
+      return sortOrder === '최신순' ? dateB - dateA : dateA - dateB;
     });
     setFilteredArr(sortedArr);
-  };
-
-  const showAllItems = () => {
-    // 정렬 기준에 따라 전체 리스트를 다시 설정
-    const sortedArr = [...initialData].sort((a, b) => {
-      const dateA = new Date(b[dateField] as any);
-      const dateB = new Date(a[dateField] as any);
-      return sortOrder === '최신순' ? dateB.getTime() - dateA.getTime() : dateA.getTime() - dateB.getTime();
-    });
-    setFilteredArr(sortedArr);
-  };
+  }, [filteredArr, dateField]);
 
   return { filteredArr, onSearch, onSortChange, showAllItems };
-};
+}
