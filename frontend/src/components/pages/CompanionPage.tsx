@@ -6,6 +6,7 @@ import testImg2 from '../../assets/statics/test2.jpg';
 import testImg3 from '../../assets/statics/test3.png';
 import testImg4 from '../../assets/statics/test4.jpg';
 import testImg5 from '../../assets/statics/test5.jpg';
+import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
 
 interface ScheduleItem {
   type: string;
@@ -138,22 +139,30 @@ const dummyData: CompanionData[] = [
 
 export const CompanionPage: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+  const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
 
   const handleItemClick = (index: number) => {
     setSelectedIndex(index);
   };
 
+  const handleOpenChoiceModal = () => {
+    setIsChoiceModalOpen(true);
+  };
+
+  const handleCloseChoiceModal = () => {
+    setIsChoiceModalOpen(false);
+  };
+
   return (
     <>
       <div className='fixed w-[300px] h-full bg-white mt-[80px] flex flex-col items-center'>
-        {/* 중앙 정렬을 위한 부모 div */}
         <div className='flex flex-col items-center w-full'>
           <input 
             type="text" 
             placeholder="검색어를 입력하세요" 
             className='border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]' 
           />
-          <ButtonCompanion label='내 동행 모집하기' />
+          <ButtonCompanion label='내 동행 모집하기' onClick={handleOpenChoiceModal} /> 
         </div>
         {dummyData.map((data, index) => {
           const isSelected = index === selectedIndex;
@@ -186,6 +195,9 @@ export const CompanionPage: React.FC = () => {
       </div>
       {selectedIndex !== null && (
         <ModalCompanionDetail data={dummyData[selectedIndex]} />
+      )}
+      {isChoiceModalOpen && (
+        <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />
       )}
     </>
   );
