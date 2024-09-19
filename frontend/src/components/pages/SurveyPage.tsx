@@ -21,6 +21,7 @@ export const SurveyPage: React.FC = () => {
   const [IsHide,setIsHide] = useState(true)
   const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
+  const [Fading,setFading] = useState(false)
 
   const handlePageNum =()=>{
     setPageNum(PageNum=>PageNum+1)
@@ -39,10 +40,15 @@ export const SurveyPage: React.FC = () => {
   const handleMBTI = (e:React.MouseEvent<HTMLButtonElement>)=> {
     const value = MBTI + e.currentTarget.value
     setMBTI(value)
-    setPageNum(PageNum=>PageNum+1)
+    // setPageNum(PageNum=>PageNum+1)
+    setFading(true)
+    setTimeout(()=>{
+      setFading(false)
+      setPageNum(PageNum=>PageNum+1)
+    },500)
     console.log('Current MBTI : ', value)
   }
-
+  
   return (
     <>
       <div data-label='배경이미지[수정필요]'
@@ -50,10 +56,11 @@ export const SurveyPage: React.FC = () => {
       className='w-full h-screen bg-contain bg-no-repeat bg-center relative'>
         <div data-label='MBTI레이아웃'
         className='bg-white w-[452px] max-h-full h-[975px] fixed right-1/4 rounded-[15px] top-1/2 transform -translate-y-1/2 overflow-hidden leading-tight'>
+          <div  className={`w-full h-full absolute bg-black transition-opacity duration-500 ${Fading ? 'opacity-100 pointer-events-auto' : 'opacity-0 pointer-events-none'} z-10`} />
           {PageNum === 0 && (
             //시작페이지
             <>
-              <video autoPlay loop muted src={VID_start} className='absolute -z-10 w-full h-full object-cover'/>
+              <video autoPlay loop muted src={VID_start} className='absolute -z-10 w-full h-full object-cover'/> 
               {IsHide ? (
                 <>
                   <img src={IMG_Logo} alt="메인로고" className='z-0 right-[33px] top-[22px] w-[70px] h-[70px] absolute'/>
@@ -66,9 +73,7 @@ export const SurveyPage: React.FC = () => {
               ):(
                 //정보입력페이지
                 <>
-                  <div className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                    {PageNum+1}/11
-                  </div>
+                  
                   <div className='right-[10px] top-[11px] absolute'>
                   <ButtonNext OnChange={handlePageNum}/>
                   </div>
@@ -89,14 +94,14 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP01} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 좋은 아침이에요!<br/>
                 창밖을 바라보니 풍경이 너무 좋네요!<br/>
                 밖이 어떤 풍경인가요?
               </span>
-              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI} value={'N'}>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI} value={'N'}>
                 <span className='text-white font-medium text-[20px]'>
                 나무가 우거진 숲
                 </span>
@@ -113,7 +118,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP02} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 출근하는 길에<br/>
@@ -136,19 +141,19 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP03} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 새로운 업무가 도착했습니다!<br/>
                 어떻게 시작할까요?
               </span>
-              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI} value={'계획'}>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI}>
                 <span className='text-white font-medium text-[20px]'>
                 마스터 플랜은 필수!<br/>
                 체계적으로 계획을 세운 후 시작하기
                 </span>
               </button>
-              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[344px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI} value={'무계획'}>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[344px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI}>
                 <span className='text-white font-medium text-[20px]'>
                 머리 속 가장 먼저 떠오르는<br/>
                 아이디어부터 당장 실행해보기
@@ -161,19 +166,19 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP04} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 오후 세시, 졸음이 쏟아지는 시간입니다.<br/>
                 잠을 깨기 위해 무엇을 하면 좋을까요?
               </span>
-              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI} value={'외향'}>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[194px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center ' onClick={handleMBTI}>
                 <span className='text-white font-medium text-[20px]'>
                 잠깨는데 수다만한게 없죠!<br/>
                 동료들과 이야기를 나눠요
                 </span>
               </button>
-              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[344px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI} value={'내향'}>
+              <button className='w-[370px] h-[110px] bg-black bg-opacity-30 absolute top-[344px] rounded-[50px] left-1/2 transform -translate-x-1/2 flex justify-center items-center' onClick={handleMBTI}>
                 <span className='text-white font-medium text-[20px]'>
                 잠시 바람을 쐬며<br/>
                 혼자 산책을 다녀와요
@@ -186,7 +191,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP05} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 야호! 드디어 퇴근입니다.<br/>
@@ -211,7 +216,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP06} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
                 <ButtonNext OnChange={handlePageNum}/>
@@ -232,7 +237,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP06} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
                 <ButtonNext OnChange={handlePageNum}/>
@@ -253,7 +258,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP07} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
                 <ButtonNext OnChange={handlePageNum}/>
@@ -275,7 +280,7 @@ export const SurveyPage: React.FC = () => {
             <>
             <img src={IMG_STEP07} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
                 <ButtonNext OnChange={handlePageNum}/>
@@ -296,7 +301,7 @@ export const SurveyPage: React.FC = () => {
             <>
              <img src={IMG_STEP08} alt="" />
               <span className='text-[20px] top-[9px] left-[8px] absolute text-[#645E59] font-extrabold'>
-                {PageNum+1}/11
+                {PageNum}/10
               </span>
               <span className='text-[20px] top-[76px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-white'>
                 내일은 신사는 주말이에요!<br/>
