@@ -2,7 +2,7 @@
 
 == 설문조사 결과 제출
 
-Header
+HTTP Request
 
 include::{snippets}/post-survey/http-request.adoc[]
 
@@ -14,7 +14,7 @@ include::{snippets}/post-survey/response-fields.adoc[]
 
 == id로 사용자 정보 조회
 
-Header
+HTTP Request
 
 include::{snippets}/get-user-info/http-request.adoc[]
 
@@ -22,17 +22,37 @@ Path Parameter
 
 include::{snippets}/get-user-info/path-parameters.adoc[]
 
+HTTP Response
+include::{snippets}/get-user-info/response-body.adoc[]
+
 include::{snippets}/get-user-info/response-fields.adoc[]
 
 
 
 == keyword로 사람 검색
 
-Header
+HTTP Request
 include::{snippets}/get-user-search/http-request.adoc[]
 
 Query Parameter
 
 include::{snippets}/get-user-search/query-parameters.adoc[]
 
+HTTP Response
+
+include::{snippets}/get-user-search/response-body.adoc[]
+
 include::{snippets}/get-user-search/response-fields.adoc[]
+
+
+== follow 요청 및 취소 토글
+
+HTTP Request
+
+include::{snippets}/post-toggle-follow/http-request.adoc[]
+
+Path Parameter
+
+include::{snippets}/post-toggle-follow/path-parameters.adoc[]
+
+include::{snippets}/post-toggle-follow/response-fields.adoc[]
