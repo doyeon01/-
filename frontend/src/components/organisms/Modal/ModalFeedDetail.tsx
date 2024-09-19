@@ -35,9 +35,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailProps> = ({
   };
 
   return (
-    <div
-    onClick={closeModal} 
-    className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
       {/* 모달 자체에 스크롤 추가 */}
       <div   
       className="relative bg-[#F4F4EE] p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto"
