@@ -1,7 +1,8 @@
 import React from 'react'
 
-export const PlanPage = () => {
+export const PlanPage:React.FC = () => {
   return (
-    <div>PlanPage</div>
+  <>
+  </>  
   )
 }
