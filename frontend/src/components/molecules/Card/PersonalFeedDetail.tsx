@@ -11,7 +11,7 @@ export const PersonalFeedDetail: React.FC = () => {
     {
       title: '서울 전통 테마 여행',
       content: '눈이 즐거운 하루!',
-      createdDate: '2024년 9월 18일',
+      createdDate: '2024-09-18',
       comment: 6,
       like: 7,
       image: testImg1,
@@ -19,7 +19,7 @@ export const PersonalFeedDetail: React.FC = () => {
     {
       title: '서울 전통 테마 여행',
       content: '눈이 즐거운 하루!',
-      createdDate: '2024년 9월 18일',
+      createdDate: '2024-09-18',
       comment: 6,
       like: 7,
       image: testImg2,
@@ -27,7 +27,7 @@ export const PersonalFeedDetail: React.FC = () => {
     {
       title: '서울 전통 테마 여행',
       content: '눈이 즐거운 하루!',
-      createdDate: '2024년 9월 18일',
+      createdDate: '2024-09-18',
       comment: 6,
       like: 7,
       image: testImg3,
@@ -35,7 +35,7 @@ export const PersonalFeedDetail: React.FC = () => {
     {
       title: '서울 전통 테마 여행',
       content: '눈이 즐거운 하루!',
-      createdDate: '2024년 9월 18일',
+      createdDate: '2024-09월-18',
       comment: 6,
       like: 7,
       image: testImg4,
@@ -43,7 +43,7 @@ export const PersonalFeedDetail: React.FC = () => {
     {
       title: '서울 전통 테마 여행',
       content: '눈이 즐거운 하루!',
-      createdDate: '2024년 9월 18일',
+      createdDate: '2024-09-18',
       comment: 6,
       like: 7,
       image: testImg5,
