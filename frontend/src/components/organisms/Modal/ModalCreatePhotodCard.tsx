@@ -4,7 +4,7 @@ interface ModalPhotoProps {
   onClose: () => void;
 }
 
-export const ModalCreatePhtodCard: React.FC<ModalPhotoProps> = ({ onClose }) => {
+export const ModalCreatePhotodCard: React.FC<ModalPhotoProps> = ({ onClose }) => {
   return (
     <></>
   );

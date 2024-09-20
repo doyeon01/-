@@ -7,8 +7,7 @@ import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import PersonalSearch from '../../atoms/input/PersonalSearch'; 
 import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
 import { useNavigate } from 'react-router-dom';
-import ModalCreatePhtodCard from '../../organisms/Modal/ModalCreatePhtodCard';
-
+import { ModalCreatePhotodCard } from '../../organisms/Modal/ModalCreatePhotodCard';
 const mockData = [
   {
     id: 1,
@@ -74,7 +73,7 @@ export const PersonalPhotoDetail: React.FC = () => {
           onClick={handleOpenModal}>
           포토카드 생성
         </button>
-        {isModalOpen && <ModalCreatePhtodCard onClose={handleCloseModal} />}
+        {isModalOpen && <ModalCreatePhotodCard onClose={handleCloseModal} />}
       </div>
       
 
