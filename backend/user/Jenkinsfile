@@ -1,5 +1,3 @@
-import com.dabsquared.gitlabjenkins.trigger.filter.BranchFilterType
-
 pipeline {
     agent any
 
