@@ -33,9 +33,9 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
         {/* 닫기버ㅌ,ㄴ */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2  text-2xl"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
         >
-          ✖
+          &times;
         </button>
 
         <div className="flex h-full">
