@@ -49,6 +49,7 @@ pipeline {
                 script {
                     sh """
                     cd backend/user
+                    ./gradlew build
                     docker build -t user:latest .
                     """
                 }
