@@ -36,7 +36,10 @@ pipeline {
                 // deploy-test 브랜치의 server1 폴더만 체크아웃
                 checkout([$class: 'GitSCM',
                     branches: [[name: '*/deploy-test']],
-                    userRemoteConfigs: [[url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git']],
+                    userRemoteConfigs: [[
+                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
+                        credentialsId: 'GLToken'
+                    ]],
                     extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
                 ])
             }
@@ -82,7 +85,8 @@ pipeline {
                     docker pull $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
                     docker stop user || true
                     docker rm user || true
-                    docker run -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_PATH:user-latest
+                    docker run -d --name user -p $USER_PORT:$USER_PORT $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
+                    docker system prune -f --volumes
                     EOF
                     """
                 }
