@@ -35,7 +35,8 @@ pipeline {
                 checkout([$class: 'GitSCM',
                     branches: [[name: '*/deploy-test']],
                     userRemoteConfigs: [[
-                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git'
+                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
+                        credentialsId: 'GLToken'
                     ]],
                     extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
                 ])
