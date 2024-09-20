@@ -1,0 +1,121 @@
+pipeline {
+    agent any
+
+    triggers {
+        // GitLab Webhook을 통해 deploy-test 브랜치로의 push 이벤트 시 트리거
+        gitlab(
+            triggerOnPush: true,
+            branchFilterType: "Name",
+            sourceBranchRegex: "deploy-test"
+        )
+    }
+
+    environment {
+        // 환경 변수에 credential들 미리 저장
+        DOCKER_USERNAME =
+        DOCKER_PASSWORD = ''
+        DOCKER_REPO_PATH = ''
+        USER_PORT = '8081'
+        EC2_IP = ''
+        SSH_KEY = ''
+        SSH_USER = ''
+    }
+
+
+    stages {
+
+        stage('Load Credentials') {
+            steps {
+                // 모든 credential 가져오기
+                withCredentials([
+                    usernamePassword(credentialsId: 'DOCKER_USER', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'),
+                    string(credentialsId: 'DOCKER_REPO', variable: 'DOCKER_REPO_PATH'),
+                    string(credentialsId: 'EC2_SERVER1_IP', variable: 'EC2_IP'),
+                    sshUserPrivateKey(credentialsId: 'EC2_SERVER1_SSH', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
+                ]) {
+                    echo "Credentials loaded successfully."
+                }
+            }
+        }
+
+        stage('Checkout Code') {
+            steps {
+                // deploy-test 브랜치의 server1 폴더만 체크아웃
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/deploy-test']],
+                    userRemoteConfigs: [[url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git']],
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
+                ])
+            }
+        }
+
+        stage('Build Docker Image') {
+            steps {
+                script {
+                    sh """
+                    cd user
+                    docker build -t user:latest .
+                    """
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            steps {
+                script {
+                    sh """
+                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Repository') {
+            steps {
+                script {
+                    sh """
+                    docker tag user:latest $DOCKER_REPO_PATH:user-latest
+                    docker push $DOCKER_REPO_PATH:user-latest
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            steps {
+                script {
+                    sh """
+                    ssh -i $SSH_KEY $SSH_USER@$EC2_IP <<EOF
+                    docker pull $DOCKER_REPO_PATH:user-latest
+                    docker stop user || true
+                    docker rm user || true
+                    docker run -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_PATH:user-latest
+                    EOF
+                    """
+                }
+            }
+        }
+
+        stage('Logout from Docker Registry') {
+            steps {
+                script {
+                    sh """
+                    docker logout
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        success {
+            echo 'User deployed successfully on port 8081!'
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
