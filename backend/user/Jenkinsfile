@@ -58,9 +58,12 @@ pipeline {
 
         stage('Login to Docker Registry') {
             steps {
+                {
+                echo "과연"
+                }
+
                 script {
                     sh """
-                    echo "과연"
                     echo "${DOCKER_PASSWORD}"
                     docker login -u $DOCKER_USERNAME --password-stdin
                     """
