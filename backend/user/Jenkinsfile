@@ -24,6 +24,12 @@ pipeline {
                     string(credentialsId: 'EC2_SERVER1_IP', variable: 'EC2_IP'),
                     sshUserPrivateKey(credentialsId: 'EC2_SERVER1_SSH', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
                 ]) {
+                    echo "DOCKER_USERNAME: ${DOCKER_USERNAME}"
+                    echo "DOCKER_PASSWORD: ${DOCKER_PASSWORD}"
+                    echo "DOCKER_NAMESPACE: ${DOCKER_NAMESPACE}"
+                    echo "DOCKER_REPO_NAME: ${DOCKER_REPO_NAME}"
+                    echo "EC2_IP: ${EC2_IP}"
+                    echo "SSH_USER: ${SSH_USER}"
                     echo "Credentials loaded successfully."
                 }
             }
