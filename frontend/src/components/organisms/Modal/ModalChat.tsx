@@ -19,21 +19,20 @@ const friends = [
   { name: '닉네임1', img: 'https://i.pravatar.cc/150?img=6', lastMessage: '다음에 또 연락해요!' },
 ];
 
-const mydata ={ name: '고도연짱짱짱123', img: 'https://i.pravatar.cc/150?img=7',}
+const mydata = { name: '고도연짱짱짱123', img: 'https://i.pravatar.cc/150?img=7', };
 
 const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
   const [currentChat, setCurrentChat] = useState<Friend | null>(null);
-
 
   if (!isOpen) return null;
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-[#F4F4EE] w-full max-w-6xl h-[90vh] rounded-lg shadow-lg overflow-hidden relative">
-        {/* 닫기버ㅌ,ㄴ */}
+        {/* 닫기 버튼 */}
         <button
           onClick={onClose}
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-50"
         >
           &times;
         </button>
@@ -56,7 +55,7 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
                 {friends.map((friend, index) => (
                   <li
                     key={index}
-                    onClick={() => setCurrentChat(friend)}  
+                    onClick={() => setCurrentChat(friend)}
                     className="flex items-center mb-4 cursor-pointer"
                   >
                     <img
@@ -73,7 +72,7 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
 
           {/* 채팅목록 */}
           <div className="w-1/4 bg-[#F4F4EE] p-4 border-l ">
-            {/*내프로필 */}
+            {/* 내프로필 */}
             <div className="flex items-center mb-6">
               <img
                 src={mydata.img}
@@ -90,8 +89,8 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
               {friends.map((friend, index) => (
                 <li
                   key={index}
-                  onClick={() => setCurrentChat(friend)}  
-                  className="flex items-center mb-4 cursor-pointer "
+                  onClick={() => setCurrentChat(friend)}
+                  className="flex items-center mb-4 cursor-pointer"
                 >
                   <img
                     src={friend.img}
@@ -108,7 +107,7 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
           </div>
 
           {/* 채팅 대화방 */}
-          <div className="flex-1 p-4">
+          <div className="flex-1 p-4 relative z-40">
             {currentChat ? (
               <>
                 <div className="flex items-center mb-4">
@@ -136,7 +135,7 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
                     </div>
                   </div>
 
-                  {/* 내가보낸메시지 */}
+                  {/* 내가 보낸 메시지 */}
                   <div className="flex justify-end">
                     <div className="bg-white p-2 rounded-lg border border-gray-300">
                       <p>안녕하세요!!!!!</p>
@@ -146,11 +145,11 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
                 </div>
 
                 {/* 대화입력창 */}
-                <div className="flex items-center space-x-2">
+                <div className="absolute bottom-0 left-0 w-full bg-[#F4F4EE] p-4 border-t flex items-center space-x-2 z-50">
                   <input
                     type="text"
                     placeholder="메시지를 입력해주세요."
-                    className="w-10/12 p-2 rounded-md border border-gray-300"
+                    className="flex-1 p-2 rounded-md border border-gray-300"
                   />
                   <button className="bg-[#707C60] text-white px-4 py-2 rounded-md">
                     전송
