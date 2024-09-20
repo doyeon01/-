@@ -7,7 +7,7 @@ import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import PersonalSearch from '../../atoms/input/PersonalSearch'; 
 import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
 import { useNavigate } from 'react-router-dom';
-import { ModalCreatePhotodCard } from '../../organisms/Modal/ModalCreatePhotodCard';
+
 const mockData = [
   {
     id: 1,

@@ -1,9 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import { UserIcon } from '../../assets/icons/svg';
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { PersonalDetailTab } from '../molecules/Tab/PersonalDetailTab';
+import { ModalCreateFeed } from '../organisms/Modal/ModalCreateFeed';
 
 export const MyPage = () => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleOpenModal = () => {
+    setIsModalOpen(true);  
+  };
+
+  const handleCloseModal = () => {
+    setIsModalOpen(false); 
+  };
+
+
   return (
     <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-40 mb-20">
     <div className='flex justify-center pb-8'>
@@ -14,7 +26,8 @@ export const MyPage = () => {
             <div className="text-3xl font-bold">닉네임</div>
             <div className="flex justify-center">
               <ButtonPersonalInfo label="프로필 편집" className="mr-2" />
-              <ButtonPersonalInfo label="글쓰기" />
+              <ButtonPersonalInfo label="글쓰기"  onClick={handleOpenModal}/>
+              {isModalOpen && <ModalCreateFeed onClose={handleCloseModal} />}
             </div>
           </div>
           <div className="text-base text-gray-500 pt-4 font-semibold">자기소개</div>
