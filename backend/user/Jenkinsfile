@@ -10,44 +10,31 @@ pipeline {
 
     environment {
         USER_PORT = '8081'
-
-        DOCKER_USERNAME = ''
-        DOCKER_PASSWORD = ''
-        DOCKER_NAMESPACE = ''
-        DOCKER_REPO_NAME = ''
-
-        EC2_IP = ''
-
-        SSH_KEY = ''
-        SSH_USER = ''
+        DOCKER_USERINFO = credentials('DOCKER_USER')
+        DOCKER_REPO = credentials('DOCKER_REPO')
+        EC2_IP = credentials('EC2_SERVER1_IP')
+        SSH_INFO = credentials('EC2_SERVER1_SSH')
     }
 
 
     stages {
 
-        stage('Load Credentials') {
-            steps {
-                script {
-                    // 모든 자격 증명들을 한 번에 로드
-                    withCredentials([
-                        usernamePassword(credentialsId: 'DOCKER_USER', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'),
-                        usernamePassword(credentialsId: 'DOCKER_REPO', usernameVariable: 'DOCKER_NAMESPACE', passwordVariable: 'DOCKER_REPO_NAME'),
-                        string(credentialsId: 'EC2_SERVER1_IP', variable: 'EC2_IP'),
-                        sshUserPrivateKey(credentialsId: 'EC2_SERVER1_SSH', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
-                    ]) {
-                        // 불러온 자격 증명들을 전역 환경 변수에 할당
-                        env.DOCKER_USERNAME = DOCKER_USERNAME
-                        env.DOCKER_PASSWORD = DOCKER_PASSWORD
-                        env.DOCKER_NAMESPACE = DOCKER_NAMESPACE
-                        env.DOCKER_REPO_NAME = DOCKER_REPO_NAME
-                        env.EC2_IP = EC2_IP
-                        env.SSH_KEY = SSH_KEY
-                        env.SSH_USER = SSH_USER
-                        echo "Credentials loaded successfully."
-                    }
-                }
-            }
-        }
+//         stage('Load Credentials') {
+//             steps {
+//                 script {
+//                     // 모든 자격 증명들을 한 번에 로드
+//                     withCredentials([
+//                         usernamePassword(credentialsId: 'DOCKER_USER', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'),
+//                         usernamePassword(credentialsId: 'DOCKER_REPO', usernameVariable: 'DOCKER_NAMESPACE', passwordVariable: 'DOCKER_REPO_NAME'),
+//                         string(credentialsId: 'EC2_SERVER1_IP', variable: 'EC2_IP')
+//                         sshUserPrivateKey(credentialsId: 'EC2_SERVER1_SSH', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
+//                     ]) {
+//                         // 불러온 자격 증명들을 전역 환경 변수에 할당
+//                         echo "Credentials loaded successfully."
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Checkout Code') {
             steps {
@@ -74,7 +61,12 @@ pipeline {
                     """
                 }
                 {
-                    echo "EC2_IP: ${env.USER_PORT}"
+                    echo "DOCKER_USERNAME: $DOCKER_USERINFO_USR"
+                    echo "DOCKER_PASSWORD: $DOCKER_USERINFO_PSW"
+                    echo "DOCKER_NAMESPACE: $DOCKER_REPO_USR"
+                    echo "DOCKER_REPO_NAME: $DOCKER_REPO_PSW"
+                    echo "EC2_IP: $EC2_IP"
+                    echo "SSH_USER: $SSH_INFO_USR"
                 }
             }
         }
