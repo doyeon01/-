@@ -52,7 +52,7 @@ export const SurveyPage: React.FC = () => {
   return (
     <>
       <div data-label='배경이미지[수정필요]'
-      style={{ backgroundImage: url(${IMG_BG}) }}
+      style={{ backgroundImage: `url(${IMG_BG})` }}
       className='w-full h-screen bg-contain bg-no-repeat bg-center relative'>
         <div data-label='MBTI레이아웃'
         className='bg-white w-[452px] max-h-full h-[975px] fixed right-1/4 rounded-[15px] top-1/2 transform -translate-y-1/2 overflow-hidden leading-tight'>
