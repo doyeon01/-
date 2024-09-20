@@ -1,3 +1,4 @@
+import React from 'react';
 import testImg1 from './../../../assets/statics/test1.jpg';
 import testImg2 from './../../../assets/statics/test2.jpg';
 import testImg3 from './../../../assets/statics/test3.png';
@@ -5,6 +6,7 @@ import testImg4 from './../../../assets/statics/test4.jpg';
 import testImg5 from './../../../assets/statics/test5.jpg';
 import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
+import { PhotoCard } from './PhtotCard';
 
 interface TestArr {
   title: string;
@@ -23,7 +25,7 @@ const testArr: TestArr[] = [
 
 export const PersonalPlanDetail: React.FC = () => {
   const { filteredArr, onSearch, onSortChange, showAllItems } = useSearchAndSort<TestArr>(
-    testArr, 
+    testArr,
     ['title', 'address'], // 검색에 사용할 필드
     'createdDate'         // 정렬에 사용할 날짜 필드
   );
@@ -41,20 +43,12 @@ export const PersonalPlanDetail: React.FC = () => {
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredArr.length > 0 ? (
           filteredArr.map((item, index) => (
-            <div
+            <PhotoCard
               key={index}
-              className="relative overflow-hidden rounded-lg transform transition-transform duration-300 hover:scale-105 shadow-lg"
-            >
-              <img
-                src={item.testimg}
-                alt={item.title}
-                className="w-full h-72 object-cover rounded-lg"
-              />
-              <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
-                <h3 className="text-lg font-bold">{item.title}</h3>
-                <p className="text-sm">{item.address}</p>
-              </div>
-            </div>
+              title={item.title}
+              address={item.address}
+              testimg={item.testimg}
+            />
           ))
         ) : (
           <p className="text-center col-span-3">일정이 없습니다.</p>
