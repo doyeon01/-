@@ -48,7 +48,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    cd user
+                    cd backend/user
                     docker build -t user:latest .
                     """
                 }
