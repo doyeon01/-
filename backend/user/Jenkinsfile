@@ -1,5 +1,3 @@
-//test
-
 pipeline {
     agent any
 
@@ -18,29 +16,11 @@ pipeline {
         SSH_INFO = credentials('EC2_SERVER1_SSH')
     }
 
-
     stages {
-
-//         stage('Load Credentials') {
-//             steps {
-//                 script {
-//                     // 모든 자격 증명들을 한 번에 로드
-//                     withCredentials([
-//                         usernamePassword(credentialsId: 'DOCKER_USER', usernameVariable: 'DOCKER_USERNAME', passwordVariable: 'DOCKER_PASSWORD'),
-//                         usernamePassword(credentialsId: 'DOCKER_REPO', usernameVariable: 'DOCKER_NAMESPACE', passwordVariable: 'DOCKER_REPO_NAME'),
-//                         string(credentialsId: 'EC2_SERVER1_IP', variable: 'EC2_IP')
-//                         sshUserPrivateKey(credentialsId: 'EC2_SERVER1_SSH', keyFileVariable: 'SSH_KEY', usernameVariable: 'SSH_USER')
-//                     ]) {
-//                         // 불러온 자격 증명들을 전역 환경 변수에 할당
-//                         echo "Credentials loaded successfully."
-//                     }
-//                 }
-//             }
-//         }
 
         stage('Checkout Code') {
             steps {
-                // deploy-test 브랜치의 server1 폴더만 체크아웃
+                // deploy-test 브랜치의 user 폴더만 체크아웃
                 checkout([$class: 'GitSCM',
                     branches: [[name: '*/deploy-test']],
                     userRemoteConfigs: [[
@@ -59,17 +39,10 @@ pipeline {
                     cd backend/user
                     chmod +x ./gradlew
                     ./gradlew build
+                    ls build/libs
                     docker build -t user:latest .
                     """
                 }
-//                 {
-//                     echo "DOCKER_USERNAME: $DOCKER_USERINFO_USR"
-//                     echo "DOCKER_PASSWORD: $DOCKER_USERINFO_PSW"
-//                     echo "DOCKER_NAMESPACE: $DOCKER_REPO_USR"
-//                     echo "DOCKER_REPO_NAME: $DOCKER_REPO_PSW"
-//                     echo "EC2_IP: $EC2_IP"
-//                     echo "SSH_USER: $SSH_INFO_USR"
-//                 }
             }
         }
 
@@ -101,7 +74,7 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
                     docker stop user || true
                     docker rm user || true
-                    docker rmi user || true
+                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
