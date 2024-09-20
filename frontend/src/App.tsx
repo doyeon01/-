@@ -12,23 +12,15 @@ import { PocaPage } from './components/pages/PocaPage';
 import { Navbar } from './components/organisms/Navbar';
 import MainPage from './components/pages/MainPage';
 import ModalChat from './components/organisms/Modal/ModalChat'; 
-import ButtonChat from './assets/statics/ButtonChat.png';
+import ButtonChat from './components/atoms/button/ButtonChat';
 
 const App: React.FC = () => {
   const location = useLocation();
-  const [isChatOpen, setIsChatOpen] = useState(false); 
 
-  const openChat = () => {
-    setIsChatOpen(true);
-  };
-
-  const closeChat = () => {
-    setIsChatOpen(false);
-  };
 
   return (
     <>
-      <div className="w-full h-full bg-[#F4F4EE] font-TheJamsil">
+      <div className="w-full h-full bg-[#F4F4EE] font-TheJamsil select-none">
         {location.pathname !== '/' && location.pathname !== '/survey' && (
           <Navbar className="fixed top-0 w-full z-10" />
         )}
@@ -46,14 +38,8 @@ const App: React.FC = () => {
         </Routes>
       </div>
       
-      <img
-        src={ButtonChat}
-        alt="ChatBtn"
-        className="fixed bottom-4 right-4 w-16 h-16 z-50 cursor-pointer"
-        onClick={openChat}
-      />
 
-      <ModalChat isOpen={isChatOpen} onClose={closeChat} />
+      <ButtonChat/>
     </>
   );
 };
