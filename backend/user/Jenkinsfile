@@ -73,6 +73,14 @@ pipeline {
                     docker build -t user:latest .
                     """
                 }
+                {
+                    echo "DOCKER_USERNAME: ${env.DOCKER_USERNAME}"
+                    echo "DOCKER_PASSWORD: ${env.DOCKER_PASSWORD}"
+                    echo "DOCKER_NAMESPACE: ${env.DOCKER_NAMESPACE}"
+                    echo "DOCKER_REPO_NAME: ${env.DOCKER_REPO_NAME}"
+                    echo "EC2_IP: ${env.EC2_IP}"
+                    echo "SSH_USER: ${env.SSH_USER}"
+                }
             }
         }
 
