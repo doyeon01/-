@@ -7,6 +7,7 @@ import testImg3 from '../../assets/statics/test3.png';
 import testImg4 from '../../assets/statics/test4.jpg';
 import testImg5 from '../../assets/statics/test5.jpg';
 import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
+import KakaoMap from '../organisms/KaKaoMap';
 
 interface ScheduleItem {
   type: string;
@@ -155,50 +156,52 @@ export const CompanionPage: React.FC = () => {
 
   return (
     <>
-      <div className='fixed w-[300px] h-full bg-white mt-[80px] flex flex-col items-center'>
-        <div className='flex flex-col items-center w-full'>
-          <input 
-            type="text" 
-            placeholder="검색어를 입력하세요" 
-            className='border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]' 
-          />
-          <ButtonCompanion label='내 동행 모집하기' onClick={handleOpenChoiceModal} /> 
-        </div>
-        {dummyData.map((data, index) => {
-          const isSelected = index === selectedIndex;
-          return (
-            <div 
-              key={index} 
-              className={`flex items-center border-b border-gray-300 py-4 w-full cursor-pointer
-                ${isSelected ? 'bg-[#F0F0F3] ' : 'bg-none'}`}
-              onClick={() => handleItemClick(index)}  
-            >
-              <div className={`flex  ${isSelected ? 'bg-[#B6AFA9] text-white' : 'bg-[#F0F0F3] text-black'} 
-                  rounded-lg items-center justify-center w-16 h-16 flex-col mr-3`}>
-                <div className='font-bold text-[21.75px] leading-none'>{data.date.substring(8, 10)}</div>
-                <div className='font-bold text-[17.4px] leading-none'>{data.date.substring(6, 7)}월</div>
-              </div>  
-              <div className='flex-grow'>
-                <div className='font-semibold text-sm'>{data.title}</div>
-                <div className='flex flex-row'>
-                  <img 
-                    src={data.img} 
-                    alt={data.title} 
-                    className='w-8 h-8 rounded-full object-cover mr-1' 
-                  />
-                  <div className={`text-xs  mt-2`}>{data.author}</div>
+      <div className="h-[80px] w-full px-4 bg-white"/>
+      <KakaoMap/>
+        <div className='fixed w-[300px] h-full bg-white flex flex-col items-center z-50 border-gray border-r-2'>
+          <div className='flex flex-col items-center w-full'>
+            <input 
+              type="text" 
+              placeholder="검색어를 입력하세요" 
+              className='border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]' 
+            />
+            <ButtonCompanion label='내 동행 모집하기' onClick={handleOpenChoiceModal} /> 
+          </div>
+          {dummyData.map((data, index) => {
+            const isSelected = index === selectedIndex;
+            return (
+              <div 
+                key={index} 
+                className={`flex items-center border-b border-gray-300 py-4 w-full cursor-pointer
+                  ${isSelected ? 'bg-[#F0F0F3] ' : 'bg-none'}`}
+                onClick={() => handleItemClick(index)}  
+              >
+                <div className={`flex  ${isSelected ? 'bg-[#B6AFA9] text-white' : 'bg-[#F0F0F3] text-black'} 
+                    rounded-lg items-center justify-center w-16 h-16 flex-col mr-3`}>
+                  <div className='font-bold text-[21.75px] leading-none'>{data.date.substring(8, 10)}</div>
+                  <div className='font-bold text-[17.4px] leading-none'>{data.date.substring(6, 7)}월</div>
+                </div>  
+                <div className='flex-grow'>
+                  <div className='font-semibold text-sm'>{data.title}</div>
+                  <div className='flex flex-row'>
+                    <img 
+                      src={data.img} 
+                      alt={data.title} 
+                      className='w-8 h-8 rounded-full object-cover mr-1' 
+                    />
+                    <div className={`text-xs  mt-2`}>{data.author}</div>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
-      </div>
-      {selectedIndex !== null && (
-        <ModalCompanionDetail data={dummyData[selectedIndex]} />
-      )}
-      {isChoiceModalOpen && (
-        <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />
-      )}
+            );
+          })}
+        </div>
+        {selectedIndex !== null && (
+          <ModalCompanionDetail data={dummyData[selectedIndex]} />
+        )}
+        {isChoiceModalOpen && (
+          <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />
+        )}
     </>
   );
 };
