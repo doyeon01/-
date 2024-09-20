@@ -30,7 +30,7 @@ export const PersonalPlanDetail: React.FC = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center mb-5">
+      <div className="mb-5">
         <PersonalSearch 
           onSearch={onSearch} 
           showAllItems={showAllItems} 

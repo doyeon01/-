@@ -19,33 +19,33 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
   const buttons = [
     {
       label: '전체', content: [
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg1 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg2 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg3 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg4 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg5 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg1 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg2 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg3 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg4 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg5 },
       ]
     },
     {
       label: '명소', content: [
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg1 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg2 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg1 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg2 },
       ]
     },
     {
       label: '숙박', content: [
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg3 },
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg4 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg3 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg4 },
       ]
     },
     {
       label: '음식점', content: [
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg5 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg5 },
       ]
     },
     {
       label: '카페', content: [
-        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024년 9월 18일', comment: 6, like: 7, image: testImg4 },
+        { title: '서울 전통 테마 여행', content: '눈이 즐거운 하루!', createdDate: '2024-09-18', comment: 6, like: 7, image: testImg4 },
       ]
     },
   ];

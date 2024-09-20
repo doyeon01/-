@@ -6,15 +6,15 @@ import testImg4 from './../../../assets/statics/test4.jpg';
 import testImg5 from './../../../assets/statics/test5.jpg';
 import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
-import { RedHeartIcon } from './../../../assets/icons/svg' // Assuming you have this component for the heart icon
+import { FeedCard } from './FeedCard';
 
 interface TravelPlans {
   title: string;
   address: string;
   description: string;
   createdDate: string;
-  comments: number;
-  likes: number;
+  comment: number;
+  like: number;
   image: string;
 }
 
@@ -24,8 +24,8 @@ const travelPlans: TravelPlans[] = [
     address: '부산',
     description: '해운대 야경 같이 보실 분 구해요',
     createdDate: '2024-09-07',
-    comments: 6,
-    likes: 12,
+    comment: 6,
+    like: 12,
     image: testImg1,
   },
   {
@@ -33,8 +33,8 @@ const travelPlans: TravelPlans[] = [
     address: '파주',
     description: '돛단배 같이 타실 분 2명 구해요',
     createdDate: '2024-09-06',
-    comments: 8,
-    likes: 20,
+    comment: 8,
+    like: 20,
     image: testImg2,
   },
   {
@@ -42,8 +42,8 @@ const travelPlans: TravelPlans[] = [
     address: '창원',
     description: '맛집 탐방하실 분 구해요',
     createdDate: '2024-09-11',
-    comments: 5,
-    likes: 18,
+    comment: 5,
+    like: 18,
     image: testImg3,
   },
   {
@@ -51,8 +51,8 @@ const travelPlans: TravelPlans[] = [
     address: '창원',
     description: '맛집 탐방하실 분 구해요',
     createdDate: '2024-09-20',
-    comments: 5,
-    likes: 17,
+    comment: 5,
+    like: 17,
     image: testImg4,
   },
   {
@@ -60,8 +60,8 @@ const travelPlans: TravelPlans[] = [
     address: '창원',
     description: '맛집 탐방하실 분 구해요',
     createdDate: '2024-09-18',
-    comments: 5,
-    likes: 19,
+    comment: 5,
+    like: 19,
     image: testImg5,
   },
 ];
@@ -75,33 +75,25 @@ export const PersonalCompanionDetail: React.FC = () => {
 
   return (
     <>
-      <div className="flex justify-end items-center mb-5">
+      <div className="mb-5">
         <PersonalSearch onSearch={onSearch} showAllItems={showAllItems} onSortChange={onSortChange} />
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredArr.length > 0 ? (
           filteredArr.map((plan, index) => (
-            <div key={index} className="max-w-sm rounded overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
-              <img className="w-full h-48 object-cover" src={plan.image} alt={plan.title} />
-              <div className="px-6 py-4">
-              <div className="flex justify-between items-center mb-2">
-                <div className="font-medium text-lg">{plan.title}</div>
-                <p className="bg-[#6F755B] text-white px-2 py-1 rounded-md text-right">{plan.address}</p>
-              </div>
-
-                <p className="font-normal text-gray-700 text-sm mb-2">{plan.description}</p>
-                <div className="flex justify-between items-center">
-                  <span className="flex gap-1">
-                    <p className="font-normal text-gray-400 text-xs">{plan.createdDate} ·</p>
-                    <p className="font-normal text-gray-400 text-xs">{plan.comments}개의 댓글</p>
-                  </span>
-                  <span className="flex items-center">
-                    <RedHeartIcon /> 
-                    <p className="font-normal text-xs pl-1">{plan.likes}</p>
-                  </span>
-                </div>
-              </div>
+            <div key={index}>
+              <FeedCard
+              key={index}
+              title={plan.title}
+              address={plan.address}
+              content={plan.description}
+              createdDate={plan.createdDate}
+              comment={plan.comment}
+              like={plan.like}
+              image={plan.image}
+             
+              />
             </div>
           ))
         ) : (
