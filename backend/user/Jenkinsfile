@@ -101,10 +101,10 @@ pipeline {
                     ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<EOF
                     docker stop user || true
                     docker rm user || true
-                    docker rmi user || true
+//                     docker rmi user || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
-                    docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR:user-latest
+                    docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     EOF
                     """
                 }
