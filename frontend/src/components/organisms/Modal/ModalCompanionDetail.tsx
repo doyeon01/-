@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 interface ScheduleItem {
   type: string;
@@ -23,7 +23,7 @@ interface CompanionData {
   date: string;
   title: string;
   author: string;
-  img: string;
+  img: string; 
   details: Details;
 }
 
@@ -32,9 +32,20 @@ interface ModalCompanionDetailProps {
 }
 
 const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ data }) => {
+  const [commentContent, setCommentContent] = useState('');
+
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentContent(e.target.value);
+  };
+
+  const handleCommentSubmit = () => {
+    console.log('댓글 내용:', commentContent);
+    setCommentContent('');
+  };
+
   return (
     <div 
-      className='fixed w-[300px] h-[calc(100vh-80px)] bg-white mt-[80px] p-4 left-[310px] overflow-y-auto'
+      className='fixed w-[300px] h-[595px] bg-white  p-4 left-[310px] overflow-y-auto rounded-xl shadow-xl top-[85px] border-gray border-2'
       style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
     >
       {/* 날짜와 작성자 정보 */}
@@ -77,7 +88,22 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ data }) => 
           </div>
         ))}
       </div>
+      {/* 댓글 작성 영역 */}
 
+      <div className="relative mt-4">
+          <textarea
+            placeholder="댓글을 작성하세요."
+            className="w-full border border-gray-300 rounded-lg p-2 mb-6" 
+            value={commentContent}
+            onChange={handleCommentChange}
+          ></textarea>
+          <button
+            className="absolute bg-[#6F7C60] text-white px-2 py-1 mb-1 rounded-md right-0 bottom-0 text-[10px]"
+            onClick={handleCommentSubmit}
+          >
+            댓글 작성
+          </button>
+        </div>
       {/* 댓글 정보 */}
       <div className='border-t border-gray-300 py-2'>
         <div className='font-bold text-lg mb-2'>댓글</div>
