@@ -60,14 +60,14 @@ pipeline {
                     docker build -t user:latest .
                     """
                 }
-                {
-                    echo "DOCKER_USERNAME: $DOCKER_USERINFO_USR"
-                    echo "DOCKER_PASSWORD: $DOCKER_USERINFO_PSW"
-                    echo "DOCKER_NAMESPACE: $DOCKER_REPO_USR"
-                    echo "DOCKER_REPO_NAME: $DOCKER_REPO_PSW"
-                    echo "EC2_IP: $EC2_IP"
-                    echo "SSH_USER: $SSH_INFO_USR"
-                }
+//                 {
+//                     echo "DOCKER_USERNAME: $DOCKER_USERINFO_USR"
+//                     echo "DOCKER_PASSWORD: $DOCKER_USERINFO_PSW"
+//                     echo "DOCKER_NAMESPACE: $DOCKER_REPO_USR"
+//                     echo "DOCKER_REPO_NAME: $DOCKER_REPO_PSW"
+//                     echo "EC2_IP: $EC2_IP"
+//                     echo "SSH_USER: $SSH_INFO_USR"
+//                 }
             }
         }
 
@@ -75,7 +75,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
+                    docker login -u $DOCKER_USERINFO_USR -p $DOCKER_USERINFO_PSW
                     """
                 }
             }
@@ -85,8 +85,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker tag user:latest $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
-                    docker push $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
+                    docker tag user:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     """
                 }
             }
@@ -96,11 +96,11 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i $SSH_KEY $SSH_USER@$EC2_IP <<EOF
-                    docker pull $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
+                    ssh -i $SSH_INFO $SSH_USER@$EC2_IP <<EOF
+                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     docker stop user || true
                     docker rm user || true
-                    docker run -d --name user -p $USER_PORT:$USER_PORT $DOCKER_NAMESPACE/$DOCKER_REPO_NAME:user-latest
+                    docker run -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     docker system prune -f --volumes
                     EOF
                     """
