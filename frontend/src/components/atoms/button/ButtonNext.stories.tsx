@@ -3,10 +3,10 @@ import { Story } from '@storybook/react'
 import {ButtonNext, Props} from './ButtonNext'
 
 export default {
-    title:'ButtonNext',
+    title:'Components/ButtonNext',
     component: ButtonNext,
     argTypes: {
-        OnChange: { control: 'OnChange' }, 
+        text: { control: 'text' }, 
       },
 }
 
@@ -15,5 +15,6 @@ const Template: Story<Props> = (args) => <ButtonNext {...args} />;
 export const Default = Template.bind({})
 
 Default.args = {
-    OnChange: ()=>console.log('다음')
+    text: "다음",
+    onClick: ()=>console.log('다음페이지')
 }

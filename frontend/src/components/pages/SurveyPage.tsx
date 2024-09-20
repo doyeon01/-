@@ -52,7 +52,7 @@ export const SurveyPage: React.FC = () => {
   return (
     <>
       <div data-label='배경이미지[수정필요]'
-      style={{ backgroundImage: `url(${IMG_BG})` }}
+      style={{ backgroundImage: url(${IMG_BG}) }}
       className='w-full h-screen bg-contain bg-no-repeat bg-center relative'>
         <div data-label='MBTI레이아웃'
         className='bg-white w-[452px] max-h-full h-[975px] fixed right-1/4 rounded-[15px] top-1/2 transform -translate-y-1/2 overflow-hidden leading-tight'>
@@ -73,17 +73,40 @@ export const SurveyPage: React.FC = () => {
               ):(
                 //정보입력페이지
                 <>
-                  
-                  <div className='right-[10px] top-[11px] absolute'>
-                  <ButtonNext OnChange={handlePageNum}/>
+                  <div className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
+                    {PageNum + 1}/10
                   </div>
-                  <span className='block mt-[137px] mb-[47px] text-[30px] whitespace-nowrap text-center'>여행을 떠나기 전에 <br/>간단한 소개를 부탁드려요</span>
-                  <div className='gap-6 mb-6 flex flex-col items-center'>
-                    <input type='text' id='nickname' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='닉네임'/>
-                    <input type='text' id='birth' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='생년월일'/>
-                    <GenderSelector Gender={Gender} OnGenderChange={handleGender}/>
-                    <textarea id='address' className='w-[360px] h-[88px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='거주지'/>
-                    <textarea id='introduce' className='w-[360px] h-[176px] rounded-[20px] text-center text-[30px] focus:outline-none resize-none' placeholder='자기소개'/>
+                  <div className="right-[10px] top-[5px] absolute">
+                    <ButtonNext text="다음" onClick={handlePageNum} />
+                  </div>
+                  <span className="block mt-[100px] mb-[30px] text-[20px] whitespace-nowrap text-center">
+                    여행을 떠나기 전에 <br />
+                    간단한 소개를 부탁드려요
+                  </span>
+                  <div className="gap-4 mb-4 flex flex-col items-center">
+                    <input
+                      type="text"
+                      id="nickname"
+                      className="w-[250px] h-[60px] rounded-[10px] text-center text-[20px] focus:outline-none resize-none"
+                      placeholder="닉네임"
+                    />
+                    <input
+                      type="text"
+                      id="birth"
+                      className="w-[250px] h-[60px] rounded-[10px] text-center text-[20px] focus:outline-none resize-none"
+                      placeholder="생년월일"
+                    />
+                    <GenderSelector Gender={Gender} OnGenderChange={handleGender} />
+                    <textarea
+                      id="address"
+                      className="w-[250px] h-[60px] rounded-[10px] text-center text-[20px] focus:outline-none resize-none"
+                      placeholder="거주지"
+                    />
+                    <textarea
+                      id="introduce"
+                      className="w-[250px] h-[120px] rounded-[10px] text-center text-[20px] focus:outline-none resize-none"
+                      placeholder="자기소개"
+                    />
                   </div>
                 </>
               )}
@@ -219,7 +242,7 @@ export const SurveyPage: React.FC = () => {
                 {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
-                <ButtonNext OnChange={handlePageNum}/>
+                <ButtonNext text="다음" onClick={handlePageNum}/>
               </div>
               <span className='text-[20px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 어떤 음식이 마음에 드시나요?
@@ -240,7 +263,7 @@ export const SurveyPage: React.FC = () => {
                 {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
-                <ButtonNext OnChange={handlePageNum}/>
+                <ButtonNext text="다음" onClick={handlePageNum}/>
               </div>
               <span className='text-[20px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 후식으로는 어떤 게 좋을까요?
@@ -261,7 +284,7 @@ export const SurveyPage: React.FC = () => {
                 {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
-                <ButtonNext OnChange={handlePageNum}/>
+                <ButtonNext text="다음" onClick={handlePageNum}/>
               </div>
               <span className='text-[20px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 친구에게 연락이 왔어요!<br/>
@@ -283,7 +306,7 @@ export const SurveyPage: React.FC = () => {
                 {PageNum}/10
               </span>
               <div className='right-[10px] top-[11px] absolute'>
-                <ButtonNext OnChange={handlePageNum}/>
+                <ButtonNext text="다음" onClick={handlePageNum}/>
               </div>
               <span className='text-[20px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap'>
                 숙소는 어디가 좋을까요?
