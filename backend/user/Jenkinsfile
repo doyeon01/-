@@ -69,7 +69,11 @@ pipeline {
                     docker login -u "$DOCKER_USERNAME" -p "$DOCKER_PASSWORD"
                     """
                 }
+                {
+                    echo "Login"
+                }
             }
+
         }
 
         stage('Push Docker Image to Repository') {
