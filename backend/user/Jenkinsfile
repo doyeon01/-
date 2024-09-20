@@ -12,7 +12,7 @@ pipeline {
 
     environment {
         // 환경 변수에 credential들 미리 저장
-        DOCKER_USERNAME =
+        DOCKER_USERNAME = ''
         DOCKER_PASSWORD = ''
         DOCKER_REPO_PATH = ''
         USER_PORT = '8081'
