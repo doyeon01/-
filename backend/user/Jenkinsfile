@@ -12,7 +12,6 @@ pipeline {
 
     environment {
         USER_PORT = '8081'
-        PERSONAL_ACCESS_TOKEN = 'GITLAB_PERSONAL'
     }
 
 
@@ -39,7 +38,7 @@ pipeline {
                     branches: [[name: '*/deploy-test']],
                     userRemoteConfigs: [[
                         url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
-                        credentialsId: ${PERSONAL_ACCESS_TOKEN}
+                        credentialsId: 'GLToken'
                     ]],
                     extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
                 ])
