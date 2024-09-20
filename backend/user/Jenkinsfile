@@ -96,7 +96,7 @@ pipeline {
             steps {
                 script {
                     sh """
-                    ssh -i $SSH_INFO $SSH_USER@$EC2_IP <<EOF
+                    ssh -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<EOF
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     docker stop user || true
                     docker rm user || true
