@@ -42,38 +42,33 @@ export const PersonalPhotoDetail: React.FC = () => {
   
   const nav = useNavigate()
 
-  const [isModalOpen, setIsModalOpen] = useState(false);
+  // const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const handleOpenModal = () => {
-    setIsModalOpen(true);  
-  };
+  // const handleOpenModal = () => {
+  //   setIsModalOpen(true);  
+  // };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false); 
-  };
+  // const handleCloseModal = () => {
+  //   setIsModalOpen(false); 
+  // };
 
 
   return (
     <>
-      <div className="mb-5">
+      <div className="mb-2">
         <PersonalSearch 
           onSearch={onSearch} 
           showAllItems={showAllItems} 
           onSortChange={onSortChange} 
         />
       </div>
-      <hr className='mb-4' />
+      {/* <hr className='mb-4' /> */}
 
-      <div className='flex justify-end space-x-2 mb-4'>
+      <div className='flex justify-end space-x-2 mb-6'>
         <ButtonPersonalInfo
           label='전체 여행 돌아보기'
           onClick={()=>nav('/poca')}/>
-        <button
-          className='text-white bg-[#4A90E2] hover:bg-[#357ABD] text-sm py-2 px-6 rounded-lg font-base transition-colors duration-200'
-          onClick={handleOpenModal}>
-          포토카드 생성
-        </button>
-        {isModalOpen && <ModalCreatePhotodCard onClose={handleCloseModal} />}
+        
       </div>
       
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
-import { useSetRecoilState } from 'recoil'; // Recoil 훅 가져오기
+import { useSetRecoilState } from 'recoil';
 import { FeedIcon, LikeIcon, RouteIcon, UsersIcon, CameraIcon } from './../../../../src/assets/icons/svg';
 import { PersonalFeedDetail } from '../Card/PersonalFeedDetail';
 import { PersonalLikeDetail } from '../Card/PersonalLikeDetail';
