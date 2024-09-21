@@ -1,3 +1,5 @@
+def skipRemainingStages = false
+
 pipeline {
     agent any
 
@@ -38,8 +40,9 @@ pipeline {
                     // 최근 커밋과 그 이전 커밋 비교, user 폴더에 변경된 파일이 있는지 확인
                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- user/", returnStdout: true).trim()
                     if (changes == '') {
-                        echo 'No changes in user folder, skipping build and deploy.'
-                        currentBuild.result = 'SUCCESS'
+//                         echo 'No changes in user folder, skipping build and deploy.'
+//                         currentBuild.result = 'SUCCESS'
+                        skipRemainingStages = true
                         return
                     } else {
                         echo "Changes detected in user folder. Proceeding with build and deploy."
@@ -49,6 +52,11 @@ pipeline {
         }
 
         stage('Build Docker Image') {
+            when {
+                expression {
+                    !skipRemainingStages
+                }
+            }
             steps {
                 script {
                     sh """
@@ -63,6 +71,11 @@ pipeline {
         }
 
         stage('Login to Docker Registry') {
+            when {
+                expression {
+                    !skipRemainingStages
+                }
+            }
             steps {
                 script {
                     sh """
@@ -73,6 +86,11 @@ pipeline {
         }
 
         stage('Push Docker Image to Repository') {
+            when {
+                expression {
+                    !skipRemainingStages
+                }
+            }
             steps {
                 script {
                     sh """
@@ -84,6 +102,11 @@ pipeline {
         }
 
         stage('Deploy to EC2') {
+            when {
+                expression {
+                    !skipRemainingStages
+                }
+            }
             steps {
                 script {
                     sh """
@@ -101,6 +124,11 @@ pipeline {
         }
 
         stage('Logout from Docker Registry') {
+            when {
+                expression {
+                    !skipRemainingStages
+                }
+            }
             steps {
                 script {
                     sh """
@@ -116,7 +144,11 @@ pipeline {
             echo 'Pipeline finished!'
         }
         success {
-            echo 'User deployed successfully on port 8081!'
+            if (skipRemainingStages) {
+                echo 'No changes in user folder, skipping build and deploy.'
+            } else {
+                echo 'User deployed successfully on port 8081!'
+            }
         }
         failure {
             echo 'Deployment failed!'
