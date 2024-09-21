@@ -47,7 +47,7 @@ public class UserController {
     }
     @PostMapping("/toggle-follow/{followTargetId}")
     public ApiResult<Void> toggleFollow(@PathVariable Long followTargetId) {
-        Long userId = 1L;  // 현재 사용자 id (임시)
+        Long userId = 2L;  // 현재 사용자 id (임시)
         userService.toggleFollow(userId, followTargetId);
         return success(null);
     }
