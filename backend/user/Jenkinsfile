@@ -144,10 +144,12 @@ pipeline {
             echo 'Pipeline finished!'
         }
         success {
-            if (skipRemainingStages) {
-                echo 'No changes in user folder, skipping build and deploy.'
-            } else {
-                echo 'User deployed successfully on port 8081!'
+            script{
+                if (skipRemainingStages) {
+                    echo 'No changes in user folder, skipping build and deploy.'
+                } else {
+                    echo 'User deployed successfully on port 8081!'
+                }
             }
         }
         failure {
