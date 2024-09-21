@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';  // sweetalert2 import 추가
 import { PictureIcon, LocationIcon, BackIcon } from '../../../assets/icons/svg';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import DaumPostcode from 'react-daum-postcode';
@@ -49,6 +50,19 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     goBackToSchedule: () => {
       setIsScheduleSelected(false); // 게시글 작성 모달에서 일정 선택 모달로 돌아감
     },
+    // 완료 버튼 클릭 시 유효성 검사
+    validateAndComplete: () => {
+      if (!title || !content || !selectedImage || !calendarlocation) {
+        Swal.fire({
+          icon: 'warning',
+          title: '내용을 입력하세요',
+          text: '이미지, 제목, 내용, 위치를 모두 작성해 주세요.',
+          confirmButtonText: '확인'
+        });
+      } else {
+        onComplete();
+      }
+    },
   };
 
   return (
@@ -74,7 +88,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
               </div>
               <button
                 className="bg-[#707C60] text-white px-4 py-2 rounded-lg pr-4"
-                onClick={onComplete} 
+                onClick={handle.validateAndComplete} // 완료 버튼 클릭 시 유효성 검사 후 onComplete 호출
               >
                 완료
               </button>

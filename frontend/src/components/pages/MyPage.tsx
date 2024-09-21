@@ -3,12 +3,11 @@ import { UserIcon } from '../../assets/icons/svg';
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { PersonalDetailTab } from '../molecules/Tab/PersonalDetailTab';
 import { ModalCreateFeed2 } from '../organisms/Modal/ModalCreateFeed2';
+import { useNavigate } from 'react-router-dom';
 
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // 글 작성 완료 시 페이지 리렌더링을 위한 상태 추가
-  const [refreshKey, setRefreshKey] = useState(0); // 페이지 새로 고침 상태
+  const nav = useNavigate();
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -18,14 +17,14 @@ export const MyPage = () => {
     setIsModalOpen(false);
   };
 
-  // 글 작성 완료 후 모달 닫고 페이지 리렌더링
+  // 글 작성 완료 후 탭을 1번으로 설정하고 모달을 닫음
   const handleCompleteModal = () => {
     setIsModalOpen(false);
-    setRefreshKey(prev => prev + 1); 
+    nav('/my', { state: { activeTab: 'tab1' } });
   };
 
   return (
-    <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-40 mb-20" key={refreshKey}>
+    <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-40 mb-20">
       <div className="flex justify-center pb-8">
         <div className="flex justify-center pt-14 gap-8">
           <UserIcon />
