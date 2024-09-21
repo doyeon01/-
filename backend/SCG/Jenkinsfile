@@ -32,6 +32,21 @@ pipeline {
             }
         }
 
+        stage('Check for SCG Changes') {
+            steps {
+                script {
+                    // 최근 커밋과 그 이전 커밋 비교, SCG 폴더에 변경된 파일이 있는지 확인
+                    def changes = sh(script: "git diff --name-only HEAD~1 HEAD SCG/", returnStdout: true).trim()
+                    if (changes == '') {
+                        currentBuild.result = 'SUCCESS'
+                        error('No changes in SCG folder, skipping build and deploy.')
+                    } else {
+                        echo "Changes detected in SCG folder. Proceeding with build and deploy."
+                    }
+                }
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 script {
