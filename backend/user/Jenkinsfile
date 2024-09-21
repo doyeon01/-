@@ -38,8 +38,9 @@ pipeline {
                     // 최근 커밋과 그 이전 커밋 비교, user 폴더에 변경된 파일이 있는지 확인
                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- user/", returnStdout: true).trim()
                     if (changes == '') {
+                        echo 'No changes in user folder, skipping build and deploy.'
                         currentBuild.result = 'SUCCESS'
-                        error('No changes in user folder, skipping build and deploy.')
+                        return
                     } else {
                         echo "Changes detected in user folder. Proceeding with build and deploy."
                     }
