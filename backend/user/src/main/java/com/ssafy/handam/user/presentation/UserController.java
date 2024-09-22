@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-// 제발 변경사항 인식해라!!!
+// 됐다!!!
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
