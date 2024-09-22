@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     triggers {
-        // GitLab Webhook을 통해 deploy-test 브랜치로의 push 이벤트 시 트리거.
+        // GitLab Webhook을 통해 deploy-test 브랜치로의 push 이벤트 시 트리거
         gitlab(
             triggerOnPush: true,
         )
