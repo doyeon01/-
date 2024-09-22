@@ -37,6 +37,8 @@ pipeline {
         stage('Check for user Changes') {
             steps {
                 script {
+                    // 원격 브랜치 상태를 가져와 최신 커밋 확인
+                    sh 'git fetch origin deploy-test'
                     // 최근 커밋과 그 이전 커밋 비교, user 폴더에 변경된 파일이 있는지 확인
 //                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- user/", returnStdout: true).trim()
                     def changes = sh(script: "git diff --name-only origin/deploy-test~1 origin/deploy-test -- user/", returnStdout: true).trim()
