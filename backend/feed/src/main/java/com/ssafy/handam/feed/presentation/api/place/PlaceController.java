@@ -2,7 +2,7 @@ package com.ssafy.handam.feed.presentation.api.place;
 
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
-import com.ssafy.handam.feed.application.PlaceService;
+import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.place.PlaceDetailRequest;
 import com.ssafy.handam.feed.presentation.response.place.PlaceDetailResponse;
@@ -16,10 +16,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class PlaceController {
 
-    private final PlaceService placeService;
+    private final FeedService feedService;
 
     @GetMapping
     public ApiResult<PlaceDetailResponse> getPlaceDetail(PlaceDetailRequest request) {
-        return success(placeService.getPlaceDetail(request.toServiceRequest().id()));
+        return success(feedService.getPlaceDetail(request.toServiceRequest().id()));
     }
 }

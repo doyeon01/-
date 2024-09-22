@@ -7,7 +7,6 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.handam.feed.RestDocsSupport;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -23,15 +22,22 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @DisplayName("사용자 맞춤형 Best 피드 조회 API")
     @Test
     void getRecommendedFeedsForUser() throws Exception {
-        // Mock 응답 생성
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "image-url", 1L, 10);
-
+        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
+                1L,
+                "title",
+                "image-url",
+                1L,
+                10,
+                "123 Main Street",
+                37.7749,
+                122.4194,
+                "username",
+                "profile-image-url"
+        );
         RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
 
-        // Mock 서비스 호출 설정
         given(feedService.getBestFeedsForUser(any())).willReturn(response);
 
-        // 요청 데이터 생성 (Request Body)
         String requestBody = """
                     {
                         "userId": 1,
@@ -63,8 +69,20 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
                                         .description("피드 이미지 URL"),
+                                fieldWithPath("response.feeds[].title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].address").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response.feeds[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 경도"),
+                                fieldWithPath("response.feeds[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 위도"),
+                                fieldWithPath("response.feeds[].username").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response.feeds[].userProfileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -74,7 +92,18 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void getFeedsByFilters() throws Exception {
 
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "image-url", 1L, 10);
+        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
+                1L,
+                "title",
+                "image-url",
+                1L,
+                10,
+                "123 Main Street",
+                37.7749,
+                122.4194,
+                "username",
+                "profile-image-url"
+        );
         FeedsByFiltersResponse response = FeedsByFiltersResponse.of(List.of(feedPreviewDto));
 
         given(feedService.getFeedsByFilters(any())).willReturn(response);
@@ -87,7 +116,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                             {
                                                 "placeType": "CAFE",
                                                 "ageRange": 20,
-                                                "gender": "M",
+                                                "gender": "MALE",
                                                 "latitude": 37.7749,
                                                 "longitude": 122.4194,
                                                 "keyword": "coffee",
@@ -130,9 +159,21 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
                                         .description("피드 이미지 URL"),
+                                fieldWithPath("response.feeds[].title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
-                                fieldWithPath("error").description("에러 메시지 (성공 시 null)")
+                                fieldWithPath("response.feeds[].address").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response.feeds[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 경도"),
+                                fieldWithPath("response.feeds[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 위도"),
+                                fieldWithPath("response.feeds[].username").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response.feeds[].userProfileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("error").description("에러 메시지")
                         )
                 ));
     }

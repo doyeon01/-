@@ -5,25 +5,21 @@ import com.ssafy.handam.feed.domain.PlaceType;
 
 public record PlaceDetailResponse(Long id,
                                   String name,
-                                  String address1,
-                                  String address2,
+                                  String address,
                                   String imageUrl,
                                   Double longitude,
                                   Double latitude,
-                                  PlaceType placeType,
-                                  int likeCount) {
+                                  PlaceType placeType
+) {
 
     public static PlaceDetailResponse of(Place place) {
-        return new PlaceDetailResponse(place.getId(),
+        return new PlaceDetailResponse(
+                place.getId(),
                 place.getName(),
-                place.getAddress1(),
-                place.getAddress2(),
+                place.getAddress().getAddress(),
                 place.getImageUrl(),
-                place.getLongitude(),
-                place.getLatitude(),
-                place.getPlaceType(),
-                place.getLikeCount())
-                ;
-
+                place.getAddress().getLongitude(),
+                place.getAddress().getLatitude(),
+                place.getPlaceType());
     }
 }

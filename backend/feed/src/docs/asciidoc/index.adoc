@@ -1,6 +1,6 @@
 ifndef::snippets[]
 :snippets: ../../build/generated-snippets
-endif::snippets[]
+endif::[]
 
 = 여행한담 Rest API 문서
 [[place-detail]]

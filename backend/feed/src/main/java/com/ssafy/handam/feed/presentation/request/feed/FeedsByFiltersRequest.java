@@ -3,7 +3,6 @@ package com.ssafy.handam.feed.presentation.request.feed;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByFiltersServiceRequest;
 
 import java.util.List;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 public record FeedsByFiltersRequest(
         String placeType,
@@ -14,21 +13,19 @@ public record FeedsByFiltersRequest(
         String keyword,
         List<String> sortBy,
         int page,
-         int size
+        int size
 ) {
 
-    public static FeedsByFiltersServiceRequest toServiceRequest(
-            String placeType,
-            int ageRange,
-            String gender,
-            Double latitude,
-            Double longitude,
-            String keyword,
-            List<String> sortBy,
-            int page,
-            int size) {
-
-
-        return new FeedsByFiltersServiceRequest(placeType, ageRange, gender, latitude, longitude, keyword, sortBy, page, size);
+    public static FeedsByFiltersServiceRequest toServiceRequest(FeedsByFiltersRequest request) {
+        return new FeedsByFiltersServiceRequest(
+                request.placeType(),
+                request.ageRange(),
+                request.gender(),
+                request.latitude(),
+                request.longitude(),
+                request.keyword(),
+                request.sortBy(),
+                request.page(),
+                request.size());
     }
 }
