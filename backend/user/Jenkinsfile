@@ -56,9 +56,10 @@ pipeline {
 
         stage('Build Docker Image') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "user/**"
+//                 expression {
+//                     !skipRemainingStages
+//                 }
             }
             steps {
                 script {
@@ -75,9 +76,10 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "user/**"
+//                 expression {
+//                     !skipRemainingStages
+//                 }
             }
             steps {
                 script {
@@ -90,9 +92,10 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "user/**"
+//                 expression {
+//                     !skipRemainingStages
+//                 }
             }
             steps {
                 script {
@@ -106,9 +109,10 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "user/**"
+//                 expression {
+//                     !skipRemainingStages
+//                 }
             }
             steps {
                 script {
@@ -128,9 +132,10 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "user/**"
+//                 expression {
+//                     !skipRemainingStages
+//                 }
             }
             steps {
                 script {
@@ -148,11 +153,12 @@ pipeline {
         }
         success {
             script{
-                if (skipRemainingStages) {
-                    echo 'No changes in user folder, skipping build and deploy.'
-                } else {
-                    echo 'User deployed successfully on port 8081!'
-                }
+//                 if (skipRemainingStages) {
+//                     echo 'No changes in user folder, skipping build and deploy.'
+//                 } else {
+//                     echo 'User deployed successfully on port 8081!'
+//                 }
+                echo 'User deployed successfully on port 8081!'
             }
         }
         failure {
