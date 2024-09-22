@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 
-// jenkins test 왜 인식을 못하지?
+// 제발 변경사항 인식해라!!!
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
