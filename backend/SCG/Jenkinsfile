@@ -1,4 +1,4 @@
-def skipRemainingStages = false
+def skipRemainingStages = true
 
 pipeline {
     agent any
@@ -34,29 +34,28 @@ pipeline {
             }
         }
 
-        stage('Check for SCG Changes') {
-            steps {
-                script {
-                    // 최근 커밋과 그 이전 커밋 비교, SCG 폴더에 변경된 파일이 있는지 확인
-                    def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- SCG/", returnStdout: true).trim()
-                    if (changes == '') {
-                        skipRemainingStages = true
-                        return
-                    } else {
-                        echo "Changes detected in SCG folder. Proceeding with build and deploy."
-                    }
-                }
-            }
-        }
+//         stage('Check for SCG Changes') {
+//             steps {
+//                 script {
+//                     // 최근 커밋과 그 이전 커밋 비교, SCG 폴더에 변경된 파일이 있는지 확인
+//                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- SCG/", returnStdout: true).trim()
+//                     if (changes == '') {
+//                         skipRemainingStages = true
+//                         return
+//                     } else {
+//                         echo "Changes detected in SCG folder. Proceeding with build and deploy."
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Build Docker Image') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/SCG/**"
             }
             steps {
                 script {
+                    skipRemainingStages = false
                     sh """
                     cd backend/SCG
                     chmod +x ./gradlew
@@ -70,9 +69,7 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/SCG/**"
             }
             steps {
                 script {
@@ -85,9 +82,7 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/SCG/**"
             }
             steps {
                 script {
@@ -101,9 +96,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/SCG/**"
             }
             steps {
                 script {
@@ -123,9 +116,7 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/SCG/**"
             }
             steps {
                 script {
@@ -146,7 +137,7 @@ pipeline {
                 if (skipRemainingStages) {
                     echo 'No changes in SCG folder, skipping build and deploy.'
                 } else {
-                    echo 'User deployed successfully on port 8080!'
+                    echo 'Deployed successfully on port $USER_PORT!'
                 }
             }
         }
