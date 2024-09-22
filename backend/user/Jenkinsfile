@@ -56,7 +56,7 @@ pipeline {
 
         stage('Build Docker Image') {
             when {
-                changeset "**"
+                changeset "backend/user/**"
 //                 expression {
 //                     !skipRemainingStages
 //                 }
@@ -76,7 +76,7 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                changeset "**"
+                changeset "backend/user/**"
 //                 expression {
 //                     !skipRemainingStages
 //                 }
@@ -92,7 +92,7 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                changeset "**"
+                changeset "backend/user/**"
 //                 expression {
 //                     !skipRemainingStages
 //                 }
@@ -109,7 +109,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                changeset "**"
+                changeset "backend/user/**"
 //                 expression {
 //                     !skipRemainingStages
 //                 }
@@ -132,7 +132,7 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                changeset "**"
+                changeset "backend/user/**"
 //                 expression {
 //                     !skipRemainingStages
 //                 }
