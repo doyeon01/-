@@ -1,4 +1,4 @@
-def skipRemainingStages = false
+def skipRemainingStages = true
 
 pipeline {
     agent any
@@ -34,31 +34,30 @@ pipeline {
             }
         }
 
-        stage('Check for eureka Changes') {
-            steps {
-                script {
-                    // 최근 커밋과 그 이전 커밋 비교, eureka 폴더에 변경된 파일이 있는지 확인
-                    def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- eureka/", returnStdout: true).trim()
-                    if (changes == '') {
-//                         echo 'No changes in eureka folder, skipping build and deploy.'
-//                         currentBuild.result = 'SUCCESS'
-                        skipRemainingStages = true
-                        return
-                    } else {
-                        echo "Changes detected in eureka folder. Proceeding with build and deploy."
-                    }
-                }
-            }
-        }
+//         stage('Check for eureka Changes') {
+//             steps {
+//                 script {
+//                     // 최근 커밋과 그 이전 커밋 비교, eureka 폴더에 변경된 파일이 있는지 확인
+//                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- eureka/", returnStdout: true).trim()
+//                     if (changes == '') {
+// //                         echo 'No changes in eureka folder, skipping build and deploy.'
+// //                         currentBuild.result = 'SUCCESS'
+//                         skipRemainingStages = true
+//                         return
+//                     } else {
+//                         echo "Changes detected in eureka folder. Proceeding with build and deploy."
+//                     }
+//                 }
+//             }
+//         }
 
         stage('Build Docker Image') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/eureka/**"
             }
             steps {
                 script {
+                    skipRemainingStages = false
                     sh """
                     cd backend/eureka
                     chmod +x ./gradlew
@@ -72,9 +71,7 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/eureka/**"
             }
             steps {
                 script {
@@ -87,9 +84,7 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/eureka/**"
             }
             steps {
                 script {
@@ -103,9 +98,7 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/eureka/**"
             }
             steps {
                 script {
@@ -125,9 +118,7 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                expression {
-                    !skipRemainingStages
-                }
+                changeset "backend/eureka/**"
             }
             steps {
                 script {
