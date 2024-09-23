@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.domain.repository.jpa;
+package com.ssafy.handam.feed.infrastructure.jpa;
 
 import com.ssafy.handam.feed.domain.entity.Place;
 import java.util.Optional;

@@ -28,7 +28,7 @@ public class FeedController {
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
             @RequestBody RecommendedFeedsForUserRequest request) {
-        return success(feedService.getBestFeedsForUser(
+        return success(feedService.getRecommendedFeedsForUser(
                 RecommendedFeedsForUserRequest.toServiceRequest(request)
         ));
     }

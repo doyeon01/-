@@ -36,7 +36,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
         );
         RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
 
-        given(feedService.getBestFeedsForUser(any())).willReturn(response);
+        given(feedService.getRecommendedFeedsForUser(any())).willReturn(response);
 
         String requestBody = """
                     {

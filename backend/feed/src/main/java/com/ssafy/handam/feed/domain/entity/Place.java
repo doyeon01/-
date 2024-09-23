@@ -71,4 +71,3 @@ public class Place extends BaseEntity {
                 .build();
     }
 }
-
