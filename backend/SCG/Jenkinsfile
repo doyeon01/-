@@ -11,7 +11,7 @@ pipeline {
     }
 
     environment {
-        USER_PORT = '8081'
+        USER_PORT = '8080'
         DOCKER_USERINFO = credentials('DOCKER_USER')
         DOCKER_REPO = credentials('DOCKER_REPO')
         EC2_IP = credentials('EC2_SERVER1_IP')
@@ -33,23 +33,6 @@ pipeline {
                 ])
             }
         }
-
-//         stage('Check for user Changes') {
-//             steps {
-//                 script {
-//                     // 최근 커밋과 그 이전 커밋 비교, user 폴더에 변경된 파일이 있는지 확인
-// //                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- user/", returnStdout: true).trim()
-//                     if (changes == '') {
-// //                         echo 'No changes in user folder, skipping build and deploy.'
-// //                         currentBuild.result = 'SUCCESS'
-//                         skipRemainingStages = true
-//                         return
-//                     } else {
-//                         echo "Changes detected in user folder. Proceeding with build and deploy."
-//                     }
-//                 }
-//             }
-//         }
 
         stage('Build Docker Image') {
             when {
