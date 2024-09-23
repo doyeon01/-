@@ -46,7 +46,7 @@ pipeline {
                     chmod +x ./gradlew
                     ./gradlew build
                     ls build/libs
-                    docker build -t SCG:latest .
+                    docker build -t scg:latest .
                     """
                 }
             }
@@ -72,8 +72,8 @@ pipeline {
             steps {
                 script {
                     sh """
-                    docker tag SCG:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:SCG-latest
-                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:SCG-latest
+                    docker tag scg:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
                     """
                 }
             }
