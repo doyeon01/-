@@ -1,27 +1,33 @@
-import React, { FC } from 'react';
+import React, { FC, ReactNode } from 'react';
 
 interface ButtonLikeCategoryProps {
-  initialClicked?: boolean; // 선택 사항이므로 물음표로 처리
-  label: string; // 문자열 타입
-  onClick: () => void; // 클릭 이벤트는 반환값이 없는 함수
-  px?: number; // 패딩 X (수평)
-  py?: number; // 패딩 Y (수직)
+  initialClicked?: boolean;
+  label: string | ReactNode; // label을 문자열 또는 JSX 요소로 받을 수 있음
+  onClick: () => void;
+  px?: number;
+  py?: number;
 }
 
 const ButtonLikeCategory: FC<ButtonLikeCategoryProps> = ({ 
   initialClicked = false, 
   label, 
   onClick,
-  px = 4, // 기본값 설정
-  py = 2  // 기본값 설정
+  px = 4,
+  py = 2
 }) => {
   return (
     <div
       onClick={onClick}
-      className={`border rounded-full inline-block cursor-pointer px-${px} py-${py} 
-      ${initialClicked ? 'bg-[#707C60] text-white' : 'bg-white text-black border-black'}`}
+      style={{
+        paddingLeft: `${px * 0.25}rem`,
+        paddingRight: `${px * 0.25}rem`,
+        paddingTop: `${py * 0.25}rem`,
+        paddingBottom: `${py * 0.25}rem`,
+      }}
+      className={`border rounded-full inline-block cursor-pointer transition-colors duration-200
+      ${initialClicked ? 'bg-[#707C60] text-white hover:bg-[#5f674d]' : 'bg-white text-black border-black hover:bg-gray-200'}`}
     >
-      <span>{label}</span>
+      {typeof label === 'string' ? <span>{label}</span> : label} 
     </div>
   );
 };

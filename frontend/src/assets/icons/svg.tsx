@@ -145,6 +145,23 @@ export function RedHeartIcon(): JSX.Element {
   );
 }
 
+export function RealHeartIcon(): JSX.Element {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width="1em"
+      height="1em"
+      viewBox="0 0 24 24"
+      fill="red" 
+    >
+      <path 
+        d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53z"
+      />
+    </svg>
+  );
+}
+
+
 export function SearchIcon(): JSX.Element {
   return (
     <svg
@@ -200,6 +217,27 @@ export function LocationIcon(): JSX.Element {
   );
 }
 
+export function LocationDetailIcon(): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="3em"
+      height="3em"
+      viewBox="0 0 24 24"
+    >
+      <g
+        fill="none"
+        stroke="#878787"
+        strokeLinecap="round" 
+        strokeLinejoin="round"  
+        strokeWidth="2"  
+      >
+        <circle cx="12" cy="10" r="3" />
+        <path d="M12 2a8 8 0 0 0-8 8c0 1.892.402 3.13 1.5 4.5L12 22l6.5-7.5c1.098-1.37 1.5-2.608 1.5-4.5a8 8 0 0 0-8-8" />
+      </g>
+    </svg>
+  );
+}
 export function BackIcon(): JSX.Element {
   return (
     <svg
@@ -210,4 +248,47 @@ export function BackIcon(): JSX.Element {
       <path fill="currentColor" fillRule="evenodd" d="m3.343 12l7.071 7.071L9 20.485l-7.778-7.778a1 1 0 0 1 0-1.414L9 3.515l1.414 1.414z"/>
     </svg>
   );
+}
+
+export function FoodIcon(): JSX.Element {
+  return(
+    <svg xmlns="http://www.w3.org/2000/svg"
+     width="2.5em"
+     height="2.5em"
+     viewBox="0 0 256 256">
+      <path fill="#645E59" d="M68 88V40a12 12 0 0 1 24 0v48a12 12 0 0 1-24 0m152-48v184a12 12 0 0 1-24 0v-44h-44a12 12 0 0 1-12-12a273.2 273.2 0 0 1 7.33-57.82c10.09-41.76 29.43-69.85 55.94-81.18A12 12 0 0 1 220 40m-24 22.92C182.6 77 175 98 170.77 115.38a254.4 254.4 0 0 0-6.22 40.62H196ZM128 39a12 12 0 0 0-24 2l4 47.46a28 28 0 0 1-56 0L56 41a12 12 0 1 0-24-2l-4 48v1a52.1 52.1 0 0 0 40 50.59V224a12 12 0 0 0 24 0v-85.41A52.1 52.1 0 0 0 132 88v-1Z"/>
+    </svg>
+  )
+}
+
+export function PlaceIcon(): JSX.Element {
+  return(
+    <svg xmlns="http://www.w3.org/2000/svg"
+     width="2.5em"
+     height="2.5em"
+     viewBox="0 0 24 24">
+    <path fill="#645E59" d="M8.21 17c.44-.85.85-1.84 1.23-3H9v-2h1c.61-2.6 1-5.87 1-10h2c0 4.13.4 7.4 1 10h1v2h-.44c.38 1.16.79 2.15 1.23 3H17v2l2 3h-2.42c-.77-1.76-2.53-3-4.58-3s-3.81 1.24-4.58 3H5l2-3l-.03-2zm4.38-3h-1.18a22 22 0 0 1-1.13 3h3.44c-.4-.87-.79-1.87-1.13-3"/>
+    </svg>
+  )
+}
+
+export function CafeIcon(): JSX.Element {
+  return(
+    <svg xmlns="http://www.w3.org/2000/svg"
+     width="2.5em"
+     height="2.5em"
+     viewBox="0 0 20 20">
+    <g fill="#645E59"><path fill-rule="evenodd" d="M15.5 4h-12a1 1 0 0 0-1 1c0 4.918 3.061 9 7 9s7-4.082 7-9a1 1 0 0 0-1-1m-6 8c-2.455 0-4.596-2.57-4.949-6h9.898c-.353 3.43-2.494 6-4.949 6" clip-rule="evenodd"/><path d="M4 14.5h11a1 1 0 1 1 0 2H4a1 1 0 1 1 0-2m10.024-3.69l.552-1.923c.257.074.539.113.831.113c1.107 0 1.893-.543 1.893-1s-.786-1-1.893-1V5C17.495 5 19.3 6.248 19.3 8s-1.805 3-3.893 3c-.477 0-.944-.065-1.383-.19"/></g></svg>
+  )
+}
+
+export function HotelIcon(): JSX.Element {
+  return(
+    <svg xmlns="http://www.w3.org/2000/svg"
+     width="2.5em"
+     height="2e.5m"
+     viewBox="0 0 24 24">
+    <path fill="#645E59" d="M11.336 2.253a1 1 0 0 1 1.328 0l9 8a1 1 0 0 1-1.328 1.494L20 11.45V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7.55l-.336.297a1 1 0 0 1-1.328-1.494zM6 9.67V19h3v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5h3V9.671l-6-5.333zM13 19v-4h-2v4z"/>
+    </svg>
+  )
 }

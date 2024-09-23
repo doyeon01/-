@@ -21,11 +21,6 @@ const testArr: TestArr[] = [
   { title: '낯선 도시 탐험해보기', address: '경상남도 밀양시', testimg: testImg3, createdDate: '2024-09-14' },
   { title: '오랫만에 여행!', address: '경기도 연천군', testimg: testImg4, createdDate: '2024-09-13' },
   { title: '문화생활 여행', address: '서울특별시', testimg: testImg5, createdDate: '2024-09-20' },
-  { title: '퇴사 기념 혼여', address: '경기도 이천시', testimg: testImg1, createdDate: '2024-09-18' },
-  { title: '대학교 졸업여행 ', address: '강원도 동해시', testimg: testImg2, createdDate: '2024-09-18' },
-  { title: '낯선 도시 탐험해보기', address: '경상남도 밀양시', testimg: testImg3, createdDate: '2024-09-14' },
-  { title: '오랫만에 여행!', address: '경기도 연천군', testimg: testImg4, createdDate: '2024-09-13' },
-  { title: '문화생활 여행', address: '서울특별시', testimg: testImg5, createdDate: '2024-09-20' },
 ];
 
 export const PersonalPlanDetail: React.FC = () => {
@@ -53,6 +48,7 @@ export const PersonalPlanDetail: React.FC = () => {
               title={item.title}
               address={item.address}
               testimg={item.testimg}
+              showButton={true}  
             />
           ))
         ) : (
