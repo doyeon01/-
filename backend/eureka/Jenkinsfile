@@ -1,0 +1,133 @@
+def skipRemainingStages = true
+
+pipeline {
+    agent any
+
+    triggers {
+        // GitLab Webhook을 통해 backend 브랜치로의 push 이벤트 시 트리거.
+        gitlab(
+            triggerOnPush: true,
+        )
+    }
+
+    environment {
+        USER_PORT = '8761'
+        DOCKER_USERINFO = credentials('DOCKER_USER')
+        DOCKER_REPO = credentials('DOCKER_REPO')
+        EC2_IP = credentials('EC2_SERVER1_IP')
+        SSH_INFO = credentials('EC2_SERVER1_SSH')
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                // backend 브랜치의 user 폴더만 체크아웃
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/backend']],
+                    userRemoteConfigs: [[
+                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
+                        credentialsId: 'PERSONAL_ACCESS_TOKEN'
+                    ]],
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'eureka/']]]]
+                ])
+            }
+        }
+
+        stage('Build Docker Image') {
+            when {
+                changeset "backend/eureka/**"
+            }
+            steps {
+                script {
+                    skipRemainingStages = false
+                    sh """
+                    cd backend/eureka
+                    chmod +x ./gradlew
+                    ./gradlew build
+                    ls build/libs
+                    docker build -t eureka:latest .
+                    """
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            when {
+                changeset "backend/eureka/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker login -u $DOCKER_USERINFO_USR -p $DOCKER_USERINFO_PSW
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Repository') {
+            when {
+                changeset "backend/eureka/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker tag eureka:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            when {
+                changeset "backend/eureka/**"
+            }
+            steps {
+                script {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                    docker stop eureka || true
+                    docker rm eureka || true
+                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest || true
+                    docker system prune -f --volumes
+                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest
+                    docker run -it -d --name eureka -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                    EOF
+                    """.stripIndent()
+                }
+            }
+        }
+
+        stage('Logout from Docker Registry') {
+            when {
+                changeset "backend/eureka/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker logout
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        success {
+            script{
+                if (skipRemainingStages) {
+                    echo 'No changes in eureka folder, skipping build and deploy.'
+                } else {
+                    echo 'Deployed successfully on port $USER_PORT!'
+                }
+            }
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
