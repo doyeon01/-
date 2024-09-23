@@ -1,0 +1,133 @@
+def skipRemainingStages = true
+
+pipeline {
+    agent any
+
+    triggers {
+        // GitLab Webhook을 통해 backend 브랜치로의 push 이벤트 시 트리거.
+        gitlab(
+            triggerOnPush: true,
+        )
+    }
+
+    environment {
+        USER_PORT = '8080'
+        DOCKER_USERINFO = credentials('DOCKER_USER')
+        DOCKER_REPO = credentials('DOCKER_REPO')
+        EC2_IP = credentials('EC2_SERVER1_IP')
+        SSH_INFO = credentials('EC2_SERVER1_SSH')
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                // backend 브랜치의 SCG 폴더만 체크아웃
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/backend']],
+                    userRemoteConfigs: [[
+                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
+                        credentialsId: 'PERSONAL_ACCESS_TOKEN'
+                    ]],
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'SCG/']]]]
+                ])
+            }
+        }
+
+        stage('Build Docker Image') {
+            when {
+                changeset "backend/SCG/**"
+            }
+            steps {
+                script {
+                    skipRemainingStages = false
+                    sh """
+                    cd backend/SCG
+                    chmod +x ./gradlew
+                    ./gradlew build
+                    ls build/libs
+                    docker build -t scg:latest .
+                    """
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            when {
+                changeset "backend/SCG/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker login -u $DOCKER_USERINFO_USR -p $DOCKER_USERINFO_PSW
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Repository') {
+            when {
+                changeset "backend/SCG/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker tag scg:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            when {
+                changeset "backend/SCG/**"
+            }
+            steps {
+                script {
+                    sh """
+                    ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                    docker stop scg || true
+                    docker rm scg || true
+                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest || true
+                    docker system prune -f --volumes
+                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    docker run -it -d --name scg -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    EOF
+                    """.stripIndent()
+                }
+            }
+        }
+
+        stage('Logout from Docker Registry') {
+            when {
+                changeset "backend/SCG/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker logout
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        success {
+            script{
+                if (skipRemainingStages) {
+                    echo 'No changes in SCG folder, skipping build and deploy.'
+                } else {
+                    echo 'Deployed successfully on port $USER_PORT!'
+                }
+            }
+        }
+        failure {
+            echo 'Deployment failed!'
+        }
+    }
+}
