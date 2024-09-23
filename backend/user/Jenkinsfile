@@ -136,11 +136,11 @@ pipeline {
         }
         success {
             script{
+                def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
                 if (skipRemainingStages) {
                     echo 'No changes in user folder, skipping build and deploy.'
                 } else {
                     echo 'Deployed successfully on port $USER_PORT!'
-                    def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
                     mattermostSend (
                         color: 'good',
                         message: "${user}님의 ${env.JOB_NAME} 서버 배포 성공. (${env.BUILD_NUMBER}) ",
