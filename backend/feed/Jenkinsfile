@@ -4,7 +4,7 @@ pipeline {
     agent any
 
     triggers {
-        // GitLab Webhook을 통해 backend 브랜치로의 push 이벤트 시 트리거
+        // GitLab Webhook을 통해 backend 브랜치로의 push 이벤트 시 트리거.
         gitlab(
             triggerOnPush: true,
         )
@@ -24,7 +24,7 @@ pipeline {
             steps {
                 // backend 브랜치의 feed 폴더만 체크아웃
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/deploy']],
+                    branches: [[name: '*/backend']],
                     userRemoteConfigs: [[
                         url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
                         credentialsId: 'PERSONAL_ACCESS_TOKEN'
