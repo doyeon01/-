@@ -59,7 +59,7 @@ const CardSetHotPlace: React.FC = () => {
         ))}
       </div>
 
-      <div className="grid grid-cols-5 gap-4">
+      <div className="grid grid-cols-5">
         {filteredImages.map((item, index) => (
           <div
             key={index}

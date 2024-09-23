@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import testImg1 from '../../../assets/statics/test1.jpg';
 import testImg2 from '../../../assets/statics/test2.jpg';
 import testImg3 from '../../../assets/statics/test3.png';
@@ -20,29 +20,42 @@ const testArr: TestArr[] = [
 ];
 
 const CardSetMainRec: React.FC = () => {
+  const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
+
   return (
-    <div className="grid grid-cols-5 gap-4">
-      {testArr.map((item, index) => (
-        <div
-          key={index}
-          className="relative overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
-        >
-          <img
-            src={item.testimg}
-            alt={item.title}
-            className="w-full h-72 object-cover"
-          />
-          <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
-            <h3 className="text-lg font-bold">{item.title}</h3>
-            <p className="text-sm">{item.address}</p>
+    <div className="flex gap-4">
+      {testArr.map((item, index) => {
+        const isHovered = hoveredIndex === index;
+
+        const widthClass = isHovered
+          ? 'flex-[3]' 
+          : 'flex-[1]'; 
+
+        return (
+          <div
+            key={index}
+            className={`relative transition-all duration-300 ease-in-out ${widthClass} overflow-hidden cursor-pointer`}
+            onMouseEnter={() => setHoveredIndex(index)}
+          >
+            <img
+              src={item.testimg}
+              alt={item.title}
+              className="object-cover w-full h-[320px] rounded-lg shadow-lg"
+            />
+            <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
+              <h3 className="text-lg font-bold">{item.title}</h3>
+              <p className="text-sm">{item.address}</p>
+            </div>
+            {isHovered && (
+              <div className="absolute top-2 right-2">
+                <button className="bg-white rounded-full p-2 shadow-md">
+                  ❤️
+                </button>
+              </div>
+            )}
           </div>
-          <div className="absolute top-2 right-2">
-            <button className="bg-white rounded-full p-2 shadow-md">
-              ❤️
-            </button>
-          </div>
-        </div>
-      ))}
+        );
+      })}
     </div>
   );
 };
