@@ -92,7 +92,7 @@ pipeline {
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest
-                    docker run -it -d --name eureka -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                    docker run -it -d --name eureka -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:eureka-latest
                     EOF
                     """.stripIndent()
                 }
