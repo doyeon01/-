@@ -1,16 +1,24 @@
 package com.ssafy.handam.feed.domain.entity;
 
+import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.domain.valueobject.Address;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.data.elasticsearch.core.index.AliasAction.Add;
 
 
 @Entity
@@ -23,45 +31,44 @@ public class Place extends BaseEntity {
     private Long id;
 
     private String name;
-    private String address1;
-    private String address2;
     private String imageUrl;
-    private Double longitude;
-    private Double latitude;
-    private int likeCount;
+
+    @Embedded
+    private Address address;
+
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL)
+    private List<Feed> feeds = new ArrayList<>();
 
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;
 
     @Builder
     private Place(
-            Long id,
             String name,
-                  String address1,
-                  String address2,
-                  String imageUrl,
-                  Double longitude,
-                  Double latitude,
-                  PlaceType placeType
+            String imageUrl,
+            Address address,
+            List<Feed> feeds,
+            PlaceType placeType
     ) {
-        this.id = id;
         this.name = name;
-        this.address1 = address1;
-        this.address2 = address2;
         this.imageUrl = imageUrl;
-        this.longitude = longitude;
-        this.latitude = latitude;
+        this.address = address;
+        this.feeds = feeds;
         this.placeType = placeType;
-        this.likeCount = 0;
     }
 
-    public void incrementLikeCount() {
-        this.likeCount++;
+    public void addFeed(Feed feed) {
+        feeds.add(feed);
+        feed.assignToPlace(this);
     }
 
-    public void decrementLikeCount() {
-        if (this.likeCount > 0) {
-            this.likeCount--;
-        }
+    public static Place createPlace(FeedCreationServiceRequest request) {
+        return Place.builder()
+                .name(request.title())
+                .imageUrl(request.feedImageUrl())
+                .address(request.address())
+                .placeType(request.placeType())
+                .build();
     }
 }
+

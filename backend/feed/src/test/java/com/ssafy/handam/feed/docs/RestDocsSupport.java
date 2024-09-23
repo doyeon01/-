@@ -1,10 +1,9 @@
-package com.ssafy.handam.feed;
+package com.ssafy.handam.feed.docs;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.feed.application.FeedService;
-import com.ssafy.handam.feed.application.PlaceService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;;
@@ -27,9 +26,6 @@ public abstract class RestDocsSupport {
     protected ObjectMapper objectMapper;
 
     protected MockMvc mockMvc;
-
-    @MockBean
-    protected PlaceService placeService;
 
     @MockBean
     protected FeedService feedService;

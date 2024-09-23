@@ -14,6 +14,14 @@ spring:
       hibernate:
         default_batch_fetch_size: 100
 
-  web:
-    resources:
-      static-locations: classpath:/static/, classpath:/public/, classpath:/docs/
+    web:
+      resources:
+        static-locations: classpath:/static/, classpath:/public/, classpath:/docs/
+
+
+  elasticsearch:
+    uris: http://j11c205a.p.ssafy.io:9200
+
+user:
+  service:
+    url: http://j11c205.p.ssafy.io:8081

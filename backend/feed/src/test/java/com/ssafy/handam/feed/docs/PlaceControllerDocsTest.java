@@ -10,9 +10,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.handam.feed.RestDocsSupport;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Place;
+import com.ssafy.handam.feed.domain.valueobject.Address;
 import com.ssafy.handam.feed.presentation.response.place.PlaceDetailResponse;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -24,9 +24,17 @@ class PlaceControllerDocsTest extends RestDocsSupport {
     @DisplayName("장소 상세 정보 조회 API")
     @Test
     void getPlaceDetail() throws Exception {
-        PlaceDetailResponse response = PlaceDetailResponse.of(createPlace());
+        PlaceDetailResponse response = new PlaceDetailResponse(
+                1L,
+                "장소 이름",
+                "장소 주소",
+                "장소 이미지 URL",
+                127.123456,
+                37.123456,
+                PlaceType.RESTAURANT
+        );
 
-        given(placeService.getPlaceDetail(any())).willReturn(response);
+        given(feedService.getPlaceDetail(any())).willReturn(response);
 
         mockMvc.perform(get("/api/v1/places")
                         .param("id", "1")
@@ -42,18 +50,14 @@ class PlaceControllerDocsTest extends RestDocsSupport {
                                         .description("장소 ID"),
                                 fieldWithPath("response.name").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
-                                fieldWithPath("response.address1").type(JsonFieldType.STRING)
+                                fieldWithPath("response.address").type(JsonFieldType.STRING)
                                         .description("장소 주소"),
-                                fieldWithPath("response.address2").type(JsonFieldType.STRING)
-                                        .description("장소 상세 주소"),
                                 fieldWithPath("response.imageUrl").type(JsonFieldType.STRING)
                                         .description("장소 이미지 URL"),
                                 fieldWithPath("response.longitude").type(JsonFieldType.NUMBER)
                                         .description("장소 경도"),
                                 fieldWithPath("response.latitude").type(JsonFieldType.NUMBER)
                                         .description("장소 위도"),
-                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
-                                        .description("좋아요 수"),
                                 fieldWithPath("response.placeType").type(JsonFieldType.STRING)
                                         .description("장소 타입"),
                                 fieldWithPath("error").type(JsonFieldType.NULL)
@@ -65,14 +69,11 @@ class PlaceControllerDocsTest extends RestDocsSupport {
     }
 
     private Place createPlace() {
+        Address address = new Address("장소 주소", 37.123456, 127.123456);
         return Place.builder()
-                .id(1L)
                 .name("장소 이름")
-                .address1("장소 주소")
-                .address2("장소 상세 주소")
+                .address(address)
                 .imageUrl("장소 이미지 URL")
-                .longitude(37.123456)
-                .latitude(127.123456)
                 .placeType(PlaceType.RESTAURANT)
                 .build();
     }

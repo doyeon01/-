@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.domain.entity;
 
+import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -41,6 +42,16 @@ public class Feed extends BaseEntity {
         this.likeCount = 0;
     }
 
+    public static Feed createFeed(FeedCreationServiceRequest request, Place place) {
+        return Feed.builder()
+                .title(request.title())
+                .content(request.content())
+                .imageUrl(request.feedImageUrl())
+                .place(place)
+                .userId(request.userId())
+                .build();
+    }
+
     public void incrementLikeCount() {
         this.likeCount++;
     }
@@ -49,6 +60,10 @@ public class Feed extends BaseEntity {
         if (this.likeCount > 0) {
             this.likeCount--;
         }
+    }
+
+    public void assignToPlace(Place place) {
+        this.place = place;
     }
 }
 
