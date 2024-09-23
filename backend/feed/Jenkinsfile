@@ -126,7 +126,7 @@ pipeline {
                     def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
                     mattermostSend (
                         color: 'good',
-                        message: "${user}님의 ${env.JOB_NAME} 서버 배포 성공. (${env.BUILD_NUMBER}) ",
+                        message: "${user}님의 ${env.JOB_NAME} 서버 배포 성공. (#${env.BUILD_NUMBER}) ",
                     )
                 }
             }
@@ -137,7 +137,7 @@ pipeline {
                 def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
                 mattermostSend (
                     color: 'danger',
-                    message: "${user}님? ${env.JOB_NAME} 서버 터졌는데요? (${env.BUILD_NUMBER}) ",
+                    message: "${user}님? ${env.JOB_NAME} 서버 터졌는데요? (#${env.BUILD_NUMBER}) ",
                 )
             }
         }
