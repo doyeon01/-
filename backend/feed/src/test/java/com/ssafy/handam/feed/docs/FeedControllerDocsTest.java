@@ -192,7 +192,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.likeFeed(any(Long.class), any(Long.class))).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/feeds/like/{feedId}", 1)
+                        MockMvcRequestBuilders.post("/api/v1/feeds/like/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .param("userId", "1")

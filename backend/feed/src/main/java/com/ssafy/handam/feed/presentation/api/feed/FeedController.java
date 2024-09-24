@@ -52,7 +52,7 @@ public class FeedController {
         return success(feedService.getFeedDetails(feedId));
     }
 
-    @GetMapping("/like/{feedId}")
+    @PostMapping("/like/{feedId}")
     public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
