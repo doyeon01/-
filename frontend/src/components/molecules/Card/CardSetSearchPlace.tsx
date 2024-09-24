@@ -9,13 +9,18 @@ interface Place {
 
 interface CardSetSearchPlaceProps {
   places: Place[];
+  onItemClick: (item: Place) => void;
 }
 
-const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ places }) => {
+const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ places,onItemClick }) => {
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
       {places.map((place, index) => (
-        <div key={index} className="relative group">
+        <div 
+        key={index} 
+        className="relative group"
+        onClick={() => onItemClick(place)}
+        >
           <img
             src={place.testimg}
             alt={place.title}

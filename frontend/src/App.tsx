@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Routes, useLocation } from 'react-router-dom';
 import { SurveyPage } from './components/pages/SurveyPage';
 import { LandingPage } from './components/pages/LandingPage';
@@ -11,7 +11,6 @@ import { ScheduleDetail } from './components/pages/ScheduleDetail';
 import { PocaPage } from './components/pages/PocaPage';
 import { Navbar } from './components/organisms/Navbar';
 import MainPage from './components/pages/MainPage';
-import ModalChat from './components/organisms/Modal/ModalChat'; 
 import ButtonChat from './components/atoms/button/ButtonChat';
 
 const App: React.FC = () => {
