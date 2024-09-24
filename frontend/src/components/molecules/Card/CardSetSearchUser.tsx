@@ -4,17 +4,23 @@ interface User {
   user: string;
   address: string;
   testimg: string;
+  title: string; 
 }
 
 interface CardSetSearchUserProps {
   users: User[];
+  onItemClick: (item: User) => void;
 }
 
-const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ users }) => {
+const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ users,onItemClick }) => {
   return (
     <div className="flex flex-col items-center space-y-4">
       {users.map((user, index) => (
-        <div key={index} className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2">
+        <div 
+        key={index} 
+        className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2"
+        onClick={() => onItemClick(user)}
+        >
           <div className="flex items-center space-x-4">
             <img
               src={user.testimg}

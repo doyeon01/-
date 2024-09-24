@@ -3,7 +3,7 @@ import styles from './CardSetFestivalRec.module.css';
 import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
-import DropDown from '../Dropdown/Dropdown';
+import DropDown from '../Dropdown/DropDown';
 import { getFestivalData } from '../../../services/api/postFestival';
 
 const CardSetFestivalRec: React.FC = () => {

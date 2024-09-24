@@ -14,7 +14,7 @@ const DropDown: React.FC<DropDownProps> = ({ selectedPlace, setSelectedPlace }) 
     const value = e.target.value;
     setSelectedPlace(value ? value : null); 
     console.log(selectedPlace);
-    
+    console.log(isOpen);
     setIsOpen(false); 
   };
 

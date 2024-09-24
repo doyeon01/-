@@ -8,7 +8,7 @@ interface ModalFeedDetailProps {
   postTitle: string;
   postImage: string;
   likesCount: number;
-  comments: { username: string; content: string; profileImg: string }[];
+  comments: { username: string; content: string; }[];
   closeModal: () => void;
 }
 
@@ -117,7 +117,6 @@ const ModalFeedDetail: React.FC<ModalFeedDetailProps> = ({
             {comments.map((comment, index) => (
               <div key={index} className="flex items-start border-b-2 pb-5 ">
                 <img
-                  src={comment.profileImg} 
                   alt={`${comment.username}'s profile`} 
                   className="w-8 h-8 rounded-full object-cover mr-2"
                 />

@@ -1,7 +1,7 @@
 import React from 'react'
 import Vector from '../../../assets/statics/Vector.png'
 
-interface Props {
+export interface Props {
     text: string; 
     onClick?: () => void;
 }
