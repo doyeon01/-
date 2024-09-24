@@ -5,7 +5,7 @@ pipeline {
         // 필요한 환경 변수 설정
         DOCKER_IMAGE = 'frontend'  // 사용할 Docker 이미지 이름
         REPO_URL = 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git'
-        S3_BUCKET = 'your-s3-bucket'         // S3 버킷 설정 (S3 사용 시)
+        // S3_BUCKET = 'your-s3-bucket'         // S3 버킷 설정 (S3 사용 시)
         FRONTEND_PORT = '3000'
         DOCKER_USERINFO = credentials('DOCKER_USER')
         DOCKER_REPO = credentials('DOCKER_REPO')
