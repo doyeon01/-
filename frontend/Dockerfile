@@ -1,9 +1,9 @@
 # Step 1: Build the React app
-FROM node:20 AS build
+FROM node:18 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
 RUN npm install
-COPY ./ ./
+COPY . .
 
 # Set up environment variables
 RUN echo "VITE_FESTIVAL_API_KEY = i6joetD7vwqBJ+jkjYB7eY7xMq3/Co/Gu7a3B0EPjHum8n8VJBSfZH0k5Sv46qdSMio73m0KV/iEv324Cj+MIw==" > .env
@@ -21,5 +21,6 @@ COPY --from=build /app/dist /usr/share/nginx/html
 # RUN ln -s /etc/nginx/sites-available/j11c205.p.ssafy.io /etc/nginx/sites-enabled/
 
 EXPOSE 80
+EXPOSE 443
 
 CMD ["nginx", "-g", "daemon off;"]

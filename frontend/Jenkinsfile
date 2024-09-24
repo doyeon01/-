@@ -63,7 +63,7 @@ pipeline {
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$DOCKER_IMAGE-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$DOCKER_IMAGE-latest
-                    docker run -it -d --name $DOCKER_IMAGE -p $FRONTEND_PORT:$FRONTEND_PORT $DOCKER_IMAGE:latest
+                    docker run -it -d --name $DOCKER_IMAGE -p $FRONTEND_PORT:$FRONTEND_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$DOCKER_IMAGE-latest
                     EOF
                     """.stripIndent()
                 }
