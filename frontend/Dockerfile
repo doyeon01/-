@@ -2,6 +2,8 @@
 FROM node:18 AS build
 WORKDIR /app
 COPY package.json package-lock.json ./
+RUN rm -rf node_modules/.vite
+RUN rm -rf node_modules
 RUN npm install
 COPY . .
 
