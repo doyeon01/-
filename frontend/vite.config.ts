@@ -7,13 +7,7 @@ export default defineConfig({
         'process.env': process.env 
     },
     base: './',
-    build: {
-        rollupOptions: {
-            output: {
-                entryFileNames: 'assets/[name].js',
-                chunkFileNames: 'assets/[name].js',
-                assetFileNames: 'assets/[name].[ext]'
-            }
-        }
+    resolve: {
+        extensions: ['.ts', '.tsx', '.js'] // 확장자 우선 순위 설정
     }
 });
