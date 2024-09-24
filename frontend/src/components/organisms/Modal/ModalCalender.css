@@ -6,14 +6,14 @@
   border: #B8B1AB solid 3px;
   border-radius: 30px;
   box-shadow: 4px 2px 10px rgba(0, 0, 0, 0.13);
-  padding: 3% 5%;
   background-color: white;
   overflow: hidden;
+  font-size: 20px;
 }
 
 /* 전체 폰트 컬러 */
 .react-calendar__month-view abbr {
-  color: #333; /* gray_1 값 */
+  color: black
 }
 
 /* 네비게이션 가운데 정렬 */
@@ -55,8 +55,11 @@
 }
 
 /* 오늘 날짜 폰트 컬러 */
+.react-calendar__tile--now {
+  background-color: #b6afa9;
+}
 .react-calendar__tile--now abbr {
-  color: blue; /* primary_2 값 */
+  color: white; /* primary_2 값 */
 }
 
 /* 네비게이션 월 스타일 적용 */
@@ -74,45 +77,22 @@
 
 /* 일 날짜 간격 */
 .react-calendar__tile {
-  padding: 5px 0px 18px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  justify-items: center;
+  /* padding: 5px 0px 18px; */
   position: relative;
 }
 
 /* 선택한 날짜 스타일 적용 */
 .react-calendar__tile:enabled:hover,
 .react-calendar__tile:enabled:focus,
-.react-calendar__tile--active {
-  background-color: yellow; /* yellow_2 값 */
+.react-calendar__tile--active, 
+.react-calendar__tile--active abbr {
+  background-color: #665F59; /* yellow_2 값 */
+  color: white !important;
   border-radius: 0.3rem;
-}
-
-/* 오늘 버튼 스타일 */
-.today-button {
-  position: absolute;
-  right: 7%;
-  top: 6%;
-  background-color: #0099ff; /* primary_3 값 */
-  color: yellow; /* yellow_2 값 */
-  width: 18%;
-  min-width: fit-content;
-  height: 1.5rem;
-  text-align: center;
-  margin: 0 auto;
-  line-height: 1.6rem;
-  border-radius: 15px;
-  font-size: 0.8rem;
-  font-weight: 800;
-}
-
-/* 오늘 날짜에 텍스트 삽입 스타일 */
-.today-text {
-  font-size: x-small;
-  color: #6600cc; /* br_2 값 */
-  font-weight: 600;
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translateX(-50%);
 }
 
 /* 출석한 날짜에 점 표시 스타일 */

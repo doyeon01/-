@@ -3,12 +3,21 @@ import ButtonRefreshIcon from '../atoms/button/ButtonRefreshIcon'
 import CardPlanFav from '../molecules/Card/CardPlanFav'
 import KaKaoMap_Plan from '../organisms/KaKaoMap_Plan'
 import ModalCalendar from '../organisms/Modal/ModalCalender'
+import moment from 'moment'
 
 export const PlanPage:React.FC = () => {
   const [Ismodal,setismodal] = useState(false)
+  const [IsHide,setIsHide] = useState(true)
+  const [selectedDate,setSelectedDate] = useState<Date | null>(null)
 
   const handleIsmodal = ()=>{
     setismodal(Ismodal=>!Ismodal)
+  }
+
+  const handleIsHide = (choicedDate: Date)=>{
+    setIsHide(IsHide=>!IsHide)
+    setismodal(Ismodal=>!Ismodal)
+    setSelectedDate(choicedDate)
   }
 
   return (
@@ -16,13 +25,14 @@ export const PlanPage:React.FC = () => {
   {/* 모달 창 */}
   {Ismodal === true && (
     <>
-    <div className='w-full h-full bg-black opacity-50 fixed z-10'/>
+    <div className='w-full h-full bg-black opacity-50 fixed z-10' onClick={handleIsmodal}/>
     <div className='absolute z-10 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2 '>
-      <ModalCalendar/>
+      <ModalCalendar onClick={handleIsHide}/>
     </div>
     </>
   )}
-  <div className='flex flex-row items-center justify-center gap-[22px] top-[150px] relative'>
+
+  {IsHide === true ? (<div className='flex flex-row items-center justify-center gap-[22px] top-[150px] relative'>
     <div //지도 컴포넌트
     className='w-full h-[500px] bg-sky-200 relative ml-10'>
       <KaKaoMap_Plan/>
@@ -46,7 +56,21 @@ export const PlanPage:React.FC = () => {
       <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치"/>
       <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치"/>
     </div>
+  </div>):(
+    <div className='flex flex-col items-center justify-center h-screen'>
+    {/* 선택된 날짜가 존재할 때만 렌더링 */}
+    {selectedDate ? (
+      <>
+        <h1 className='text-2xl font-semibold'>선택된 날짜:</h1>
+        <p className='text-xl'>
+          {moment(selectedDate).format('YYYY년 MM월 DD일')} {/* 날짜 포맷 */}
+        </p>
+      </>
+    ) : (
+      <p>날짜가 선택되지 않았습니다.</p>
+    )}
   </div>
+  )}
   </>  
   )
 }
