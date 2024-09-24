@@ -64,6 +64,7 @@ pipeline {
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$DOCKER_IMAGE-latest
                     docker run -it -d --name $DOCKER_IMAGE -p $FRONTEND_PORT:80 $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$DOCKER_IMAGE-latest
+                    docker cp frontend_docker_nginx.conf frontend:/etc/nginx/conf.d/default.conf
                     EOF
                     """.stripIndent()
                 }
