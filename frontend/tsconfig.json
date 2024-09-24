@@ -5,8 +5,19 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "jsx": "react-jsx",
-    "noUnusedLocals": false, 
-    "noUnusedParameters": false 
+    "jsx": "react-jsx",             // React JSX 지원
+    "noUnusedLocals": false,        // 사용되지 않는 지역 변수 체크 비활성화
+    "noUnusedParameters": false,    // 사용되지 않는 파라미터 체크 비활성화
+    "esModuleInterop": true,        // ES 모듈의 상호 운용성 활성화
+    "allowSyntheticDefaultImports": true, // 기본 모듈 가져오기 활성화
+    "strict": true,                 // 엄격한 타입 검사 모드
+    "target": "es6",                // 컴파일 타겟 설정
+    "module": "commonjs",           // 모듈 시스템 설정
+    "baseUrl": ".",                 // 절대 경로 설정
+    "paths": {                      // 경로 별칭 설정
+      "@components/*": ["src/components/*"],
+      "@pages/*": ["src/pages/*"],
+      "@utils/*": ["src/utils/*"]
+    }
   }
 }
