@@ -17,7 +17,7 @@ export const PlanPage:React.FC = () => {
   {Ismodal === true && (
     <>
     <div className='w-full h-full bg-black opacity-50 fixed z-10'/>
-    <div className='bg-white absolute z-10 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2 '>
+    <div className='absolute z-10 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2 '>
       <ModalCalendar/>
     </div>
     </>

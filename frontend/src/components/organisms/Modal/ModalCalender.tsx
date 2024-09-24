@@ -22,7 +22,7 @@ const ModalCalendar: React.FC = () => {
 
   return (
     <>
-      <div data-label="배경" className='bg-opacity-100 bg-[#F4F4EE] w-[500px] h-[500px] flex justify-center items-center flex-col'>
+      <div data-label="배경" className='bg-[#F4F4EE] w-[500px] h-[500px] flex justify-center items-center flex-col rounded-[15px] border border-black'>
         <span className='text-[40px]'>
           여행가실 날짜를 골라주세요
         </span>
