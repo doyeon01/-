@@ -1,5 +1,4 @@
-import React from 'react'
-import { Story } from '@storybook/react'
+import { Meta, StoryFn } from '@storybook/react'
 import {ButtonNext, Props} from './ButtonNext'
 
 export default {
@@ -8,9 +7,9 @@ export default {
     argTypes: {
         text: { control: 'text' }, 
       },
-}
+} as Meta<Props>
 
-const Template: Story<Props> = (args) => <ButtonNext {...args} />;
+const Template: StoryFn<Props> = (args: Props) => <ButtonNext {...args} />;
 
 export const Default = Template.bind({})
 
