@@ -1,4 +1,3 @@
-import React from 'react';
 import { Meta, StoryFn } from '@storybook/react';
 import ButtonRefresh, { ButtonRefreshProps } from './ButtonRefresh'; // 컴포넌트 경로 확인 필수
 
