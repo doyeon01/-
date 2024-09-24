@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { UserIcon } from '../../assets/icons/svg';
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { PersonalDetailTab } from '../molecules/Tab/PersonalDetailTab';
