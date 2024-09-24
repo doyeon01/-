@@ -6,8 +6,5 @@ export default defineConfig({
     define: {
         'process.env': process.env 
     },
-    base: './',
-    resolve: {
-        extensions: ['.ts', '.tsx', '.js'] // 확장자 우선 순위 설정
-    }
+    base: '/'
 });
