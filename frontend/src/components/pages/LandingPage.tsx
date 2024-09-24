@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { ModalLogin } from '../organisms/Modal/ModalLogin';
 
 export const LandingPage = () => {

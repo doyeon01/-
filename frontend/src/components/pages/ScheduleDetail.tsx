@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { LocationIcon } from '../../assets/icons/svg'; // 아이콘 임포트
 import { DayPlan } from '../organisms/DayPlan';
 import testImg1 from './../../assets/statics/test1.jpg'
 import testImg2 from './../../assets/statics/test2.jpg'
@@ -214,11 +213,12 @@ export const ScheduleDetail = () => {
 
   return (
     <div className='mt-40'>
-        <h1 className="text-4xl font-bold text-center">{dummyData.title}</h1>
-
-        <div style={{ marginLeft: '1350px' }}>
-        <ButtonPersonalInfo label="수정하기" onClick={() => nav('/plan')} px={4} py={3} size={'lg'}/>
+      <div className='relative mb-10'>
+        <h1 className="text-4xl font-bold flex justify-center items-center">{dummyData.title}</h1>
+        <div className='absolute top-0 right-28'>
+          <ButtonPersonalInfo label="수정하기" onClick={() => nav('/plan')} px={4} py={2} size={'lg'}/>
         </div>
+      </div>
 
 
       <div className={getGridClass()}>
