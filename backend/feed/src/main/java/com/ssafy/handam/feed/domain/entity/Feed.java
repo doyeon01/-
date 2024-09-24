@@ -1,17 +1,19 @@
 package com.ssafy.handam.feed.domain.entity;
 
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
+import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.domain.valueobject.Address;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Id;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import jakarta.persistence.Id;
 
 @Entity
 @Getter
@@ -22,32 +24,43 @@ public class Feed extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private Long userId;
     private String title;
     private String content;
     private String imageUrl;
     private int likeCount;
-    private Long userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "place_id")
-    private Place place;
+    @Embedded
+    private Address address;
+
+    @Enumerated(EnumType.STRING)
+    private PlaceType placeType;
 
     @Builder
-    public Feed(String title, String content, String imageUrl, Place place, Long userId) {
+    private Feed(
+            String title,
+            String content,
+            String imageUrl,
+            Address address,
+            PlaceType placeType,
+            Long userId
+    ) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
-        this.place = place;
+        this.address = address;
+        this.placeType = placeType;
         this.userId = userId;
         this.likeCount = 0;
     }
 
-    public static Feed createFeed(FeedCreationServiceRequest request, Place place) {
+    public static Feed createFeed(FeedCreationServiceRequest request) {
         return Feed.builder()
                 .title(request.title())
                 .content(request.content())
                 .imageUrl(request.feedImageUrl())
-                .place(place)
+                .address(request.address())
+                .placeType(request.placeType())
                 .userId(request.userId())
                 .build();
     }
@@ -61,9 +74,4 @@ public class Feed extends BaseEntity {
             this.likeCount--;
         }
     }
-
-    public void assignToPlace(Place place) {
-        this.place = place;
-    }
 }
-

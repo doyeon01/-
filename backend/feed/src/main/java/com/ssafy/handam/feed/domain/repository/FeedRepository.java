@@ -1,13 +1,11 @@
 package com.ssafy.handam.feed.domain.repository;
 
-import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
-import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Repository;
+import com.ssafy.handam.feed.domain.entity.Feed;
+import java.util.List;
+import java.util.Optional;
 
-@Repository
-@RequiredArgsConstructor
-public class FeedRepository {
-
-    private final FeedJpaRepository feedJpaRepository;
+public interface FeedRepository {
+        Optional<Feed> findById(Long id);
+        Feed save(Feed feed);
 
 }

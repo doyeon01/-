@@ -8,6 +8,11 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
+import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import java.util.List;
@@ -19,7 +24,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 class FeedControllerDocsTest extends RestDocsSupport {
 
-    @DisplayName("사용자 맞춤형 Best 피드 조회 API")
+    @DisplayName("사용자 맞춤형 피드 조회 API")
     @Test
     void getRecommendedFeedsForUser() throws Exception {
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
@@ -173,6 +178,186 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 이름"),
                                 fieldWithPath("response.feeds[].userProfileImageUrl").type(JsonFieldType.STRING)
                                         .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("좋아요 API")
+    @Test
+    void likeFeedTest() throws Exception {
+
+        FeedLikeResponse response = new FeedLikeResponse(1L, 1L, true);
+
+        given(feedService.likeFeed(any(Long.class), any(Long.class))).willReturn(response);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/v1/feeds/like/{feedId}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("userId", "1")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("like-feed",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
+                                        .description("좋아요 여부"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("피드 상세 보기 API")
+    @Test
+    void getFeedDetailDocsTest() throws Exception {
+
+        FeedDetailResponse feedDetailResponse = new FeedDetailResponse(
+                1L,
+                1L,
+                "username",
+                "http://example.com/profile.jpg",
+                "http://example.com/feed.jpg",
+                "Test Title",
+                "Test Content",
+                127.123123,
+                32.1323,
+                PlaceType.CAFE,
+                0
+        );
+
+        given(feedService.getFeedDetails(any(Long.class))).willReturn(feedDetailResponse);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/v1/feeds/{feedId}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .pathInfo("/1")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-feed-detail",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.feedImageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
+                                        .description("좋아요 수"),
+                                fieldWithPath("response.username").type(JsonFieldType.STRING)
+                                        .description("사용자 닉네임"),
+                                fieldWithPath("response.profileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response.title").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("response.content").type(JsonFieldType.STRING)
+                                        .description("장소 주소"),
+                                fieldWithPath("response.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("response.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("response.placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("피드 생성 API")
+    @Test
+    void createFeedTest() throws Exception {
+        FeedCreationRequest request = FeedCreationRequest.builder()
+                .userId(1L)
+                .title("Test Title")
+                .content("Test Content")
+                .feedImageUrl("http://example.com/feed.jpg")
+                .address("Test Address")
+                .longitude(127.123123)
+                .latitude(32.1323)
+                .placeType(PlaceType.CAFE)
+                .build();
+
+        FeedResponse response = new FeedResponse(
+                1L,
+                1L,
+                "testUser",
+                "http://example.com/profile.jpg",
+                "Test Title",
+                "Test Content",
+                "http://example.com/feed.jpg",
+                "Test Address",
+                127.123123,
+                32.1323,
+                "CAFE",
+                0
+        );
+
+        given(feedService.createFeed(any())).willReturn(response);
+
+        String requestBody = objectMapper.writeValueAsString(request);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/feeds/create")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .content(requestBody)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("create-feed",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestFields(
+                                fieldWithPath("userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                        .description("피드 내용"),
+                                fieldWithPath("feedImageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("address").type(JsonFieldType.STRING)
+                                        .description("피드 주소"),
+                                fieldWithPath("longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드 경도"),
+                                fieldWithPath("latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드 위도"),
+                                fieldWithPath("placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.feedImageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.userProfileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response.address").type(JsonFieldType.STRING)
+                                        .description("피드 주소"),
+                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
+                                        .description("좋아요 수"),
+                                fieldWithPath("response.username").type(JsonFieldType.STRING)
+                                        .description("사용자 닉네임"),
+                                fieldWithPath("response.title").type(JsonFieldType.STRING).
+                                        description("장소 이름"),
+                                fieldWithPath("response.content").type(JsonFieldType.STRING)
+                                        .description("장소 주소"),
+                                fieldWithPath("response.latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("response.longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("response.placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
