@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css'; // 기본 react-calendar 스타일
 import './ModalCalender.css'; // 커스텀 CSS 파일
-// import moment from 'moment';
+import moment from 'moment';
 
 type ValuePiece = Date | null;
 type Value = ValuePiece | [ValuePiece, ValuePiece];
@@ -16,9 +16,9 @@ const ModalCalendar: React.FC = () => {
     setDate(newDate);
   };
 
-  // const handleTodayClick = () => {
-  //   setStartDate(today); // 오늘 날짜로 돌아가는 버튼 동작
-  // };
+  const handleTodayClick = () => {
+    setStartDate(today); // 오늘 날짜로 돌아가는 버튼 동작
+  };
 
   return (
     <>
@@ -29,9 +29,9 @@ const ModalCalendar: React.FC = () => {
         <Calendar
           value={date}
           onChange={handleDateChange}
-          // formatDay={(locale, date) => moment(date).format('D')}
-          // formatYear={(locale, date) => moment(date).format('YYYY')}
-          // formatMonthYear={(locale, date) => moment(date).format('YYYY. MM')}
+          formatDay={(locale, date) => moment(date).format('D')}
+          formatYear={(locale, date) => moment(date).format('YYYY')}
+          formatMonthYear={(locale, date) => moment(date).format('YYYY. MM')}
           calendarType="gregory"
           showNeighboringMonth={false}
           next2Label={null}
