@@ -1,4 +1,3 @@
-import React from 'react';
 import { LocationDetailIcon, PlaceIcon, FoodIcon, CafeIcon, HotelIcon } from '../../assets/icons/svg'; // 아이콘 임포트
 
 interface ScheduleItem {
@@ -46,7 +45,7 @@ const ScheduleItemComponent: React.FC<{ item: ScheduleItem; isLast: boolean }> =
           </div>
           <p className="text-sm text-gray-600 pt-2">{item.description}</p>
        
-        </div>``
+        </div>
       </div>
     </div>
   );

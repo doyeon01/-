@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import testImg1 from './../../../assets/statics/test1.jpg';

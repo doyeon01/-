@@ -1,6 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { ModalPhotoCard } from '../../organisms/Modal/ModalPhotoCard';
 
 interface PhotoCardProps {
@@ -39,13 +38,13 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({ title, address, testimg, s
         {showButton && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-50">
             <button 
-              className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-4 bg-white rounded-lg transition-opacity duration-300 group-hover:opacity-100"
+              className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg transition-opacity duration-300 group-hover:opacity-100"
               onClick={() => nav('/schedule')}
             >
               여행 일정 보기
             </button>
             <button 
-              className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-4 bg-white rounded-lg ml-4 transition-opacity duration-300 group-hover:opacity-100"
+              className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg ml-4 transition-opacity duration-300 group-hover:opacity-100"
               onClick={handleOpenModal}
             >
               포토카드 생성

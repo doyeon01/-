@@ -1,4 +1,3 @@
-import React from 'react';
 import { RedHeartIcon } from '../../../assets/icons/svg'; // 아이콘 경로 확인
 
 export interface CardProps {
