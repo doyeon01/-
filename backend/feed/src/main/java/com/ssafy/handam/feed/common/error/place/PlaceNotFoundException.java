@@ -5,4 +5,7 @@ public class PlaceNotFoundException extends RuntimeException {
     public PlaceNotFoundException(Long id) {
         super("Place Not Found Exception: " + id);
     }
+
+    public PlaceNotFoundException() {        super("Place Not Found Exception");
+    }
 }

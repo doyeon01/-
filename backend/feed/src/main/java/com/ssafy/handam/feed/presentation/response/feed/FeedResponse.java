@@ -7,6 +7,9 @@ import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 
 public record FeedResponse(
         Long id,
+        Long userId,
+        String username,
+        String userProfileImageUrl,
         String title,
         String content,
         String feedImageUrl,
@@ -14,18 +17,21 @@ public record FeedResponse(
         Double longitude,
         Double latitude,
         String placeType,
-        Long userId
+        int likeCount
 ) {
-    public static FeedResponse from(Feed feed, Address address, UserDto userDto , PlaceType placeType) {
+    public static FeedResponse from(Feed feed, UserDto userDto , PlaceType placeType) {
         return new FeedResponse(
                 feed.getId(),
+                userDto.id(),
+                userDto.name(),
+                userDto.profileImageUrl(),
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
-                address.getAddress(),
-                address.getLongitude(),
-                address.getLatitude(),
+                feed.getAddress().getAddress(),
+                feed.getAddress().getLongitude(),
+                feed.getAddress().getLatitude(),
                 placeType.name(),
-                userDto.id());
+                feed.getLikeCount());
     }
 }

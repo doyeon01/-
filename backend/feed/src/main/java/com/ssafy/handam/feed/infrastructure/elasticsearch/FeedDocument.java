@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.infrastructure.elasticsearch;
 
+import jakarta.persistence.GeneratedValue;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 
@@ -7,7 +8,9 @@ import org.springframework.data.elasticsearch.annotations.Document;
 public class FeedDocument {
 
     @Id
+    @GeneratedValue
     private Long id;
+
     private String title;
     private String content;
     private String imageUrl;
@@ -16,6 +19,4 @@ public class FeedDocument {
     private Double latitude;
     private Long userId;
     private int likeCount;
-
-    // Getter, Setter, Constructor 등 추가
 }
