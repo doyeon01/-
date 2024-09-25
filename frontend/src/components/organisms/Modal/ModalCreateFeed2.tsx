@@ -66,8 +66,14 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-[#F4F4EE] rounded-lg shadow-lg w-[850px] h-[600px] p-6 relative">
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
+      onClick={onClose} // 검은색 오버레이 클릭 시 모달 닫기
+    >
+      <div
+        className="bg-[#F4F4EE] rounded-lg shadow-lg w-[850px] h-[600px] p-6 relative"
+        onClick={(e) => e.stopPropagation()} // 이벤트 버블링 방지 - 모달 내부 클릭 시 상위로 전파 안되게 함
+      >
         {!isScheduleSelected ? (
           <ModalCreateFeed1 onSelectSchedule={handle.completeScheduleSelection} onClose={onClose} /> 
         ) : (
