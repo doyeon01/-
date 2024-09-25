@@ -61,7 +61,7 @@ export const PlanPage: React.FC = () => {
       )}
 
       {IsHide === true ? (
-        <div className="flex flex-row items-center justify-center gap-[22px] top-[150px] relative">
+        <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative">
           <div
             className="w-full h-[500px] bg-sky-200 relative ml-10">
             <KaKaoMap_Plan />
@@ -88,7 +88,7 @@ export const PlanPage: React.FC = () => {
         </div>
       ) : (
         <>
-          <div className="flex flex-row justify-center items-center top-[79px] relative divide-x max-h-full h-[620px]">
+          <div className="flex flex-row justify-center items-center relative divide-x max-h-[calc(100vh-80px)] h-[calc(100vh-80px)] overflow-hidden">
             <div className="h-full bg-white flex flex-col min-w-[60px] text-[13px]">
               <div className='flex-grow'>
               {datesList.map((date, index) => (

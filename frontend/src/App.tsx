@@ -19,12 +19,11 @@ const App: React.FC = () => {
 
   return (
     <>
-      <div className="w-full h-full bg-[#F4F4EE] font-TheJamsil select-none">
+      <div className="flex flex-col w-full h-screen bg-[#F4F4EE] font-TheJamsil select-none">
         {location.pathname !== '/' && location.pathname !== '/survey' && (
-          <div className='mb-[80px]'>
           <Navbar className="fixed top-0 w-full z-10" />
-          </div>
         )}
+        <div className='flex-grow mt-[80px]'>
         <Routes>
           <Route path="/" element={<LandingPage />} />
           <Route path="/survey" element={<SurveyPage />} />
@@ -37,6 +36,7 @@ const App: React.FC = () => {
           <Route path="/schedule" element={<ScheduleDetail />} />
           <Route path="/poca" element={<PocaPage />} />
         </Routes>
+        </div>
       </div>
       
 
