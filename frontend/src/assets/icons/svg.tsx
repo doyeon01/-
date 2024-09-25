@@ -152,7 +152,7 @@ export function RealHeartIcon(): JSX.Element {
       width="1em"
       height="1em"
       viewBox="0 0 24 24"
-      fill="red" 
+      fill="#707C60" 
     >
       <path 
         d="m12 21.35l-1.45-1.32C5.4 15.36 2 12.27 2 8.5C2 5.41 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.08C13.09 3.81 14.76 3 16.5 3C19.58 3 22 5.41 22 8.5c0 3.77-3.4 6.86-8.55 11.53z"
@@ -289,6 +289,19 @@ export function HotelIcon(): JSX.Element {
      height="2e.5m"
      viewBox="0 0 24 24">
     <path fill="#645E59" d="M11.336 2.253a1 1 0 0 1 1.328 0l9 8a1 1 0 0 1-1.328 1.494L20 11.45V19a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-7.55l-.336.297a1 1 0 0 1-1.328-1.494zM6 9.67V19h3v-5a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v5h3V9.671l-6-5.333zM13 19v-4h-2v4z"/>
+    </svg>
+  )
+}
+
+
+export function DownLoadIcon(): JSX.Element {
+  return(
+    <svg 
+    xmlns="http://www.w3.org/2000/svg" 
+    width="2em" 
+    height="2em" 
+    viewBox="0 0 24 24">
+    <path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"/>
     </svg>
   )
 }
