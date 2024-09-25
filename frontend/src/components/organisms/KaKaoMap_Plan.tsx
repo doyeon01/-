@@ -9,24 +9,24 @@ const KaKaoMap_Plan: React.FC = () => {
         script.async = true
         document.body.appendChild(script);
 
-        // script.onload = () => {
-        //     window.kakao.maps.load(() => {
-                // const mapContainer = document.getElementById('map');
-                // if (mapContainer) {
-                //     const mapOption = {
-                //         center: new window.kakao.maps.LatLng(36.76817, 127.9888),
-                //         level: 13
-                //     };
-                    // const map = new window.kakao.maps.Map(mapContainer, mapOption);
+        script.onload = () => {
+            window.kakao.maps.load(() => {
+                const mapContainer = document.getElementById('map');
+                if (mapContainer) {
+                    const mapOption = {
+                        center: new window.kakao.maps.LatLng(36.76817, 127.9888),
+                        level: 13
+                    };
+                    const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-                    // const markerPosition = new window.kakao.maps.LatLng(36.76817, 127.9888);
-                    // const marker = new window.kakao.maps.Marker({
-                    //     position: markerPosition, 
-                    // });
-                    // marker.setMap(map); 
-        //         }
-        //     });
-        // }
+                    const markerPosition = new window.kakao.maps.LatLng(36.76817, 127.9888);
+                    const marker = new window.kakao.maps.Marker({
+                        position: markerPosition, 
+                    });
+                    marker.setMap(map); 
+                }
+            });
+        }
         return () => {
             document.body.removeChild(script);
         };

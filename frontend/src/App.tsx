@@ -21,7 +21,9 @@ const App: React.FC = () => {
     <>
       <div className="w-full h-full bg-[#F4F4EE] font-TheJamsil select-none">
         {location.pathname !== '/' && location.pathname !== '/survey' && (
+          <div className='mb-[80px]'>
           <Navbar className="fixed top-0 w-full z-10" />
+          </div>
         )}
         <Routes>
           <Route path="/" element={<LandingPage />} />
