@@ -56,8 +56,7 @@ public class FeedController {
     }
 
     @PostMapping("/like/{feedId}")
-    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId, @RequestParam String eventType) {
-            likeService.sendLikeEvent(userId, feedId, eventType);
+    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
 }
