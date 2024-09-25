@@ -8,11 +8,20 @@ import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedsByFiltersRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
+import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 
 @RestController
 @RequestMapping("/api/v1/feeds")
@@ -26,7 +35,7 @@ public class FeedController {
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
             @RequestBody RecommendedFeedsForUserRequest request) {
-        return success(feedService.getBestFeedsForUser(
+        return success(feedService.getRecommendedFeedsForUser(
                 RecommendedFeedsForUserRequest.toServiceRequest(request)
         ));
     }
@@ -42,13 +51,13 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    public ApiResult<FeedResponse> getFeedDetails(@PathVariable Long feedId) {
+    public ApiResult<FeedDetailResponse> getFeedDetails(@PathVariable Long feedId) {
         return success(feedService.getFeedDetails(feedId));
     }
 
-    @PostMapping("/like")
-    public String sendLike(@RequestParam Long userId, @RequestParam Long feedId, @RequestParam String eventType) {
-        likeService.sendLikeEvent(userId, feedId, eventType);
-        return "Like event sent successfully!";
+    @PostMapping("/like/{feedId}")
+    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId, @RequestParam String eventType) {
+            likeService.sendLikeEvent(userId, feedId, eventType);
+        return success(feedService.likeFeed(feedId, userId));
     }
 }

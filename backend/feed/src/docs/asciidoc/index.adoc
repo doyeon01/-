@@ -11,12 +11,10 @@ endif::[]
 :toclevels: 2
 :sectlinks:
 
-== 장소 API
-
-include::api/place/place-detail.adoc[]
-
-
 == 피드 API
 
 include::api/feed/recommended-feeds-for-user.adoc[]
 include::api/feed/get-feeds-by-filter.adoc[]
+include::api/feed/get-feed-detail.adoc[]
+include::api/feed/create-feed.adoc[]
+include::api/feed/like-feed.adoc[]

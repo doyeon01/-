@@ -44,11 +44,6 @@ public class GeneralExceptionHandler {
         return newResponse(e, HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler(PlaceNotFoundException.class)
-    public ResponseEntity<?> handlePlaceNotFoundException(PlaceNotFoundException e) {
-        return newResponse("장소를 찾을 수 없습니다.", HttpStatus.NOT_FOUND);
-    }
-
     @ExceptionHandler({
             IllegalArgumentException.class,
             IllegalStateException.class,
