@@ -23,7 +23,7 @@ const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: string) => void, onClo
     <div className="h-full overflow-y-auto p-4 relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
       <button
         className="absolute top-0 right-0 text-gray-500 hover:text-gray-700"
-        onClick={onClose}
+        onClick={()=>{onClose()}}
       >
         &times;
       </button>
