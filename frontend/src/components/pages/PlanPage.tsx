@@ -8,10 +8,10 @@ import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 
 import MapMarker from '../../assets/statics/MapMarker.png'
 import test1 from '../../assets/statics/test1.jpg'
-import test2 from '../../assets/statics/test2.jpg'
-import test3 from '../../assets/statics/test3.png'
-import test4 from '../../assets/statics/test4.jpg'
-import test5 from '../../assets/statics/test5.jpg'
+// import test2 from '../../assets/statics/test2.jpg'
+// import test3 from '../../assets/statics/test3.png'
+// import test4 from '../../assets/statics/test4.jpg'
+// import test5 from '../../assets/statics/test5.jpg'
 
 export const PlanPage: React.FC = () => {
   const [Ismodal, setismodal] = useState(false)

@@ -41,9 +41,9 @@ const ModalCalendar: React.FC<Props> = ({onClick}) => {
         <Calendar
           value={date}
           onChange={handleDateChange}
-          formatDay={(locale, date) => moment(date).format('D')}
-          formatYear={(locale, date) => moment(date).format('YYYY')}
-          formatMonthYear={(locale, date) => moment(date).format('YYYY. MM')}
+          formatDay={(_, date) => moment(date).format('D')}
+          formatYear={(_, date) => moment(date).format('YYYY')}
+          formatMonthYear={(_, date) => moment(date).format('YYYY. MM')}
           calendarType="gregory"
           showNeighboringMonth={false}
           next2Label={null}
