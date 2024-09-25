@@ -2,12 +2,11 @@ package com.ssafy.handam.accompanyboard.presentation;
 
 import static com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.success;
 
-import com.ssafy.handam.accompanyboard.domain.model.entity.Article;
-import com.ssafy.handam.accompanyboard.domain.model.valueobject.response.ArticleInfoResponse;
-import com.ssafy.handam.accompanyboard.domain.model.valueobject.response.ArticleListResponse;
+import com.ssafy.handam.accompanyboard.domain.entity.Article;
+import com.ssafy.handam.accompanyboard.domain.valueobject.response.ArticleInfoResponse;
+import com.ssafy.handam.accompanyboard.domain.valueobject.response.ArticleListResponse;
 import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.accompanyboard.presentation.request.AccompanyBoardArticleRequest;
-import com.ssafy.handam.accompanyboard.presentation.request.ArticleInitSettingRequest;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.web.bind.annotation.GetMapping;

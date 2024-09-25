@@ -1,9 +1,8 @@
-package com.ssafy.handam.accompanyboard.domain.model.entity;
+package com.ssafy.handam.accompanyboard.domain.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

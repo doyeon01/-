@@ -1,16 +1,11 @@
-package com.ssafy.handam.accompanyboard.domain.model.valueobject.response;
+package com.ssafy.handam.accompanyboard.domain.valueobject.response;
 
-import com.ssafy.handam.accompanyboard.domain.model.entity.Article;
-import lombok.AllArgsConstructor;
+import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import lombok.Builder;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 @Getter
 @Builder
-@NoArgsConstructor
-@AllArgsConstructor
 public class ArticleInfoResponse {
 
     private Long id;

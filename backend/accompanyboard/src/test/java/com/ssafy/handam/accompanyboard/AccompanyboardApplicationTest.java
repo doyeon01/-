@@ -14,7 +14,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import com.ssafy.handam.RestDocsSupport;
+import com.ssafy.handam.accompanyboard.docs.RestDocsSupport;
 import com.ssafy.handam.accompanyboard.presentation.request.AccompanyBoardArticleRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

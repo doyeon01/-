@@ -1,4 +1,4 @@
-package com.ssafy.handam;
+package com.ssafy.handam.accompanyboard.docs;
 
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -24,16 +23,18 @@ public abstract class RestDocsSupport {
     @Autowired
     protected ObjectMapper objectMapper;
 
+
     protected MockMvc mockMvc;
 
 //    @MockBean
 //    protected AccompanyBoardService accompanyBoardService;
 
     @BeforeEach
-    void setup(RestDocumentationContextProvider provider) {
+    void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(webApplicationContext)
-                .apply(documentationConfiguration(provider))
+                .apply(documentationConfiguration(restDocumentation))
                 .build();
     }
+
 
 }
