@@ -15,7 +15,7 @@ public class UserApiClient {
     @Value("${user.service.url}")
     private String userServiceUrl;
 
-    public UserDto getUserById(String userId){
+    public UserDto getUserById(Long userId){
         return restTemplate.getForObject(userServiceUrl + "/user/" + userId, UserDto.class);
     }
 }

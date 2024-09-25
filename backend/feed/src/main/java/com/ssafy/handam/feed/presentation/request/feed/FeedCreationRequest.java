@@ -2,7 +2,6 @@ package com.ssafy.handam.feed.presentation.request.feed;
 
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
-import com.ssafy.handam.feed.domain.valueobject.Address;
 import lombok.Builder;
 
 @Builder
@@ -21,7 +20,9 @@ public record FeedCreationRequest(
                 .title(request.title())
                 .content(request.content())
                 .feedImageUrl(request.feedImageUrl())
-                .address(new Address(request.address(), request.longitude(), request.latitude()))
+                .address(request.address())
+                .longitude(request.longitude())
+                .latitude(request.latitude())
                 .placeType(request.placeType())
                 .userId(request.userId())
                 .build();

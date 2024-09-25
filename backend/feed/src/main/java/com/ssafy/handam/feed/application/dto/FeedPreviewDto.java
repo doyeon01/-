@@ -1,7 +1,6 @@
 package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
-import com.ssafy.handam.feed.domain.valueobject.Address;
 
 public record FeedPreviewDto(
         Long id,
@@ -16,16 +15,16 @@ public record FeedPreviewDto(
         String userProfileImageUrl
 ) {
 
-    public static FeedPreviewDto from(Feed feed, Address address, String username, String userProfileImageUrl) {
+    public static FeedPreviewDto from(Feed feed, String username, String userProfileImageUrl) {
         return new FeedPreviewDto(
                 feed.getId(),
                 feed.getTitle(),
                 feed.getImageUrl(),
                 feed.getUserId(),
                 feed.getLikeCount(),
-                address.getAddress(),
-                address.getLongitude(),
-                address.getLatitude(),
+                feed.getAddress(),
+                feed.getLongitude(),
+                feed.getLatitude(),
                 username,
                 userProfileImageUrl);
     }

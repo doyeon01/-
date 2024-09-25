@@ -2,7 +2,6 @@ package com.ssafy.handam.feed.presentation.response.feed;
 
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
-import com.ssafy.handam.feed.domain.valueobject.Address;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 
 public record FeedResponse(
@@ -28,9 +27,9 @@ public record FeedResponse(
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
-                feed.getAddress().getAddress(),
-                feed.getAddress().getLongitude(),
-                feed.getAddress().getLatitude(),
+                feed.getAddress(),
+                feed.getLongitude(),
+                feed.getLatitude(),
                 placeType.name(),
                 feed.getLikeCount());
     }

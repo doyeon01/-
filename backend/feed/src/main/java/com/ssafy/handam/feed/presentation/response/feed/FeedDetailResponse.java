@@ -12,6 +12,7 @@ public record FeedDetailResponse(
         String feedImageUrl,
         String title,
         String content,
+        String address,
         Double longitude,
         Double latitude,
         PlaceType placeType,
@@ -26,6 +27,7 @@ public record FeedDetailResponse(
             String feedImageUrl,
             String title,
             String content,
+            String address,
             Double longitude,
             Double latitude,
             PlaceType placeType,
@@ -39,6 +41,7 @@ public record FeedDetailResponse(
                 .feedImageUrl(feedImageUrl)
                 .title(title)
                 .content(content)
+                .address(address)
                 .longitude(longitude)
                 .latitude(latitude)
                 .placeType(placeType)

@@ -2,8 +2,6 @@ package com.ssafy.handam.feed.domain.entity;
 
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
-import com.ssafy.handam.feed.domain.valueobject.Address;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -28,10 +26,10 @@ public class Feed extends BaseEntity {
     private String title;
     private String content;
     private String imageUrl;
+    private String address;
+    private Double longitude;
+    private Double latitude;
     private int likeCount;
-
-    @Embedded
-    private Address address;
 
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;
@@ -41,18 +39,25 @@ public class Feed extends BaseEntity {
             String title,
             String content,
             String imageUrl,
-            Address address,
+            String address,
+            Double longitude,
+            Double latitude,
             PlaceType placeType,
             Long userId
-    ) {
+    )
+
+    {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
         this.address = address;
+        this.longitude = longitude;
+        this.latitude = latitude;
         this.placeType = placeType;
         this.userId = userId;
         this.likeCount = 0;
     }
+
 
     public static Feed createFeed(FeedCreationServiceRequest request) {
         return Feed.builder()
@@ -60,6 +65,8 @@ public class Feed extends BaseEntity {
                 .content(request.content())
                 .imageUrl(request.feedImageUrl())
                 .address(request.address())
+                .longitude(request.longitude())
+                .latitude(request.latitude())
                 .placeType(request.placeType())
                 .userId(request.userId())
                 .build();

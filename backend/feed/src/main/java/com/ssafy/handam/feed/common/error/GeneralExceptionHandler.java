@@ -1,7 +1,6 @@
 package com.ssafy.handam.feed.common.error;
 
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.error;
-import com.ssafy.handam.feed.common.error.place.PlaceNotFoundException;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
@@ -93,5 +92,4 @@ public class GeneralExceptionHandler {
         log.error("Unexpected exception occurred: {}", e.getMessage(), e);
         return newResponse(e, HttpStatus.INTERNAL_SERVER_ERROR);
     }
-
 }
