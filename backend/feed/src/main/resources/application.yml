@@ -22,6 +22,20 @@ spring:
   elasticsearch:
     uris: http://j11c205a.p.ssafy.io:9200
 
+  kafka:
+    bootstrap-servers: http://j11c205.p.ssafy.io:9092
+    consumer:
+      group-id: like-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      acks: 1
+    template:
+      default-topic: like-events
+
 user:
   service:
     url: http://j11c205.p.ssafy.io:8081
