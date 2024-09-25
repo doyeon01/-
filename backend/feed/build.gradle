@@ -55,6 +55,13 @@ dependencies {
 
     // Elasticsearch
     implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
+
+    // Kafka
+    implementation 'org.springframework.kafka:spring-kafka'
+    testImplementation 'org.springframework.kafka:spring-kafka-test'
+
+    // Kafka 클라이언트
+    implementation 'org.apache.kafka:kafka-clients:3.4.0'
 }
 
 ext {

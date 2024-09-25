@@ -3,7 +3,7 @@ package com.ssafy.handam.feed.presentation.api.feed;
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.feed.application.FeedService;
-import com.ssafy.handam.feed.common.security.JwtAuthentication;
+import com.ssafy.handam.feed.application.LikeService;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedsByFiltersRequest;
@@ -22,12 +22,15 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+
 @RestController
 @RequestMapping("/api/v1/feeds")
 @RequiredArgsConstructor
 public class FeedController {
 
     private final FeedService feedService;
+    private final LikeService likeService;
+
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
@@ -53,7 +56,8 @@ public class FeedController {
     }
 
     @PostMapping("/like/{feedId}")
-    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
+    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId, @RequestParam String eventType) {
+            likeService.sendLikeEvent(userId, feedId, eventType);
         return success(feedService.likeFeed(feedId, userId));
     }
 }
