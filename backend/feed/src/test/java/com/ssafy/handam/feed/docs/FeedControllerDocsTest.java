@@ -225,9 +225,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "http://example.com/feed.jpg",
                 "Test Title",
                 "Test Content",
+                "Test Address",
                 127.123123,
                 32.1323,
-                PlaceType.CAFE,
+                "CAFE",
                 0
         );
 
@@ -259,6 +260,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.title").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
                                 fieldWithPath("response.content").type(JsonFieldType.STRING)
+                                        .description("장소 내용"),
+                                fieldWithPath("response.address").type(JsonFieldType.STRING)
                                         .description("장소 주소"),
                                 fieldWithPath("response.latitude").type(JsonFieldType.NUMBER)
                                         .description("위도"),

@@ -1,6 +1,6 @@
 package com.ssafy.handam.feed.presentation.response.feed;
 
-import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import lombok.Builder;
 
 @Builder
@@ -15,37 +15,26 @@ public record FeedDetailResponse(
         String address,
         Double longitude,
         Double latitude,
-        PlaceType placeType,
+        String placeType,
         int likeCount
 ) {
 
     public static FeedDetailResponse of(
-            Long id,
-            Long userId,
-            String username,
-            String profileImageUrl,
-            String feedImageUrl,
-            String title,
-            String content,
-            String address,
-            Double longitude,
-            Double latitude,
-            PlaceType placeType,
-            int likeCount
-    ) {
+            FeedDetailDto feedDetailDto, String username, String profileImageUrl) {
+
         return FeedDetailResponse.builder()
-                .id(id)
-                .userId(userId)
+                .id(feedDetailDto.getId())
+                .userId(feedDetailDto.getUserId())
                 .username(username)
                 .profileImageUrl(profileImageUrl)
-                .feedImageUrl(feedImageUrl)
-                .title(title)
-                .content(content)
-                .address(address)
-                .longitude(longitude)
-                .latitude(latitude)
-                .placeType(placeType)
-                .likeCount(likeCount)
+                .feedImageUrl(feedDetailDto.getImageUrl())
+                .title(feedDetailDto.getTitle())
+                .content(feedDetailDto.getContent())
+                .address(feedDetailDto.getAddress())
+                .longitude(feedDetailDto.getLongitude())
+                .latitude(feedDetailDto.getLatitude())
+                .placeType(feedDetailDto.getPlaceType())
+                .likeCount(feedDetailDto.getLikeCount())
                 .build();
     }
 }
