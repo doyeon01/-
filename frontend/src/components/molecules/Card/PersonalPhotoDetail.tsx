@@ -4,8 +4,6 @@ import testImg3 from './../../../assets/statics/test3.png';
 import { PhotoCard } from './PhtotCard';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import PersonalSearch from '../../atoms/input/PersonalSearch'; 
-import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
-import { useNavigate } from 'react-router-dom';
 
 const mockData = [
   {
@@ -39,37 +37,16 @@ export const PersonalPhotoDetail: React.FC = () => {
     'createdDate' 
   );
   
-  const nav = useNavigate()
-
-  // const [isModalOpen, setIsModalOpen] = useState(false);
-
-  // const handleOpenModal = () => {
-  //   setIsModalOpen(true);  
-  // };
-
-  // const handleCloseModal = () => {
-  //   setIsModalOpen(false); 
-  // };
-
 
   return (
     <>
-      <div className="mb-2">
+      <div className="mb-5">
         <PersonalSearch 
           onSearch={onSearch} 
           showAllItems={showAllItems} 
           onSortChange={onSortChange} 
         />
       </div>
-      {/* <hr className='mb-4' /> */}
-
-      <div className='flex justify-end space-x-2 mb-6'>
-        <ButtonPersonalInfo
-          label='전체 여행 돌아보기'
-          onClick={()=>nav('/poca')}/>
-        
-      </div>
-      
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         {filteredArr.length > 0 ? (
@@ -79,6 +56,7 @@ export const PersonalPhotoDetail: React.FC = () => {
               title={item.title}
               address={item.address}
               testimg={item.image}
+              showDownLoadButton={true}
             />
           ))
         ) : (

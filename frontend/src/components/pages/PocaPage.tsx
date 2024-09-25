@@ -1,5 +1,9 @@
 export const PocaPage = () => {
   return (
-    <div>PocaPage</div>
+    <>
+      <div className="mt-40">
+
+      </div>
+    </>
   )
 }
