@@ -58,20 +58,6 @@ public class Feed extends BaseEntity {
         this.likeCount = 0;
     }
 
-
-    public static Feed createFeed(FeedCreationServiceRequest request) {
-        return Feed.builder()
-                .title(request.title())
-                .content(request.content())
-                .imageUrl(request.feedImageUrl())
-                .address(request.address())
-                .longitude(request.longitude())
-                .latitude(request.latitude())
-                .placeType(request.placeType())
-                .userId(request.userId())
-                .build();
-    }
-
     public void incrementLikeCount() {
         this.likeCount++;
     }

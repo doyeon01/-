@@ -19,7 +19,7 @@ spring:
         default_batch_fetch_size: 100
 
   elasticsearch:
-    uris: http://j11c205a.p.ssafy.io:9200
+    uris: http://localhost:9200
 
   user:
     service:

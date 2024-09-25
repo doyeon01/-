@@ -2,12 +2,14 @@ package com.ssafy.handam.feed.application;
 
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
+import com.ssafy.handam.feed.application.dto.LikeDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByFiltersServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.RecommendedFeedsForUserServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
@@ -68,6 +70,9 @@ public class FeedService {
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
-        return new FeedLikeResponse(1L, 1L, true);
+        feedDomainService.likeFeed(feedId, userId);
+        int size = feedDomainService.countUpLike(feedId).size();
+        Like like = feedDomainService.likeFeed(feedId, userId);
+        return FeedLikeResponse.of(LikeDto.of(like), true, size);
     }
 }

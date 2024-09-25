@@ -187,7 +187,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void likeFeedTest() throws Exception {
 
-        FeedLikeResponse response = new FeedLikeResponse(1L, 1L, true);
+        FeedLikeResponse response = new FeedLikeResponse(1L, 1L, true, 1);
 
         given(feedService.likeFeed(any(Long.class), any(Long.class))).willReturn(response);
 
@@ -208,6 +208,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("사용자 ID"),
                                 fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
                                         .description("좋아요 여부"),
+                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
+                                        .description("좋아요 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
