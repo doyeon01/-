@@ -20,7 +20,7 @@ const App: React.FC = () => {
   return (
     <>
       <div className="w-full h-full bg-[#F4F4EE] font-TheJamsil select-none">
-        {location.pathname !== '/' && location.pathname !== '/survey' && (
+      {location.pathname !== '/' && location.pathname !== '/survey' && (
           <Navbar className="fixed top-0 w-full z-10" />
         )}
         <Routes>

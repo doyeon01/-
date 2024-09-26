@@ -10,9 +10,11 @@ interface TravelItem {
 }
 
 const travelData: TravelItem[] = [
-    { title: '제주도의 푸른밤', imageSrc: img1, backgroundClass: 'bg-green-100' },
-    { title: '서울의 야경', imageSrc: img2, backgroundClass: 'bg-pink-100' },
-    { title: '부산의 해변', imageSrc: img3, backgroundClass: 'bg-blue-100' },
+    { title: '제주도의 푸른밤', imageSrc: img1, backgroundClass: '#8a9873' },
+    { title: '푸른 산책로', imageSrc: img2, backgroundClass: '#8fa6a6' }, // 밝은 세이지 색상
+    { title: '신비로운 숲', imageSrc: img3, backgroundClass: '#a3b59d' }, // 소프트 그린
+    { title: '은은한 저녁', imageSrc: img1, backgroundClass: '#b8a99b' }, // 부드러운 그레이 색상
+    { title: '산의 정적', imageSrc: img2, backgroundClass: '#d7c3b1' }, // 밝은 베이지 색상
 ];
 
 const CarouselMain: React.FC = () => {
@@ -33,7 +35,7 @@ const CarouselMain: React.FC = () => {
     return (
         <>
             <div className="relative w-full h-[550px]">
-                <div className={`${travelData[currentIndex].backgroundClass} absolute inset-0`}>
+                <div className='absolute inset-0' style={{ backgroundColor: travelData[currentIndex].backgroundClass }}>
                     <div className="relative w-full max-w-4xl mx-auto p-8">
                         <div className="flex items-center">
                             <div className="w-1/2 mt-40">

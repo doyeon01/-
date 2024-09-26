@@ -1,8 +1,8 @@
 import { useState } from 'react';
 import { UserIcon } from '../../assets/icons/svg';
-import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { PersonalDetailTab } from '../molecules/Tab/PersonalDetailTab';
 import { ModalCreateFeed2 } from '../organisms/Modal/ModalCreateFeed2';
+import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { useNavigate } from 'react-router-dom';
 
 export const MyPage = () => {

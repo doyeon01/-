@@ -1,4 +1,4 @@
-import { RedHeartIcon } from '../../../assets/icons/svg'; // 아이콘 경로 확인
+import { RealHeartIcon } from '../../../assets/icons/svg'; // 아이콘 경로 확인
 
 export interface CardProps {
   title: string;
@@ -18,9 +18,7 @@ export const FeedCard: React.FC<CardProps> = ({ title, address, content, created
         <div className="flex justify-between items-center mb-2">
           <div className="font-medium text-lg">{title}</div>
           {address && (
-            <p className="bg-[#645E59] text-white px-3 py-1 rounded-full text-center inline-block">
-              {address}
-            </p>
+            <span className="bg-[#b6afa9] text-white text-sm font-normal px-2.5 py-1.5 rounded-full text-center inline-block ">{address}</span>
           )}
 
         </div>
@@ -31,7 +29,7 @@ export const FeedCard: React.FC<CardProps> = ({ title, address, content, created
             <p className="font-normal text-gray-400 text-xs">{comment}개의 댓글</p>
           </span>
           <span className="flex items-center">
-            <RedHeartIcon />
+            <RealHeartIcon />
             <p className="font-normal text-xs pl-1">{like}</p>
           </span>
         </div>
