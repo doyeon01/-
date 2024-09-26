@@ -61,9 +61,9 @@ export const PlanPage: React.FC = () => {
       )}
 
       {IsHide === true ? (
-        <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative">
+        <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative max-h-[calc(100vh-80px)] h-[calc(100vh-150px)]">
           <div
-            className="w-full h-[500px] bg-sky-200 relative ml-10">
+            className="w-full h-full bg-sky-200 relative ml-10">
             <KaKaoMap_Plan />
             <div
               className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
@@ -73,7 +73,7 @@ export const PlanPage: React.FC = () => {
           </div>
 
           <div
-            className="w-[400px] max-h-[500px] h-[500px] bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin">
+            className="w-[400px] h-full bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin">
             <span className="text-[21px] font-semibold mt-[15px]">추천 여행지로 여행 계획하기</span>
             <hr className="w-[60%] border-t-[3px] border-black mt-[10px]" />
             <button
@@ -107,7 +107,7 @@ export const PlanPage: React.FC = () => {
               </div>
             </div>
 
-            <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y">
+            <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden">
               <div className="w-[390px] h-[150px] flex min-h-[150px] justify-around  items-center">
                 <div className="flex flex-col justify-start text-[13px] gap-4">
                   <span>관광명소 | 무등산</span>
