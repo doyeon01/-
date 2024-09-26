@@ -12,10 +12,11 @@ public record FeedPreviewDto(
         Double longitude,
         Double latitude,
         String username,
-        String userProfileImageUrl
+        String userProfileImageUrl,
+        boolean isLiked
 ) {
 
-    public static FeedPreviewDto from(Feed feed, String username, String userProfileImageUrl) {
+    public static FeedPreviewDto from(Feed feed, String username, String userProfileImageUrl, boolean isLiked) {
         return new FeedPreviewDto(
                 feed.getId(),
                 feed.getTitle(),
@@ -26,6 +27,8 @@ public record FeedPreviewDto(
                 feed.getLongitude(),
                 feed.getLatitude(),
                 username,
-                userProfileImageUrl);
+                userProfileImageUrl,
+                isLiked
+        );
     }
 }

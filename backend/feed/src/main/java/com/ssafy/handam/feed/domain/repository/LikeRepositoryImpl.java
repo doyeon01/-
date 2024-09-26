@@ -4,6 +4,7 @@ import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -28,8 +29,8 @@ public class LikeRepositoryImpl implements LikeRepository {
     }
 
     @Override
-    public List<Like> findByUserId(Long id) {
-        return likeJpaRepository.findByUserId(id);
+    public List<Like> findByUserId(Long id, Pageable pageable) {
+        return likeJpaRepository.findByUserId(id, pageable);
     }
 
     @Override
