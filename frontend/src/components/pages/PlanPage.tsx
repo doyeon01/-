@@ -49,7 +49,7 @@ export const PlanPage: React.FC = () => {
   }
 
   return (
-    <>
+    <div className='mt-20'>
       {/* 모달 창 */}
       {Ismodal === true && (
         <>
@@ -130,6 +130,6 @@ export const PlanPage: React.FC = () => {
           </div>
         </>
       )}
-    </>
+    </div>
   )
 }
