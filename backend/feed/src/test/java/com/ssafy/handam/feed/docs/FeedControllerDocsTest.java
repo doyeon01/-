@@ -3,8 +3,12 @@ package com.ssafy.handam.feed.docs;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.operation.preprocess.Preprocessors.*;
-import static org.springframework.restdocs.payload.PayloadDocumentation.*;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
+import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
+import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
@@ -187,7 +191,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void likeFeedTest() throws Exception {
 
-        FeedLikeResponse response = new FeedLikeResponse(1L, 1L, true, 1);
+        FeedLikeResponse response = new FeedLikeResponse(1L, true, 1);
 
         given(feedService.likeFeed(any(Long.class), any(Long.class))).willReturn(response);
 
@@ -204,8 +208,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
-                                        .description("사용자 ID"),
                                 fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
@@ -363,6 +365,36 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("경도"),
                                 fieldWithPath("response.placeType").type(JsonFieldType.STRING)
                                         .description("장소 타입"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("좋아요 취소 API")
+    @Test
+    void unlikeFeedTest() throws Exception {
+
+        FeedLikeResponse response = new FeedLikeResponse(1L, true, 1);
+
+        given(feedService.unlikeFeed(any(Long.class), any(Long.class))).willReturn(response);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.post("/api/v1/feeds/unlike/{feedId}", 1)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("userId", "1")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("like-feed",
+                        preprocessResponse(prettyPrint()),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
+                                        .description("좋아요 여부"),
+                                fieldWithPath("response.likeCount").type(JsonFieldType.NUMBER)
+                                        .description("좋아요 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));

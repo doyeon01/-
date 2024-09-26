@@ -9,4 +9,6 @@ public interface LikeJpaRepository extends JpaRepository<Like, Long> {
     List<Like> findByFeedId(Long feedId);
     
     List<Like> findByUserId(Long userId);
+
+    List<Like> findByFeedIdAndUserId(Long feedId, Long userId);
 }
