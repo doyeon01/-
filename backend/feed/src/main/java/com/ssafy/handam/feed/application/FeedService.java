@@ -1,25 +1,35 @@
 package com.ssafy.handam.feed.application;
 
+import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
+import com.ssafy.handam.feed.application.dto.LikeDto;
+import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByFiltersServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.RecommendedFeedsForUserServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
+import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
+import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@Transactional
 @RequiredArgsConstructor
 public class FeedService {
 
-    FeedDomainService feedDomainService;
+    private final FeedDomainService feedDomainService;
+    private final UserApiClient userApiClient;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", 32.1323,
@@ -36,19 +46,9 @@ public class FeedService {
     }
 
     public FeedDetailResponse getFeedDetails(Long feedId) {
-        return FeedDetailResponse.of(
-                1L,
-                1L,
-                "testUser",
-                "http://example.com/profile.jpg",
-                "http://example.com/feed.jpg",
-                "Test Title",
-                "Test Content",
-                127.123123,
-                32.1323,
-                PlaceType.CAFE,
-                0
-        );
+        Feed feed = feedDomainService.findById(feedId);
+        UserDetailDto userDetailDto = UserDetailDto.from(userApiClient.getUserById(feed.getUserId()));
+        return FeedDetailResponse.of(FeedDetailDto.of(feed), userDetailDto.name(), userDetailDto.profileImageUrl());
     }
 
     public FeedResponse createFeed(FeedCreationServiceRequest request) {
@@ -70,6 +70,8 @@ public class FeedService {
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
-        return new FeedLikeResponse(1L, 1L, true);
+        Like like = feedDomainService.likeFeed(feedId, userId);
+        int size = feedDomainService.countUpLike(feedId).size();
+        return FeedLikeResponse.of(LikeDto.of(like), true, size);
     }
 }

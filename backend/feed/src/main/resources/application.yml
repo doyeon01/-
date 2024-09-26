@@ -3,13 +3,14 @@ spring:
     name: feed
 
   datasource:
-    url: jdbc:h2:mem:~/feedApplcation
-    username: sa
-    password:
+    url: jdbc:mysql://j11c205a.p.ssafy.io:3306/feed_db  # EC2 서버의 MySQL URL
+    username: handam  # MySQL 사용자 아이디
+    password: ssafy   # MySQL 사용자 비밀번호
+    driver-class-name: com.mysql.cj.jdbc.Driver  # MySQL JDBC 드라이버
 
   jpa:
     hibernate:
-      ddl-auto: none
+      ddl-auto: create
     properties:
       hibernate:
         default_batch_fetch_size: 100
