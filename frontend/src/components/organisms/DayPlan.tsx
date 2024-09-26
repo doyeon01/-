@@ -1,4 +1,4 @@
-import { LocationDetailIcon, PlaceIcon, FoodIcon, CafeIcon, HotelIcon } from '../../assets/icons/svg'; // 아이콘 임포트
+import {PlaceIcon, FoodIcon, CafeIcon, HotelIcon } from '../../assets/icons/svg'; // 아이콘 임포트
 
 interface ScheduleItem {
   type: string;
@@ -57,7 +57,6 @@ export const DayPlan: React.FC<{ daySchedule: DaySchedule }> = ({ daySchedule })
     <div className="my-8">
       <div className="flex justify-center items-center space-x-4 mb-4">
         <div className='flex flex-col gap-2'>
-          <LocationDetailIcon />
           <h2 className="text-xl font-bold">{daySchedule.day}</h2>
         </div>
       </div>

@@ -24,7 +24,7 @@ export const MyPage = () => {
   };
 
   return (
-    <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-40 mb-20">
+    <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-24 mb-20">
       <div className="flex justify-center pb-8">
         <div className="flex justify-center pt-14 gap-8">
           <UserIcon />
