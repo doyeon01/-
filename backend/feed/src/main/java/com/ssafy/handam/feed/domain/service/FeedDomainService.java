@@ -6,6 +6,7 @@ import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import jakarta.transaction.Transactional;
+import java.util.Collection;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -35,11 +36,23 @@ public class FeedDomainService {
         return like;
     }
 
+    public void unlikeFeed(Long feedId, Long userId) {
+        Feed feed = findBy(feedId);
+        feed.decrementLikeCount();
+        feedRepository.save(feed);
+        Like like = likeRepository.findByFeedIdAndUserId(feedId, userId).get(0);
+        likeRepository.delete(like);
+    }
+
     private Feed findBy(Long feedId) {
         return feedRepository.findById(feedId).orElseThrow(() -> new IllegalArgumentException("Feed not found"));
     }
 
     public List<Like> countUpLike(Long feedId) {
+        return likeRepository.findByFeedId(feedId);
+    }
+
+    public List<Like> countDownLike(Long feedId) {
         return likeRepository.findByFeedId(feedId);
     }
 }

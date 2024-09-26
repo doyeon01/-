@@ -13,8 +13,8 @@ public class LikeRepositoryImpl implements LikeRepository {
     private final LikeJpaRepository likeJpaRepository;
 
     @Override
-    public Like save(Like like) {
-        return likeJpaRepository.save(like);
+    public void save(Like like) {
+        likeJpaRepository.save(like);
     }
 
     @Override
@@ -30,5 +30,10 @@ public class LikeRepositoryImpl implements LikeRepository {
     @Override
     public List<Like> findByUserId(Long id) {
         return likeJpaRepository.findByUserId(id);
+    }
+
+    @Override
+    public List<Like> findByFeedIdAndUserId(Long feedId, Long userId) {
+        return likeJpaRepository.findByFeedIdAndUserId(feedId, userId);
     }
 }

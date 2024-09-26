@@ -59,4 +59,9 @@ public class FeedController {
     public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
+
+    @PostMapping("/unlike/{feedId}")
+    public ApiResult<FeedLikeResponse> unlikeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
+        return success(feedService.unlikeFeed(feedId, userId));
+    }
 }

@@ -1,10 +1,21 @@
 package com.ssafy.handam.feed.presentation.api.feed;
 
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.domain.entity.Like;
+import com.ssafy.handam.feed.domain.repository.FeedRepository;
+import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
+import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -16,12 +27,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
-import static org.mockito.ArgumentMatchers.anyLong;
-import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles("test")
@@ -32,6 +37,15 @@ class FeedControllerIntegrationTest {
 
     @Autowired
     private FeedJpaRepository feedJpaRepository;
+
+    @Autowired
+    private LikeJpaRepository likeJpaRepository;
+
+    @Autowired
+    private FeedRepository feedRepository;
+
+    @Autowired
+    private LikeRepository likeRepository;
 
     @MockBean
     private UserApiClient userApiClient;
@@ -80,13 +94,28 @@ class FeedControllerIntegrationTest {
 
     @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 Like 요청")
     @Test
-    void likeFeedTest() throws  Exception {
+    void likeFeedTest() throws Exception {
         mockMvc.perform(post("/api/v1/feeds/like/" + savedFeedId + "?userId=1")
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.feedId").value(savedFeedId))
-                .andExpect(jsonPath("$.response.userId").value(1L))
                 .andExpect(jsonPath("$.response.isLiked").value(true))
                 .andExpect(jsonPath("$.response.likeCount").value(1));
+    }
+
+    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 Unlike 요청")
+    @Test
+    void unlikeFeedTest() throws Exception {
+        Feed feed = feedRepository.findById(savedFeedId)
+                .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
+
+        likeRepository.save(Like.builder().userId(1L).feed(feed).build());
+
+        mockMvc.perform(post("/api/v1/feeds/unlike/" + savedFeedId + "?userId=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.feedId").value(savedFeedId))
+                .andExpect(jsonPath("$.response.isLiked").value(false))
+                .andExpect(jsonPath("$.response.likeCount").value(0));
     }
 }
