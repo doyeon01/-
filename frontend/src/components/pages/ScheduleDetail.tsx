@@ -16,7 +16,7 @@ const dummyData = {
   title: "퇴사 기념 혼자서 부산 여행",
   days: [
     {
-      day: "첫째 날",
+      day: "DAY 1",
       schedule: [
         {
           type: "관광지",
@@ -49,7 +49,7 @@ const dummyData = {
       ]
     },
     {
-      day: "둘째 날",
+      day: "DAY 2",
       schedule: [
         {
           type: "관광지",
@@ -82,7 +82,7 @@ const dummyData = {
       ]
     },
     {
-      day: "셋째 날",
+      day: "DAY 3",
       schedule: [
         {
           type: "관광지",
@@ -115,7 +115,7 @@ const dummyData = {
       ]
     },
     {
-      day: "넷째 날",
+      day: "DAY 4",
       schedule: [
         {
           type: "관광지",
@@ -148,7 +148,7 @@ const dummyData = {
       ]
     },
     {
-      day: "넷째 날",
+      day: "DAY 5",
       schedule: [
         {
           type: "관광지",
@@ -212,7 +212,7 @@ export const ScheduleDetail = () => {
   };
 
   return (
-    <div className='mt-40'>
+    <div className='mt-28'>
       <div className='relative mb-10'>
         <h1 className="text-4xl font-bold flex justify-center items-center">{dummyData.title}</h1>
         <div className='absolute top-0 right-28'>
