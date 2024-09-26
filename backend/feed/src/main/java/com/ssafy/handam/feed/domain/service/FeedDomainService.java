@@ -30,9 +30,9 @@ public class FeedDomainService {
         Feed feed = findBy(feedId);
         feed.incrementLikeCount();
         feedRepository.save(feed);
-        Like like = Like.builder().feedId(feedId).userId(userId).build();
+        Like like = Like.builder().feed(feed).userId(userId).build();
         likeRepository.save(like);
-        return null;
+        return like;
     }
 
     private Feed findBy(Long feedId) {

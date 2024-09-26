@@ -1,7 +1,11 @@
 package com.ssafy.handam.feed.domain.entity;
 
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Builder;
@@ -13,15 +17,19 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Like extends  BaseEntity {
+
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     Long userId;
-    Long feedId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Feed feed;
 
     @Builder
-    private Like(Long userId, Long feedId) {
+    private Like(Long userId, Feed feed) {
         this.userId = userId;
-        this.feedId = feedId;
+        this.feed = feed;
     }
 }

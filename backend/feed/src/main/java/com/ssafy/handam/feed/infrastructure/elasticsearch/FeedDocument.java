@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.infrastructure.elasticsearch;
 
+import com.ssafy.handam.feed.domain.entity.Feed;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -43,4 +44,17 @@ public class FeedDocument {
 
     @Field(type = FieldType.Keyword)
     private String placeType;
+
+    public static  FeedDocument from(Feed feed) {
+        return FeedDocument.builder()
+                .id(feed.getId())
+                .userId(feed.getUserId())
+                .title(feed.getTitle())
+                .content(feed.getContent())
+                .imageUrl(feed.getImageUrl())
+                .likeCount(feed.getLikeCount())
+                .address(feed.getAddress())
+                .placeType(feed.getPlaceType().name())
+                .build();
+    }
 }

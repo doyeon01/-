@@ -70,9 +70,8 @@ public class FeedService {
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
-        feedDomainService.likeFeed(feedId, userId);
-        int size = feedDomainService.countUpLike(feedId).size();
         Like like = feedDomainService.likeFeed(feedId, userId);
+        int size = feedDomainService.countUpLike(feedId).size();
         return FeedLikeResponse.of(LikeDto.of(like), true, size);
     }
 }

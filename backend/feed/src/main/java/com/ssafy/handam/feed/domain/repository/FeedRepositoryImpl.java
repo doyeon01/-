@@ -26,25 +26,12 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Feed save(Feed feed) {
         Feed savedFeed = feedJpaRepository.save(feed);
-        feedElasticsearchRepository.save(toFeedDocument(savedFeed));
+        feedElasticsearchRepository.save(FeedDocument.from(savedFeed));
         return savedFeed;
     }
 
     @Override
     public Like save(Like like) {
         return likeJpaRepository.save(like);
-    }
-
-    private FeedDocument toFeedDocument(Feed feed) {
-        return FeedDocument.builder()
-                .id(feed.getId())
-                .userId(feed.getUserId())
-                .title(feed.getTitle())
-                .content(feed.getContent())
-                .imageUrl(feed.getImageUrl())
-                .likeCount(feed.getLikeCount())
-                .address(feed.getAddress())
-                .placeType(feed.getPlaceType().name())
-                .build();
     }
 }

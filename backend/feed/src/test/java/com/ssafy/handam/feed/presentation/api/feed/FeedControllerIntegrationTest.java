@@ -31,7 +31,7 @@ class FeedControllerIntegrationTest {
     private MockMvc mockMvc;
 
     @Autowired
-    private FeedJpaRepository feedJpaRepositorySSSS;
+    private FeedJpaRepository feedJpaRepository;
 
     @MockBean
     private UserApiClient userApiClient;
