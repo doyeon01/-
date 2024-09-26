@@ -1,0 +1,12 @@
+[[like-feed]]
+=== 피드 좋아요 API
+
+==== HTTP Request
+
+include::{snippets}/unlike-feed/http-request.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/unlike-feed/http-response.adoc[]
+include::{snippets}/unlike-feed/response-fields.adoc[]

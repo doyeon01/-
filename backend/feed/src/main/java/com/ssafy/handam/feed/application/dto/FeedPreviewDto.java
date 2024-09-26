@@ -11,6 +11,7 @@ public record FeedPreviewDto(
         String address,
         Double longitude,
         Double latitude,
+        String placeType,
         String username,
         String userProfileImageUrl,
         boolean isLiked
@@ -26,6 +27,7 @@ public record FeedPreviewDto(
                 feed.getAddress(),
                 feed.getLongitude(),
                 feed.getLatitude(),
+                feed.getPlaceType().name(),
                 username,
                 userProfileImageUrl,
                 isLiked

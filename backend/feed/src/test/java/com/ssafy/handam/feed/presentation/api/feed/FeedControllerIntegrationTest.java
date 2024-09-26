@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.entity.Like;
@@ -16,6 +17,7 @@ import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -50,6 +52,9 @@ class FeedControllerIntegrationTest {
     @MockBean
     private UserApiClient userApiClient;
 
+    @Autowired
+    private FeedService feedService;
+
     private Long savedFeedId;
 
     @BeforeEach
@@ -70,6 +75,12 @@ class FeedControllerIntegrationTest {
 
         UserDto mockUserDto = UserDto.of(1L, "testUser", "test@example.com", "http://example.com/profile.jpg");
         when(userApiClient.getUserById(anyLong())).thenReturn(mockUserDto);
+    }
+
+    @AfterEach
+    void tearDown() {
+        likeJpaRepository.deleteAll();
+        feedJpaRepository.deleteAll();
     }
 
 
@@ -118,4 +129,29 @@ class FeedControllerIntegrationTest {
                 .andExpect(jsonPath("$.response.isLiked").value(false))
                 .andExpect(jsonPath("$.response.likeCount").value(0));
     }
+
+    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 사용자가 누른 좋아요 FeedList 조회")
+    @Test
+    void getLikedFeedListTest() throws Exception {
+        Feed feed = feedRepository.findById(savedFeedId)
+                .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
+        System.out.println(savedFeedId);
+        feedService.likeFeed(savedFeedId, 1L);
+        likeRepository.save(Like.builder().userId(1L).feed(feed).build());
+        mockMvc.perform(get("/api/v1/feeds/liked?userId=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.feeds[0].id").value(savedFeedId))
+                .andExpect(jsonPath("$.response.feeds[0].userId").value(1L))
+                .andExpect(jsonPath("$.response.feeds[0].username").value("testUser"))
+                .andExpect(jsonPath("$.response.feeds[0].userProfileImageUrl").value("http://example.com/profile.jpg"))
+                .andExpect(jsonPath("$.response.feeds[0].title").value("Test Title"))
+                .andExpect(jsonPath("$.response.feeds[0].address").value("Test Address"))
+                .andExpect(jsonPath("$.response.feeds[0].longitude").value(127.123123))
+                .andExpect(jsonPath("$.response.feeds[0].latitude").value(32.1323))
+                .andExpect(jsonPath("$.response.feeds[0].placeType").value("CAFE"))
+                .andExpect(jsonPath("$.response.feeds[0].likeCount").value(1));
+    }
+
+
 }

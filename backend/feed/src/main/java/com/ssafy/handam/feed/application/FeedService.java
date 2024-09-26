@@ -32,14 +32,14 @@ public class FeedService {
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", 32.1323,
-                127.123123, "username", "profileImageUrl", true);
+                127.123123, "CAFE", "username", "profileImageUrl", true);
         List<FeedPreviewDto> previewDtos = List.of(feedPreviewDto);
         return RecommendedFeedsForUserResponse.of(previewDtos);
     }
 
     public FeedsByFiltersResponse getFeedsByFilters(FeedsByFiltersServiceRequest request) {
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", 32.1323,
-                127.123123, "username", "profileImageUrl", true);
+                127.123123, "CAFE", "username", "profileImageUrl", true);
         List<FeedPreviewDto> previewDtos = List.of(feedPreviewDto);
         return FeedsByFiltersResponse.of(previewDtos);
     }
