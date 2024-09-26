@@ -17,10 +17,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api/v1/accompanyboard")
+@RequestMapping("/api/v1/accompanyboard/article")
 public class AccompanyBoardController {
 
-    @GetMapping("/articles/{id}")
+    @GetMapping("/{id}")
     public ApiResult<ArticleInfoResponse> getArticle(@PathVariable("id") Long id) {
 
         Article article = Article.builder()
