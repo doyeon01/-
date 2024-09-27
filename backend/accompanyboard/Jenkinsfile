@@ -1,4 +1,6 @@
 def skipRemainingStages = true
+// 상태
+
 
 pipeline {
     agent any
