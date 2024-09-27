@@ -1,10 +1,9 @@
 [[like-feed]]
-=== 피드 좋아요 API
+=== 피드 좋아요 취소 API
 
 ==== HTTP Request
 
 include::{snippets}/unlike-feed/http-request.adoc[]
-
 
 ==== HTTP Response
 
