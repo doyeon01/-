@@ -6,9 +6,10 @@ import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import jakarta.transaction.Transactional;
-import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -27,13 +28,12 @@ public class FeedDomainService {
         return feedRepository.save(feed);
     }
 
-    public Like likeFeed(Long feedId, Long userId) {
+    public void likeFeed(Long feedId, Long userId) {
         Feed feed = findBy(feedId);
         feed.incrementLikeCount();
         feedRepository.save(feed);
         Like like = Like.builder().feed(feed).userId(userId).build();
         likeRepository.save(like);
-        return like;
     }
 
     public void unlikeFeed(Long feedId, Long userId) {
@@ -54,5 +54,19 @@ public class FeedDomainService {
 
     public List<Like> countDownLike(Long feedId) {
         return likeRepository.findByFeedId(feedId);
+    }
+
+    public List<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
+        List<Like> likes = likeRepository.findByUserId(userId, pageable);
+        if (likes == null || likes.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return likes.stream()
+                .map(Like::getFeed)
+                .toList();
+    }
+
+    public boolean isLikedFeed(Long feedId, Long userId) {
+        return !likeRepository.findByFeedIdAndUserId(feedId, userId).isEmpty();
     }
 }
