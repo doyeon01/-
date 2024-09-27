@@ -30,7 +30,7 @@ pipeline {
                         url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
                         credentialsId: 'PERSONAL_ACCESS_TOKEN'
                     ]],
-                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: "$SERVER_NAME}"]]]]
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: "$SERVER_NAME/"]]]]
                 ])
             }
         }
