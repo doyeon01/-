@@ -9,7 +9,7 @@ declare global {
 const KakaoMap: React.FC = () => {
     useEffect(() => {
         const script = document.createElement('script');
-        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&autoload=false`; 
+        script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`; 
         script.async = true;
         script.defer = true;
         document.body.appendChild(script);
