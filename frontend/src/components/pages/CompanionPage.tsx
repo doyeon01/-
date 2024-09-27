@@ -8,6 +8,7 @@ import testImg4 from '../../assets/statics/test4.jpg';
 import testImg5 from '../../assets/statics/test5.jpg';
 import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
 import KakaoMap from '../organisms/KaKaoMap';
+import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 
 interface ScheduleItem {
   type: string;
@@ -145,7 +146,9 @@ export const CompanionPage: React.FC = () => {
   const handleItemClick = (index: number) => {
     setSelectedIndex(index);
   };
-
+  const closeModal = () =>{
+    setSelectedIndex(null);
+  }
   const handleOpenChoiceModal = () => {
     setIsChoiceModalOpen(true);
   };
@@ -156,7 +159,8 @@ export const CompanionPage: React.FC = () => {
 
   return (
     <>
-      <div className="h-[80px] w-full px-4 bg-white"/>
+
+      <div className="h-[80px] w-full"/>
       <KakaoMap/>
         <div className='fixed w-[300px] h-full bg-white flex flex-col items-center z-50 border-gray border-r-2'>
           <div className='flex flex-col items-center w-full'>
@@ -197,7 +201,16 @@ export const CompanionPage: React.FC = () => {
           })}
         </div>
         {selectedIndex !== null && (
+          <div 
+          className='w-[23px] h-[45px] bg-white fixed flex justify-center items-center rounded-r-lg top-[400px] left-[609px] border cursor-pointer z-50'
+          onClick={closeModal}
+          >
+            <img src={Mini_Vector}/>
+          </div>
+        )}
+        {selectedIndex !== null && (
           <ModalCompanionDetail data={dummyData[selectedIndex]} />
+          
         )}
         {isChoiceModalOpen && (
           <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />
