@@ -43,11 +43,11 @@ pipeline {
                 script {
                     skipRemainingStages = false
                     sh """
-                    cd backend/${SERVER_NAME}
+                    cd backend/$SERVER_NAME
                     chmod +x ./gradlew
                     ./gradlew build
                     ls build/libs
-                    docker build -t ${SERVER_NAME}:latest .
+                    docker build -t $SERVER_NAME:latest .
                     """
                 }
             }
@@ -55,7 +55,7 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                changeset "backend/${SERVER_NAME}/**"
+                changeset "backend/$SERVER_NAME/**"
             }
             steps {
                 script {
@@ -68,13 +68,13 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                changeset "backend/${SERVER_NAME}/**"
+                changeset "backend/$SERVER_NAME/**"
             }
             steps {
                 script {
                     sh """
-                    docker tag ${SERVER_NAME}:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
-                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
+                    docker tag $SERVER_NAME:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
                     """
                 }
             }
@@ -82,18 +82,18 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                changeset "backend/${SERVER_NAME}/**"
+                changeset "backend/$SERVER_NAME/**"
             }
             steps {
                 script {
                     sh """
                     ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
-                    docker stop ${SERVER_NAME} || true
-                    docker rm ${SERVER_NAME} || true
-                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest || true
+                    docker stop $SERVER_NAME || true
+                    docker rm $SERVER_NAME || true
+                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest || true
                     docker system prune -f --volumes
-                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
-                    docker run -it -d --name ${SERVER_NAME} -p $SERVER_PORT:$SERVER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
+                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
+                    docker run -it -d --name $SERVER_NAME -p $SERVER_PORT:$SERVER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
                     EOF
                     """.stripIndent()
                 }
@@ -102,7 +102,7 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                changeset "backend/${SERVER_NAME}/**"
+                changeset "backend/$SERVER_NAME/**"
             }
             steps {
                 script {
