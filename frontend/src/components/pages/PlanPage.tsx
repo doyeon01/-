@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 import ButtonRefreshIcon from '../atoms/button/ButtonRefreshIcon'
 import CardPlanFav from '../molecules/Card/CardPlanFav'
 import KaKaoMap_Plan from '../organisms/KaKaoMap_Plan'
@@ -19,7 +19,7 @@ export const PlanPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
-  // const [searchinTab, setSearchingTab] = useState(true)
+
 
   
   // 모달 열고 닫기
@@ -49,10 +49,32 @@ export const PlanPage: React.FC = () => {
   const handleCurrentDate = (currentDate: number) => {
     setCurrentDate(currentDate)
   }
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
-  // const handleSearchingTab = () => {
-  //   setSearchingTab(searchinTab => !searchinTab)
-  // }
+  useEffect(() => {
+    const scrollContainer = scrollContainerRef.current;
+
+    const handleWheel = (event: WheelEvent) => {
+      if (scrollContainer) {
+        // prevent the default vertical scroll behavior
+        event.preventDefault();
+        // assign the vertical scroll delta to horizontal scroll
+        scrollContainer.scrollLeft += event.deltaY;
+      }
+    };
+
+    if (scrollContainer) {
+      // Add wheel event listener
+      scrollContainer.addEventListener('wheel', handleWheel, { passive: false });
+    }
+
+    return () => {
+      if (scrollContainer) {
+        // Clean up event listener on component unmount
+        scrollContainer.removeEventListener('wheel', handleWheel);
+      }
+    };
+  }, []);
 
   return (
     <div className='relative top-20'>
@@ -69,7 +91,7 @@ export const PlanPage: React.FC = () => {
       {IsHide === true ? (
         <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative h-[calc(100vh-160px)]">
           <div className="w-full h-full bg-sky-200 relative ml-10">
-            <KaKaoMap_Plan test={false}/>
+            <KaKaoMap_Plan isSearch={false}/>
             <div className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
               <ButtonRefreshIcon />
               <span className="text-[13px]">마지막 업데이트 : X 전</span>
@@ -88,6 +110,7 @@ export const PlanPage: React.FC = () => {
           </div>
         </div>
       ) : (
+        <>
         <div className="flex flex-row justify-center items-center relative divide-x h-[calc(100vh-80px)] overflow-hidden">
           <div className="h-full bg-white flex flex-col min-w-[60px] text-[13px]">
             <div className="flex-grow">
@@ -105,7 +128,7 @@ export const PlanPage: React.FC = () => {
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
           </div>
               
-          <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden">
+          <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
             <div className="w-[390px] h-[150px] flex min-h-[150px] justify-around items-center">
               <div className="flex flex-col justify-start text-[13px] gap-4">
                 <span>관광명소 | 무등산</span>
@@ -120,10 +143,29 @@ export const PlanPage: React.FC = () => {
 
           </div>
 
-          <div className="w-full h-full">
-            <KaKaoMap_Plan test={true}/>
+          <div className="w-full h-full z-0">
+            <KaKaoMap_Plan isSearch={true}/>
           </div>
         </div>
+        <div ref={scrollContainerRef} className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'>
+          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+            <img src={test1} className="w-full h-full object-cover"/>
+          </div>
+          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+            <img src={test1} className="w-full h-full object-cover"/>
+          </div>
+          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+            <img src={test1} className="w-full h-full object-cover"/>
+          </div>
+          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+            <img src={test1} className="w-full h-full object-cover"/>
+          </div>
+          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+            <img src={test1} className="w-full h-full object-cover"/>
+          </div>
+
+        </div>
+        </>
       )}
     </div>
   )
