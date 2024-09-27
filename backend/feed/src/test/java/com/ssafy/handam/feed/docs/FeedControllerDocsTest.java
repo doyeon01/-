@@ -316,7 +316,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 .title("Test Title")
                 .content("Test Content")
                 .feedImageUrl("http://example.com/feed.jpg")
-                .address("Test Address")
+                .address1("Test Address")
+                .address2("Test Address")
                 .longitude(127.123123)
                 .latitude(32.1323)
                 .placeType(PlaceType.CAFE)
@@ -361,7 +362,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("피드 내용"),
                                 fieldWithPath("feedImageUrl").type(JsonFieldType.STRING)
                                         .description("피드 이미지 URL"),
-                                fieldWithPath("address").type(JsonFieldType.STRING)
+                                fieldWithPath("address1").type(JsonFieldType.STRING)
+                                        .description("피드 주소"),
+                                fieldWithPath("address2").type(JsonFieldType.STRING)
                                         .description("피드 주소"),
                                 fieldWithPath("longitude").type(JsonFieldType.NUMBER)
                                         .description("피드 경도"),
@@ -565,7 +568,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.feeds[].latitude").type(JsonFieldType.NUMBER)
                                         .description("피드의 위도"),
                                 fieldWithPath("response.feeds[].placeType").type(JsonFieldType.STRING)
-                                        .description("장소 타입"),
+                                        .description(
+                                                "장소 타입 (CAFE, RESTAURANT, ACCOMMODATION, TOURIST_ATTRACTION, ETC 또는 null 가능)"),
                                 fieldWithPath("response.feeds[].username").type(JsonFieldType.STRING)
                                         .description("사용자 이름"),
                                 fieldWithPath("response.feeds[].userProfileImageUrl").type(JsonFieldType.STRING)

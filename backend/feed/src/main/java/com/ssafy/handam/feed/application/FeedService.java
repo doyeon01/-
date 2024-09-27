@@ -55,22 +55,8 @@ public class FeedService {
     }
 
     public FeedResponse createFeed(FeedCreationServiceRequest request) {
-
-        return new FeedResponse(
-                1L,
-                1L,
-                "testUser",
-                "http://example.com/profile.jpg",
-                "Test Title",
-                "Test Content",
-                "http://example.com/feed.jpg",
-                "Test Address1",
-                "Test Address2",
-                127.123123,
-                32.1323,
-                "CAFE",
-                0
-        );
+        Feed feed = feedDomainService.createFeed(request);
+        return FeedResponse.from(feed, userApiClient.getUserById(feed.getUserId()));
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
