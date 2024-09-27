@@ -23,7 +23,7 @@ pipeline {
 
         stage('Checkout Code') {
             steps {
-                // backend 브랜치의 accompanyboard 폴더만 체크아웃.
+                // backend 브랜치의 accompanyboard 폴더만 체크아웃
                 checkout([$class: 'GitSCM',
                     branches: [[name: '*/be/accompanyboard-deploy']],
                     userRemoteConfigs: [[
