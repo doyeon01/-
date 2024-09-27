@@ -5,8 +5,9 @@ import KaKaoMap_Plan from '../organisms/KaKaoMap_Plan'
 import ModalCalendar from '../organisms/Modal/ModalCalender'
 import moment from 'moment'
 import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
+import ScheduleRegister from '../atoms/input/ScheduleRegister'
 
-import MapMarker from '../../assets/statics/MapMarker.png'
+import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import test1 from '../../assets/statics/test1.jpg'
 // import test2 from '../../assets/statics/test2.jpg'
 // import test3 from '../../assets/statics/test3.png'
@@ -19,8 +20,12 @@ export const PlanPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
+  const [searchinTab, setSearchingTab] = useState(true)
+  const [scheduleData, setScheduleData] = useState<{ [key: number]: any }>({});
 
-
+  const handleSearchingTab = () => {
+    setSearchingTab(searchinTab => !searchinTab)
+    } 
   
   // 모달 열고 닫기
   const handleIsmodal = () => {
@@ -49,6 +54,14 @@ export const PlanPage: React.FC = () => {
   const handleCurrentDate = (currentDate: number) => {
     setCurrentDate(currentDate)
   }
+
+  const handleScheduleChange = (date: number, data: any) => {
+    setScheduleData((prevData) => ({
+      ...prevData,
+      [date]: data, // currentDate 기반으로 데이터 저장
+    }));
+  };
+
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -77,7 +90,7 @@ export const PlanPage: React.FC = () => {
   }, []);
 
   return (
-    <div className='relative top-20'>
+    <div className='relative top-20 overflow-hidden'>
       {/* 모달 창 */}
       {Ismodal === true && (
         <>
@@ -127,43 +140,50 @@ export const PlanPage: React.FC = () => {
             </div>
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
           </div>
-              
-          <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
-            <div className="w-[390px] h-[150px] flex min-h-[150px] justify-around items-center">
-              <div className="flex flex-col justify-start text-[13px] gap-4">
-                <span>관광명소 | 무등산</span>
-                <textarea placeholder="내용추가" className="h-[60px] whitespace-pre-wrap w-[200px] overflow-hidden resize-none" />
-                <div className="flex justify-start items-center gap-1 text-[#645E59]">
-                  <img src={MapMarker} className="scale-75" />
-                  광주 광역시 동구 증심사길 177
-                </div>
-              </div>
-              <img src={test1} className="w-[110px] h-[110px] rounded-[13px]" />
-            </div>
-
-          </div>
+          {currentDate && (
+              <ScheduleRegister
+                currentDate={currentDate}
+                data={scheduleData[currentDate] || {}} // 숫자에 맞는 데이터 전달
+                onScheduleChange={handleScheduleChange}
+              />
+            )}
+          
 
           <div className="w-full h-full z-0">
             <KaKaoMap_Plan isSearch={true}/>
           </div>
         </div>
-        <div ref={scrollContainerRef} className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'>
-          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-            <img src={test1} className="w-full h-full object-cover"/>
-          </div>
-          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-            <img src={test1} className="w-full h-full object-cover"/>
-          </div>
-          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-            <img src={test1} className="w-full h-full object-cover"/>
-          </div>
-          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-            <img src={test1} className="w-full h-full object-cover"/>
-          </div>
-          <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-            <img src={test1} className="w-full h-full object-cover"/>
-          </div>
+        <div className="relative z-10">
+          <div className={`transition-transform duration-300 ${searchinTab ? 'translate-y-0' : 'translate-y-[350px]'}`}>
+            <div 
+              id='folding'
+              className='w-[23px] h-[45px] bg-white flex justify-center items-center rounded-r-lg absolute z-50 border cursor-pointer -rotate-90 bottom-[338px] left-1/2'
+              onClick={handleSearchingTab}
+            >
+              <img src={Mini_Vector} className={`${searchinTab ? '' : 'transform scale-x-[-1]'}`}/>
+            </div>
 
+            <div 
+              ref={scrollContainerRef} 
+              className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-visible'
+            >
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
+            </div>
+          </div>
         </div>
         </>
       )}
