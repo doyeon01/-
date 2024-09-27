@@ -19,8 +19,9 @@ export const PlanPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
-  const [searchinTab, setSearchingTab] = useState(true)
+  // const [searchinTab, setSearchingTab] = useState(true)
 
+  
   // 모달 열고 닫기
   const handleIsmodal = () => {
     setismodal(Ismodal => !Ismodal)
@@ -49,9 +50,9 @@ export const PlanPage: React.FC = () => {
     setCurrentDate(currentDate)
   }
 
-  const handleSearchingTab = () => {
-    setSearchingTab(searchinTab => !searchinTab)
-  }
+  // const handleSearchingTab = () => {
+  //   setSearchingTab(searchinTab => !searchinTab)
+  // }
 
   return (
     <div className='relative top-20'>

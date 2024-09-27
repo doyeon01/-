@@ -69,6 +69,8 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
 
         if (placesService && map) {
             placesService.keywordSearch(keyword, (data: any, status: any, pagination: any) => {
+                console.log(pagination);
+                
                 if (status === window.kakao.maps.services.Status.OK) {
                     setPlaces(data); // 검색 결과 저장
                     displayMarkers(data); // 마커 표시
@@ -95,6 +97,8 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
         const newMarkers: any[] = [];
 
         places.forEach((place, index) => {
+            console.log(index);
+            
             const position = new window.kakao.maps.LatLng(place.y, place.x);
             const marker = new window.kakao.maps.Marker({
                 position,
