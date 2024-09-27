@@ -20,11 +20,17 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
     };
   }, []);
 
+  const isWhiteBackground = location.pathname === '/companion';
+
   return (
     <nav
       id="navbar"
       style={{
-        backgroundColor: isScrolled ? 'white' : 'transparent', 
+        backgroundColor: isWhiteBackground
+          ? '#FFFFFF' 
+          : isScrolled
+          ? '#F4F4EE'
+          : 'transparent', 
         boxShadow: isScrolled ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
         transition: 'background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
         fontFamily: 'Arita',
