@@ -1,0 +1,11 @@
+[[get-created-feeds-by-user]]
+=== 사용자가 생성한 피드 목록 조회
+
+==== HTTP Request
+
+include::{snippets}/get-created-feeds-by-user/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-created-feeds-by-user/http-response.adoc[]
+include::{snippets}/get-created-feeds-by-user/response-fields.adoc[]
