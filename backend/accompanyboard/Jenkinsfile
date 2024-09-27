@@ -30,24 +30,24 @@ pipeline {
                         url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
                         credentialsId: 'PERSONAL_ACCESS_TOKEN'
                     ]],
-                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: "$SERVER_NAME/"]]]]
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: "accompanyboard/"]]]]
                 ])
             }
         }
 
         stage('Build Docker Image') {
             when {
-                changeset "backend/$SERVER_NAME/**"
+                changeset "backend/accompanyboard/**"
             }
             steps {
                 script {
                     skipRemainingStages = false
                     sh """
-                    cd backend/$SERVER_NAME
+                    cd backend/accompanyboard
                     chmod +x ./gradlew
                     ./gradlew build
                     ls build/libs
-                    docker build -t $SERVER_NAME:latest .
+                    docker build -t accompanyboard:latest .
                     """
                 }
             }
@@ -55,7 +55,7 @@ pipeline {
 
         stage('Login to Docker Registry') {
             when {
-                changeset "backend/$SERVER_NAME/**"
+                changeset "backend/accompanyboard/**"
             }
             steps {
                 script {
@@ -68,13 +68,13 @@ pipeline {
 
         stage('Push Docker Image to Repository') {
             when {
-                changeset "backend/$SERVER_NAME/**"
+                changeset "backend/accompanyboard/**"
             }
             steps {
                 script {
                     sh """
-                    docker tag $SERVER_NAME:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
-                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
+                    docker tag accompanyboard:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:accompanyboard-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:accompanyboard-latest
                     """
                 }
             }
@@ -82,18 +82,18 @@ pipeline {
 
         stage('Deploy to EC2') {
             when {
-                changeset "backend/$SERVER_NAME/**"
+                changeset "backend/accompanyboard/**"
             }
             steps {
                 script {
                     sh """
                     ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
-                    docker stop $SERVER_NAME || true
-                    docker rm $SERVER_NAME || true
-                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest || true
+                    docker stop accompanyboard || true
+                    docker rm accompanyboard || true
+                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:accompanyboard-latest || true
                     docker system prune -f --volumes
-                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
-                    docker run -it -d --name $SERVER_NAME -p $SERVER_PORT:$SERVER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:$SERVER_NAME-latest
+                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:accompanyboard-latest
+                    docker run -it -d --name accompanyboard -p $SERVER_PORT:$SERVER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:accompanyboard-latest
                     EOF
                     """.stripIndent()
                 }
@@ -102,7 +102,7 @@ pipeline {
 
         stage('Logout from Docker Registry') {
             when {
-                changeset "backend/$SERVER_NAME/**"
+                changeset "backend/accompanyboard/**"
             }
             steps {
                 script {
@@ -121,7 +121,7 @@ pipeline {
         success {
             script{
                 if (skipRemainingStages) {
-                    echo "No changes in ${SERVER_NAME} folder, skipping build and deploy."
+                    echo "No changes in accompanyboard folder, skipping build and deploy."
                 } else {
                     echo "Deployed successfully on port ${SERVER_PORT}!"
                     def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
