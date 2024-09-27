@@ -20,4 +20,4 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo Asia/Seoul > /
 COPY --from=builder /home/gradle/project/build/libs/accompanyboard-0.0.1-SNAPSHOT.jar /accompanyboard.jar
 
 # 실행
-ENTRYPOINT ["java", "-jar", "-Dserver.port=8080", "-Duser.timezone=Asia/Seoul", "/accompanyboard.jar"]
+ENTRYPOINT ["java", "-jar", "-Dserver.port=8082", "-Duser.timezone=Asia/Seoul", "/accompanyboard.jar"]
