@@ -120,37 +120,37 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
     };
 
     // 검색 결과 목록 렌더링
-    // const renderPlaces = () => {
-    //     return places.map((place, index) => (
-    //         <li key={index} className="item">
-    //             <span className={`markerbg marker_${index + 1}`}></span>
-    //             <div className="info">
-    //                 <h5>{place.place_name}</h5>
-    //                 {place.road_address_name ? (
-    //                     <>
-    //                         <span>{place.road_address_name}</span>
-    //                         <span className="jibun gray">{place.address_name}</span>
-    //                     </>
-    //                 ) : (
-    //                     <span>{place.address_name}</span>
-    //                 )}
-    //                 <span className="tel">{place.phone}</span>
-    //             </div>
-    //         </li>
-    //     ));
-    // };
-
     const renderPlaces = () => {
         return places.map((place, index) => (
             <li key={index} className="item">
                 <span className={`markerbg marker_${index + 1}`}></span>
                 <div className="info">
-                    {/* place 객체의 전체 정보를 JSON 형식으로 출력 */}
-                    <pre>{JSON.stringify(place, null, 2)}</pre>
+                    <h5>{place.place_name}</h5>
+                    {place.road_address_name ? (
+                        <>
+                            <span>{place.road_address_name}</span>
+                            <span className="jibun gray">{place.address_name}</span>
+                        </>
+                    ) : (
+                        <span>{place.address_name}</span>
+                    )}
+                    <span className="tel">{place.phone}</span>
                 </div>
             </li>
         ));
     };
+
+    // const renderPlaces = () => {
+    //     return places.map((place, index) => (
+    //         <li key={index} className="item">
+    //             <span className={`markerbg marker_${index + 1}`}></span>
+    //             <div className="info">
+    //                 {/* place 객체의 전체 정보를 JSON 형식으로 출력 */}
+    //                 <pre>{JSON.stringify(place, null, 2)}</pre>
+    //             </div>
+    //         </li>
+    //     ));
+    // };
     return (
         <>
             {/* 검색 바 */}
@@ -169,8 +169,8 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
                 <span className='m-3'>✖</span>
               </div>
             {/* 검색 결과 목록 */}
-            <div id="menu_wrap" className="bg-white">
-                <ul id="placesList">{renderPlaces()}</ul>
+            <div id="menu_wrap" className="bg-white ">
+                <ul id="placesList" className='flex items-start justify-start flex-col'>{renderPlaces()}</ul>
             </div>
             </div>
 
