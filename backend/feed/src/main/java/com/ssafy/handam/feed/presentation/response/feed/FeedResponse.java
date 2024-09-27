@@ -12,13 +12,14 @@ public record FeedResponse(
         String title,
         String content,
         String feedImageUrl,
-        String address,
+        String address1,
+        String address2,
         Double longitude,
         Double latitude,
         String placeType,
         int likeCount
 ) {
-    public static FeedResponse from(Feed feed, UserDto userDto , PlaceType placeType) {
+    public static FeedResponse from(Feed feed, UserDto userDto, PlaceType placeType) {
         return new FeedResponse(
                 feed.getId(),
                 userDto.id(),
@@ -27,7 +28,8 @@ public record FeedResponse(
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
-                feed.getAddress(),
+                feed.getAddress1(),
+                feed.getAddress2(),
                 feed.getLongitude(),
                 feed.getLatitude(),
                 placeType.name(),

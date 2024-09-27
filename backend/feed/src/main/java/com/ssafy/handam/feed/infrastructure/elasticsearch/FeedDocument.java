@@ -34,7 +34,10 @@ public class FeedDocument {
     private int likeCount;
 
     @Field(type = FieldType.Text)
-    private String address;
+    private String address1;
+
+    @Field(type = FieldType.Text)
+    private String address2;
 
     @Field(type = FieldType.Double)
     private Double longitude;
@@ -45,7 +48,7 @@ public class FeedDocument {
     @Field(type = FieldType.Keyword)
     private String placeType;
 
-    public static  FeedDocument from(Feed feed) {
+    public static FeedDocument from(Feed feed) {
         return FeedDocument.builder()
                 .id(feed.getId())
                 .userId(feed.getUserId())
@@ -53,7 +56,10 @@ public class FeedDocument {
                 .content(feed.getContent())
                 .imageUrl(feed.getImageUrl())
                 .likeCount(feed.getLikeCount())
-                .address(feed.getAddress())
+                .address1(feed.getAddress1())
+                .address2(feed.getAddress2())
+                .longitude(feed.getLongitude())
+                .latitude(feed.getLatitude())
                 .placeType(feed.getPlaceType().name())
                 .build();
     }
