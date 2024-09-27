@@ -1,8 +1,7 @@
 package com.ssafy.handam.accompanyboard.presentation.response.article;
 
-import lombok.Builder;
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 
-@Builder
 public record AccompanyBoardArticleDetailResponse(
         Long id,
         Long userId,
@@ -11,7 +10,15 @@ public record AccompanyBoardArticleDetailResponse(
         String description
 ) {
 
-    public static AccompanyBoardArticleDetailResponseBuilder of(
-
-    )
+    public static AccompanyBoardArticleDetailResponse of(
+            AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto
+    ) {
+        return new AccompanyBoardArticleDetailResponse(
+                accompanyBoardArticleDetailDto.id(),
+                accompanyBoardArticleDetailDto.userId(),
+                accompanyBoardArticleDetailDto.scheduleId(),
+                accompanyBoardArticleDetailDto.title(),
+                accompanyBoardArticleDetailDto.description()
+        );
+    }
 }

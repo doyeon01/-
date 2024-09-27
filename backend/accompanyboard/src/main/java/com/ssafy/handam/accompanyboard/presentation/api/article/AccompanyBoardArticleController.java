@@ -1,10 +1,11 @@
 package com.ssafy.handam.accompanyboard.presentation.api.article;
 
 import static com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.success;
+import static com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest.toServiceRequest;
 
 import com.ssafy.handam.accompanyboard.application.AccompanyBoardArticleService;
 import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
-import com.ssafy.handam.accompanyboard.presentation.request.comment.AccompanyBoardCommentCreationRequest;
+import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -23,17 +24,17 @@ public class AccompanyBoardArticleController {
     private final AccompanyBoardArticleService accompanyBoardArticleService;
 
     @PostMapping("/create")
-    public ApiResult<AccompanyBoardArticleDetailResponse>createArticle(@RequestBody AccompanyBoardCommentCreationRequest request) {
+    public ApiResult<AccompanyBoardArticleDetailResponse>createArticle(@RequestBody AccompanyBoardArticleCreationRequest request) {
         return success(accompanyBoardArticleService.createArticle(toServiceRequest(request)));
     }
 
-    @GetMapping
-    public ApiResult<List<AccompanyBoardArticleDetailResponse>> getArticles() {
-        return success(accompanyBoardArticleService.getArticles());
-    }
-
-    @GetMapping("/{articleId}")
-    public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {
-        return success(accompanyBoardArticleService.getArticleDetails(articleId));
-    }
+//    @GetMapping
+//    public ApiResult<List<AccompanyBoardArticleDetailResponse>> getArticles() {
+//        return success(accompanyBoardArticleService.getArticles());
+//    }
+//
+//    @GetMapping("/{articleId}")
+//    public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {
+//        return success(accompanyBoardArticleService.getArticleDetails(articleId));
+//    }
 }

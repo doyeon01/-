@@ -13,28 +13,28 @@
 === 동행 게시글 등록
 
 ==== HTTP Request
-include::{snippets}/post-article/http-request.adoc[]
+include::{snippets}/create-article/http-request.adoc[]
 ==== HTTP Response
-include::{snippets}/post-article/http-response.adoc[]
-include::{snippets}/post-article/request-fields.adoc[]
-include::{snippets}/post-article/response-fields.adoc[]
+include::{snippets}/create-article/http-response.adoc[]
+include::{snippets}/create-article/request-fields.adoc[]
+include::{snippets}/create-article/response-fields.adoc[]
 
----
-=== 특정 동행 게시글 조회
-
-==== HTTP Request
-include::{snippets}/get-article/http-request.adoc[]
-==== HTTP Response
-include::{snippets}/get-article/http-response.adoc[]
-include::{snippets}/get-article/path-parameters.adoc[]
-include::{snippets}/get-article/response-fields.adoc[]
-
----
-=== 전체 동행 게시글 조회
-
-==== HTTP Request
-include::{snippets}/get-articles/http-request.adoc[]
-==== HTTP Response
-include::{snippets}/get-articles/http-response.adoc[]
-include::{snippets}/get-articles/response-fields.adoc[]
+// ---
+// === 특정 동행 게시글 조회
+//
+// ==== HTTP Request
+// include::{snippets}/get-article/http-request.adoc[]
+// ==== HTTP Response
+// include::{snippets}/get-article/http-response.adoc[]
+// include::{snippets}/get-article/path-parameters.adoc[]
+// include::{snippets}/get-article/response-fields.adoc[]
+//
+// ---
+// === 전체 동행 게시글 조회
+//
+// ==== HTTP Request
+// include::{snippets}/get-articles/http-request.adoc[]
+// ==== HTTP Response
+// include::{snippets}/get-articles/http-response.adoc[]
+// include::{snippets}/get-articles/response-fields.adoc[]
 

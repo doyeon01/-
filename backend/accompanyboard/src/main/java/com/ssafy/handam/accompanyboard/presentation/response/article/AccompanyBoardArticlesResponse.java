@@ -1,4 +1,4 @@
 package com.ssafy.handam.accompanyboard.presentation.response.article;
 
-public class AccompanyBoardArticlesResponse {
+public record AccompanyBoardArticlesResponse() {
 }
