@@ -1,4 +1,4 @@
-package com.ssafy.handam.scg.component;
+package com.ssafy.handam.scg.filters;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;

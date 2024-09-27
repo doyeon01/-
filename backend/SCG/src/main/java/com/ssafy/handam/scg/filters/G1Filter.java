@@ -1,4 +1,4 @@
-package com.ssafy.handam.scg.component;
+package com.ssafy.handam.scg.filters;
 
 import org.springframework.cloud.gateway.filter.GatewayFilterChain;
 import org.springframework.cloud.gateway.filter.GlobalFilter;
@@ -9,7 +9,6 @@ import reactor.core.publisher.Mono;
 
 @Component
 public class G1Filter implements GlobalFilter, Ordered {
-
 
     @Override
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {

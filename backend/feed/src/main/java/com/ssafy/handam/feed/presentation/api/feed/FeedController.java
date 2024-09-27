@@ -59,4 +59,9 @@ public class FeedController {
     public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
+
+    @PostMapping("/liked/{feedId}")
+    public void test(@PathVariable Long feedId, @RequestParam Long userId) {
+        likeService.sendLikeEvent(feedId, userId,"NAUP");
+    }
 }

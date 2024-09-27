@@ -1,4 +1,4 @@
-package com.ssafy.handam.scg.component;
+package com.ssafy.handam.scg.filters;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
