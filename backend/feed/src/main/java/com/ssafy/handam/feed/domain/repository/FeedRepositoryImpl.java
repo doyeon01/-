@@ -1,7 +1,6 @@
 package com.ssafy.handam.feed.domain.repository;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
-import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
@@ -30,11 +29,6 @@ public class FeedRepositoryImpl implements FeedRepository {
         Feed savedFeed = feedJpaRepository.save(feed);
         feedElasticsearchRepository.save(FeedDocument.from(savedFeed));
         return savedFeed;
-    }
-
-    @Override
-    public Like save(Like like) {
-        return likeJpaRepository.save(like);
     }
 
     @Override

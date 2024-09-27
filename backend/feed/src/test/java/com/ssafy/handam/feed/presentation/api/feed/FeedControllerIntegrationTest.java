@@ -28,9 +28,11 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 @ActiveProfiles("test")
 class FeedControllerIntegrationTest {
 
@@ -174,4 +176,35 @@ class FeedControllerIntegrationTest {
                 .andExpect(jsonPath("$.response.feeds[0].placeType").value("CAFE"))
                 .andExpect(jsonPath("$.response.feeds[0].likeCount").value(0));
     }
+
+    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 피드 생성")
+    @Test
+    void createFeedTest() throws Exception {
+        mockMvc.perform(post("/api/v1/feeds/create")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content("{\n" +
+                                "  \"title\": \"Test Title\",\n" +
+                                "  \"content\": \"Test Content\",\n" +
+                                "  \"imageUrl\": \"http://example.com/feed.jpg\",\n" +
+                                "  \"address1\": \"Test Address\",\n" +
+                                "  \"address2\": \"Test Address\",\n" +
+                                "  \"longitude\": 127.123123,\n" +
+                                "  \"latitude\": 32.1323,\n" +
+                                "  \"placeType\": \"CAFE\",\n" +
+                                "  \"userId\": 1\n" +
+                                "}"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.userId").value(1L))
+                .andExpect(jsonPath("$.response.username").value("testUser"))
+                .andExpect(jsonPath("$.response.userProfileImageUrl").value("http://example.com/profile.jpg"))
+                .andExpect(jsonPath("$.response.title").value("Test Title"))
+                .andExpect(jsonPath("$.response.content").value("Test Content"))
+                .andExpect(jsonPath("$.response.address1").value("Test Address"))
+                .andExpect(jsonPath("$.response.address2").value("Test Address"))
+                .andExpect(jsonPath("$.response.longitude").value(127.123123))
+                .andExpect(jsonPath("$.response.latitude").value(32.1323))
+                .andExpect(jsonPath("$.response.placeType").value("CAFE"))
+                .andExpect(jsonPath("$.response.likeCount").value(0));
+    }
 }
+

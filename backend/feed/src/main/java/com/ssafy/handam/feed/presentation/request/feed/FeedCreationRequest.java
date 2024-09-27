@@ -9,7 +9,8 @@ public record FeedCreationRequest(
         String title,
         String content,
         String feedImageUrl,
-        String address,
+        String address1,
+        String address2,
         Double longitude,
         Double latitude,
         PlaceType placeType,
@@ -20,7 +21,8 @@ public record FeedCreationRequest(
                 .title(request.title())
                 .content(request.content())
                 .feedImageUrl(request.feedImageUrl())
-                .address(request.address())
+                .address1(request.address1())
+                .address2(request.address2())
                 .longitude(request.longitude())
                 .latitude(request.latitude())
                 .placeType(request.placeType())

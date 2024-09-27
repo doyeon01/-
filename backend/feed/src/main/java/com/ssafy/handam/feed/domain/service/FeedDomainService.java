@@ -1,6 +1,7 @@
 package com.ssafy.handam.feed.domain.service;
 
 
+import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
@@ -75,4 +76,17 @@ public class FeedDomainService {
         return !likeRepository.findByFeedIdAndUserId(feedId, userId).isEmpty();
     }
 
+    public Feed createFeed(FeedCreationServiceRequest request) {
+        return feedRepository.save(Feed.builder()
+                .title(request.title())
+                .content(request.content())
+                .imageUrl(request.feedImageUrl())
+                .address1(request.address1())
+                .address2(request.address2())
+                .longitude(request.longitude())
+                .latitude(request.latitude())
+                .placeType(request.placeType())
+                .userId(request.userId())
+                .build());
+    }
 }
