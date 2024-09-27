@@ -1,6 +1,5 @@
 package com.ssafy.handam.feed.domain.entity;
 
-import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -26,7 +25,8 @@ public class Feed extends BaseEntity {
     private String title;
     private String content;
     private String imageUrl;
-    private String address;
+    private String address1;
+    private String address2;
     private Double longitude;
     private Double latitude;
     private int likeCount;
@@ -39,18 +39,18 @@ public class Feed extends BaseEntity {
             String title,
             String content,
             String imageUrl,
-            String address,
+            String address1,
+            String address2,
             Double longitude,
             Double latitude,
             PlaceType placeType,
             Long userId
-    )
-
-    {
+    ) {
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
-        this.address = address;
+        this.address1 = address1;
+        this.address2 = address2;
         this.longitude = longitude;
         this.latitude = latitude;
         this.placeType = placeType;

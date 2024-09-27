@@ -31,14 +31,16 @@ public class FeedService {
     private final UserApiClient userApiClient;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", 32.1323,
+        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address1", "address2",
+                32.1323,
                 127.123123, "CAFE", "username", "profileImageUrl", true);
         List<FeedPreviewDto> previewDtos = List.of(feedPreviewDto);
         return RecommendedFeedsForUserResponse.of(previewDtos);
     }
 
     public FeedsByFiltersResponse getFeedsByFilters(FeedsByFiltersServiceRequest request) {
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", 32.1323,
+        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(1L, "title", "content", 1L, 0, "address", "address2",
+                32.1323,
                 127.123123, "CAFE", "username", "profileImageUrl", true);
         List<FeedPreviewDto> previewDtos = List.of(feedPreviewDto);
         return FeedsByFiltersResponse.of(previewDtos);
@@ -61,7 +63,8 @@ public class FeedService {
                 "Test Title",
                 "Test Content",
                 "http://example.com/feed.jpg",
-                "Test Address",
+                "Test Address1",
+                "Test Address2",
                 127.123123,
                 32.1323,
                 "CAFE",

@@ -12,7 +12,8 @@ public record FeedDetailResponse(
         String feedImageUrl,
         String title,
         String content,
-        String address,
+        String address1,
+        String address2,
         Double longitude,
         Double latitude,
         String placeType,
@@ -24,18 +25,19 @@ public record FeedDetailResponse(
             FeedDetailDto feedDetailDto, String username, String profileImageUrl) {
 
         return FeedDetailResponse.builder()
-                .id(feedDetailDto.getId())
-                .userId(feedDetailDto.getUserId())
+                .id(feedDetailDto.id())
+                .userId(feedDetailDto.userId())
                 .username(username)
                 .profileImageUrl(profileImageUrl)
-                .feedImageUrl(feedDetailDto.getImageUrl())
-                .title(feedDetailDto.getTitle())
-                .content(feedDetailDto.getContent())
-                .address(feedDetailDto.getAddress())
-                .longitude(feedDetailDto.getLongitude())
-                .latitude(feedDetailDto.getLatitude())
-                .placeType(feedDetailDto.getPlaceType())
-                .likeCount(feedDetailDto.getLikeCount())
+                .feedImageUrl(feedDetailDto.imageUrl())
+                .title(feedDetailDto.title())
+                .content(feedDetailDto.content())
+                .address1(feedDetailDto.address1())
+                .address2(feedDetailDto.address2())
+                .longitude(feedDetailDto.longitude())
+                .latitude(feedDetailDto.latitude())
+                .placeType(feedDetailDto.placeType())
+                .likeCount(feedDetailDto.likeCount())
                 .isLiked(feedDetailDto.isLiked())
                 .build();
     }
