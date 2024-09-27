@@ -3,9 +3,10 @@ spring:
     name: feed
 
   datasource:
-    url: jdbc:h2:mem:~/feedApplcation
-    username: sa
-    password:
+    url: jdbc:mysql://j11c205a.p.ssafy.io:3306/feed_db
+    username: handam
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
 
   jpa:
     hibernate:

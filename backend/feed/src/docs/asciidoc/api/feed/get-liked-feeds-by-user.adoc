@@ -1,0 +1,11 @@
+[[get-liked-feeds-by-user]]
+=== 사용자가 좋아요한 피드 조회
+
+==== HTTP Request
+
+include::{snippets}/get-liked-feeds-by-user/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-liked-feeds-by-user/http-response.adoc[]
+include::{snippets}/get-liked-feeds-by-user/response-fields.adoc[]

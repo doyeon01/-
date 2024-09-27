@@ -1,11 +1,12 @@
 package com.ssafy.handam.feed.presentation.response.feed;
 
 public record FeedLikeResponse(
-        Long userId,
         Long feedId,
-        boolean isLiked) {
+        boolean isLiked,
+        int likeCount
+) {
 
-    FeedLikeResponse of (Long userId, Long feedId, boolean isLiked) {
-        return new FeedLikeResponse(userId, feedId, isLiked);
+    public static FeedLikeResponse of(long feedId, boolean isLiked, int likeCount) {
+        return new FeedLikeResponse(feedId, isLiked, likeCount);
     }
 }

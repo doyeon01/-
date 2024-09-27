@@ -8,12 +8,15 @@ import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedsByFiltersRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
+import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
+import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -60,8 +63,24 @@ public class FeedController {
         return success(feedService.likeFeed(feedId, userId));
     }
 
+    @PostMapping("/unlike/{feedId}")
+    public ApiResult<FeedLikeResponse> unlikeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
+        return success(feedService.unlikeFeed(feedId, userId));
+    }
+
+    @GetMapping("/liked")
+    public ApiResult<LikedFeedsByUserResponse> getLikedByUser(Pageable pageable, @RequestParam Long userId) {
+        return success(feedService.getLikedFeedsByUser(userId, pageable));
+    }
+
+    @GetMapping("users/created")
+    public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(Pageable pageable, @RequestParam Long userId) {
+        return success(feedService.getCreatedFeedsByUser(userId, pageable));
+    }
+
     @PostMapping("/liked/{feedId}")
     public void test(@PathVariable Long feedId, @RequestParam Long userId) {
         likeService.sendLikeEvent(feedId, userId,"NAUP");
     }
 }
+

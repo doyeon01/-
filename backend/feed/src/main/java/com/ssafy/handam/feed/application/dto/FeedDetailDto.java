@@ -1,29 +1,26 @@
-package com.ssafy.handam.feed.presentation.response.feed;
+package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
-import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 
-public record FeedResponse(
+public record FeedDetailDto(
         Long id,
         Long userId,
-        String username,
-        String userProfileImageUrl,
         String title,
         String content,
-        String feedImageUrl,
+        String imageUrl,
         String address1,
         String address2,
         Double longitude,
         Double latitude,
         String placeType,
-        int likeCount
+        int likeCount,
+        boolean isLiked
 ) {
-    public static FeedResponse from(Feed feed, UserDto userDto) {
-        return new FeedResponse(
+
+    public static FeedDetailDto of(Feed feed, boolean isLiked) {
+        return new FeedDetailDto(
                 feed.getId(),
-                userDto.id(),
-                userDto.name(),
-                userDto.profileImageUrl(),
+                feed.getUserId(),
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
@@ -32,6 +29,8 @@ public record FeedResponse(
                 feed.getLongitude(),
                 feed.getLatitude(),
                 feed.getPlaceType().name(),
-                feed.getLikeCount());
+                feed.getLikeCount(),
+                isLiked
+        );
     }
 }

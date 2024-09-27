@@ -1,6 +1,6 @@
 package com.ssafy.handam.feed.presentation.response.feed;
 
-import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import lombok.Builder;
 
 @Builder
@@ -12,37 +12,33 @@ public record FeedDetailResponse(
         String feedImageUrl,
         String title,
         String content,
+        String address1,
+        String address2,
         Double longitude,
         Double latitude,
-        PlaceType placeType,
-        int likeCount
+        String placeType,
+        int likeCount,
+        boolean isLiked
 ) {
 
     public static FeedDetailResponse of(
-            Long id,
-            Long userId,
-            String username,
-            String profileImageUrl,
-            String feedImageUrl,
-            String title,
-            String content,
-            Double longitude,
-            Double latitude,
-            PlaceType placeType,
-            int likeCount
-    ) {
+            FeedDetailDto feedDetailDto, String username, String profileImageUrl) {
+
         return FeedDetailResponse.builder()
-                .id(id)
-                .userId(userId)
+                .id(feedDetailDto.id())
+                .userId(feedDetailDto.userId())
                 .username(username)
                 .profileImageUrl(profileImageUrl)
-                .feedImageUrl(feedImageUrl)
-                .title(title)
-                .content(content)
-                .longitude(longitude)
-                .latitude(latitude)
-                .placeType(placeType)
-                .likeCount(likeCount)
+                .feedImageUrl(feedDetailDto.imageUrl())
+                .title(feedDetailDto.title())
+                .content(feedDetailDto.content())
+                .address1(feedDetailDto.address1())
+                .address2(feedDetailDto.address2())
+                .longitude(feedDetailDto.longitude())
+                .latitude(feedDetailDto.latitude())
+                .placeType(feedDetailDto.placeType())
+                .likeCount(feedDetailDto.likeCount())
+                .isLiked(feedDetailDto.isLiked())
                 .build();
     }
 }
