@@ -8,6 +8,7 @@ import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedsByFiltersRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
+import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
@@ -70,5 +71,10 @@ public class FeedController {
     @GetMapping("/liked")
     public ApiResult<LikedFeedsByUserResponse> getLikedByUser(Pageable pageable, @RequestParam Long userId) {
         return success(feedService.getLikedFeedsByUser(userId, pageable));
+    }
+
+    @GetMapping("users/created")
+    public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(Pageable pageable, @RequestParam Long userId) {
+        return success(feedService.getCreatedFeedsByUser(userId, pageable));
     }
 }

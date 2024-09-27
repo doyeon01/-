@@ -156,5 +156,22 @@ class FeedControllerIntegrationTest {
                 .andExpect(jsonPath("$.response.feeds[0].likeCount").value(1));
     }
 
-
+    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 사용자가 생성한 FeedList 조회")
+    @Test
+    void getCreatedFeedListTest() throws Exception {
+        mockMvc.perform(get("/api/v1/feeds/users/created?userId=1")
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.feeds[0].id").value(savedFeedId))
+                .andExpect(jsonPath("$.response.feeds[0].userId").value(1L))
+                .andExpect(jsonPath("$.response.feeds[0].username").value("testUser"))
+                .andExpect(jsonPath("$.response.feeds[0].userProfileImageUrl").value("http://example.com/profile.jpg"))
+                .andExpect(jsonPath("$.response.feeds[0].title").value("Test Title"))
+                .andExpect(jsonPath("$.response.feeds[0].address1").value("Test Address"))
+                .andExpect(jsonPath("$.response.feeds[0].address2").value("Test Address"))
+                .andExpect(jsonPath("$.response.feeds[0].longitude").value(127.123123))
+                .andExpect(jsonPath("$.response.feeds[0].latitude").value(32.1323))
+                .andExpect(jsonPath("$.response.feeds[0].placeType").value("CAFE"))
+                .andExpect(jsonPath("$.response.feeds[0].likeCount").value(0));
+    }
 }

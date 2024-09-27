@@ -10,21 +10,22 @@ import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
+import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
-@Transactional
 @RequiredArgsConstructor
+@Transactional
 public class FeedService {
 
     private final FeedDomainService feedDomainService;
@@ -48,7 +49,7 @@ public class FeedService {
 
     public FeedDetailResponse getFeedDetails(Long feedId) {
         Feed feed = feedDomainService.findById(feedId);
-        UserDetailDto userDetailDto = UserDetailDto.from(userApiClient.getUserById(feed.getUserId()));
+        UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId());
         return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDetailDto.id())),
                 userDetailDto.name(), userDetailDto.profileImageUrl());
     }
@@ -83,10 +84,19 @@ public class FeedService {
         return FeedLikeResponse.of(feedId, false, feedDomainService.countDownLike(feedId).size());
     }
 
+    @Transactional(readOnly = true)
     public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable) {
         List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(feedDomainService.getLikedFeedsByUser(userId, pageable),
                 userApiClient.getUserById(userId));
         return LikedFeedsByUserResponse.of(likedFeeds);
+    }
+
+    @Transactional(readOnly = true)
+    public CreatedFeedsByUserResponse getCreatedFeedsByUser(Long userId, Pageable pageable) {
+        List<FeedPreviewDto> createdFeeds = getFeedPreviewDtoList(
+                feedDomainService.getCreatedFeedsByUser(userId, pageable),
+                userApiClient.getUserById(userId));
+        return CreatedFeedsByUserResponse.of(createdFeeds);
     }
 
     private List<FeedPreviewDto> getFeedPreviewDtoList(List<Feed> feeds, UserDto user) {
@@ -98,5 +108,9 @@ public class FeedService {
 
     private boolean isLikedFeed(Feed feed, Long userId) {
         return feedDomainService.isLikedFeed(feed.getId(), userId);
+    }
+
+    private UserDetailDto getUserDetailDto(Long userId) {
+        return UserDetailDto.from(userApiClient.getUserById(userId));
     }
 }

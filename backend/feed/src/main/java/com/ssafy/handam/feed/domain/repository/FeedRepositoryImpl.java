@@ -6,8 +6,10 @@ import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -33,5 +35,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Like save(Like like) {
         return likeJpaRepository.save(like);
+    }
+
+    @Override
+    public List<Feed> findByUserId(Long userId, Pageable pageable) {
+        return feedJpaRepository.findByUserId(userId, pageable);
     }
 }

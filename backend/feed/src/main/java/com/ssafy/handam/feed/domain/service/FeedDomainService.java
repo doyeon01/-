@@ -66,7 +66,13 @@ public class FeedDomainService {
                 .toList();
     }
 
+
+    public List<Feed> getCreatedFeedsByUser(Long userId, Pageable pageable) {
+        return feedRepository.findByUserId(userId, pageable);
+    }
+
     public boolean isLikedFeed(Long feedId, Long userId) {
         return !likeRepository.findByFeedIdAndUserId(feedId, userId).isEmpty();
     }
+
 }
