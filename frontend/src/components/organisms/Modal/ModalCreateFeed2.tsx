@@ -1,19 +1,29 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';  // sweetalert2 import 추가
 import { PictureIcon, LocationIcon, BackIcon } from '../../../assets/icons/svg';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import DaumPostcode from 'react-daum-postcode';
 import ModalCreateFeed1 from './ModalCreateFeed1';
+import axios from 'axios'; // Axios를 통해 API 호출
 
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
   const [content, setContent] = useState<string>('');  // 내용
   const [selectedCategory, setSelectedCategory] = useState<string>('전체'); // 카테고리
-  const [openPostcode, setOpenPostcode] = useState(false);
+  const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
   const [isScheduleSelected, setIsScheduleSelected] = useState(false); // 일정 선택 상태
+  const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
+  const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
+
+  const apikey = import.meta.env.VITE_KAKAO_MAP_API_KEY; // 카카오 API 키
+
+
+  useEffect(()=>{
+    console.log(apikey)
+  },[])
 
   const handle = {
     ImageChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,12 +46,52 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     clickButton: () => {
       setOpenPostcode(current => !current);
     },
-    selectAddress: (data: any) => {
+    selectAddress: async (data: any) => {
       setCalendarLocation(data.address);
       setOpenPostcode(false); // 주소 선택 후 창 닫기
-    },
-    closePostcode: () => {
-      setOpenPostcode(false); // 모달 닫기
+
+      await axios
+      .get(`https://dapi.kakao.com/v2/local/search/address.json`, {
+        params: { query: data.address },
+        headers: {
+          Authorization: `KakaoAK ${apikey}`, 
+        },
+      })
+      .then((response) => {
+        console.log(response.data.documents); 
+      })
+      .catch((error) => {
+        console.error("Error fetching coordinates:", error); 
+      });
+    
+
+    //   try {
+    //     console.log(data.address)
+    //     // 카카오 주소-좌표 변환 API 호출
+    //     const result = await axios.get(`https://dapi.kakao.com/v2/local/search/address.json`, {
+    //       params: { query: data.address },
+    //       headers: {
+    //         Authorization: `KakaoAK ${apikey}`, // 카카오 REST API 키
+    //       },
+    //     });
+
+    //     if (result.data.documents.length > 0) {
+    //       const { x, y } = result.data.documents[0]; // x: 경도, y: 위도
+    //       setLongitude(Number(x)); // 경도 저장
+    //       setLatitude(Number(y));  // 위도 저장
+    //       console.log(`위도: ${y}, 경도: ${x}`);
+    //     }
+    //   } catch (error) {
+    //     console.error('Error fetching coordinates:', error);
+    //     Swal.fire({
+    //       icon: 'error',
+    //       title: '좌표 변환 오류',
+    //       text: '주소에 대한 위도와 경도를 가져오지 못했습니다.',
+    //     });
+    //   }
+    // },
+    // closePostcode: () => {
+    //   setOpenPostcode(false); // 모달 닫기
     },
     completeScheduleSelection: (title: string) => {
       setSchedule(title); // 선택된 일정 ID를 상태로 설정
@@ -222,6 +272,11 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     </div>
                   </div>
                 )}
+
+                <div className="mt-4">
+                  <p>위도: {latitude}</p>
+                  <p>경도: {longitude}</p>
+                </div>
               </div>
             </div>
           </div>
