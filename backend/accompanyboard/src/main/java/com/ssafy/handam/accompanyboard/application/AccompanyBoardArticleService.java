@@ -1,5 +1,7 @@
 package com.ssafy.handam.accompanyboard.application;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
+import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardArticleDomainService;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
@@ -15,12 +17,7 @@ public class AccompanyBoardArticleService {
     private final AccompanyBoardArticleDomainService accompanyBoardArticleDomainService;
 
     public AccompanyBoardArticleDetailResponse createArticle(AccompanyBoardArticleCreationRequest request) {
-        return new AccompanyBoardArticleDetailResponse(
-                1L,
-                1L,
-                1L,
-                "testTitle",
-                "testDescription"
-        );
+        Article article = accompanyBoardArticleDomainService.createArticle(request);
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article));
     }
 }
