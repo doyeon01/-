@@ -1,11 +1,12 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Lens from '../../assets/statics/Lens.png'
+import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 
 export interface Props {
-    test:Boolean
+    isSearch:Boolean
 }
 
-const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
+const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
     const [keyword, setKeyword] = useState(''); // 키워드 상태
     const [places, setPlaces] = useState<any[]>([]); // 장소 목록 상태
     const [markers, setMarkers] = useState<any[]>([]); // 마커 상태
@@ -13,6 +14,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
     const [map, setMap] = useState<any>(null);
     const infowindow = useRef<any>(null); // 인포윈도우 참조
     const [placesService, setPlacesService] = useState<any>(null); // 장소 검색 서비스 상태
+    const [searchinTab, setSearchingTab] = useState(true)
 
     const script = document.createElement('script');
     script.type = 'text/javascript'
@@ -20,8 +22,12 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
     script.async = true
     document.body.appendChild(script);
 
+    const handleSearchingTab = () => {
+    setSearchingTab(searchinTab => !searchinTab)
+    } 
 
-    if (test == true){
+
+    if (isSearch == true){
     useEffect(() => {
         script.onload = () => {
             console.log('Kakao API 로드됨');
@@ -126,43 +132,29 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
     // 검색 결과 목록 렌더링
     const renderPlaces = () => {
         return places.map((place, index) => (
-            <li key={index} className="item">
-                <span className={`markerbg marker_${index + 1}`}></span>
-                <div className="info">
-                    <h5>{place.place_name}</h5>
+            <li key={index} className="flex items-start w-full border-b border-gray-200 py-2">
+                <div className="ml-4">
+                    <p className='text-blue-400 text-[18px] cursor-pointer hover:underline hover:underline-offset-1' onClick={() => window.open(place.place_url, '_blank')}>{place.place_name}</p>
                     {place.road_address_name ? (
                         <>
-                            <span>{place.road_address_name}</span>
-                            <span className="jibun gray">{place.address_name}</span>
+                            <span className='text-[15px] text-gray-400'>{place.road_address_name}</span>
                         </>
                     ) : (
-                        <span>{place.address_name}</span>
+                        <span className='text-[15px] text-gray-400'>{place.address_name}</span>
                     )}
-                    <span className="tel">{place.phone}</span>
                 </div>
             </li>
         ));
     };
 
-    // const renderPlaces = () => {
-    //     return places.map((place, index) => (
-    //         <li key={index} className="item">
-    //             <span className={`markerbg marker_${index + 1}`}></span>
-    //             <div className="info">
-    //                 {/* place 객체의 전체 정보를 JSON 형식으로 출력 */}
-    //                 <pre>{JSON.stringify(place, null, 2)}</pre>
-    //             </div>
-    //         </li>
-    //     ));
-    // };
     return (
         <>
             {/* 검색 바 */}
-            <div className='w-[350px] h-[calc(100%-20px)] bg-white absolute z-10 ml-[10px] mt-[10px] rounded-[10px] flex flex-col justify-start overflow-hidden items-center'>
-              <div className='w-[calc(100%-30px)] h-[45px] border-[#B6AFA9] flex justify-around items-center m-3 border-2 rounded-[5px]' >
+            <div id='box' className={`w-[350px] h-[calc(100%-20px)] bg-white absolute z-10 ml-[10px] mt-[10px] rounded-[10px] flex flex-col justify-start items-center transition-transform duration-300 ease-in-out transform ${searchinTab ? 'translate-x-0' : '-translate-x-[360px]'}`}>
+            <div className='w-[calc(100%-30px)] h-[45px] border-[#B6AFA9] flex justify-around items-center m-3 border-2 rounded-[5px]' >
                 <img src={Lens} alt="" className='m-3'/>
                 <input type="text"
-                className='w-full'
+                className='w-full outline-none focus:border-transparent'
                 onChange={(e) => setKeyword(e.target.value)}
                 value={keyword}
                 onKeyDown={(e) => {
@@ -170,16 +162,27 @@ const KaKaoMap_Plan: React.FC<Props> = ({test}) => {
                     searchPlaces(); // Enter 키 입력 시 검색 실행
                     }
                 }}/>
-                <span className='m-3'>✖</span>
-              </div>
+                {keyword && (
+                    <span 
+                    id='xbutton'
+                    className='m-3 cursor-pointer'
+                    onClick={() => {
+                        setKeyword('');  // 입력 필드 공백으로 설정
+                        setPlaces([]);   // 검색 결과 초기화
+                    }}
+                    >✖</span>
+                )}
+            </div>
             {/* 검색 결과 목록 */}
-            <div id="menu_wrap" className="bg-white ">
-                <ul id="placesList" className='flex items-start justify-start flex-col'>{renderPlaces()}</ul>
+            <ul id="placesList" className='flex flex-col items-start w-full overflow-y-auto scrollbar-thin'>{renderPlaces()}</ul>
+            <div id='folding'className='w-[23px] h-[45px] bg-white flex justify-center items-center rounded-r-lg absolute z-20 top-1/2 -right-[23px] border cursor-pointer' onClick={handleSearchingTab}>
+                <img src={Mini_Vector} className={`${searchinTab ? '' : 'transform scale-x-[-1]'}`}/>
             </div>
             </div>
-
+                
             {/* 지도 표시 영역 */}
             <div id="map" className="w-full h-full" ref={mapRef}></div>
+
 
 
         </>
