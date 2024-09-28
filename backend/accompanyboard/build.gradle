@@ -86,6 +86,15 @@ tasks.named('asciidoctor') {
     dependsOn tasks.named('test')
 }
 
+tasks.register("copyDocs", Copy) {
+    from('build/docs/asciidoc')
+    into('src/main/resources/static/docs')
+}
+
+tasks.named('asciidoctor').configure {
+    finalizedBy(tasks.named('copyDocs'))
+}
+
 bootJar {
     dependsOn asciidoctor
     from("build/docs/asciidoc") {
