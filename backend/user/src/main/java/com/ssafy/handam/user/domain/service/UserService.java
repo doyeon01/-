@@ -6,8 +6,11 @@ import com.ssafy.handam.user.domain.model.valueobject.FollowStatus;
 import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.repository.FollowRepository;
 import com.ssafy.handam.user.domain.repository.UserRepository;
+import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
+import com.ssafy.handam.user.presentation.request.OAuthUserLoginRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseCookie;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -17,6 +20,22 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+    private final JwtUtil jwtUtil;
+
+
+    public String generateToken(OAuthUserLoginRequest loginRequest) {
+        return jwtUtil.generateToken(loginRequest);
+    }
+
+    public ResponseCookie createCookie(String token) {
+        return ResponseCookie.from("accessToken", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .maxAge(3600)  // 1시간 유효
+                .sameSite("Strict")
+                .build();
+    }
 
     public User findUserById(Long id) {
         return userRepository.findById(id)
