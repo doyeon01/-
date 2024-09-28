@@ -15,8 +15,8 @@ pipeline {
         SERVER_NAME = 'accompanyboard'
         DOCKER_USERINFO = credentials('DOCKER_USER')
         DOCKER_REPO = credentials('DOCKER_REPO')
-        EC2_IP = credentials('EC2_SERVER2_IP')
-        SSH_INFO = credentials('EC2_SERVER2_SSH')
+        EC2_IP = credentials('EC2_SERVER1_IP')
+        SSH_INFO = credentials('EC2_SERVER1_SSH')
     }
 
     stages {
