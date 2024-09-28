@@ -1,19 +1,25 @@
-import React, { useState } from 'react';
-import Swal from 'sweetalert2';  // sweetalert2 import 추가
+import { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';  
 import { PictureIcon, LocationIcon, BackIcon } from '../../../assets/icons/svg';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import DaumPostcode from 'react-daum-postcode';
 import ModalCreateFeed1 from './ModalCreateFeed1';
+import axios from 'axios'; 
+import { FeedCreate } from '../../../services/api/FeedService';
 
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
   const [content, setContent] = useState<string>('');  // 내용
   const [selectedCategory, setSelectedCategory] = useState<string>('전체'); // 카테고리
-  const [openPostcode, setOpenPostcode] = useState(false);
+  const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
   const [isScheduleSelected, setIsScheduleSelected] = useState(false); // 일정 선택 상태
+  const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
+  const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
+
+  const apikey = import.meta.env.VITE_KAKAO_SPOT_API_KEY; 
 
   const handle = {
     ImageChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -36,12 +42,24 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     clickButton: () => {
       setOpenPostcode(current => !current);
     },
-    selectAddress: (data: any) => {
+    selectAddress: async (data: any) => {
       setCalendarLocation(data.address);
       setOpenPostcode(false); // 주소 선택 후 창 닫기
-    },
-    closePostcode: () => {
-      setOpenPostcode(false); // 모달 닫기
+
+      await axios.get('https://dapi.kakao.com/v2/local/search/address.json', {
+        params: { query: data.address }, 
+        headers: {
+          Authorization: `KakaoAK ${apikey}`,
+        },
+      })
+      .then((res) => {
+        const result = res.data.documents[0];
+        setLongitude(Number(result.x));
+        setLatitude(Number(result.y));
+      })
+      .catch((error) => {
+        console.error(error); 
+      });
     },
     completeScheduleSelection: (title: string) => {
       setSchedule(title); // 선택된 일정 ID를 상태로 설정
@@ -52,16 +70,35 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     },
     // 완료 버튼 클릭 시 유효성 검사
     validateAndComplete: () => {
-      if (!title || !content || !selectedImage || !calendarlocation) {
+      if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude) {
         Swal.fire({
           icon: 'warning',
           title: '내용을 입력하세요',
           text: '이미지, 제목, 내용, 위치를 모두 작성해 주세요.',
           confirmButtonText: '확인'
         });
-      } else {
-        onComplete();
+        return;
       }
+
+      const formData = new FormData();
+      formData.append('title', title);
+      formData.append('content', content);
+      formData.append('file', selectedImage);
+      formData.append('address1', calendarlocation);
+      formData.append('address2', calendarlocation); 
+      formData.append('longitude', String(longitude));
+      formData.append('latitude', String(latitude));
+      formData.append('placeType', selectedCategory);
+      formData.append('userId', String(1));
+
+      FeedCreate(formData)
+        .then(() => {
+          console.log('피드 생성 완료');
+          onComplete();
+        })
+        .catch((error) => {
+          console.error(error);
+        });
     },
   };
 
@@ -211,7 +248,6 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     <div className="bg-white rounded-lg shadow-lg p-6 relative w-[600px]">
                       <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
-                        onClick={handle.closePostcode}
                       >
                         &times;
                       </button>
