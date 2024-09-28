@@ -1,4 +1,4 @@
-:snippets: build/generated-snippets
+:snippets: snippets
 :doctype: book
 :source-highlighter: highlightjs
 :toc: left

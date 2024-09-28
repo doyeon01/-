@@ -91,4 +91,7 @@ bootJar {
     from("build/docs/asciidoc") {
         into "static/docs"
     }
+    from("build/generated-snippets") {
+        into "static/docs/snippets"
+    }
 }
