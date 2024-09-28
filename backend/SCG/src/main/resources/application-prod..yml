@@ -1,0 +1,50 @@
+spring:
+  application:
+    name: SCG
+  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/api/v1/user/**
+
+        - id: user-docs
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/user/docs/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /user/docs/(?<remaining>.*)
+                replacement: /docs/${remaining}
+
+        - id: feed
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/api/v1/feeds/**
+
+        - id: feed-docs
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/feeds/docs/**
+          filters:
+            - name: RewritePath
+              args:
+                regexp: /feeds/docs/(?<remaining>.*)
+                replacement: /docs/${remaining}
+
+  jwt:
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+
+server:
+  port: 8080
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway

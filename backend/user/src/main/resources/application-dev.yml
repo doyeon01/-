@@ -1,0 +1,12 @@
+spring:
+  application:
+    name: user
+  jwt:
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8081
+
