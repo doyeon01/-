@@ -4,9 +4,11 @@ import static com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.success;
 import static com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest.toServiceRequest;
 
 import com.ssafy.handam.accompanyboard.application.AccompanyBoardArticleService;
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -28,10 +30,10 @@ public class AccompanyBoardArticleController {
         return success(accompanyBoardArticleService.createArticle(toServiceRequest(request)));
     }
 
-//    @GetMapping
-//    public ApiResult<List<AccompanyBoardArticleDetailResponse>> getArticles() {
-//        return success(accompanyBoardArticleService.getArticles());
-//    }
+    @GetMapping
+    public ApiResult<AccompanyBoardArticlesResponse> getArticles() {
+        return success(accompanyBoardArticleService.getArticles());
+    }
 //
 //    @GetMapping("/{articleId}")
 //    public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {

@@ -2,6 +2,7 @@ package com.ssafy.handam.accompanyboard.domain.repository;
 
 import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.infrastructure.jpa.AccompanyBoardArticleJpaRepository;
+import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
@@ -22,4 +23,7 @@ public class AccompanyBoardArticleRepositoryImpl implements AccompanyBoardArticl
         Article savedArticle = accompanyBoardArticleJpaRepository.save(article);
         return savedArticle;
     }
+
+    @Override
+    public List<Article> findAll() { return accompanyBoardArticleJpaRepository.findAll(); }
 }
