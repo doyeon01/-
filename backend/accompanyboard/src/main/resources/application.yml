@@ -1,0 +1,20 @@
+spring:
+  application:
+    name: accompanyboard
+
+  datasource:
+    url: jdbc:mysql://j11c205.p.ssafy.io:3307/accompany_board
+    username: handam
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        default_batch_fetch_size: 100
+
+  web:
+    resources:
+      static-locations: classpath:/static/, classpath:/public/, classpath:/docs/

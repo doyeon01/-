@@ -14,10 +14,7 @@ spring:
           predicates:
             - Path=/user/docs/**
           filters:
-            - name: RewritePath
-              args:
-                regexp: /user/docs/(?<remaining>.*)
-                replacement: /docs/${remaining}
+            - RewritePath=/user/docs/(?<remaining>.*),/docs/${remaining}
 
         - id: feed
           uri: http://j11c205a.p.ssafy.io:8080
@@ -29,13 +26,19 @@ spring:
           predicates:
             - Path=/feeds/docs/**
           filters:
-            - name: RewritePath
-              args:
-                regexp: /feeds/docs/(?<remaining>.*)
-                replacement: /docs/${remaining}
+            - RewritePath=/feeds/docs/(?<remaining>.*),/docs/${remaining}
 
-  jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+        - id: accompanyboard
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/accompanyboards/**
+
+        - id: accompanyboard-docs
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/accompanyboards/docs/**
+          filters:
+            - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
 
 server:
   port: 8080
