@@ -42,7 +42,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
         onChange={handleInputChange} // 입력 값 변경 처리
         placeholder="Enter schedule title"
       />
-      {/* <div className="w-[390px] h-[150px] flex min-h-[150px] justify-around items-center">
+      <div className="w-[390px] h-[150px] flex min-h-[150px] justify-around items-center">
         <div className="flex flex-col justify-start text-[13px] gap-4">
           <span>관광명소 | 무등산</span>
           <textarea placeholder="내용추가" className="h-[60px] whitespace-pre-wrap w-[200px] overflow-hidden resize-none" />
@@ -52,7 +52,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
           </div>
         </div>
         <img src={test1} className="w-[110px] h-[110px] rounded-[13px]" />
-      </div> */}
+      </div>
     </div>
   );
 };
