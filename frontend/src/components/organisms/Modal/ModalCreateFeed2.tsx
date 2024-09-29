@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import Swal from 'sweetalert2';  
 import { PictureIcon, LocationIcon, BackIcon } from '../../../assets/icons/svg';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
