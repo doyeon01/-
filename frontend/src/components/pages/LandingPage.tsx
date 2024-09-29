@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModalLogin } from '../organisms/Modal/ModalLogin';
-import Test from './Test';
 
 export const LandingPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -24,7 +23,6 @@ export const LandingPage = () => {
       <button onClick={()=>{nav('/main')}} className='border border-gray-700'>
         메인페이지
       </button>
-      <Test></Test>
     </>
   );
 };

@@ -2,75 +2,64 @@ import React, { useEffect, useState } from 'react';
 import img1 from '../../../assets/statics/mainCarousel1.jpg';
 import img2 from '../../../assets/statics/mainCarousel2.jpg';
 import img3 from '../../../assets/statics/mainCarousel3.jpg';
-import styles from './CarouselMain.module.css';
 
 interface TravelItem {
     title: string;
     imageSrc: string;
-    description: string;
+    backgroundClass: string;
 }
 
 const travelData: TravelItem[] = [
-    { title: '제주도의 푸른밤', imageSrc: img1, description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim."
-    },
-    { title: '푸른 산책로', imageSrc: img2, description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim."
-    }, 
-    { title: '신비로운 숲', imageSrc: img3, description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim."
-    },
-    { title: '은은한 저녁', imageSrc: img1, description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim."
-    }, 
-    { title: '산의 정적', imageSrc: img2, description: "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Tempore fuga voluptatum, iure corporis inventore praesentium nisi. Id laboriosam ipsam enim."
-    }, 
+    { title: '제주도의 푸른밤', imageSrc: img1, backgroundClass: '#8a9873' },
+    { title: '푸른 산책로', imageSrc: img2, backgroundClass: '#8fa6a6' }, // 밝은 세이지 색상
+    { title: '신비로운 숲', imageSrc: img3, backgroundClass: '#a3b59d' }, // 소프트 그린
+    { title: '은은한 저녁', imageSrc: img1, backgroundClass: '#b8a99b' }, // 부드러운 그레이 색상
+    { title: '산의 정적', imageSrc: img2, backgroundClass: '#d7c3b1' }, // 밝은 베이지 색상
 ];
 
 const CarouselMain: React.FC = () => {
-    const [data, setData] = useState(travelData);
+    const [currentIndex, setCurrentIndex] = useState<number>(0);
 
-    const handleNextClick = () => {
-      setData((prevData) => {
-        const firstItem = prevData[0];
-        return [...prevData.slice(1), firstItem];
-      });
+    const handlePrev = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === 0 ? travelData.length - 1 : prevIndex - 1
+        );
     };
-  
-    const handlePrevClick = () => {
-      setData((prevData) => {
-        const lastItem = prevData[prevData.length - 1];
-        return [lastItem, ...prevData.slice(0, prevData.length - 1)];
-      });
+
+    const handleNext = () => {
+        setCurrentIndex((prevIndex) =>
+            prevIndex === travelData.length - 1 ? 0 : prevIndex + 1
+        );
     };
-  
+
     return (
-      <>
-        <ul className={styles.slider}>
-          {data.map((item, index) => (
-            <li
-              key={index}
-              className={styles.item}
-              style={{ backgroundImage: `url('${item.imageSrc}')` }}
-            >
-              <div
-                className={`${styles.content}`}
-                style={{ opacity: index === 1 ? 1 : 0 }}
-              >
-                <h2 className={styles.title}>{item.title}</h2>
-                <p className={styles.description}>{item.description}</p>
-                <button>Read More</button>
-              </div>
-            </li>
-          ))}
-        </ul>
-        <nav className={styles.nav}>
-          <button className={`${styles.btn} ${styles.prev}`} onClick={handlePrevClick}>
-            이전
-          </button>
-          <button className={`${styles.btn} ${styles.next}`} onClick={handleNextClick}>
-            다음
-          </button>
-        </nav>
-      </>
+        <>
+            <div className="relative w-full h-[550px]">
+                <div className='absolute inset-0' style={{ backgroundColor: travelData[currentIndex].backgroundClass }}>
+                    <div className="relative w-full max-w-4xl mx-auto p-8">
+                        <div className="flex items-center">
+                            <div className="w-1/2 mt-40">
+                                <h1 className="text-3xl font-bold mb-2">{travelData[currentIndex].title}</h1>
+                                <button className="text-sm text-gray-500 underline">자세히 보기</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <img
+                    src={travelData[currentIndex].imageSrc}
+                    className="absolute top-[140px] right-0 w-[724px] h-[487px] object-cover"
+                    alt={travelData[currentIndex].title}
+                />
+            </div>
+            <MainButton
+                handlePrev={handlePrev}
+                handleNext={handleNext}
+                currentIndex={currentIndex}
+                setCurrentIndex={setCurrentIndex}
+            />
+       </>
     );
-  };
+};
 
 interface MainButtonProps {
     handlePrev: () => void;

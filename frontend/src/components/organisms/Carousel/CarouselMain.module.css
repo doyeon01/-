@@ -31,12 +31,15 @@
 .item:nth-child(3) {
   left: 50%;
 }
+
 .item:nth-child(4) {
   left: calc(50% + 220px);
 }
+
 .item:nth-child(5) {
   left: calc(50% + 440px);
 }
+
 .item:nth-child(6) {
   left: calc(50% + 660px);
   opacity: 0;
@@ -51,19 +54,10 @@
   font: 400 0.85rem helvetica, sans-serif;
   color: white;
   text-shadow: 0 3px 8px rgba(0, 0, 0, 0.5);
-  opacity: 0;
-  transition: opacity 0.75s ease-in-out;
-}
-
-.content.show {
   opacity: 1;
-  animation: show 0.75s ease-in-out forwards; /* 애니메이션 추가 */
 }
 
-.content .title {
-  font-family: 'arial-black';
-  text-transform: uppercase;
-}
+
 
 .content .description {
   line-height: 1.7;
@@ -102,48 +96,4 @@
 
 .nav .btn:hover {
   background-color: rgba(255, 255, 255, 0.3);
-}
-
-@keyframes show {
-  0% {
-    filter: blur(5px);
-    transform: translateY(calc(-50% + 75px));
-  }
-  100% {
-    opacity: 1;
-    filter: blur(0);
-  }
-}
-
-/* 미디어 쿼리 */
-@media (width > 650px) and (width < 900px) {
-  .content .title {
-    font-size: 1rem;
-  }
-  .content .description {
-    font-size: 0.7rem;
-  }
-  .content button {
-    font-size: 0.7rem;
-  }
-  .item {
-    width: 160px;
-    height: 270px;
-  }
-}
-
-@media (width < 650px) {
-  .content .title {
-    font-size: 0.9rem;
-  }
-  .content .description {
-    font-size: 0.65rem;
-  }
-  .content button {
-    font-size: 0.7rem;
-  }
-  .item {
-    width: 130px;
-    height: 220px;
-  }
 }
