@@ -10,7 +10,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: none
     properties:
       hibernate:
         default_batch_fetch_size: 100
@@ -24,7 +24,7 @@ spring:
     uris: http://j11c205a.p.ssafy.io:9200
 
   kafka:
-    bootstrap-servers: http://j11c205.p.ssafy.io:9092
+    bootstrap-servers: j11c205.p.ssafy.io:9092
     consumer:
       group-id: like-group
       auto-offset-reset: earliest

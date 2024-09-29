@@ -1,0 +1,53 @@
+spring:
+  application:
+    name: SCG
+  cloud:
+    gateway:
+      routes:
+        - id: user
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/api/v1/user/**
+
+        - id: user-docs
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/user/docs/**
+          filters:
+            - RewritePath=/user/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: feed
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/api/v1/feeds/**
+
+        - id: feed-docs
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/feeds/docs/**
+          filters:
+            - RewritePath=/feeds/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: accompanyboard
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/accompanyboards/**
+
+        - id: accompanyboard-docs
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/accompanyboards/docs/**
+          filters:
+            - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+
+server:
+  port: 8080
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway

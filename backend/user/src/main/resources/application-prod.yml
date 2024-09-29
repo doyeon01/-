@@ -1,0 +1,16 @@
+spring:
+  application:
+    name: user
+  jpa:
+    hibernate:
+      ddl-auto: none
+
+server:
+  port: 8081
+
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://j11c205.p.ssafy.io:8761/eureka

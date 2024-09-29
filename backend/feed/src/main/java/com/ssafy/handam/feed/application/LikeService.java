@@ -20,11 +20,11 @@ public class LikeService {
     private final FeedDomainService feedDomainService;
     private final UserApiClient userApiClient;
 
-    public void sendLikeEvent(Long userId, Long feedId, String eventType) {
+    public void sendLikeEvent(Long feedId, Long userId, String eventType) {
         Map<String, Object> message = new HashMap<>();
-        message.put("user_id", userId);
         message.put("feed_id", feedId);
-        message.put("event_type", eventType);
+        message.put("user_id", userId);
+        message.put("travel_type", eventType);
         message.put("timestamp", Instant.now().toString());
 
         try {

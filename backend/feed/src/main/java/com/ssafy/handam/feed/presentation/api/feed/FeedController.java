@@ -77,4 +77,10 @@ public class FeedController {
     public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(Pageable pageable, @RequestParam Long userId) {
         return success(feedService.getCreatedFeedsByUser(userId, pageable));
     }
+
+    @PostMapping("/liked/{feedId}")
+    public void test(@PathVariable Long feedId, @RequestParam Long userId) {
+        likeService.sendLikeEvent(feedId, userId,"NAUP");
+    }
 }
+
