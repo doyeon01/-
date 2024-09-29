@@ -4,6 +4,7 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.accompanyboard.application.AccompanyBoardArticleService;
+import com.ssafy.handam.accompanyboard.application.AccompanyBoardCommentService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,9 @@ public abstract class RestDocsSupport {
 
     @MockBean
     protected AccompanyBoardArticleService accompanyBoardArticleService;
+
+    @MockBean
+    protected AccompanyBoardCommentService accompanyBoardCommentService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
