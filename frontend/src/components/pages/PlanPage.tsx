@@ -20,8 +20,7 @@ export const PlanPage: React.FC = () => {
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
-  const [searchinTab, setSearchingTab] = useState(true)
-  const [scheduleData, setScheduleData] = useState<{ [key: number]: any }>({});
+  const [searchinTab, setSearchingTab] = useState(false)
 
   const handleSearchingTab = () => {
     setSearchingTab(searchinTab => !searchinTab)
@@ -54,13 +53,6 @@ export const PlanPage: React.FC = () => {
   const handleCurrentDate = (currentDate: number) => {
     setCurrentDate(currentDate)
   }
-
-  const handleScheduleChange = (date: number, data: any) => {
-    setScheduleData((prevData) => ({
-      ...prevData,
-      [date]: data, // currentDate 기반으로 데이터 저장
-    }));
-  };
 
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
@@ -140,13 +132,24 @@ export const PlanPage: React.FC = () => {
             </div>
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
           </div>
-          {currentDate && (
-              <ScheduleRegister
-                currentDate={currentDate}
-                data={scheduleData[currentDate] || {}} // 숫자에 맞는 데이터 전달
-                onScheduleChange={handleScheduleChange}
-              />
-            )}
+          <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
+          {datesList.map((_, index) => (
+              index +1 === currentDate && (
+                <ScheduleRegister 
+                  key={index}
+                  currentDate={currentDate}
+                  index={index}
+                />
+              )
+            ))}
+            {/* {currentDate && (
+                <ScheduleRegister
+                  currentDate={currentDate}
+                  data={scheduleData[currentDate] || {}} // 숫자에 맞는 데이터 전달
+                  index={index}
+                />
+              )} */}
+          </div>
           
 
           <div className="w-full h-full z-0">
@@ -165,8 +168,11 @@ export const PlanPage: React.FC = () => {
 
             <div 
               ref={scrollContainerRef} 
-              className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-visible'
+              className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'
             >
+              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
+                <img src={test1} className="w-full h-full object-cover"/>
+              </div>
               <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
                 <img src={test1} className="w-full h-full object-cover"/>
               </div>
