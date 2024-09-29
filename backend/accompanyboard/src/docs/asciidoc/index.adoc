@@ -27,6 +27,7 @@ include::{snippets}/get-articles/http-request.adoc[]
 include::{snippets}/get-articles/http-response.adoc[]
 include::{snippets}/get-articles/response-fields.adoc[]
 
+
 === 특정 동행 게시글 조회
 ==== HTTP Request
 include::{snippets}/get-article-details/http-request.adoc[]
@@ -34,3 +35,13 @@ include::{snippets}/get-article-details/http-request.adoc[]
 include::{snippets}/get-article-details/http-response.adoc[]
 include::{snippets}/get-article-details/path-parameters.adoc[]
 include::{snippets}/get-article-details/response-fields.adoc[]
+
+
+=== 동행 게시글 댓글 등록
+
+==== HTTP Request
+include::{snippets}/create-comment/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/create-comment/http-response.adoc[]
+include::{snippets}/create-comment/request-fields.adoc[]
+include::{snippets}/create-comment/response-fields.adoc[]
