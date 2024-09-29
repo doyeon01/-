@@ -1,14 +1,15 @@
 package com.ssafy.handam.scg.filters;
 
 import com.ssafy.handam.scg.jwt.JwtUtil;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.gateway.filter.GatewayFilter;
 import org.springframework.cloud.gateway.filter.factory.AbstractGatewayFilterFactory;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Config> {
 
     private final JwtUtil jwtUtil;
@@ -30,8 +31,7 @@ public class JwtAuthFilter extends AbstractGatewayFilterFactory<JwtAuthFilter.Co
                 return chain.filter(exchange.mutate().request(request).build());
             }
 
-            request.mutate().header("Auth", "false").build();
-            return chain.filter(exchange.mutate().request(request).build());
+            return jwtUtil.onError(exchange,"JWT Token expired", HttpStatus.UNAUTHORIZED);
         };
     }
 

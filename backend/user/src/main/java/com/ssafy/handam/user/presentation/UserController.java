@@ -3,16 +3,11 @@ package com.ssafy.handam.user.presentation;
 import static com.ssafy.handam.user.application.common.ApiUtils.success;
 import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
 import com.ssafy.handam.user.domain.model.entity.User;
-import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
+import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
-import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
-import com.ssafy.handam.user.presentation.request.UserLoginRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.ResponseCookie;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -23,33 +18,6 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
-    private final JwtUtil jwtUtil;
-
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody UserLoginRequest loginRequest) {
-        String username = loginRequest.username();
-        String password = loginRequest.password();
-
-        if (authenticate(username, password)) {
-            String token = jwtUtil.generateToken(username);
-            ResponseCookie cookie = ResponseCookie.from("accessToken", token)
-//                    .httpOnly(true)
-//                    .secure(true)
-                    .path("/")
-                    .maxAge(3600)
-                    .sameSite("Strict")
-                    .build();
-
-            return ResponseEntity.ok()
-                    .header(HttpHeaders.SET_COOKIE, cookie.toString())
-                    .body(token);
-        }
-
-        return ResponseEntity.status(401).body("Invalid username or password");
-    }
-    private boolean authenticate(String username, String password) {
-        return "testuser".equals(username) && "testpassword".equals(password);
-    }
 
     @PostMapping("/{id}/survey")
     public ApiResult<Void> submitUserSurvey(@PathVariable("id") Long id) {
@@ -64,6 +32,10 @@ public class UserController {
         User user = userService.findUserById(id);
         UserInfoResponse response = UserInfoResponse.of(user);
         return success(response);
+    }
+    @GetMapping("/test")
+    public void test(){
+        System.out.println("통과~");
     }
 
     @GetMapping("/search")

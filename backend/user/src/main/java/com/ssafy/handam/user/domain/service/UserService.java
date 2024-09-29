@@ -3,13 +3,13 @@ package com.ssafy.handam.user.domain.service;
 import com.ssafy.handam.user.domain.model.entity.Follow;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.FollowStatus;
-import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
+import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
+import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.repository.FollowRepository;
 import com.ssafy.handam.user.domain.repository.UserRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -17,6 +17,18 @@ import java.util.List;
 public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
+
+    public User saveUser(OAuthUserInfo oAuthUserInfo) {
+        User user = User.builder()
+                .nickname(oAuthUserInfo.nickname())
+                .birthday(oAuthUserInfo.birthday())
+                .gender(oAuthUserInfo.gender())
+                .age(oAuthUserInfo.age())
+                .profileImage(oAuthUserInfo.profileImage())
+                .build();
+
+        return userRepository.save(user);
+    }
 
     public User findUserById(Long id) {
         return userRepository.findById(id)

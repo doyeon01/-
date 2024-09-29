@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import java.time.LocalDate;
+import java.time.MonthDay;
 import java.util.Set;
 
 @Entity
@@ -19,11 +19,17 @@ public class User {
     private Long id;
 
     private String nickname;
-    private LocalDate birth;
+    private MonthDay birthday;
     private Gender gender;
-    private String residence;
+    private String age;
+    private String profileImage;
+    private String travelStyl1;
+    private String travelStyl2;
+    private String travelStyl3;
+    private String travelStyl4;
     private String introduction;
     private double accompanyTemperature;
+
 
     @OneToMany(mappedBy = "follower")
     private Set<Follow> following;
@@ -33,18 +39,30 @@ public class User {
 
 
     @Builder
-    private User(String nickname, LocalDate birth, Gender gender, String residence,
-                 String introduction, double accompanyTemperature) {
+    private User(String nickname,
+                 MonthDay birthday,
+                 Gender gender,
+                 String age,
+                 String profileImage) {
         this.nickname = nickname;
-        this.birth = birth;
+        this.birthday = birthday;
         this.gender = gender;
-        this.residence = residence;
-        this.introduction = introduction;
-        this.accompanyTemperature = accompanyTemperature;
+        this.age = age;
+        this.profileImage = profileImage;
+        this.accompanyTemperature = 36.5;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void updateUser(String introduction,
+                           String travelStyl1,
+                           String travelStyl2,
+                           String travelStyl3,
+                           String travelStyl4) {
+        this.introduction = introduction;
+        this.travelStyl1 = travelStyl1;
+        this.travelStyl2 = travelStyl2;
+        this.travelStyl3 = travelStyl3;
+        this.travelStyl4 = travelStyl4;
     }
+
 
 }

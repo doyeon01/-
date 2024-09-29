@@ -1,31 +1,52 @@
 package com.ssafy.handam.user.infrastructure.jwt;
 
+import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
+import com.ssafy.handam.user.infrastructure.jwt.valueobject.JwtPayload;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
-
 import javax.crypto.SecretKey;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+
 
 @Component
 public class JwtUtil {
 
     private final SecretKey secretKey;
+    private final long expirationTime = 3600000;
 
     public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(String username) {
+    public boolean isJwtValid(String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String extractUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
+    }
+    public String createJwtToken(OAuthUserInfo userInfo) {
+        JwtPayload jwtPayload = JwtPayload.of(userInfo.providerId(), userInfo.email());
+        return generateToken(jwtPayload);
+    }
+
+    public String generateToken(JwtPayload jwtPayload) {
         return Jwts.builder()
-                .setSubject(username)
+                .setSubject(jwtPayload.providerId())
+                .claim("email", jwtPayload.email())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-                .signWith(secretKey, SignatureAlgorithm.HS256)
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
+                .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }
 }

@@ -2,13 +2,12 @@ package com.ssafy.handam.user.docs;
 
 import com.ssafy.handam.user.RestDocsSupport;
 import com.ssafy.handam.user.domain.model.entity.User;
-import com.ssafy.handam.user.domain.model.valueobject.Gender;
-import com.ssafy.handam.user.domain.model.valueobject.response.UserInfoResponse;
+import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
-import java.time.LocalDate;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -152,17 +151,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
         }
 
         public User createUser(Long id) {
-            User user = User.builder()
-                    .nickname("고도연")
-                    .birth(LocalDate.of(2000, 1, 2))
-                    .gender(Gender.FEMALE)
-                    .residence("MokPo")
-                    .introduction("안녕하세요 저는 개발자 입니다.")
-                    .accompanyTemperature(36.5)
-                    .build();
+//            User user = User.builder()
+//                    .nickname("고도연")
+//                    .birth(LocalDate.of(2000, 1, 2))
+//                    .gender(Gender.FEMALE)
+//                    .introduction("안녕하세요 저는 개발자 입니다.")
+//                    .accompanyTemperature(36.5)
+//                    .build();
 
-            user.setId(id);  // 테스트 위한 id 값 setter(임시)
-            return user;
+            return null;
         }
         public UserSurveyRequest createUserSurveyRequest() {
             Map<Integer, String> questions = new HashMap<>();
@@ -181,26 +178,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
             return UserSurveyRequest.of(questions, photoSelections);
         }
         public List<User> createMockUsers() {
-            User user1 = User.builder()
-                    .nickname("고도연")
-                    .birth(LocalDate.of(2000, 1, 2))
-                    .gender(Gender.FEMALE)
-                    .residence("MokPo")
-                    .introduction("안녕하세요 저는 개발자입니다.")
-                    .accompanyTemperature(36.5)
-                    .build();
-            user1.setId(1L);
-
-            User user2 = User.builder()
-                    .nickname("도연킴")
-                    .birth(LocalDate.of(1990, 10, 5))
-                    .gender(Gender.FEMALE)
-                    .residence("Busan")
-                    .introduction("안녕하세요, 도연입니다.")
-                    .accompanyTemperature(37.0)
-                    .build();
-            user2.setId(2L);
-
-            return List.of(user1, user2);
+//            User user1 = User.builder()
+//                    .nickname("고도연")
+//                    .birth(LocalDate.of(2000, 1, 2))
+//                    .gender(Gender.FEMALE)
+//                    .introduction("안녕하세요 저는 개발자입니다.")
+//                    .accompanyTemperature(36.5)
+//                    .build();
+//
+//            User user2 = User.builder()
+//                    .nickname("도연킴")
+//                    .birth(LocalDate.of(1990, 10, 5))
+//                    .gender(Gender.FEMALE)
+//                    .introduction("안녕하세요, 도연입니다.")
+//                    .accompanyTemperature(37.0)
+//                    .build();
+            return null;
         }
     }
