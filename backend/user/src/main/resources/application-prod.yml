@@ -4,6 +4,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: none
+  jwt:
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
 
 server:
   port: 8081
