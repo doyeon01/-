@@ -29,4 +29,8 @@ public class AccompanyBoardArticleDomainService {
         return accompanyBoardArticleRepository.findAll();
     }
 
+    public Article getArticleDetails(Long articleId) {
+        return accompanyBoardArticleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
+    }
+
 }

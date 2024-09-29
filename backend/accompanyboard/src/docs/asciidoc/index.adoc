@@ -26,3 +26,11 @@ include::{snippets}/get-articles/http-request.adoc[]
 ==== HTTP Response
 include::{snippets}/get-articles/http-response.adoc[]
 include::{snippets}/get-articles/response-fields.adoc[]
+
+=== 특정 동행 게시글 조회
+==== HTTP Request
+include::{snippets}/get-article-details/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-article-details/http-response.adoc[]
+include::{snippets}/get-article-details/path-parameters.adoc[]
+include::{snippets}/get-article-details/response-fields.adoc[]

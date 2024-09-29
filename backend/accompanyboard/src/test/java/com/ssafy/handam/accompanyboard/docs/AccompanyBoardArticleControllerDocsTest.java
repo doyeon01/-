@@ -9,8 +9,11 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
@@ -19,6 +22,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -89,6 +93,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
         AccompanyBoardArticlePreviewDto accompanyBoardArticlePreviewDto = new AccompanyBoardArticlePreviewDto(
                 1L,
                 1L,
+                1L,
                 "testTitle"
         );
 
@@ -104,14 +109,59 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         responseFields(
-                            fieldWithPath("success").description("성공 여부"),
-                            fieldWithPath("response.articles[].userId").type(JsonFieldType.NUMBER)
-                                    .description("작성자 ID"),
-                            fieldWithPath("response.articles[].scheduleId").type(JsonFieldType.NUMBER)
-                                    .description("일정 ID"),
-                            fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
-                                    .description("게시글 제목"),
-                            fieldWithPath("error").description("에러 메시지")
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.articles[].id").type(JsonFieldType.NUMBER)
+                                        .description("게시글 ID"),
+                                fieldWithPath("response.articles[].userId").type(JsonFieldType.NUMBER)
+                                        .description("작성자 ID"),
+                                fieldWithPath("response.articles[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
+                                        .description("게시글 제목"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )));
+    }
+
+    @Test
+    @DisplayName("특정 동행 게시글 조회 API")
+    void getArticleDetailsTest() throws Exception {
+        AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto = new AccompanyBoardArticleDetailDto(
+                1L,
+                1L,
+                1L,
+                "testTitle",
+                "testDescription"
+        );
+
+        Long requestId = 1L;
+
+        AccompanyBoardArticleDetailResponse response = AccompanyBoardArticleDetailResponse.of(accompanyBoardArticleDetailDto);
+
+        given(accompanyBoardArticleService.getArticleDetails(requestId)).willReturn(response);
+
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/articles/{articleId}", requestId)
+        )
+                .andExpect(status().isOk())
+                .andDo(document("get-article-details",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("articleId").description("동행 게시글 ID") // 경로 변수 문서화
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.id").type(JsonFieldType.NUMBER)
+                                        .description("동행 게시글 ID"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.title").type(JsonFieldType.STRING)
+                                        .description("동행 게시글 제목"),
+                                fieldWithPath("response.description").type(JsonFieldType.STRING)
+                                        .description("동행 게시글 내용"),
+                                fieldWithPath("error").description("에러 메시지")
                         )));
     }
 }

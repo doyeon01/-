@@ -34,9 +34,9 @@ public class AccompanyBoardArticleController {
     public ApiResult<AccompanyBoardArticlesResponse> getArticles() {
         return success(accompanyBoardArticleService.getArticles());
     }
-//
-//    @GetMapping("/{articleId}")
-//    public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {
-//        return success(accompanyBoardArticleService.getArticleDetails(articleId));
-//    }
+
+    @GetMapping("/{articleId}")
+    public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {
+        return success(accompanyBoardArticleService.getArticleDetails(articleId));
+    }
 }

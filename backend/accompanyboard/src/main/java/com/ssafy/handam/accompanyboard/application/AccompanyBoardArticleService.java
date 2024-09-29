@@ -30,6 +30,11 @@ public class AccompanyBoardArticleService {
         return AccompanyBoardArticlesResponse.of(articles);
     }
 
+    public AccompanyBoardArticleDetailResponse getArticleDetails(Long articleId) {
+        Article article = accompanyBoardArticleDomainService.getArticleDetails(articleId);
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article));
+    }
+
     private List<AccompanyBoardArticlePreviewDto> getAccompanyBoardArticlePreviewDtoList(List<Article> articles) {
         return articles.stream()
                 .map(AccompanyBoardArticlePreviewDto::of)
