@@ -37,7 +37,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         CookieUtil.addTokenToCookie(response, token);
 
-        response.sendRedirect("http://localhost:8080/api/v1/user/test");
+        response.sendRedirect("http://j11c205.p.ssafy.io:8080/api/v1/user/test");
     }
 
 }

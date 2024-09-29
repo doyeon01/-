@@ -41,6 +41,7 @@ spring:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
   jwt:
     secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+    
 server:
   port: 8080
 
