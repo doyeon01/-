@@ -1,4 +1,4 @@
-:snippets: build/generated-snippets
+:snippets: ../../../build/generated-snippets
 :doctype: book
 :source-highlighter: highlightjs
 :toc: left
@@ -19,22 +19,18 @@ include::{snippets}/create-article/http-response.adoc[]
 include::{snippets}/create-article/request-fields.adoc[]
 include::{snippets}/create-article/response-fields.adoc[]
 
-// ---
-// === 특정 동행 게시글 조회
-//
-// ==== HTTP Request
-// include::{snippets}/get-article/http-request.adoc[]
-// ==== HTTP Response
-// include::{snippets}/get-article/http-response.adoc[]
-// include::{snippets}/get-article/path-parameters.adoc[]
-// include::{snippets}/get-article/response-fields.adoc[]
-//
-// ---
-// === 전체 동행 게시글 조회
-//
-// ==== HTTP Request
-// include::{snippets}/get-articles/http-request.adoc[]
-// ==== HTTP Response
-// include::{snippets}/get-articles/http-response.adoc[]
-// include::{snippets}/get-articles/response-fields.adoc[]
 
+=== 동행 게시글 전체 조회
+==== HTTP Request
+include::{snippets}/get-articles/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-articles/http-response.adoc[]
+include::{snippets}/get-articles/response-fields.adoc[]
+
+=== 특정 동행 게시글 조회
+==== HTTP Request
+include::{snippets}/get-article-details/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-article-details/http-response.adoc[]
+include::{snippets}/get-article-details/path-parameters.adoc[]
+include::{snippets}/get-article-details/response-fields.adoc[]

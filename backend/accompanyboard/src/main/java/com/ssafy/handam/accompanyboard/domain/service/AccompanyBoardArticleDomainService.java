@@ -1,9 +1,11 @@
 package com.ssafy.handam.accompanyboard.domain.service;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.repository.AccompanyBoardArticleRepository;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -21,6 +23,14 @@ public class AccompanyBoardArticleDomainService {
                 .title(request.title())
                 .description(request.description())
                 .build());
+    }
+
+    public List<Article> getArticles() {
+        return accompanyBoardArticleRepository.findAll();
+    }
+
+    public Article getArticleDetails(Long articleId) {
+        return accompanyBoardArticleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
     }
 
 }
