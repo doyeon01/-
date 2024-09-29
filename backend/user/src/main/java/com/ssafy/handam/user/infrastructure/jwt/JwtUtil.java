@@ -1,6 +1,8 @@
 package com.ssafy.handam.user.infrastructure.jwt;
 
-import com.ssafy.handam.user.presentation.request.OAuthUserLoginRequest;
+import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
+import com.ssafy.handam.user.infrastructure.jwt.valueobject.JwtPayload;
+import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.security.Keys;
@@ -14,17 +16,36 @@ import java.util.Date;
 public class JwtUtil {
 
     private final SecretKey secretKey;
+    private final long expirationTime = 3600000;
 
     public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
     }
 
-    public String generateToken(OAuthUserLoginRequest loginRequest) {
+    public boolean isJwtValid(String token) {
+        try {
+            Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token);
+            return true;
+        } catch (Exception e) {
+            return false;
+        }
+    }
+
+    public String extractUserId(String token) {
+        Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
+        return claims.getSubject();
+    }
+    public String createJwtToken(OAuthUserInfo userInfo) {
+        JwtPayload jwtPayload = JwtPayload.of(userInfo.providerId(), userInfo.email());
+        return generateToken(jwtPayload);
+    }
+
+    public String generateToken(JwtPayload jwtPayload) {
         return Jwts.builder()
-                .setSubject(loginRequest.providerId())
-                .claim("email", loginRequest.email())
+                .setSubject(jwtPayload.providerId())
+                .claim("email", jwtPayload.email())
                 .setIssuedAt(new Date())
-                .setExpiration(new Date(System.currentTimeMillis() + 3600000))
+                .setExpiration(new Date(System.currentTimeMillis() + expirationTime))
                 .signWith(SignatureAlgorithm.HS256, secretKey)
                 .compact();
     }

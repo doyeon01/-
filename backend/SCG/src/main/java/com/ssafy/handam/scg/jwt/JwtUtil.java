@@ -1,25 +1,21 @@
 package com.ssafy.handam.scg.jwt;
 
 import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.http.server.reactive.ServerHttpResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
-
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.List;
-import java.util.stream.Collectors;
+
 
 @Slf4j
 @Component
@@ -32,27 +28,22 @@ public class JwtUtil {
     }
 
     public String getAccessToken(ServerHttpRequest request) {
-        System.out.println(request.getCookies().getFirst("accessToken"));
         return request.getCookies().getFirst("accessToken") != null
                 ? request.getCookies().getFirst("accessToken").getValue()
                 : null;
     }
-    public String resolveTokenUser(String token) throws JwtException {
+    public Claims extractClaims(String token) throws JwtException {
         return Jwts.parser()
                 .setSigningKey(secretKey)
                 .build()
                 .parseClaimsJws(token)
-                .getBody()
-                .get("sub")
-                .toString();
+                .getBody();
     }
 
+
     public boolean isJwtValid(String token) throws JwtException {
-        Jws<Claims> claims = Jwts.parser()
-                .setSigningKey(secretKey)
-                .build()
-                .parseClaimsJws(token);
-        return !claims.getBody().getExpiration().before(new Date());
+        Claims claims = extractClaims(token);
+        return !claims.getExpiration().before(new Date());
     }
 
     public Mono<Void> onError(ServerWebExchange exchange, String err, HttpStatus status) {
