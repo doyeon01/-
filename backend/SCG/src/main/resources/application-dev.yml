@@ -1,6 +1,8 @@
 spring:
   application:
     name: SCG
+  jwt:
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
   cloud:
     gateway:
       routes:
@@ -42,9 +44,6 @@ spring:
               args:
                 regexp: /feeds/docs/(?<remaining>.*)
                 replacement: /docs/${remaining}
-
-  jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
 
 server:
   port: 8080
