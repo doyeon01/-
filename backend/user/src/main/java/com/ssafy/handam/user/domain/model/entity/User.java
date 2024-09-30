@@ -19,7 +19,9 @@ public class User {
     private Long id;
 
     private String nickname;
-    private String gender;
+
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private String age;
     private String profileImage;
     private String travelStyl1;
@@ -39,7 +41,7 @@ public class User {
 
     @Builder
     private User(String nickname,
-                 String gender,
+                 Gender gender,
                  String age,
                  String profileImage) {
         this.nickname = nickname;

@@ -7,7 +7,7 @@ import java.time.MonthDay;
 
 public record UserInfoResponse(Long id,
                                String nickname,
-                               String gender,
+                               Gender gender,
                                String age,
                                String profileImage,
                                String introduction,
