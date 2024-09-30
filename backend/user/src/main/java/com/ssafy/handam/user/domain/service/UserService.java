@@ -20,13 +20,13 @@ public class UserService {
 
     public void handleUserLogin(OAuthUserInfo oAuthUserInfo) {
         String email = oAuthUserInfo.email();
-        if (!userExists(email)) {
+        if (doesUserNotExist(email)) {
             saveUser(oAuthUserInfo);
         }
     }
 
-    private boolean userExists(String email) {
-        return userRepository.existsByEmail(email);
+    private boolean doesUserNotExist(String email) {
+        return !userRepository.existsByEmail(email);
     }
     public User saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
