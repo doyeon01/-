@@ -11,10 +11,10 @@ interface TravelItem {
 
 const travelData: TravelItem[] = [
     { title: '제주도의 푸른밤', imageSrc: img1, backgroundClass: '#8a9873' },
-    { title: '푸른 산책로', imageSrc: img2, backgroundClass: '#8fa6a6' }, // 밝은 세이지 색상
-    { title: '신비로운 숲', imageSrc: img3, backgroundClass: '#a3b59d' }, // 소프트 그린
-    { title: '은은한 저녁', imageSrc: img1, backgroundClass: '#b8a99b' }, // 부드러운 그레이 색상
-    { title: '산의 정적', imageSrc: img2, backgroundClass: '#d7c3b1' }, // 밝은 베이지 색상
+    { title: '푸른 산책로', imageSrc: img2, backgroundClass: '#8fa6a6' },
+    { title: '신비로운 숲', imageSrc: img3, backgroundClass: '#a3b59d' }, 
+    { title: '은은한 저녁', imageSrc: img1, backgroundClass: '#b8a99b' },
+    { title: '산의 정적', imageSrc: img2, backgroundClass: '#d7c3b1' },
 ];
 
 const CarouselMain: React.FC = () => {
