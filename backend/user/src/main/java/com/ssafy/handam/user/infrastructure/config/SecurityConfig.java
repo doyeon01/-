@@ -30,7 +30,7 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/oauth2/**", "/api/v1/user/test").permitAll()
+                        .requestMatchers("/","/login", "/oauth2/**", "/api/v1/user/test").permitAll()
                         .anyRequest().authenticated());
         return http.build();
     }
