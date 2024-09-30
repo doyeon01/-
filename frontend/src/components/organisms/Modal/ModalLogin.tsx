@@ -39,7 +39,15 @@ export const ModalLogin: React.FC<ModalLoginProps> = ({ onClose }) => {
               </button>
 
               <button className="w-full max-w-xs bg-[#1EDE00] text-green-800 border-green-300 hover:bg-opacity-70 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center"
-              onClick={() => window.location.href="/oauth2/authorization/naver"}
+              onClick={() => {
+                const clientId = 'qNQxjUUrP4J8qo0Qr6Zv';
+                const redirectUri = encodeURIComponent('http://j11c205.p.ssafy.io:8081/login/oauth2/code/naver');
+                const state = 'OfzgFSIxJaDV3JFGu6zndpGxqqXIetGvhDBQ5l3g2e8=';
+            
+                const naverAuthUrl = `https://nid.naver.com/oauth2.0/authorize?response_type=code&client_id=${clientId}&redirect_uri=${redirectUri}&scope=name%20email%20nickname%20gender%20age%20birthday%20profile_image%20mobile&state=${state}`;
+                
+                window.location.href = naverAuthUrl;
+              }}
               >
                 <span className="inline-flex items-center justify-center">
                   <img
