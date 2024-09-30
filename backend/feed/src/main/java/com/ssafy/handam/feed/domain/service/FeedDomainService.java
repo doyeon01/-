@@ -6,10 +6,12 @@ import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
+import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import jakarta.transaction.Transactional;
 import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,6 +47,7 @@ public class FeedDomainService {
         likeRepository.delete(like);
     }
 
+    
     private Feed findBy(Long feedId) {
         return feedRepository.findById(feedId).orElseThrow(() -> new IllegalArgumentException("Feed not found"));
     }
@@ -88,5 +91,9 @@ public class FeedDomainService {
                 .placeType(request.placeType())
                 .userId(request.userId())
                 .build());
+    }
+
+    public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
+        return feedRepository.searchFeedsByKeywordSortedByLikeCount(keyword, pageable);
     }
 }
