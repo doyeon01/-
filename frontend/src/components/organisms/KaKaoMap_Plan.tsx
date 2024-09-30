@@ -37,7 +37,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
                         const mapOption = {
                             center: new window.kakao.maps.LatLng(37.566826, 126.9786567), // 중심 좌표
                             level: 3 // 확대 레벨
-                        };
+                        }; 
                         const createdMap = new window.kakao.maps.Map(mapRef.current, mapOption);
                         setMap(createdMap); // 지도 객체 저장
 
