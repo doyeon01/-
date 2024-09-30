@@ -42,7 +42,6 @@ spring:
               args:
                 regexp: /feeds/docs/(?<remaining>.*)
                 replacement: /docs/${remaining}
-
   jwt:
     secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
 
