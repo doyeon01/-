@@ -47,7 +47,6 @@ spring:
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
 
-
 server:
   port: 8080
 
