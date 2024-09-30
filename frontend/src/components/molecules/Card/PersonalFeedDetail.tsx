@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'
-import { Feed, FeedResponse } from '../../../model/MyPage/MyPage';
+import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType';
 // import { FeedList } from '../../../services/api/FeedService';
 
 
@@ -37,7 +37,7 @@ export const PersonalFeedDetail: React.FC = () => {
     if (loading) return; // 중복 호출 방지
     setLoading(true);
 
-    
+
     // 이 블록 더미데이터임...
     const typedFeedData = feedData as FeedResponse;
     setFeedInfos((prevFeeds) => [...prevFeeds, ...typedFeedData.response.feeds]);

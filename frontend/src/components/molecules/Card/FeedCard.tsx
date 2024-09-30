@@ -1,5 +1,5 @@
 import { RealHeartIcon } from '../../../assets/icons/svg'; // 아이콘 경로 확인
-import { CardProps } from '../../../model/MyPage/MyPage';
+import { CardProps } from '../../../model/MyPage/MyPageType';
 
 export const FeedCard: React.FC<CardProps> = ({ title, address, content, createdDate, comment, like, image }) => {
   
