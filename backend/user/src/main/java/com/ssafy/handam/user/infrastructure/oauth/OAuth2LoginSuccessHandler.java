@@ -9,6 +9,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -21,6 +22,8 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
+    @Value("${oauth2.success-redirect-url}")
+    private String successRedirectUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -31,13 +34,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         OAuthUserInfo oAuthUserInfo = OAuthUserInfo.of(attributes);
 
-        //userService.saveUser(oAuthUserInfo);
+        userService.saveUser(oAuthUserInfo);
 
         String token = jwtUtil.createJwtToken(oAuthUserInfo);
 
         CookieUtil.addTokenToCookie(response, token);
 
-        response.sendRedirect("http://j11c205.p.ssafy.io:8080/api/v1/user/test");
+        response.sendRedirect(successRedirectUrl);
     }
 
 }

@@ -2,7 +2,7 @@ spring:
   application:
     name: SCG
   jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+    secret: ${SPRING_JWT_SECRET}
   cloud:
     gateway:
       routes:
