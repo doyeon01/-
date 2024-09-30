@@ -34,7 +34,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         OAuthUserInfo oAuthUserInfo = OAuthUserInfo.of(attributes);
 
-        userService.saveUser(oAuthUserInfo);
+        userService.handleUserLogin(oAuthUserInfo);
 
         String token = jwtUtil.createJwtToken(oAuthUserInfo);
 

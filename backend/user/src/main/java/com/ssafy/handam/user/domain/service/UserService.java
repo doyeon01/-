@@ -18,8 +18,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
+    public void handleUserLogin(OAuthUserInfo oAuthUserInfo) {
+        String email = oAuthUserInfo.email();
+        if (doesUserNotExist(email)) {
+            saveUser(oAuthUserInfo);
+        }
+    }
+
+    private boolean doesUserNotExist(String email) {
+        return !userRepository.existsByEmail(email);
+    }
     public User saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
+                .email((oAuthUserInfo.email()))
                 .nickname(oAuthUserInfo.nickname())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
