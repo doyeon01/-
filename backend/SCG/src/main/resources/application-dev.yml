@@ -43,7 +43,7 @@ spring:
                 regexp: /feeds/docs/(?<remaining>.*)
                 replacement: /docs/${remaining}
   jwt:
-    secret: ${SPRING_JWT_SECRET}
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
 
 server:
   port: 8080
