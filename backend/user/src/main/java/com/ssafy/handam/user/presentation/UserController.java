@@ -28,11 +28,11 @@ public class UserController {
     @Valid
     @GetMapping("/{id}")
     public ApiResult<UserInfoResponse> getUserInfo(@NotNull @PathVariable("id") Long id) {
-
         User user = userService.findUserById(id);
         UserInfoResponse response = UserInfoResponse.of(user);
         return success(response);
     }
+
     @GetMapping("/test")
     public void test(){
         System.out.println("통과~");
@@ -41,7 +41,6 @@ public class UserController {
     @GetMapping("/search")
     public ApiResult<List<UserInfoResponse>> searchUsers(@RequestParam("keyword") String keyword) {
         List<User> users = userService.searchUsersByKeyword(keyword);
-
         List<UserInfoResponse> response = users.stream()
                 .map(UserInfoResponse::of)
                 .collect(Collectors.toList());

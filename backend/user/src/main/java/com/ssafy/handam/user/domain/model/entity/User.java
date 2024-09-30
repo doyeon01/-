@@ -19,7 +19,8 @@ public class User {
     private Long id;
 
     private String nickname;
-    private MonthDay birthday;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String age;
     private String profileImage;
@@ -40,12 +41,10 @@ public class User {
 
     @Builder
     private User(String nickname,
-                 MonthDay birthday,
                  Gender gender,
                  String age,
                  String profileImage) {
         this.nickname = nickname;
-        this.birthday = birthday;
         this.gender = gender;
         this.age = age;
         this.profileImage = profileImage;

@@ -21,7 +21,6 @@ public class UserService {
     public User saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .nickname(oAuthUserInfo.nickname())
-                .birthday(oAuthUserInfo.birthday())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
                 .profileImage(oAuthUserInfo.profileImage())
