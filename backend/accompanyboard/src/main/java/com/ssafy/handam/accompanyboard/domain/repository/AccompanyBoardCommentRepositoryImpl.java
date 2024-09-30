@@ -25,6 +25,11 @@ public class AccompanyBoardCommentRepositoryImpl implements AccompanyBoardCommen
         return savedComment;
     }
 
+    @Override
+    public List<Comment> findByAccompanyBoardArticleId(Long accompanyBoardArticleId) {
+        return accompanyBoardCommentJpaRepository.findByAccompanyBoardArticleId(accompanyBoardArticleId);
+    }
+
 //    @Override
 //    public List<Comment> findAll() { return accompanyBoardCommentJpaRepository.findAll(); }
 }

@@ -8,6 +8,5 @@ public interface AccompanyBoardCommentRepository{
 
     Optional<Comment> findById(Long id);
     Comment save(Comment comment);
-
-//    List<Comment> findAll();
+    List<Comment> findByAccompanyBoardArticleId(Long accompanyBoardArticleId);
 }

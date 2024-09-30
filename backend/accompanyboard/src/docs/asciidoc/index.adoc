@@ -45,3 +45,13 @@ include::{snippets}/create-comment/http-request.adoc[]
 include::{snippets}/create-comment/http-response.adoc[]
 include::{snippets}/create-comment/request-fields.adoc[]
 include::{snippets}/create-comment/response-fields.adoc[]
+
+
+=== 동행 게시글 댓글 조회
+
+==== HTTP Request
+include::{snippets}/get-comments-by-accompanyboard-article-id/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-comments-by-accompanyboard-article-id/http-response.adoc[]
+include::{snippets}/get-comments-by-accompanyboard-article-id/path-parameters.adoc[]
+include::{snippets}/get-comments-by-accompanyboard-article-id/response-fields.adoc[]
