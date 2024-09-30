@@ -18,6 +18,9 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, length = 255)
+    private String email;
+
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -40,10 +43,12 @@ public class User {
 
 
     @Builder
-    private User(String nickname,
+    private User(String email,
+                 String nickname,
                  Gender gender,
                  String age,
                  String profileImage) {
+        this.email = email;
         this.nickname = nickname;
         this.gender = gender;
         this.age = age;
