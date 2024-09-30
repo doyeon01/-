@@ -9,7 +9,7 @@ spring:
         - id: user-login-signup
           uri: http://j11c205.p.ssafy.io:8081
           predicates:
-              - Path=/login,/oauth2/authorization/**
+              - Path=/login,/oauth2/**
 
         - id: user
           uri: http://j11c205.p.ssafy.io:8081
