@@ -6,7 +6,7 @@ import KakaoMap from '../organisms/KaKaoMap';
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 // import { fetchArticles } from '../../services/api/AccompanyBoardAPI';
 import {Article} from '../../model/AccompanyBoardType'
-import Articles from '../../dummydata/companion/accompanyboardsarticles.json'
+import Articles from '../../dummydata/companion/accompanyBoardsArticles.json'
 
 
 export const CompanionPage: React.FC = () => {
@@ -18,6 +18,8 @@ export const CompanionPage: React.FC = () => {
   
   useEffect(() => {
     const loadArticles = async () => {
+      console.log(Articles.response.articles);
+      
       const data:Article[] = Articles.response.articles
       setArticles(data)
     //   try {
