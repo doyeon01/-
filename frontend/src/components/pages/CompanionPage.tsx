@@ -4,7 +4,7 @@ import ModalCompanionDetail from '../organisms/Modal/ModalCompanionDetail';
 import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
 import KakaoMap from '../organisms/KaKaoMap';
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
-import { fetchArticles } from '../../services/api/AccompanyBoardAPI';
+// import { fetchArticles } from '../../services/api/AccompanyBoardAPI';
 import {Article} from '../../model/AccompanyBoardType'
 import Articles from '../../dummydata/companion/accompanyboardsarticles.json'
 
@@ -14,7 +14,7 @@ export const CompanionPage: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [articles, setArticles] = useState<Article[]>([]);
-  const [error,setError] = useState('')
+  // const [error,setError] = useState('')
   
   useEffect(() => {
     const loadArticles = async () => {
