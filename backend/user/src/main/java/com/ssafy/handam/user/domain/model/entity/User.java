@@ -21,6 +21,7 @@ public class User {
     @Column(unique = true, nullable = false, length = 255)
     private String email;
 
+    private String name;
     private String nickname;
 
     @Enumerated(EnumType.STRING)
@@ -31,6 +32,7 @@ public class User {
     private String travelStyl2;
     private String travelStyl3;
     private String travelStyl4;
+    private String residence;
     private String introduction;
     private double accompanyTemperature;
 
@@ -44,23 +46,27 @@ public class User {
 
     @Builder
     private User(String email,
-                 String nickname,
+                 String name,
                  Gender gender,
                  String age,
                  String profileImage) {
         this.email = email;
-        this.nickname = nickname;
+        this.name = name;
         this.gender = gender;
         this.age = age;
         this.profileImage = profileImage;
         this.accompanyTemperature = 36.5;
     }
 
-    public void updateUser(String introduction,
+    public void updateUser(String nickname,
+                           String residence,
+                           String introduction,
                            String travelStyl1,
                            String travelStyl2,
                            String travelStyl3,
                            String travelStyl4) {
+        this.nickname = nickname;
+        this.residence = residence;
         this.introduction = introduction;
         this.travelStyl1 = travelStyl1;
         this.travelStyl2 = travelStyl2;
