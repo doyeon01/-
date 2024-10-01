@@ -3,7 +3,7 @@ import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옵니다.
 import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType'; // Feed 타입을 import
-import { LikeFeedList } from '../../../services/api/FeedService';
+import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
   const [selectedButton, setSelectedButton] = useState(0);
@@ -11,24 +11,31 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
   const [allFeeds, setAllFeeds] = useState<Feed[]>([]); // 모든 피드 리스트
   const [page, setPage] = useState(0); // 페이지 번호 저장
 
+  // 더미 데이터 및 API 데이터 가져오기
+  useEffect(() => {
+    const typedFeedData = feedData as { success: boolean; response: { feeds: Feed[] }; error: null };
+    if (typedFeedData.success) {
+      setAllFeeds(typedFeedData.response.feeds); // 초기 더미 데이터
+      setFilteredFeeds(typedFeedData.response.feeds); 
+    }
 
-  useEffect(()=>{
+    // API 요청을 통해 실제 데이터를 받아옴
     LikeFeedList(page)
       .then((res) => {
-          const data: FeedResponse = res.data;
+        const data: FeedResponse = res.data;
         if (data.success) {
+          // API 데이터가 더미 데이터를 대체
           setAllFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
+          setFilteredFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
           setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
         } else {
-          console.error(res.data.error);
+          console.error(data.error);
         }
       })
       .catch((error) => {
         console.error(error);
-      })
- 
-
-  },[])
+      });
+  }, [page]);
 
   // 좋아요 탭 클릭 시, 전체 카테고리 선택됨
   useEffect(() => {
@@ -36,19 +43,6 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
       setSelectedButton(0);
     }
   }, [resetSelectedButton]);
-
-
-
-  // 전체 피드 리스트, 필터링된 피드 리스트 저장
-  useEffect(() => {
-    const typedFeedData = feedData as { success: boolean; response: { feeds: Feed[] }; error: null };
-    if (typedFeedData.success) {
-      setAllFeeds(typedFeedData.response.feeds);
-      setFilteredFeeds(typedFeedData.response.feeds); 
-    }
-  }, []);
-
-
 
   // 선택된 버튼에 따라 피드 필터링
   useEffect(() => {
