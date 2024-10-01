@@ -32,6 +32,7 @@ public class JwtUtil {
                 ? request.getCookies().getFirst("accessToken").getValue()
                 : null;
     }
+
     public Claims extractClaims(String token) throws JwtException {
         return Jwts.parser()
                 .setSigningKey(secretKey)
@@ -39,7 +40,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
 
     public boolean isJwtValid(String token) throws JwtException {
         Claims claims = extractClaims(token);

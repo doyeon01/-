@@ -8,7 +8,7 @@ import org.springframework.web.server.ServerWebExchange;
 import reactor.core.publisher.Mono;
 
 @Component
-@Order(0)
+@Order(-1)
 @Slf4j
 public class LoggingGlobalFilter implements GlobalFilter {
 
