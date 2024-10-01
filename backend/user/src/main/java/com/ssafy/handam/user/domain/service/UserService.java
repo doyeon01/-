@@ -28,6 +28,11 @@ public class UserService {
     private boolean doesUserNotExist(String email) {
         return !userRepository.existsByEmail(email);
     }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
+    }
     public User saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .email((oAuthUserInfo.email()))
