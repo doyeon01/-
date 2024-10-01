@@ -14,11 +14,18 @@ const MainPage: React.FC = () => {
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
   const [cookies] = useCookies(['accessToken'])
 
-  const Token = cookies.accessToken
   
+
   useEffect(() => {
-    console.log(Token)
-  },[])
+    const token = cookies.accessToken;
+    
+    if (token) {
+      console.log('Access Token:', token); // 쿠키 값이 있으면 출력
+    } else {
+      console.log('Access Token not found'); // 없으면 출력
+    }
+  }, [cookies]); // 컴포넌트가 처음 렌더링될 때 실행
+
   
   const handleScroll = (event: WheelEvent) => {
     
