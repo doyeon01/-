@@ -1,16 +1,28 @@
 package com.ssafy.handam.user.presentation.request;
 
-import java.util.List;
-import java.util.Map;
+import com.ssafy.handam.user.application.dto.request.UserSurveyServiceRequest;
+import lombok.Builder;
 
+@Builder
 public record UserSurveyRequest(
-        Map<Integer, String> questions,
-        Map<Integer, List<Integer>> photoSelections
+        String nickname,
+        String residence,
+        String introduction,
+        String travelStyl1,
+        String travelStyl2,
+        String travelStyl3,
+        String travelStyl4
 ) {
 
-    public static UserSurveyRequest of(Map<Integer, String> questions,
-                                       Map<Integer, List<Integer>> photoSelections) {
-        return new UserSurveyRequest(questions, photoSelections);
+    public UserSurveyServiceRequest toServiceRequest(UserSurveyRequest userSurveyRequest) {
+        return UserSurveyServiceRequest.builder()
+                .nickname(userSurveyRequest.nickname())
+                .residence(userSurveyRequest.residence())
+                .introduction(userSurveyRequest.introduction())
+                .travelStyl1(userSurveyRequest.travelStyl1())
+                .travelStyl2(userSurveyRequest.travelStyl2())
+                .travelStyl3(userSurveyRequest.travelStyl3())
+                .travelStyl4(userSurveyRequest.travelStyl4())
+                .build();
     }
-
 }
