@@ -33,4 +33,8 @@ public class AccompanyBoardArticleDomainService {
         return accompanyBoardArticleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
     }
 
+    public List<Article> getArticlesByUser(Long userId) {
+        return accompanyBoardArticleRepository.findByUserId(userId);
+    }
+
 }
