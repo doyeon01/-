@@ -18,7 +18,7 @@ export const CompanionPage: React.FC = () => {
   
   useEffect(() => {
     const loadArticles = async () => {
-      const data:any[] = Articles.response.articles
+      const data:Article[] = Articles.response.articles
       setArticles(data)
     //   try {
     //     const data = await fetchArticles();
