@@ -18,10 +18,25 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
+    public void handleUserLogin(OAuthUserInfo oAuthUserInfo) {
+        String email = oAuthUserInfo.email();
+        if (doesUserNotExist(email)) {
+            saveUser(oAuthUserInfo);
+        }
+    }
+
+    private boolean doesUserNotExist(String email) {
+        return !userRepository.existsByEmail(email);
+    }
+
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
+    }
     public User saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
+                .email((oAuthUserInfo.email()))
                 .nickname(oAuthUserInfo.nickname())
-                .birthday(oAuthUserInfo.birthday())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
                 .profileImage(oAuthUserInfo.profileImage())

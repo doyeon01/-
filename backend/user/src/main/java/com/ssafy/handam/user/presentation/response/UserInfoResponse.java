@@ -6,8 +6,8 @@ import com.ssafy.handam.user.domain.model.valueobject.Gender;
 import java.time.MonthDay;
 
 public record UserInfoResponse(Long id,
+                               String email,
                                String nickname,
-                               MonthDay birthday,
                                Gender gender,
                                String age,
                                String profileImage,
@@ -21,8 +21,8 @@ public record UserInfoResponse(Long id,
     public static UserInfoResponse of(User user) {
         return new UserInfoResponse(
                 user.getId(),
+                user.getEmail(),
                 user.getNickname(),
-                user.getBirthday(),
                 user.getGender(),
                 user.getAge(),
                 user.getProfileImage(),

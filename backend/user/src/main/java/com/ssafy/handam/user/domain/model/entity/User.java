@@ -18,8 +18,12 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(unique = true, nullable = false, length = 255)
+    private String email;
+
     private String nickname;
-    private MonthDay birthday;
+
+    @Enumerated(EnumType.STRING)
     private Gender gender;
     private String age;
     private String profileImage;
@@ -39,13 +43,13 @@ public class User {
 
 
     @Builder
-    private User(String nickname,
-                 MonthDay birthday,
+    private User(String email,
+                 String nickname,
                  Gender gender,
                  String age,
                  String profileImage) {
+        this.email = email;
         this.nickname = nickname;
-        this.birthday = birthday;
         this.gender = gender;
         this.age = age;
         this.profileImage = profileImage;

@@ -4,6 +4,7 @@ import com.ssafy.handam.accompanyboard.domain.entity.Comment;
 import com.ssafy.handam.accompanyboard.domain.repository.AccompanyBoardCommentRepository;
 import com.ssafy.handam.accompanyboard.presentation.request.comment.AccompanyBoardCommentCreationRequest;
 import jakarta.transaction.Transactional;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -20,5 +21,9 @@ public class AccompanyBoardCommentDomainService {
                 .accompanyBoardArticleId(request.accompanyBoardArticleId())
                 .content(request.content())
                 .build());
+    }
+
+    public List<Comment> getCommentsByAccompanyBoardArticleId (Long accompanyBoardArticleId) {
+        return accompanyBoardCommentRepository.findByAccompanyBoardArticleId(accompanyBoardArticleId);
     }
 }

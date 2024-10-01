@@ -9,13 +9,19 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardCommentDto;
 import com.ssafy.handam.accompanyboard.presentation.request.comment.AccompanyBoardCommentCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.comment.AccompanyBoardCommentResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.comment.AccompanyBoardCommentsResponse;
+import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -72,6 +78,45 @@ public class AccompanyBoardCommentControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
+    }
 
+    @Test
+    @DisplayName("동행 게시글 댓글 조회")
+    void getCommentsByAccompanyBoardArticleIdTest() throws Exception {
+        AccompanyBoardCommentDto accompanyBoardCommentDto = new AccompanyBoardCommentDto(
+                1L,
+                1L,
+                1L,
+                "testContent"
+        );
+
+        Long requestId = 1L;
+
+        AccompanyBoardCommentsResponse response = AccompanyBoardCommentsResponse.of(List.of(accompanyBoardCommentDto));
+
+        given(accompanyBoardCommentService.getCommentsByAccompanyBoardArticleId(requestId)).willReturn(response);
+
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/comments/{accompanyBoardArticleId}", requestId)
+        )
+                .andExpect(status().isOk())
+                .andDo(document("get-comments-by-accompanyboard-article-id",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("accompanyBoardArticleId").description("동행 게시글 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.comments[].id").type(JsonFieldType.NUMBER)
+                                        .description("댓글 ID"),
+                                fieldWithPath("response.comments[].userId").type(JsonFieldType.NUMBER)
+                                        .description("댓글 작성자 ID"),
+                                fieldWithPath("response.comments[].accompanyBoardArticleId").type(JsonFieldType.NUMBER)
+                                        .description("동행 게시글 ID"),
+                                fieldWithPath("response.comments[].content").type(JsonFieldType.STRING)
+                                        .description("댓글 내용"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )));
     }
 }

@@ -28,40 +28,41 @@ repositories {
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-web'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.h2database:h2'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+    // Spring Boot Starter Dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-web'           // 웹 애플리케이션
+    implementation 'org.springframework.boot:spring-boot-starter-validation'    // 검증 기능
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'      // JPA (Hibernate)
 
-    // QueryDSL
-    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    // Database Drivers
+    runtimeOnly 'com.h2database:h2'                                              // H2 Database (개발/테스트 용)
+    runtimeOnly 'com.mysql:mysql-connector-j'                                    // MySQL Driver
+
+    // QueryDSL for Dynamic Query
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'                     // QueryDSL JPA with Jakarta EE
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
-    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
-    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+    // QueryDSL Annotation Processor (Q 클래스 자동 생성)
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"              // Jakarta Annotations
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"            // Jakarta Persistence API (JPA)
 
-    // Lombok
-    compileOnly 'org.projectlombok:lombok'
-    annotationProcessor 'org.projectlombok:lombok'
+    // Lombok for Code Generation
+    compileOnly 'org.projectlombok:lombok'                                       // Lombok (코드 단순화)
+    annotationProcessor 'org.projectlombok:lombok'                               // Lombok Annotation Processor
 
-    // Test 관련 의존성
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
-    testImplementation "org.testcontainers:junit-jupiter:1.19.7"
+    // Test Dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'       // Spring Boot 테스트 기능
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'                 // JUnit 테스트 실행기
 
-    // Spring REST Docs
-    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'
-    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    // Spring REST Docs for Documentation
+    asciidoctorExt 'org.springframework.restdocs:spring-restdocs-asciidoctor'    // Spring REST Docs with Asciidoctor
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'    // REST Docs 테스트
+    testImplementation 'org.springframework.restdocs:spring-restdocs-core'       // REST Docs Core
+    // Elasticsearch for Search Engine
+    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch' // Elasticsearch 연동
 
-    // Elasticsearch
-    implementation 'org.springframework.boot:spring-boot-starter-data-elasticsearch'
-
-    // Kafka
-    implementation 'org.springframework.kafka:spring-kafka'
-    testImplementation 'org.springframework.kafka:spring-kafka-test'
-
-    // Kafka 클라이언트
-    implementation 'org.apache.kafka:kafka-clients:3.4.0'
+    // Apache Kafka for Messaging
+    implementation 'org.springframework.kafka:spring-kafka'                     // Kafka 연동
+    testImplementation 'org.springframework.kafka:spring-kafka-test'            // Kafka 테스트 도구
+    implementation 'org.apache.kafka:kafka-clients:3.4.0'                       // Kafka 클라이언트 라이브러리
 }
 
 ext {

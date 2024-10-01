@@ -40,14 +40,20 @@ pipeline {
             }
             steps {
                 script {
-                    skipRemainingStages = false
-                    sh """
-                    cd backend/SCG
-                    chmod +x ./gradlew
-                    ./gradlew build
-                    ls build/libs
-                    docker build -t scg:latest .
-                    """
+                    withCredentials([
+                        string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                    ]){
+                        skipRemainingStages = false
+                        sh """
+                        cd backend/SCG
+                        chmod +x ./gradlew
+                        ./gradlew build
+                        ls build/libs
+                        docker build \
+                        --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                        -t user:latest .
+                        """
+                    }
                 }
             }
         }

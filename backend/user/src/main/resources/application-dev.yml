@@ -1,21 +1,31 @@
+oauth2:
+  success-redirect-url: "http://localhost:8080/api/v1/user/test"
 spring:
   application:
     name: user
   jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+    secret: ${SPRING_JWT_SECRET}
+  datasource:
+    url: jdbc:mysql://j11c205.p.ssafy.io:3306/user_database
+    username: handam
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
   security:
     oauth2:
       client:
         registration:
           naver:
-            client-id: qNQxjUUrP4J8qo0Qr6Zv
-            client-secret: dgeWW3o88l
+            client-id: ${CLIENT_ID}
+            client-secret: ${CLIENT_SECRET}
             redirect-uri: "http://localhost:8081/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
-            scope: name,email,nickname,gender,age,birthday,profile_image,birthyear,mobile
+            scope: name,email,nickname,gender,age,birthday,profile_image,birthday,mobile
             client-name: Naver
         provider:
           naver:

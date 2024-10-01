@@ -2,17 +2,22 @@ spring:
   application:
     name: SCG
   jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+    secret: ${SPRING_JWT_SECRET}
   cloud:
     gateway:
       routes:
+        - id: user-login-signup
+          uri: http://localhost:8081
+          predicates:
+              - Path=/login,/oauth2/**
+
         - id: user
-          uri: http://j11c205.p.ssafy.io:8081
+          uri: http://localhost:8081
           predicates:
             - Path=/api/v1/user/**
 
         - id: user-docs
-          uri: http://j11c205.p.ssafy.io:8081
+          uri: http://localhost:8081
           predicates:
             - Path=/user/docs/**
           filters:
@@ -41,7 +46,6 @@ spring:
             - Path=/accompanyboards/docs/**
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
-
 
 server:
   port: 8080

@@ -3,18 +3,16 @@ package com.ssafy.handam.feed.presentation.api.feed;
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.feed.application.FeedService;
-import com.ssafy.handam.feed.application.LikeService;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
-import com.ssafy.handam.feed.presentation.request.feed.FeedsByFiltersRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedsByFiltersResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,8 +30,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
 
     private final FeedService feedService;
-    private final LikeService likeService;
-
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
@@ -43,9 +39,12 @@ public class FeedController {
         ));
     }
 
-    @PostMapping("/filter")
-    public ApiResult<FeedsByFiltersResponse> getFeedsByFilters(@RequestBody FeedsByFiltersRequest request) {
-        return success(feedService.getFeedsByFilters(FeedsByFiltersRequest.toServiceRequest(request)));
+    @GetMapping("/search")
+    public ApiResult<SearchedFeedsResponse> searchFeeds(
+            @RequestParam String keyword,
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size) {
+        return success(feedService.searchFeedsByKeywordSortedByLikeCount(keyword, page, size));
     }
 
     @PostMapping("/create")
