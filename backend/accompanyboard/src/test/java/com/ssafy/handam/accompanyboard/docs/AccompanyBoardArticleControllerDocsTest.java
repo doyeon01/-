@@ -17,6 +17,7 @@ import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDeta
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByUserResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -75,7 +76,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.id").type(JsonFieldType.NUMBER)
                                         .description("동행 게시글 ID"),
                                 fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
-                                        .description("사용자 ID"),
+                                        .description("작성자 ID"),
                                 fieldWithPath("response.scheduleId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.title").type(JsonFieldType.STRING)
@@ -111,13 +112,13 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.articles[].id").type(JsonFieldType.NUMBER)
-                                        .description("게시글 ID"),
+                                        .description("동행 게시글 ID"),
                                 fieldWithPath("response.articles[].userId").type(JsonFieldType.NUMBER)
                                         .description("작성자 ID"),
                                 fieldWithPath("response.articles[].scheduleId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
-                                        .description("게시글 제목"),
+                                        .description("동행 게시글 제목"),
                                 fieldWithPath("error").description("에러 메시지")
                         )));
     }
@@ -154,7 +155,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.id").type(JsonFieldType.NUMBER)
                                         .description("동행 게시글 ID"),
                                 fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
-                                        .description("사용자 ID"),
+                                        .description("작성자 ID"),
                                 fieldWithPath("response.scheduleId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.title").type(JsonFieldType.STRING)
@@ -163,5 +164,49 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 내용"),
                                 fieldWithPath("error").description("에러 메시지")
                         )));
+    }
+
+    @Test
+    @DisplayName("특정 사용자가 작성한 전체 동행 게시글 조회 API")
+    void getArticlesByUserTest() throws Exception {
+        AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto = new AccompanyBoardArticleDetailDto(
+                1L,
+                1L,
+                1L,
+                "testTitle",
+                "testDescription"
+        );
+
+        Long requestUserId = 1L;
+
+        AccompanyBoardArticlesByUserResponse response = AccompanyBoardArticlesByUserResponse.of(List.of(accompanyBoardArticleDetailDto));
+
+        given(accompanyBoardArticleService.getArticlesByUser(requestUserId)).willReturn(response);
+
+        mockMvc.perform(
+                RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/articles/user/{userId}", requestUserId)
+        )
+                .andExpect(status().isOk())
+                .andDo(document("get-articles-By-User",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("userId").description("사용자 ID") // 경로 변수 문서화
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.articles[].id").type(JsonFieldType.NUMBER)
+                                        .description("동행 게시글 ID"),
+                                fieldWithPath("response.articles[].userId").type(JsonFieldType.NUMBER)
+                                        .description("작성자 ID"),
+                                fieldWithPath("response.articles[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
+                                        .description("동행 게시글 제목"),
+                                fieldWithPath("response.articles[].description").type(JsonFieldType.STRING)
+                                        .description("동행 게시글 내용"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )));
+
     }
 }
