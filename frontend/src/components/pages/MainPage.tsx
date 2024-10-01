@@ -17,14 +17,13 @@ const MainPage: React.FC = () => {
   
 
   useEffect(() => {
-    const token = cookies.accessToken;
-    
-    if (token) {
-      console.log('Access Token:', token); // 쿠키 값이 있으면 출력
+    if (!cookies.accessToken) {
+      console.log('Access token not found, redirecting to login...');
     } else {
-      console.log('Access Token not found'); // 없으면 출력
+      console.log('쿠키 있음')
     }
-  }, [cookies]); // 컴포넌트가 처음 렌더링될 때 실행
+  }, [cookies]); 
+
 
   
   const handleScroll = (event: WheelEvent) => {
