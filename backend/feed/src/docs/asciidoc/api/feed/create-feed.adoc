@@ -4,8 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/create-feed/http-request.adoc[]
-include::{snippets}/create-feed/request-fields.adoc[]
-
+include::{snippets}/create-feed/request-parts.adoc[]
 ==== HTTP Response
 
 include::{snippets}/create-feed/http-response.adoc[]

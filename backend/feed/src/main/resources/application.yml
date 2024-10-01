@@ -40,3 +40,9 @@ spring:
 user:
   service:
     url: http://j11c205.p.ssafy.io:8081
+
+hadoop:
+  hdfs:
+    uri: hdfs://j11c205a.p.ssafy.io:9000
+    user: ubuntu
+    replication: 2

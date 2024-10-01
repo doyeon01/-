@@ -3,6 +3,8 @@ package com.ssafy.handam.feed.presentation.api.feed;
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.feed.application.FeedService;
+import com.ssafy.handam.feed.application.LikeService;
+import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
@@ -15,13 +17,16 @@ import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserR
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 
 @RestController
@@ -30,6 +35,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
 
     private final FeedService feedService;
+    private final LikeService likeService;
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
@@ -47,9 +53,16 @@ public class FeedController {
         return success(feedService.searchFeedsByKeywordSortedByLikeCount(keyword, page, size));
     }
 
-    @PostMapping("/create")
-    public ApiResult<FeedResponse> createFeed(@RequestBody FeedCreationRequest request) {
-        return success(feedService.createFeed(FeedCreationRequest.toServiceRequest(request)));
+    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ApiResult<FeedResponse> createFeed(
+            @RequestPart("data") FeedCreationRequest request,
+            @RequestPart("image") MultipartFile imageFile) {
+
+        String savedImagePath = feedService.saveImage(imageFile);
+
+        FeedCreationServiceRequest serviceRequest = FeedCreationRequest.toServiceRequest(request);
+
+        return success(feedService.createFeed(serviceRequest, savedImagePath));
     }
 
     @GetMapping("/{feedId}")
@@ -79,7 +92,12 @@ public class FeedController {
 
     @PostMapping("/liked/{feedId}")
     public void test(@PathVariable Long feedId, @RequestParam Long userId) {
-        likeService.sendLikeEvent(feedId, userId,"NAUP");
+        likeService.sendLikeEvent(feedId, userId, "NAUP");
+    }
+
+    @PostMapping("/hadoopTest")
+    public void hadoopTest(@RequestPart("image") MultipartFile imageFile) {
+        feedService.saveImage(imageFile);
     }
 }
 

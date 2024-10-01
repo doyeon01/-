@@ -8,7 +8,6 @@ import lombok.Builder;
 public record FeedCreationRequest(
         String title,
         String content,
-        String feedImageUrl,
         String address1,
         String address2,
         Double longitude,
@@ -20,7 +19,6 @@ public record FeedCreationRequest(
         return FeedCreationServiceRequest.builder()
                 .title(request.title())
                 .content(request.content())
-                .feedImageUrl(request.feedImageUrl())
                 .address1(request.address1())
                 .address2(request.address2())
                 .longitude(request.longitude())
