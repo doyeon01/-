@@ -1,5 +1,5 @@
 oauth2:
-  success-redirect-url: "http://j11c205.p.ssafy.io/api/v1/user/test"
+  success-redirect-url: "http://j11c205.p.ssafy.io/main"
 
 spring:
   application:
