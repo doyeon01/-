@@ -6,13 +6,20 @@ import CardSetLocalRec from '../molecules/Card/CardSetLocalRec';
 import CardSetHotPlace from '../molecules/Card/CardSetHotPlace';
 import CardSetFestivalRec from '../molecules/Card/CardSetFestivalRec';
 import styles from './MainPage.module.css';
+import { useCookies } from 'react-cookie';
 
 const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
+  const [cookies] = useCookies(['accessToken'])
 
-
+  const Token = cookies.accessToken
+  
+  useEffect(() => {
+    console.log(Token)
+  },[])
+  
   const handleScroll = (event: WheelEvent) => {
     
       event.preventDefault();
