@@ -1,0 +1,13 @@
+[[chatroom-getChatRooms]]
+=== 채팅방 목록 조회 API
+
+==== HTTP Request
+
+include::{snippets}/chatroom-getChatRooms/http-request.adoc[]
+include::{snippets}/chatroom-getChatRooms/query-parameters.adoc[]
+include::{snippets}/chatroom-getChatRooms/request-headers.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/chatroom-getChatRooms/http-response.adoc[]
+include::{snippets}/chatroom-getChatRooms/response-fields.adoc[]
