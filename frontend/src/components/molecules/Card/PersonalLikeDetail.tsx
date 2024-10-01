@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
-import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옵니다.
+import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
 import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType'; // Feed 타입을 import
 import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
@@ -10,32 +10,41 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
   const [filteredFeeds, setFilteredFeeds] = useState<Feed[]>([]); // 필터링된 피드 리스트
   const [allFeeds, setAllFeeds] = useState<Feed[]>([]); // 모든 피드 리스트
   const [page, setPage] = useState(0); // 페이지 번호 저장
-
-  // 더미 데이터 및 API 데이터 가져오기
+  const [hasMore, setHasMore] = useState(true); // 더 많은 데이터를 가져올 수 있는지 여부
+  const observerRef = useRef<HTMLDivElement | null>(null); // Intersection Observer를 위한 ref
+  
+  // API 요청 및 더미 데이터 설정
   useEffect(() => {
     const typedFeedData = feedData as { success: boolean; response: { feeds: Feed[] }; error: null };
     if (typedFeedData.success) {
-      setAllFeeds(typedFeedData.response.feeds); // 초기 더미 데이터
+      setAllFeeds(typedFeedData.response.feeds); // 초기 더미 데이터 설정
       setFilteredFeeds(typedFeedData.response.feeds); 
     }
 
-    // API 요청을 통해 실제 데이터를 받아옴
-    LikeFeedList(page)
-      .then((res) => {
-        const data: FeedResponse = res.data;
-        if (data.success) {
-          // API 데이터가 더미 데이터를 대체
-          setAllFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
-          setFilteredFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
-          setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
-        } else {
-          console.error(data.error);
-        }
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [page]);
+    // // 페이지마다 API 요청을 통해 데이터를 추가
+    // if (hasMore) {
+    //   LikeFeedList(page)
+    //     .then((res) => {
+    //       const data: FeedResponse = res.data;
+    //       if (data.success) {
+    //         if (data.response.feeds.length > 0) {
+    //           // 더 많은 데이터가 있다면 추가
+    //           setAllFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
+    //           setFilteredFeeds((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
+    //           setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+    //         } else {
+    //           // 더 이상 데이터가 없으면 hasMore를 false로 설정
+    //           setHasMore(false);
+    //         }
+    //       } else {
+    //         console.error(data.error);
+    //       }
+    //     })
+    //     .catch((error) => {
+    //       console.error(error);
+    //     });
+    // }
+  }, [page, hasMore]);
 
   // 좋아요 탭 클릭 시, 전체 카테고리 선택됨
   useEffect(() => {
@@ -59,6 +68,27 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
       setFilteredFeeds(allFeeds.filter((feed) => feed.placeType === placeType));
     }
   }, [selectedButton, allFeeds]);
+
+  // 무한 스크롤을 위한 Intersection Observer 설정
+  useEffect(() => {
+    if (!hasMore) return; // 더 이상 데이터가 없으면 실행하지 않음
+
+    const observer = new IntersectionObserver((entries) => {
+      if (entries[0].isIntersecting) {
+        setPage((prevPage) => prevPage + 1); // 페이지 증가
+      }
+    });
+
+    if (observerRef.current) {
+      observer.observe(observerRef.current); // observerRef가 가리키는 요소를 관찰
+    }
+
+    return () => {
+      if (observerRef.current) {
+        observer.unobserve(observerRef.current); // 컴포넌트가 언마운트될 때 observer를 해제
+      }
+    };
+  }, [hasMore]);
 
   const buttons = [
     { label: '전체', id: 0 },
@@ -94,6 +124,9 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
           />
         ))}
       </div>
+
+      {/* 무한 스크롤을 위한 감시 대상 요소 */}
+      <div ref={observerRef} className="h-10"></div>
     </div>
   );
 };
