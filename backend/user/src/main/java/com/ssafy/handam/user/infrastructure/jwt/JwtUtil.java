@@ -31,9 +31,9 @@ public class JwtUtil {
         }
     }
 
-    public String extractUserId(String token) {
+    public String extractUserEmail(String token) {
         Claims claims = Jwts.parser().setSigningKey(secretKey).build().parseClaimsJws(token).getBody();
-        return claims.getSubject();
+        return claims.get("email", String.class);
     }
     public String createJwtToken(OAuthUserInfo userInfo) {
         JwtPayload jwtPayload = JwtPayload.of(userInfo.providerId(), userInfo.email());

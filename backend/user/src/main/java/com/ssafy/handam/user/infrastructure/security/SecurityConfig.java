@@ -1,4 +1,4 @@
-package com.ssafy.handam.user.infrastructure.config;
+package com.ssafy.handam.user.infrastructure.security;
 
 import com.ssafy.handam.user.application.service.oauth.CustomOAuth2UserService;
 import com.ssafy.handam.user.infrastructure.oauth.OAuth2LoginSuccessHandler;
@@ -30,8 +30,8 @@ public class SecurityConfig {
                                 .userService(customOAuth2UserService))
                         .successHandler(oAuth2LoginSuccessHandler))
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/","/login/**", "/oauth2/**", "/api/v1/user/test").permitAll()
-                        .anyRequest().authenticated());
+                        .anyRequest().permitAll());
+
         return http.build();
     }
 }
