@@ -4,9 +4,11 @@ import com.ssafy.handam.user.domain.model.entity.Follow;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.FollowStatus;
 import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
-import com.ssafy.handam.user.presentation.response.UserInfoResponse;
-import com.ssafy.handam.user.domain.repository.FollowRepository;
 import com.ssafy.handam.user.domain.repository.UserRepository;
+import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
+import com.ssafy.handam.user.presentation.response.UserInfoResponse;
+import com.ssafy.handam.user.infrastructure.repository.FollowRepository;
+import com.ssafy.handam.user.infrastructure.repository.UserJpaRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -33,16 +35,33 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
     }
-    public User saveUser(OAuthUserInfo oAuthUserInfo) {
+    public void updateUserSurvey(String email, UserSurveyRequest request) {
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found"));
+
+        user.updateUser(
+                request.nickname(),
+                request.residence(),
+                request.introduction(),
+                request.travelStyl1(),
+                request.travelStyl2(),
+                request.travelStyl3(),
+                request.travelStyl4()
+        );
+
+        userRepository.save(user); // 변경된 내용 저장
+    }
+
+    public void saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .email((oAuthUserInfo.email()))
-                .nickname(oAuthUserInfo.nickname())
+                .name(oAuthUserInfo.name())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
                 .profileImage(oAuthUserInfo.profileImage())
                 .build();
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
     public User findUserById(Long id) {

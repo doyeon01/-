@@ -4,6 +4,7 @@ import static com.ssafy.handam.user.application.common.ApiUtils.success;
 import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
+import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
@@ -41,9 +42,17 @@ public class UserController {
         return success(response);
     }
 
-    @PostMapping("/{id}/survey")
-    public ApiResult<Void> submitUserSurvey(@PathVariable("id") Long id) {
+    @PostMapping("/survey")
+    public ApiResult<Void> submitUserSurvey(HttpServletRequest request, @RequestBody UserSurveyRequest surveyRequest) {
+        String accessToken = jwtUtil.getJwtFromCookies(request);
 
+        if (accessToken == null || !jwtUtil.isJwtValid(accessToken)) {
+            throw new IllegalStateException("Invalid or missing access token");
+        }
+
+        String email = jwtUtil.extractUserEmail(accessToken);
+
+        userService.updateUserSurvey(email, surveyRequest);
         return success(null);
     }
 
