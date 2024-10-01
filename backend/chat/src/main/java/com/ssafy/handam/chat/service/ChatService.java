@@ -1,6 +1,7 @@
 package com.ssafy.handam.chat.service;
 
 import com.ssafy.handam.chat.client.UserServiceClient;
+import com.ssafy.handam.chat.controller.response.ChatResponse;
 import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatMessage;
 import com.ssafy.handam.chat.domain.ChatRoom;
@@ -37,7 +38,7 @@ public class ChatService {
                     chatRoom.getChatRoomId(),
                     userServiceClient.getUserById(latestMessage.getSenderId(), token).getResponse().nickname(),
                     latestMessage.getContent(),
-                    latestMessage.getCreatedDate().toString(),
+                    latestMessage.getCreatedDate(),
                     List.of(userServiceClient.getUserById(userId, token).getResponse(),
                             userServiceClient.getUserById(partnerId, token).getResponse())
             );
@@ -46,12 +47,18 @@ public class ChatService {
 
     public void saveMessage(ChatMessage chatMessage) {
         chatMessageRepository.save(chatMessage);
-        chatMessage.getChatRoom().getChatRoomId();
     }
 
 
-    public Page<ChatMessage> getChatByRoomId(Long roomId, Pageable pageable) {
-        return chatMessageRepository.findByChatRoom_ChatRoomId(roomId, pageable);
+    public List<ChatResponse> getChatByRoomId(Long roomId, Pageable pageable) {
+        List<ChatMessage> content = chatMessageRepository.findByChatRoom_ChatRoomId(roomId, pageable).getContent();
+        return content.stream()
+                .map(chatMessage -> ChatResponse.of(
+                        chatMessage.getChatRoom().getChatRoomId(),
+                        chatMessage.getSenderId(),
+                        chatMessage.getContent(),
+                        chatMessage.getTimestamp()))
+                .toList();
     }
 
 

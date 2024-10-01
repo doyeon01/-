@@ -5,7 +5,8 @@
 
 include::{snippets}/chatroom-getChatRooms/http-request.adoc[]
 include::{snippets}/chatroom-getChatRooms/query-parameters.adoc[]
-include::{snippets}/chatroom-getChatRooms/request-headers.adoc[]
+include::{snippets}/chatroom-getChatRooms/request-cookies.adoc[]
+
 
 ==== HTTP Response
 

@@ -8,13 +8,12 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import java.time.LocalDateTime;
-import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@NoArgsConstructor
 public class ChatMessage extends BaseEntity {
 
     @Id
@@ -36,6 +35,10 @@ public class ChatMessage extends BaseEntity {
         this.senderId = senderId;
         this.content = content;
         this.timestamp = LocalDateTime.now();
+    }
+
+    public ChatMessage(Long messageId, ChatRoom chatRoom, Long senderId, String content, LocalDateTime timestamp) {
+        super();
     }
 
     public void sendTo(ChatRoom chatRoom) {

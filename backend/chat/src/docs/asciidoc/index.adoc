@@ -12,3 +12,6 @@ endif::[]
 :sectlinks:
 
 == Chat API
+include::api/chat/chatroom-createChatRoom.adoc[]
+include::api/chat/chatroom-getChatRooms.adoc[]
+include::api/chat/chatroom-getChatMessages.adoc[]
