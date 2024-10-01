@@ -1,4 +1,4 @@
-// 피드 생성 api
+// 마이페이지 피드 목록 api
 export interface Feed {
   id: number;
   title: string;
@@ -25,6 +25,7 @@ export interface FeedResponse {
   };
   error: null;
 }
+
 
 // FeedCard 컴포넌트 Props
 export interface CardProps {
