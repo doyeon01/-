@@ -16,7 +16,6 @@ public class LoggingGlobalFilter implements GlobalFilter {
     public Mono<Void> filter(ServerWebExchange exchange, org.springframework.cloud.gateway.filter.GatewayFilterChain chain) {
         String requestUri = exchange.getRequest().getURI().toString();
         log.info("Routing request to URI: {}", requestUri);
-
         return chain.filter(exchange);
     }
 }

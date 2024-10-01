@@ -3,8 +3,10 @@ package com.ssafy.handam.user.presentation;
 import static com.ssafy.handam.user.application.common.ApiUtils.success;
 import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
 import com.ssafy.handam.user.domain.model.entity.User;
+import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +20,26 @@ import java.util.stream.Collectors;
 public class UserController {
 
     private final UserService userService;
+
+    private final JwtUtil jwtUtil;
+
+    @Valid
+    @GetMapping("/myInfo")
+    public ApiResult<UserInfoResponse> getCurrentUserInfo(HttpServletRequest request) {
+
+        String accessToken = jwtUtil.getJwtFromCookies(request);
+
+        if (accessToken == null || !jwtUtil.isJwtValid(accessToken)) {
+            throw new IllegalStateException("Invalid or missing access token");
+        }
+
+        String email = jwtUtil.extractUserEmail(accessToken);
+
+        User user = userService.findUserByEmail(email);
+
+        UserInfoResponse response = UserInfoResponse.of(user);
+        return success(response);
+    }
 
     @PostMapping("/{id}/survey")
     public ApiResult<Void> submitUserSurvey(@PathVariable("id") Long id) {
