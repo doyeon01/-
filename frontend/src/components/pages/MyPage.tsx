@@ -1,9 +1,10 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { UserIcon } from '../../assets/icons/svg';
 import { PersonalDetailTab } from '../molecules/Tab/PersonalDetailTab';
 import { ModalCreateFeed2 } from '../organisms/Modal/ModalCreateFeed2';
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { useNavigate } from 'react-router-dom';
+import { UserInfo } from '../../services/api/UserService';
 
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,6 +23,17 @@ export const MyPage = () => {
     setIsModalOpen(false);
     nav('/my', { state: { activeTab: 'tab1' } });
   };
+
+  useEffect(()=>{
+    console.log(1)
+    UserInfo()
+    .then((res)=>{
+      console.log(res.data)
+    })
+    .catch((error)=>{
+      console.log(error)
+    })
+  },[])
 
   return (
     <div className="container mx-auto p-5 max-w-4xl bg-white rounded-lg mt-24 mb-20">

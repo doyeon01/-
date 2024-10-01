@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const BaseUrl = 'https://i11c205.p.ssafy.io:8080/api/v1/feeds';
+const BaseUrl = 'https://j11c205.p.ssafy.io:8080/api/v1/feeds';
 const userId: number = 1; // userId에 숫자 타입 지정
 
 // 피드 생성 API
