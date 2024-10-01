@@ -12,10 +12,10 @@ const MainPage: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
 
-
+  
   const handleScroll = (event: WheelEvent) => {
     
-      event.preventDefault();
+    event.preventDefault();
 
     if (isScrolling) return; 
     setIsScrolling(true); 
