@@ -40,7 +40,7 @@ export const ModalLogin: React.FC<ModalLoginProps> = ({ onClose }) => {
 
               <button className="w-full max-w-xs bg-[#1EDE00] text-green-800 border-green-300 hover:bg-opacity-70 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center"
               onClick={() => {
-                window.location.href = "https://j11c205.p.ssafy.io/api/v1/user/oauth2/authorization/naver";
+                window.location.href = 'https://j11c205.p.ssafy.io/oauth2/authorization/naver';
               }}
               >
                 <span className="inline-flex items-center justify-center">
