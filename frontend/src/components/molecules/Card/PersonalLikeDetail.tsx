@@ -2,8 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType'; // Feed 타입을 import
-import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
+import { Feed } from '../../../model/MyPage/MyPageType'; // Feed 타입을 import
+// import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
   const [selectedButton, setSelectedButton] = useState(0);
@@ -21,11 +21,11 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
       setFilteredFeeds(typedFeedData.response.feeds); 
     }
 
-    // // 페이지마다 API 요청을 통해 데이터를 추가
+    // // 페이지마다 API 요청을 통해 데이터를 추가(FeedResponse 임포트 할 것)
     // if (hasMore) {
     //   LikeFeedList(page)
     //     .then((res) => {
-    //       const data: FeedResponse = res.data;
+          // const data: FeedResponse = res.data;
     //       if (data.success) {
     //         if (data.response.feeds.length > 0) {
     //           // 더 많은 데이터가 있다면 추가
@@ -34,7 +34,7 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     //           setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
     //         } else {
     //           // 더 이상 데이터가 없으면 hasMore를 false로 설정
-    //           setHasMore(false);
+              setHasMore(false);
     //         }
     //       } else {
     //         console.error(data.error);

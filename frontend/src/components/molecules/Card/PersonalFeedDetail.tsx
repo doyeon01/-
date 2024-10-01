@@ -39,10 +39,10 @@ export const PersonalFeedDetail: React.FC = () => {
     //       if (data.response.feeds.length > 0) {
     //         // 더 많은 데이터가 있다면 추가
     //         setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
-    //         setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+            setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
     //       } else {
     //         // 더 이상 데이터가 없으면 hasMore를 false로 설정
-    //         setHasMore(false);
+            setHasMore(false);
     //       }
     //     } else {
     //       console.error(data.error);
