@@ -3,6 +3,7 @@ package com.ssafy.handam.feed.presentation.api.feed;
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.feed.application.FeedService;
+import com.ssafy.handam.feed.application.LikeService;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
@@ -30,6 +31,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class FeedController {
 
     private final FeedService feedService;
+    private final LikeService likeService;
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(

@@ -1,7 +1,7 @@
 package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
         Long id,
@@ -18,10 +18,13 @@ public record FeedPreviewDto(
         String username,
         String userProfileImageUrl,
         boolean isLiked,
-        LocalDateTime createdDate
+        String createdDate
 ) {
 
     public static FeedPreviewDto from(Feed feed, String username, String userProfileImageUrl, boolean isLiked) {
+        String formattedCreatedDate = (feed.getCreatedDate() != null) ?
+                feed.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
+                "N/A";
         return new FeedPreviewDto(
                 feed.getId(),
                 feed.getTitle(),
@@ -37,7 +40,7 @@ public record FeedPreviewDto(
                 username,
                 userProfileImageUrl,
                 isLiked,
-                feed.getCreatedDate()
+                formattedCreatedDate
         );
     }
 }

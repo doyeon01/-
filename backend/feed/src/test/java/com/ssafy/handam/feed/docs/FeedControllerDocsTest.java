@@ -53,7 +53,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
@@ -139,7 +139,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto));
@@ -444,7 +444,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto));
@@ -522,7 +522,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto));

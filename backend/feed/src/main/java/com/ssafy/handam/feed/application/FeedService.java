@@ -36,7 +36,7 @@ public class FeedService {
     private final UserApiClient userApiClient;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
-        LocalDateTime createdDate = LocalDateTime.parse("2021-07-01T00:00:00");
+        String createdDate = LocalDateTime.parse("2021-07-01T00:00:00").format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         // FeedPreviewDto 생성 시 createdDate 추가
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
@@ -142,7 +142,7 @@ public class FeedService {
                 userDto.name(),
                 userDto.profileImageUrl(),
                 feedDomainService.isLikedFeed(feedDocument.getId(), userDto.id()),
-                feedDocument.getCreatedDate()
+                feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
 }
