@@ -18,6 +18,11 @@ configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+    all {
+        exclude group: 'org.slf4j', module: 'slf4j-reload4j'
+        exclude group: 'commons-logging', module: 'commons-logging'
+        exclude group: 'log4j', module: 'log4j'
+    }
     asciidoctorExt
 }
 
@@ -63,6 +68,11 @@ dependencies {
     implementation 'org.springframework.kafka:spring-kafka'                     // Kafka 연동
     testImplementation 'org.springframework.kafka:spring-kafka-test'            // Kafka 테스트 도구
     implementation 'org.apache.kafka:kafka-clients:3.4.0'                       // Kafka 클라이언트 라이브러리
+
+    // Hadoop Dependencies
+    implementation 'org.apache.hadoop:hadoop-common:3.3.6'              // Hadoop Core
+    implementation 'org.apache.hadoop:hadoop-hdfs:3.3.6'                // Hadoop HDFS
+    implementation 'org.apache.hadoop:hadoop-client:3.3.6'              // Hadoop Client
 }
 
 ext {

@@ -2,6 +2,7 @@ package com.ssafy.handam.feed.presentation.api.feed;
 
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -17,6 +18,8 @@ import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -26,6 +29,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -180,19 +184,38 @@ class FeedControllerIntegrationTest {
     @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 피드 생성")
     @Test
     void createFeedTest() throws Exception {
-        mockMvc.perform(post("/api/v1/feeds/create")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content("{\n" +
-                                "  \"title\": \"Test Title\",\n" +
-                                "  \"content\": \"Test Content\",\n" +
-                                "  \"imageUrl\": \"http://example.com/feed.jpg\",\n" +
-                                "  \"address1\": \"Test Address\",\n" +
-                                "  \"address2\": \"Test Address\",\n" +
-                                "  \"longitude\": 127.123123,\n" +
-                                "  \"latitude\": 32.1323,\n" +
-                                "  \"placeType\": \"CAFE\",\n" +
-                                "  \"userId\": 1\n" +
-                                "}"))
+        byte[] content = Files.readAllBytes(Paths.get("C:/Users/JK/Documents/원룸 사진/KakaoTalk_20231222_175652125_02.jpg"));
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image",
+                "feed.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                content
+        );
+
+        String requestJson = "{\n" +
+                "  \"userId\": 1,\n" +
+                "  \"title\": \"Test Title\",\n" +
+                "  \"content\": \"Test Content\",\n" +
+                "  \"address1\": \"Test Address\",\n" +
+                "  \"address2\": \"Test Address\",\n" +
+                "  \"longitude\": 127.123123,\n" +
+                "  \"latitude\": 32.1323,\n" +
+                "  \"placeType\": \"CAFE\"\n" +
+                "}";
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "data",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                requestJson.getBytes()
+        );
+
+        // Multipart 요청을 구성하고 기대하는 응답 값을 테스트
+        mockMvc.perform(multipart("/api/v1/feeds/create")
+                        .file(imageFile) // 'image' 파트로 이미지 파일 전송
+                        .file(jsonPart)  // 'data' 파트로 FeedCreationRequest JSON 전송
+                        .contentType(MediaType.MULTIPART_FORM_DATA) // multipart/form-data 형식
+                        .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.response.userId").value(1L))
                 .andExpect(jsonPath("$.response.username").value("testUser"))

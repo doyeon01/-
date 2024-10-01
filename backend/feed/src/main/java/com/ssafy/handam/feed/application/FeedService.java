@@ -17,15 +17,21 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.apache.hadoop.fs.FSDataOutputStream;
+import org.apache.hadoop.fs.FileSystem;
+import org.apache.hadoop.fs.Path;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @Service
 @RequiredArgsConstructor
@@ -34,9 +40,13 @@ public class FeedService {
 
     private final FeedDomainService feedDomainService;
     private final UserApiClient userApiClient;
+    private final FileSystem fileSystem;
+    @Value("${hadoop.replication.factor:2}") // default to 2
+    private short replicationFactor;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
-        String createdDate = LocalDateTime.parse("2021-07-01T00:00:00").format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        String createdDate = LocalDateTime.parse("2021-07-01T00:00:00")
+                .format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"));
 
         // FeedPreviewDto 생성 시 createdDate 추가
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
@@ -80,9 +90,19 @@ public class FeedService {
                 userDetailDto.name(), userDetailDto.profileImageUrl());
     }
 
-    public FeedResponse createFeed(FeedCreationServiceRequest request) {
-        Feed feed = feedDomainService.createFeed(request);
+    public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath) {
+        Feed feed = feedDomainService.createFeed(request, savedImagePath);
         return FeedResponse.from(feed, userApiClient.getUserById(feed.getUserId()));
+    }
+
+    public String saveImage(MultipartFile imageFile) {
+        String hdfsPath = "/images/" + imageFile.getOriginalFilename();
+        try (FSDataOutputStream outputStream  = fileSystem.create(new Path(hdfsPath), replicationFactor)) {
+            outputStream .write(imageFile.getBytes());
+            return hdfsPath;
+        } catch (Exception e) {
+            throw new IllegalArgumentException("Failed to save image");
+        }
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
