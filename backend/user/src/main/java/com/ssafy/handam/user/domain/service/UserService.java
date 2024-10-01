@@ -1,12 +1,17 @@
 package com.ssafy.handam.user.domain.service;
 
+import com.ssafy.handam.user.application.dto.request.UserSurveyServiceRequest;
 import com.ssafy.handam.user.domain.model.entity.Follow;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.FollowStatus;
 import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
-import com.ssafy.handam.user.presentation.response.UserInfoResponse;
-import com.ssafy.handam.user.domain.repository.FollowRepository;
+import com.ssafy.handam.user.domain.model.valueobject.UserSurveyData;
 import com.ssafy.handam.user.domain.repository.UserRepository;
+import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
+import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
+import com.ssafy.handam.user.presentation.response.UserInfoResponse;
+import com.ssafy.handam.user.infrastructure.repository.FollowRepository;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,6 +20,7 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService {
+    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
@@ -25,32 +31,44 @@ public class UserService {
         }
     }
 
-    private boolean doesUserNotExist(String email) {
-        return !userRepository.existsByEmail(email);
-    }
-
-    public User findUserByEmail(String email) {
+    public User getCurrentUserInfo(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
     }
-    public User saveUser(OAuthUserInfo oAuthUserInfo) {
+
+    public void updateUserSurvey(String email, UserSurveyData surveyData) {
+
+        User user = userRepository.findByEmail(email)
+                .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
+
+        user.updateUser(
+                surveyData.nickname(),
+                surveyData.residence(),
+                surveyData.introduction(),
+                surveyData.travelStyl1(),
+                surveyData.travelStyl2(),
+                surveyData.travelStyl3(),
+                surveyData.travelStyl4()
+        );
+
+        userRepository.save(user);
+    }
+
+    public void saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .email((oAuthUserInfo.email()))
-                .nickname(oAuthUserInfo.nickname())
+                .name(oAuthUserInfo.name())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
                 .profileImage(oAuthUserInfo.profileImage())
                 .build();
 
-        return userRepository.save(user);
+        userRepository.save(user);
     }
 
-    public User findUserById(Long id) {
-        return userRepository.findById(id)
+    public UserInfoResponse findUserById(Long id) {
+        User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + id));
-    }
-    public UserInfoResponse getUserInfo(Long id) {
-        User user = findUserById(id);
         return UserInfoResponse.of(user);
     }
     public List<User> searchUsersByKeyword(String keyword) {
@@ -70,5 +88,9 @@ public class UserService {
         follow.toggleStatus();
 
         followRepository.save(follow);
+    }
+
+    private boolean doesUserNotExist(String email) {
+        return !userRepository.existsByEmail(email);
     }
 }

@@ -5,6 +5,7 @@ import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -12,7 +13,9 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWit
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
@@ -30,6 +33,7 @@ import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
@@ -53,7 +57,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
@@ -139,7 +143,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto));
@@ -305,7 +309,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 .userId(1L)
                 .title("Test Title")
                 .content("Test Content")
-                .feedImageUrl("http://example.com/feed.jpg")
                 .address1("Test Address")
                 .address2("Test Address")
                 .longitude(127.123123)
@@ -329,39 +332,29 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 0
         );
 
-        given(feedService.createFeed(any())).willReturn(response);
+        given(feedService.createFeed(any(), any())).willReturn(response);
 
-        String requestBody = objectMapper.writeValueAsString(request);
+        // JSON 데이터 파트 생성
+    String requestBody = objectMapper.writeValueAsString(request);
+    MockMultipartFile data = new MockMultipartFile("data", "", "application/json", requestBody.getBytes());
+
+    // 이미지 파일 파트 생성
+    MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/feeds/create")
-                                .contentType(MediaType.APPLICATION_JSON)
-                                .accept(MediaType.APPLICATION_JSON)
-                                .content(requestBody)
-                )
+                    multipart("/api/v1/feeds/create")
+                            .file(data) // JSON 데이터
+                            .file(image) // 이미지 파일
+                            .contentType(MediaType.MULTIPART_FORM_DATA) // Content-Type 설정
+                            .accept(MediaType.APPLICATION_JSON)
+            )
                 .andExpect(status().isOk())
                 .andDo(document("create-feed",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
-                        requestFields(
-                                fieldWithPath("userId").type(JsonFieldType.NUMBER)
-                                        .description("사용자 ID"),
-                                fieldWithPath("title").type(JsonFieldType.STRING)
-                                        .description("피드 제목"),
-                                fieldWithPath("content").type(JsonFieldType.STRING)
-                                        .description("피드 내용"),
-                                fieldWithPath("feedImageUrl").type(JsonFieldType.STRING)
-                                        .description("피드 이미지 URL"),
-                                fieldWithPath("address1").type(JsonFieldType.STRING)
-                                        .description("피드 주소"),
-                                fieldWithPath("address2").type(JsonFieldType.STRING)
-                                        .description("피드 주소"),
-                                fieldWithPath("longitude").type(JsonFieldType.NUMBER)
-                                        .description("피드 경도"),
-                                fieldWithPath("latitude").type(JsonFieldType.NUMBER)
-                                        .description("피드 위도"),
-                                fieldWithPath("placeType").type(JsonFieldType.STRING)
-                                        .description("장소 타입")
+                        requestParts(
+                                partWithName("data").description("피드 생성 요청 데이터"),
+                                partWithName("image").description("피드 이미지 파일")
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
@@ -444,7 +437,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto));
@@ -522,7 +515,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 "username",
                 "profile-image-url",
                 true,
-                LocalDateTime.now()
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
 
         CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto));

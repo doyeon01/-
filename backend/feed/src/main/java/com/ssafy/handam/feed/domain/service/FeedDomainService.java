@@ -47,7 +47,7 @@ public class FeedDomainService {
         likeRepository.delete(like);
     }
 
-    
+
     private Feed findBy(Long feedId) {
         return feedRepository.findById(feedId).orElseThrow(() -> new IllegalArgumentException("Feed not found"));
     }
@@ -79,11 +79,11 @@ public class FeedDomainService {
         return !likeRepository.findByFeedIdAndUserId(feedId, userId).isEmpty();
     }
 
-    public Feed createFeed(FeedCreationServiceRequest request) {
+    public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath) {
         return feedRepository.save(Feed.builder()
                 .title(request.title())
                 .content(request.content())
-                .imageUrl(request.feedImageUrl())
+                .imageUrl(savedImagePath)
                 .address1(request.address1())
                 .address2(request.address2())
                 .longitude(request.longitude())

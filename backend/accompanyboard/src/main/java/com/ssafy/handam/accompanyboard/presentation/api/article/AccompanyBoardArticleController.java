@@ -8,6 +8,7 @@ import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePrev
 import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByUserResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -38,5 +39,10 @@ public class AccompanyBoardArticleController {
     @GetMapping("/{articleId}")
     public ApiResult<AccompanyBoardArticleDetailResponse> getArticleDetails(@PathVariable Long articleId) {
         return success(accompanyBoardArticleService.getArticleDetails(articleId));
+    }
+
+    @GetMapping("/user/{userId}")
+    public ApiResult<AccompanyBoardArticlesByUserResponse> getArticlesByUser(@PathVariable Long userId) {
+        return success(accompanyBoardArticleService.getArticlesByUser(userId));
     }
 }

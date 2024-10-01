@@ -26,4 +26,9 @@ public class AccompanyBoardArticleRepositoryImpl implements AccompanyBoardArticl
 
     @Override
     public List<Article> findAll() { return accompanyBoardArticleJpaRepository.findAll(); }
+
+    @Override
+    public List<Article> findByUserId(Long userId) {
+        return accompanyBoardArticleJpaRepository.findByUserId(userId);
+    }
 }

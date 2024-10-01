@@ -9,4 +9,5 @@ public interface AccompanyBoardArticleRepository {
     Optional<Article> findById(Long id);
     Article save(Article article);
     List<Article> findAll();
+    List<Article> findByUserId(Long userId);
 }
