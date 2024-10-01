@@ -8,6 +8,7 @@ import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
@@ -34,5 +35,11 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public List<Feed> findByUserId(Long userId, Pageable pageable) {
         return feedJpaRepository.findByUserId(userId, pageable);
+    }
+
+    @Override
+    public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
+        return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2Containing(
+                keyword, keyword, keyword, keyword, pageable);
     }
 }

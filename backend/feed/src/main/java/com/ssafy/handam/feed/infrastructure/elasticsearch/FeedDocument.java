@@ -1,6 +1,7 @@
 package com.ssafy.handam.feed.infrastructure.elasticsearch;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
+import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -8,6 +9,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
+import org.springframework.data.elasticsearch.annotations.GeoPointField;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 @Data
 @Builder
@@ -40,13 +43,19 @@ public class FeedDocument {
     private String address2;
 
     @Field(type = FieldType.Double)
-    private Double longitude;
+    private double longitude;
 
     @Field(type = FieldType.Double)
-    private Double latitude;
+    private double latitude;
+
+    @GeoPointField
+    private GeoPoint location;
 
     @Field(type = FieldType.Keyword)
     private String placeType;
+
+    @Field(type = FieldType.Date)
+    private LocalDateTime createdDate;
 
     public static FeedDocument from(Feed feed) {
         return FeedDocument.builder()
@@ -58,9 +67,10 @@ public class FeedDocument {
                 .likeCount(feed.getLikeCount())
                 .address1(feed.getAddress1())
                 .address2(feed.getAddress2())
-                .longitude(feed.getLongitude())
-                .latitude(feed.getLatitude())
+                .location(new GeoPoint(feed.getLatitude(), feed.getLongitude()))
                 .placeType(feed.getPlaceType().name())
+                .createdDate(feed.getCreatedDate())
                 .build();
     }
 }
+
