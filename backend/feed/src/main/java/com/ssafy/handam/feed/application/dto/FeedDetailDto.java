@@ -16,6 +16,7 @@ public record FeedDetailDto(
         String placeType,
         String createdDate,
         int likeCount,
+        int commentCount,
         boolean isLiked
 ) {
 
@@ -36,6 +37,7 @@ public record FeedDetailDto(
                 feed.getPlaceType().name(),
                 formattedCreatedDate,
                 feed.getLikeCount(),
+                feed.getCommentCount(),
                 isLiked
         );
     }

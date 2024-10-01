@@ -4,8 +4,12 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyInt;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.requestCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
@@ -14,13 +18,16 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
@@ -28,6 +35,7 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
@@ -42,23 +50,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @DisplayName("사용자 맞춤형 피드 조회 API")
     @Test
     void getRecommendedFeedsForUser() throws Exception {
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
-                1L,
-                "title",
-                "content",
-                "image-url",
-                1L,
-                10,
-                "123 Main Street1",
-                "123 Main Street2",
-                37.7749,
-                122.4194,
-                "CAFE",
-                "username",
-                "profile-image-url",
-                true,
-                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        );
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
         RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
 
@@ -73,7 +65,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 """;
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/feeds/user/recommended")
+                        post("/api/v1/feeds/user/recommended")
                                 .content(requestBody)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
@@ -101,6 +93,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("피드 내용"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
                                 fieldWithPath("response.feeds[].address1").type(JsonFieldType.STRING)
                                         .description("피드의 주소"),
                                 fieldWithPath("response.feeds[].address2").type(JsonFieldType.STRING)
@@ -128,30 +122,14 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void getFeedsByFilters() throws Exception {
 
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
-                1L,
-                "title",
-                "content",
-                "image-url",
-                1L,
-                10,
-                "123 Main Street",
-                "123 Main Street2",
-                37.7749,
-                122.4194,
-                "CAFE",
-                "username",
-                "profile-image-url",
-                true,
-                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        );
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
         SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto));
 
         given(feedService.searchFeedsByKeywordSortedByLikeCount(anyString(), anyInt(), anyInt())).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/feeds/search")
+                        get("/api/v1/feeds/search")
                                 .param("keyword", "coffee")
                                 .param("page", "0")
                                 .param("size", "10")
@@ -181,6 +159,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("피드 내용"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
                                 fieldWithPath("response.feeds[].address1").type(JsonFieldType.STRING)
                                         .description("피드의 주소"),
                                 fieldWithPath("response.feeds[].address2").type(JsonFieldType.STRING)
@@ -214,7 +194,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.likeFeed(any(Long.class), any(Long.class))).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/feeds/like/{feedId}", 1)
+                        post("/api/v1/feeds/like/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .param("userId", "1")
@@ -259,7 +239,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.getFeedDetails(any(Long.class))).willReturn(feedDetailResponse);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/feeds/{feedId}", 1)
+                        get("/api/v1/feeds/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .pathInfo("/1")
@@ -335,19 +315,19 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.createFeed(any(), any())).willReturn(response);
 
         // JSON 데이터 파트 생성
-    String requestBody = objectMapper.writeValueAsString(request);
-    MockMultipartFile data = new MockMultipartFile("data", "", "application/json", requestBody.getBytes());
+        String requestBody = objectMapper.writeValueAsString(request);
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", requestBody.getBytes());
 
-    // 이미지 파일 파트 생성
-    MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
+        // 이미지 파일 파트 생성
+        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
 
         mockMvc.perform(
-                    multipart("/api/v1/feeds/create")
-                            .file(data) // JSON 데이터
-                            .file(image) // 이미지 파일
-                            .contentType(MediaType.MULTIPART_FORM_DATA) // Content-Type 설정
-                            .accept(MediaType.APPLICATION_JSON)
-            )
+                        multipart("/api/v1/feeds/create")
+                                .file(data) // JSON 데이터
+                                .file(image) // 이미지 파일
+                                .contentType(MediaType.MULTIPART_FORM_DATA) // Content-Type 설정
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andDo(document("create-feed",
                         preprocessRequest(prettyPrint()),
@@ -398,7 +378,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.unlikeFeed(any(Long.class), any(Long.class))).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.post("/api/v1/feeds/unlike/{feedId}", 1)
+                        post("/api/v1/feeds/unlike/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
                                 .param("userId", "1")
@@ -422,30 +402,14 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @DisplayName("사용자가 좋아요한 피드 조회 API")
     @Test
     void getLikedFeedsByUserTest() throws Exception {
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
-                1L,
-                "title",
-                "content",
-                "image-url",
-                1L,
-                10,
-                "123 Main Street",
-                "123 Main Street2",
-                37.7749,
-                122.4194,
-                "CAFE",
-                "username",
-                "profile-image-url",
-                true,
-                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        );
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
         LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto));
 
         given(feedService.getLikedFeedsByUser(any(), any())).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/feeds/liked")
+                        get("/api/v1/feeds/liked")
                                 .param("userId", "1")
                                 .param("page", "0")
                                 .param("size", "10")
@@ -474,6 +438,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("피드 내용"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
                                 fieldWithPath("response.feeds[].address1").type(JsonFieldType.STRING)
                                         .description("피드의 주소"),
                                 fieldWithPath("response.feeds[].address2").type(JsonFieldType.STRING)
@@ -500,30 +466,15 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @DisplayName("유저가 생성한 피드 목록 조회 API")
     @Test
     void getCreatedFeedsByUserTest() throws Exception {
-        FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
-                1L,
-                "title",
-                "content",
-                "imageUrl",
-                1L,
-                10,
-                "123 Main Street",
-                "123 Main Street2",
-                37.7749,
-                122.4194,
-                "CAFE",
-                "username",
-                "profile-image-url",
-                true,
-                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
-        );
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
         CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto));
 
         given(feedService.getCreatedFeedsByUser(any(), any())).willReturn(response);
 
         mockMvc.perform(
-                        MockMvcRequestBuilders.get("/api/v1/feeds/users/created")
+                        get("/api/v1/feeds/users/created")
+                                .cookie(new Cookie("accessToken", "token"))
                                 .param("userId", "1")
                                 .param("page", "0")
                                 .param("size", "10")
@@ -552,6 +503,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("피드 내용"),
                                 fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
                                         .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
                                 fieldWithPath("response.feeds[].address1").type(JsonFieldType.STRING)
                                         .description("피드의 주소"),
                                 fieldWithPath("response.feeds[].address2").type(JsonFieldType.STRING)
@@ -574,6 +527,116 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
+    }
+
+    @DisplayName("댓글 생성 API")
+    @Test
+    void createCommentTest() throws Exception {
+        // given
+        CommentCreateResponse response = new CommentCreateResponse(1L, 1L, 1L, "content");
+        // when
+        given(feedService.createComment(any(), any(), any())).willReturn(response);
+
+        // then
+        mockMvc.perform(
+                        post("/api/v1/feeds/{feedId}/comments", 1)
+                                .cookie(new Cookie("accessToken", "token"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .param("userId", "1")
+                                .param("content", "content")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("create-comment",
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("feedId").description("피드 ID")
+                        ),
+                        requestCookies(
+                                cookieWithName("accessToken").description("인증을 위한 액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.id").type(JsonFieldType.NUMBER)
+                                        .description("댓글 ID"),
+                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.content").type(JsonFieldType.STRING)
+                                        .description("댓글 내용"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("댓글 조회 API")
+    @Test
+    void getCommentsTest() throws Exception {
+        // given
+        CommentDto commentDto = new CommentDto(1L, 1L, 1L, "content", "username", "profileImageUrl",
+                LocalDateTime.now());
+
+        // when
+        given(feedService.getComments(any())).willReturn(List.of(commentDto));
+
+        // then
+        mockMvc.perform(
+                        get("/api/v1/feeds/{feedId}/comments", 1)
+                                .cookie(new Cookie("accessToken", "token"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-comments",
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("feedId").description("피드 ID")
+                        ),
+                        requestCookies(
+                                cookieWithName("accessToken").description("인증을 위한 액세스 토큰")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response[].id").type(JsonFieldType.NUMBER)
+                                        .description("댓글 ID"),
+                                fieldWithPath("response[].feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response[].userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response[].content").type(JsonFieldType.STRING)
+                                        .description("댓글 내용"),
+                                fieldWithPath("response[].username").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response[].userProfileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response[].createdDate").type(JsonFieldType.STRING)
+                                        .description("댓글 생성일자"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+
+    }
+
+    private static FeedPreviewDto getFeedPreviewDto() {
+        return new FeedPreviewDto(
+                1L,
+                "title",
+                "content",
+                "imageUrl",
+                1L,
+                10,
+                0,
+                "123 Main Street",
+                "123 Main Street2",
+                37.7749,
+                122.4194,
+                "CAFE",
+                "username",
+                "profile-image-url",
+                true,
+                LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
+        );
     }
 }
 

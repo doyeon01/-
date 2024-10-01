@@ -30,6 +30,8 @@ public class Feed extends BaseEntity {
     private Double longitude;
     private Double latitude;
     private int likeCount;
+    private int commentCount;
+
 
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;
@@ -56,6 +58,7 @@ public class Feed extends BaseEntity {
         this.placeType = placeType;
         this.userId = userId;
         this.likeCount = 0;
+        this.commentCount = 0;
     }
 
     public void incrementLikeCount() {
@@ -65,6 +68,16 @@ public class Feed extends BaseEntity {
     public void decrementLikeCount() {
         if (this.likeCount > 0) {
             this.likeCount--;
+        }
+    }
+
+    public void incrementCommentCount() {
+        this.commentCount++;
+    }
+
+    public void decrementCommentCount() {
+        if (this.commentCount > 0) {
+            this.commentCount--;
         }
     }
 }

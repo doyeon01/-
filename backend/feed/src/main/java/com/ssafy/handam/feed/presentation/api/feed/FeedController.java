@@ -4,10 +4,12 @@ import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.application.LikeService;
+import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
+import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
@@ -15,9 +17,11 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +43,7 @@ public class FeedController {
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
+            @CookieValue(value = "accessToken", required = false) String token,
             @RequestBody RecommendedFeedsForUserRequest request) {
         return success(feedService.getRecommendedFeedsForUser(
                 RecommendedFeedsForUserRequest.toServiceRequest(request)
@@ -47,6 +52,7 @@ public class FeedController {
 
     @GetMapping("/search")
     public ApiResult<SearchedFeedsResponse> searchFeeds(
+            @CookieValue(value = "accessToken", required = false) String token,
             @RequestParam String keyword,
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "10") int size) {
@@ -55,6 +61,7 @@ public class FeedController {
 
     @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ApiResult<FeedResponse> createFeed(
+            @CookieValue(value = "accessToken", required = false) String token,
             @RequestPart("data") FeedCreationRequest request,
             @RequestPart("image") MultipartFile imageFile) {
 
@@ -66,27 +73,34 @@ public class FeedController {
     }
 
     @GetMapping("/{feedId}")
-    public ApiResult<FeedDetailResponse> getFeedDetails(@PathVariable Long feedId) {
+    public ApiResult<FeedDetailResponse> getFeedDetails(
+            @CookieValue(value = "accessToken", required = false) String token, @PathVariable Long feedId) {
         return success(feedService.getFeedDetails(feedId));
     }
 
     @PostMapping("/like/{feedId}")
-    public ApiResult<FeedLikeResponse> likeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
+    public ApiResult<FeedLikeResponse> likeFeed(@CookieValue(value = "accessToken", required = false) String token,
+                                                @PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
 
     @PostMapping("/unlike/{feedId}")
-    public ApiResult<FeedLikeResponse> unlikeFeed(@PathVariable Long feedId, @RequestParam Long userId) {
+    public ApiResult<FeedLikeResponse> unlikeFeed(@CookieValue(value = "accessToken", required = false) String token,
+                                                  @PathVariable Long feedId, @RequestParam Long userId) {
         return success(feedService.unlikeFeed(feedId, userId));
     }
 
     @GetMapping("/liked")
-    public ApiResult<LikedFeedsByUserResponse> getLikedByUser(Pageable pageable, @RequestParam Long userId) {
+    public ApiResult<LikedFeedsByUserResponse> getLikedByUser(
+            @CookieValue(value = "accessToken", required = false) String token, Pageable pageable,
+            @RequestParam Long userId) {
         return success(feedService.getLikedFeedsByUser(userId, pageable));
     }
 
     @GetMapping("users/created")
-    public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(Pageable pageable, @RequestParam Long userId) {
+    public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(
+            @CookieValue(value = "accessToken", required = false) String token, Pageable pageable,
+            @RequestParam Long userId) {
         return success(feedService.getCreatedFeedsByUser(userId, pageable));
     }
 
@@ -98,6 +112,21 @@ public class FeedController {
     @PostMapping("/hadoopTest")
     public void hadoopTest(@RequestPart("image") MultipartFile imageFile) {
         feedService.saveImage(imageFile);
+    }
+
+    @PostMapping("/{feedId}/comments")
+    public ApiResult<CommentCreateResponse> createComment(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable Long feedId, @RequestParam Long userId,
+            @RequestParam String content) {
+        return success(feedService.createComment(feedId, userId, content));
+    }
+
+    @GetMapping("/{feedId}/comments")
+    public ApiResult<List<CommentDto>> getComments(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable Long feedId) {
+        return success(feedService.getComments(feedId));
     }
 }
 
