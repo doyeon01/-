@@ -98,10 +98,10 @@ public class FeedService {
     public String saveImage(MultipartFile imageFile) {
         String hdfsPath = "/images/" + imageFile.getOriginalFilename();
         try (FSDataOutputStream outputStream  = fileSystem.create(new Path(hdfsPath), replicationFactor)) {
-            outputStream .write(imageFile.getBytes());
+            outputStream.write(imageFile.getBytes());
             return hdfsPath;
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to save image");
+            throw new IllegalArgumentException("Failed to sa ve image");
         }
     }
 
