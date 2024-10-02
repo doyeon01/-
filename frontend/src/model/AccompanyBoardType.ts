@@ -66,3 +66,27 @@ export interface ArticleApiResponse {
     };
     error: null | string;
   }
+
+
+  // 마이페이지 동행게시글 
+
+  export interface UserArticle {
+    id: number;
+    userId: number;
+    scheduleId: number;
+    title: string;
+    description: string; 
+    createdDate : string;
+    commentCount: number;
+    imageUrl: string;
+    address: string;
+  }
+  
+  export interface UserArticleApiResponse {
+    success: boolean;
+    response: {
+      articles: UserArticle[];
+    };
+    error: Error  | null;
+  }
+  

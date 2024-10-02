@@ -3,6 +3,8 @@ import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
 import { Feed } from '../../../model/MyPageType'; // Feed 타입을 import
+// import { useRecoilValue } from 'recoil';
+// import { UserId } from '../../../Recoil/atoms/Auth';
 // import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
@@ -12,6 +14,8 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
   const [page, setPage] = useState(0); // 페이지 번호 저장
   const [hasMore, setHasMore] = useState(true); // 더 많은 데이터를 가져올 수 있는지 여부
   const observerRef = useRef<HTMLDivElement | null>(null); // Intersection Observer를 위한 ref
+
+  // const userId = useRecoilValue(UserId);
   
   // API 요청 및 더미 데이터 설정
   useEffect(() => {
@@ -23,7 +27,7 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
 
     // // 페이지마다 API 요청을 통해 데이터를 추가(FeedResponse 임포트 할 것)
     // if (hasMore) {
-    //   LikeFeedList(page)
+    //   LikeFeedList(page, userId)
     //     .then((res) => {
           // const data: FeedResponse = res.data;
     //       if (data.success) {

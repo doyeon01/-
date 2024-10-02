@@ -5,7 +5,11 @@ import {
   CommentApiResponse,
   CreateCommentRequest,
   CreateCommentResponse,
+  UserArticleApiResponse
+
+
 } from '../../model/AccompanyBoardType';
+
 
 // 게시글 목록 요청
 export const fetchArticles = async () => {
@@ -62,24 +66,13 @@ export const createComment = async (data: CreateCommentRequest): Promise<CreateC
 
 // 특정 사용자의 전체 동행 게시글 조회
 
-export const articleList = async (data: CreateCommentRequest): Promise<CreateCommentResponse> => {
+export const articleList = async (userId: number) => {
   try {
-    const response = await axios.post<CreateCommentResponse>(
-      'http://localhost:8080/api/v1/accompanyboards/articles/user',
-      data,
-      {
-        headers: {
-          'Content-Type': 'application/json',
-          Accept: 'application/json',
-        },
-      }
-    );
+    const response = await axios.get<UserArticleApiResponse>(`http://localhost:8080/api/v1/accompanyboards/articles/user/${userId}`);
     return response.data;
-  } catch (error: any) {
-    return {
-      success: false,
-      response: { id: 0, userId: 0, accompanyBoardArticleId: 0, content: '' },
-      error: error.message,
-    };
+  } catch (error) {
+    throw new Error('API 요청 중 오류가 발생했습니다.');
   }
 };
+
+
