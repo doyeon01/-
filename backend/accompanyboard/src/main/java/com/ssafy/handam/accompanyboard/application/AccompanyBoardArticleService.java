@@ -13,6 +13,8 @@ import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBo
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,10 +30,11 @@ public class AccompanyBoardArticleService {
         return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, 0));
     }
 
-    public AccompanyBoardArticlesResponse getArticles() {
-        List<AccompanyBoardArticlePreviewDto> articles = getAccompanyBoardArticlePreviewDtoList(
-                accompanyBoardArticleDomainService.getArticles());
-        return AccompanyBoardArticlesResponse.of(articles);
+    public AccompanyBoardArticlesResponse getArticles(Pageable pageable) {
+
+        Page<Article> page = accompanyBoardArticleDomainService.getArticles(pageable);
+        List<AccompanyBoardArticlePreviewDto> articles = getAccompanyBoardArticlePreviewDtoList(page.getContent());
+        return AccompanyBoardArticlesResponse.of(articles, page.getNumber(), page.hasNext());
     }
 
     public AccompanyBoardArticleDetailResponse getArticleDetails(Long articleId) {
@@ -40,16 +43,18 @@ public class AccompanyBoardArticleService {
         return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, commentCount));
     }
 
-    public AccompanyBoardArticlesByUserResponse getArticlesByUser(Long userId) {
-        List<AccompanyBoardArticleDetailDto> articles = getAccompanyBoardArticleDetailDtoList(
-                accompanyBoardArticleDomainService.getArticlesByUser(userId));
-        return AccompanyBoardArticlesByUserResponse.of(articles);
+    public AccompanyBoardArticlesByUserResponse getArticlesByUser(Long userId, Pageable pageable) {
+
+        Page<Article> page = accompanyBoardArticleDomainService.getArticlesByUser(userId, pageable);
+        List<AccompanyBoardArticleDetailDto> articles = getAccompanyBoardArticleDetailDtoList(page.getContent());
+        return AccompanyBoardArticlesByUserResponse.of(articles, page.getNumber(), page.hasNext());
     }
 
-    public AccompanyBoardArticlesByTitleResponse getArticlesByTitle(String title) {
-        List<AccompanyBoardArticlePreviewDto> articles = getAccompanyBoardArticlePreviewDtoList(
-                accompanyBoardArticleDomainService.getArticlesByTitle(title));
-        return AccompanyBoardArticlesByTitleResponse.of(articles);
+    public AccompanyBoardArticlesByTitleResponse getArticlesByTitle(String title, Pageable pageable) {
+
+        Page<Article> page = accompanyBoardArticleDomainService.getArticlesByTitle(title, pageable);
+        List<AccompanyBoardArticlePreviewDto> articles = getAccompanyBoardArticlePreviewDtoList(page.getContent());
+        return AccompanyBoardArticlesByTitleResponse.of(articles, page.getNumber(), page.hasNext());
     }
 
     private List<AccompanyBoardArticlePreviewDto> getAccompanyBoardArticlePreviewDtoList(List<Article> articles) {

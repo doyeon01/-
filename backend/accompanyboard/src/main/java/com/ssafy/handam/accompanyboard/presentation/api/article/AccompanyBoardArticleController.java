@@ -11,6 +11,8 @@ import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBo
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByUserResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -32,8 +34,8 @@ public class AccompanyBoardArticleController {
     }
 
     @GetMapping
-    public ApiResult<AccompanyBoardArticlesResponse> getArticles() {
-        return success(accompanyBoardArticleService.getArticles());
+    public ApiResult<AccompanyBoardArticlesResponse> getArticles(@PageableDefault(size = 10) Pageable pageable) {
+        return success(accompanyBoardArticleService.getArticles(pageable));
     }
 
     @GetMapping("/{articleId}")
@@ -42,12 +44,12 @@ public class AccompanyBoardArticleController {
     }
 
     @GetMapping("/user/{userId}")
-    public ApiResult<AccompanyBoardArticlesByUserResponse> getArticlesByUser(@PathVariable Long userId) {
-        return success(accompanyBoardArticleService.getArticlesByUser(userId));
+    public ApiResult<AccompanyBoardArticlesByUserResponse> getArticlesByUser(@PathVariable Long userId, @PageableDefault(size = 10) Pageable pageable) {
+        return success(accompanyBoardArticleService.getArticlesByUser(userId, pageable));
     }
 
     @GetMapping("/search")
-    public ApiResult<AccompanyBoardArticlesByTitleResponse> getArticlesByTitle(@RequestParam String title) {
-        return success(accompanyBoardArticleService.getArticlesByTitle(title));
+    public ApiResult<AccompanyBoardArticlesByTitleResponse> getArticlesByTitle(@RequestParam String title, @PageableDefault(size = 10) Pageable pageable) {
+        return success(accompanyBoardArticleService.getArticlesByTitle(title, pageable));
     }
 }

@@ -2,6 +2,7 @@ package com.ssafy.handam.accompanyboard.docs;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -25,6 +26,8 @@ import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBo
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
@@ -88,7 +91,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
-                                fieldWithPath("response.createDate").type(JsonFieldType.STRING)
+                                fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
                                         .description("작성 날짜"),
                                 fieldWithPath("response.commentCount").type(JsonFieldType.NUMBER)
                                         .description("댓글 수"),
@@ -107,12 +110,16 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 "testTitle"
         );
 
-        AccompanyBoardArticlesResponse response = AccompanyBoardArticlesResponse.of(List.of(accompanyBoardArticlePreviewDto));
+        AccompanyBoardArticlesResponse response = AccompanyBoardArticlesResponse.of(List.of(accompanyBoardArticlePreviewDto), 1, false);
 
-        given(accompanyBoardArticleService.getArticles()).willReturn(response);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        given(accompanyBoardArticleService.getArticles(pageable)).willReturn(response);
 
         mockMvc.perform(
                 MockMvcRequestBuilders.get("/api/v1/accompanyboards/articles")
+                        .param("page", "0")
+                        .param("size", "10")
         )
                 .andExpect(status().isOk())
                 .andDo(document("get-articles",
@@ -128,6 +135,10 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지"),
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -174,7 +185,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
-                                fieldWithPath("response.createDate").type(JsonFieldType.STRING)
+                                fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
                                         .description("작성 날짜"),
                                 fieldWithPath("response.commentCount").type(JsonFieldType.NUMBER)
                                         .description("댓글 수"),
@@ -198,12 +209,16 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
 
         Long requestUserId = 1L;
 
-        AccompanyBoardArticlesByUserResponse response = AccompanyBoardArticlesByUserResponse.of(List.of(accompanyBoardArticleDetailDto));
+        AccompanyBoardArticlesByUserResponse response = AccompanyBoardArticlesByUserResponse.of(List.of(accompanyBoardArticleDetailDto), 0, false);
 
-        given(accompanyBoardArticleService.getArticlesByUser(requestUserId)).willReturn(response);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        given(accompanyBoardArticleService.getArticlesByUser(requestUserId, pageable)).willReturn(response);
 
         mockMvc.perform(
                 RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/articles/user/{userId}", requestUserId)
+                                        .param("page", "0")
+                                        .param("size", "10")
         )
                 .andExpect(status().isOk())
                 .andDo(document("get-articles-by-user",
@@ -224,10 +239,14 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.articles[].description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
-                                fieldWithPath("response.articles[].createDate").type(JsonFieldType.STRING)
+                                fieldWithPath("response.articles[].createdDate").type(JsonFieldType.STRING)
                                         .description("작성 날짜"),
                                 fieldWithPath("response.articles[].commentCount").type(JsonFieldType.NUMBER)
                                         .description("댓글 수"),
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지"),
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -244,13 +263,17 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 "testTitle"
         );
 
-        AccompanyBoardArticlesByTitleResponse response = AccompanyBoardArticlesByTitleResponse.of(List.of(accompanyBoardArticlePreviewDto));
+        AccompanyBoardArticlesByTitleResponse response = AccompanyBoardArticlesByTitleResponse.of(List.of(accompanyBoardArticlePreviewDto), 0, false);
 
-        given(accompanyBoardArticleService.getArticlesByTitle(anyString())).willReturn(response);
+        Pageable pageable = PageRequest.of(0, 10);
+
+        given(accompanyBoardArticleService.getArticlesByTitle(anyString(), eq(pageable))).willReturn(response);
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/api/v1/accompanyboards/articles/search")
-                                .param("title", "검색제목")
+                                .param("title", "Title")
+                                .param("page", "0")
+                                .param("size", "10")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
         )
@@ -259,7 +282,9 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         queryParameters(
-                                parameterWithName("title").description("검색 제목")
+                                parameterWithName("title").description("검색 제목"),
+                                parameterWithName("page").description("페이지 번호 (0부터 시작)").optional(),
+                                parameterWithName("size").description("게시글 개수").optional()
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
@@ -271,6 +296,10 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지"),
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
