@@ -46,6 +46,10 @@ spring:
             - Path=/accompanyboards/docs/**
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.ssafy.handam.scg.filters.LoggingGlobalFilter: DEBUG
 
         - id: chat
           uri: http://j11c205.p.ssafy.io:8083
