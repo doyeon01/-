@@ -33,7 +33,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public List<Feed> findByUserId(Long userId, Pageable pageable) {
+    public Page<Feed> findByUserId(Long userId, Pageable pageable) {
         return feedJpaRepository.findByUserId(userId, pageable);
     }
 
@@ -41,5 +41,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
         return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2Containing(
                 keyword, keyword, keyword, keyword, pageable);
+    }
+
+    @Override
+    public Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable) {
+        return feedJpaRepository.findByIdIn(feedIds, pageable);
     }
 }

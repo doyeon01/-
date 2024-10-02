@@ -8,7 +8,6 @@ import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import jakarta.transaction.Transactional;
-import java.util.Collections;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -25,10 +24,6 @@ public class FeedDomainService {
 
     public Feed findById(Long id) {
         return findBy(id);
-    }
-
-    public Feed saveFeed(Feed feed) {
-        return feedRepository.save(feed);
     }
 
     public void likeFeed(Long feedId, Long userId) {
@@ -60,18 +55,21 @@ public class FeedDomainService {
         return likeRepository.findByFeedId(feedId);
     }
 
-    public List<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
-        List<Like> likes = likeRepository.findByUserId(userId, pageable);
+    public Page<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
+        Page<Like> likes = likeRepository.findByUserId(userId, pageable);
         if (likes == null || likes.isEmpty()) {
-            return Collections.emptyList();
+            return Page.empty();
         }
-        return likes.stream()
-                .map(Like::getFeed)
+
+        List<Long> feedIds = likes.stream()
+                .map(like -> like.getFeed().getId())
                 .toList();
+
+        return feedRepository.findByIdIn(feedIds, pageable);
     }
 
 
-    public List<Feed> getCreatedFeedsByUser(Long userId, Pageable pageable) {
+    public Page<Feed> getCreatedFeedsByUser(Long userId, Pageable pageable) {
         return feedRepository.findByUserId(userId, pageable);
     }
 
