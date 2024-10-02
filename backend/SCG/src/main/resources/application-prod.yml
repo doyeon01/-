@@ -47,6 +47,19 @@ spring:
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
 
+        - id: chat
+          uri: http://j11c205.p.ssafy.io:8083
+          predicates:
+            - Path=/api/v1/chat/**
+
+        - id: chat-docs
+          uri: http://j11c205.p.ssafy.io:8083
+          predicates:
+            - Path=/chat/docs/**
+          filters:
+            - RewritePath=/chat/docs/(?<remaining>.*),/docs/${remaining}
+
+
 server:
   port: 8080
 
