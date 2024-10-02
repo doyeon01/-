@@ -5,11 +5,12 @@ import { ModalCreateFeed2 } from '../organisms/Modal/ModalCreateFeed2';
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
 import { useNavigate } from 'react-router-dom';
 import { UserInfo } from '../../services/api/UserService';
-import { UserInfoType, UserInfoResponseType } from '../../model/MyPage/MyPageType';
+import { UserInfoType, UserInfoResponseType } from '../../model/MyPageType';
 
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const nav = useNavigate();
+  
   const [nickName, setNickName] = useState<string | null>(''); // string | null 허용
   const [introduce, setIntroduce] = useState<string | null>(''); // string | null 허용
   const [accompanyTemperature, setAccompanyTemperature] = useState<number>(0); // 초기값 설정

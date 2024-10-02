@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { Feed } from '../../../model/MyPage/MyPageType'; // Feed 타입을 import
+import { Feed } from '../../../model/MyPageType'; // Feed 타입을 import
 // import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {

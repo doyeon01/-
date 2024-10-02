@@ -1,3 +1,7 @@
+import { useRecoilState } from 'recoil';
+import { UserId } from '../../Recoil/atoms/Auth';
+import { UserInfo } from '../../services/api/UserService';
+import { UserInfoType, UserInfoResponseType } from '../../model/MyPageType';
 import React, { useEffect, useState } from 'react';
 import CarouselMain from '../organisms/Carousel/CarouselMain';
 import CardSetMainRec from '../molecules/Card/CardSetMainRec';
@@ -11,6 +15,8 @@ const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
+  const [userId, setUserId] = useRecoilState(UserId);  
+
 
   
   const handleScroll = (event: WheelEvent) => {
@@ -29,6 +35,18 @@ const MainPage: React.FC = () => {
       setIsScrolling(false); 
     }, 500); 
   };
+
+  useEffect(() => {
+    UserInfo()
+      .then((res) => {
+        const data: UserInfoResponseType = res.data;
+        if (data.success) {
+          const info: UserInfoType = data.response;
+          setUserId(info.id);
+        }
+      })
+      .catch((error) => console.error(error));
+  }, []);
 
 
   useEffect(() => {

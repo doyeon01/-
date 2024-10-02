@@ -59,3 +59,27 @@ export const createComment = async (data: CreateCommentRequest): Promise<CreateC
     };
   }
 };
+
+// 특정 사용자의 전체 동행 게시글 조회
+
+export const articleList = async (data: CreateCommentRequest): Promise<CreateCommentResponse> => {
+  try {
+    const response = await axios.post<CreateCommentResponse>(
+      'http://localhost:8080/api/v1/accompanyboards/articles/user',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return {
+      success: false,
+      response: { id: 0, userId: 0, accompanyBoardArticleId: 0, content: '' },
+      error: error.message,
+    };
+  }
+};

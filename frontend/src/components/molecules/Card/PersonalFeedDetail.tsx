@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType';
+import { Feed, FeedResponse } from '../../../model/MyPageType';
 // import { FeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 
 // 피드 상세 컴포넌트
