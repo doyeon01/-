@@ -1,16 +1,19 @@
 //동행게시글 등록타입
 export interface CreateArticle {
-  id: number;
   userId: number;
   scheduleId: number;
   title: string;
   description: string;
 }
 
+export interface CreateArticleWithId extends CreateArticle {
+  id: number; 
+}
+
 export interface CreateArticleApiResponse {
   success: boolean;
-  response:CreateArticle;
-  error: Error  | null;
+  response: CreateArticleWithId;
+  error: Error | null;
 }
 
 
