@@ -49,7 +49,7 @@ const ButtonChat: React.FC = () => {
         <img className='w-16 h-16' style={{ pointerEvents: 'none' }} src={buttonChat} alt="logo" />
       </animated.div>
       {isChatOpen && (
-      <ModalChat isOpen={isChatOpen} onClose={closeChat} />
+      <ModalChat onClose={closeChat} />
       )}
     </>
   );

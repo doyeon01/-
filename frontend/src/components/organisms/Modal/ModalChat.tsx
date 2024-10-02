@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { ModalChatProps, Friend, ChatRoom, user,Message } from '../../../model/ChatType';
+import { ModalChatProps, ChatRoom, user,Message } from '../../../model/ChatType';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs'; // Client를 사용
 import axios from 'axios';
 
-const friends: Friend[] = [
-  { name: '여행러버', img: 'https://i.pravatar.cc/150?img=1', lastMessage: '안녕하세요 !! 반갑습니다 ㅎㅎ' },
-  { name: '김목자', img: 'https://i.pravatar.cc/150?img=2', lastMessage: '반가워요!' },
-  { name: '올레', img: 'https://i.pravatar.cc/150?img=3', lastMessage: '다음에 또 봐요' },
-  { name: '논네임', img: 'https://i.pravatar.cc/150?img=4', lastMessage: '좋은 하루 되세요' },
-  { name: '이팔청춘', img: 'https://i.pravatar.cc/150?img=5', lastMessage: '여행 잘 하세요!' },
-  { name: '닉네임1', img: 'https://i.pravatar.cc/150?img=6', lastMessage: '다음에 또 연락해요!' },
-];
 
-const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
+
+const ModalChat: React.FC<ModalChatProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
   const [newMessage, setNewMessage] = useState('');

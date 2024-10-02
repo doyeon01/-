@@ -9,9 +9,7 @@ export interface CreateArticle {
 
 export interface CreateArticleApiResponse {
   success: boolean;
-  response: {
-    articles: CreateArticle;
-  };
+  response:CreateArticle;
   error: Error  | null;
 }
 

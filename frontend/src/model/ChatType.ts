@@ -1,15 +1,8 @@
 export interface ModalChatProps {
-    isOpen: boolean;
     onClose: () => void;
   }
-  
-  export  interface Friend {
-    name: string;
-    img: string;
-    lastMessage: string;
-  }
 
-  
+
   export interface user {
     birthday:string;
     gender:string;
