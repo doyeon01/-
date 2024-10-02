@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.application;
 
+import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
@@ -10,6 +11,7 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
@@ -17,7 +19,6 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
-import java.io.OutputStream;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -55,6 +56,7 @@ public class FeedService {
                 "content",
                 "image-url",
                 1L,
+                0,
                 0,
                 "address1",
                 "address2",
@@ -97,7 +99,7 @@ public class FeedService {
 
     public String saveImage(MultipartFile imageFile) {
         String hdfsPath = "/images/" + imageFile.getOriginalFilename();
-        try (FSDataOutputStream outputStream  = fileSystem.create(new Path(hdfsPath), replicationFactor)) {
+        try (FSDataOutputStream outputStream = fileSystem.create(new Path(hdfsPath), replicationFactor)) {
             outputStream.write(imageFile.getBytes());
             return hdfsPath;
         } catch (Exception e) {
@@ -154,6 +156,7 @@ public class FeedService {
                 feedDocument.getImageUrl(),
                 feedDocument.getUserId(),
                 feedDocument.getLikeCount(),
+                feedDocument.getCommentCount(),
                 feedDocument.getAddress1(),
                 feedDocument.getAddress2(),
                 feedDocument.getLongitude(),
@@ -164,5 +167,19 @@ public class FeedService {
                 feedDomainService.isLikedFeed(feedDocument.getId(), userDto.id()),
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
+    }
+
+    public CommentCreateResponse createComment(Long feedId, Long userId, String content) {
+//        return CommentCreateResponse.of(feedDomainService.createComment(feedId, userId, content));
+        // TODO : feedId에 댓글을 추가하는 기능을 구현하세요.
+        return new CommentCreateResponse(1L, 1L, 1L, "content");
+    }
+
+    public List<CommentDto> getComments(Long feedId) {
+//        feedDomainService.getComments(feedId);
+        // TODO : feedId에 해당하는 댓글 목록을 조회하는 기능을 구현하세요.
+        CommentDto commentDto = new CommentDto(1L, 1L, 1L, "content", "username", "userProfileImageUrl",
+                LocalDateTime.now());
+        return List.of(commentDto);
     }
 }
