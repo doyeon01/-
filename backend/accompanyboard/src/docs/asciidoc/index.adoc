@@ -64,3 +64,12 @@ include::{snippets}/get-articles-By-User/http-request.adoc[]
 include::{snippets}/get-articles-By-User/http-response.adoc[]
 include::{snippets}/get-articles-By-User/path-parameters.adoc[]
 include::{snippets}/get-articles-By-User/response-fields.adoc[]
+
+
+=== 제목 검색 조회
+==== HTTP Request
+include::{snippets}/get-articles-By-Title/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-articles-By-Title/http-response.adoc[]
+include::{snippets}/get-articles-By-Title/query-parameters.adoc[]
+include::{snippets}/get-articles-By-Title/response-fields.adoc[]

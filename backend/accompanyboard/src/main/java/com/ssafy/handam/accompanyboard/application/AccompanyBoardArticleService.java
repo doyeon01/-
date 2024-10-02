@@ -6,6 +6,7 @@ import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardArticleDomainService;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByTitleResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByUserResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import jakarta.transaction.Transactional;
@@ -40,6 +41,12 @@ public class AccompanyBoardArticleService {
         List<AccompanyBoardArticleDetailDto> articles = getAccompanyBoardArticleDetailDtoList(
                 accompanyBoardArticleDomainService.getArticlesByUser(userId));
         return AccompanyBoardArticlesByUserResponse.of(articles);
+    }
+
+    public AccompanyBoardArticlesByTitleResponse getArticlesByTitle(String title) {
+        List<AccompanyBoardArticlePreviewDto> articles = getAccompanyBoardArticlePreviewDtoList(
+                accompanyBoardArticleDomainService.getArticlesByTitle(title));
+        return AccompanyBoardArticlesByTitleResponse.of(articles);
     }
 
     private List<AccompanyBoardArticlePreviewDto> getAccompanyBoardArticlePreviewDtoList(List<Article> articles) {
