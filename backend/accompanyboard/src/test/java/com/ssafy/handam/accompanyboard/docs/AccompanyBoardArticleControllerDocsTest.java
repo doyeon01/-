@@ -192,7 +192,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/articles/user/{userId}", requestUserId)
         )
                 .andExpect(status().isOk())
-                .andDo(document("get-articles-By-User",
+                .andDo(document("get-articles-by-user",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
