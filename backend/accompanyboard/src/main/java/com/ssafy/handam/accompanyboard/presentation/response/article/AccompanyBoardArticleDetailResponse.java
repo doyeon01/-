@@ -9,8 +9,7 @@ public record AccompanyBoardArticleDetailResponse(
         String title,
         String description,
         String createdDate,
-        int commentCount
-) {
+        int commentCount) {
 
     public static AccompanyBoardArticleDetailResponse of(
             AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto
@@ -22,7 +21,6 @@ public record AccompanyBoardArticleDetailResponse(
                 accompanyBoardArticleDetailDto.title(),
                 accompanyBoardArticleDetailDto.description(),
                 accompanyBoardArticleDetailDto.createdDate(),
-                accompanyBoardArticleDetailDto.commentCount()
-        );
+                accompanyBoardArticleDetailDto.commentCount());
     }
 }

@@ -107,10 +107,11 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 1L,
-                "testTitle"
+                "testTitle",
+                "2024-10-02"
         );
 
-        AccompanyBoardArticlesResponse response = AccompanyBoardArticlesResponse.of(List.of(accompanyBoardArticlePreviewDto), 1, false);
+        AccompanyBoardArticlesResponse response = AccompanyBoardArticlesResponse.of(List.of(accompanyBoardArticlePreviewDto), 0, false);
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -135,6 +136,8 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
+                                fieldWithPath("response.articles[].createdDate").type(JsonFieldType.STRING)
+                                        .description("작성 날짜"),
                                 fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지"),
                                 fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
@@ -260,7 +263,8 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 1L,
-                "testTitle"
+                "testTitle",
+                "2024-10-02"
         );
 
         AccompanyBoardArticlesByTitleResponse response = AccompanyBoardArticlesByTitleResponse.of(List.of(accompanyBoardArticlePreviewDto), 0, false);
@@ -296,6 +300,8 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
+                                fieldWithPath("response.articles[].createdDate").type(JsonFieldType.STRING)
+                                        .description("작성 날짜"),
                                 fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지"),
                                 fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)

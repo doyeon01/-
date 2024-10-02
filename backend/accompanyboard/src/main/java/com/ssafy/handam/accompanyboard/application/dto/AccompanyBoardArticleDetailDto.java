@@ -13,22 +13,20 @@ public record AccompanyBoardArticleDetailDto(
         String title,
         String description,
         String createdDate,
-        int commentCount
-) {
+        int commentCount) {
 
     public static AccompanyBoardArticleDetailDto of(Article article, int commentCount) {
 
-        String formattedCreatedDate = (article.getCreatedDate() != null) ?
-                article.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
-                "N/A";
+            String formattedCreatedDate = (article.getCreatedDate() != null) ?
+            article.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
+            "N/A";
         return new AccompanyBoardArticleDetailDto(
-            article.getId(),
-            article.getUserId(),
-            article.getScheduleId(),
-            article.getTitle(),
-            article.getDescription(),
-            formattedCreatedDate,
-            commentCount
-        );
+                article.getId(),
+                article.getUserId(),
+                article.getScheduleId(),
+                article.getTitle(),
+                article.getDescription(),
+                formattedCreatedDate,
+                commentCount);
     }
 }
