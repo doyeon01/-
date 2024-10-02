@@ -232,7 +232,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
 
         mockMvc.perform(
                         MockMvcRequestBuilders.get("/api/v1/accompanyboards/articles/search")
-                                .param("title", "coffee")
+                                .param("title", "검색제목")
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
         )
