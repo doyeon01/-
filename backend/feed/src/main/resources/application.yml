@@ -1,6 +1,11 @@
 spring:
   application:
     name: feed
+  servlet:
+    multipart:
+      enabled: true
+      max-file-size: 10MB # 업로드할 파일의 최대 크기 설정
+      max-request-size: 10MB
 
   datasource:
     url: jdbc:mysql://j11c205a.p.ssafy.io:3306/feed_db

@@ -1,6 +1,7 @@
 package com.ssafy.handam.accompanyboard.docs;
 
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
@@ -11,12 +12,14 @@ import static org.springframework.restdocs.payload.PayloadDocumentation.requestF
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
+import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByTitleResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByUserResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesResponse;
 import java.util.List;
@@ -120,7 +123,8 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("error").description("에러 메시지")
-                        )));
+                        )
+                ));
     }
 
     @Test
@@ -163,7 +167,8 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
                                 fieldWithPath("error").description("에러 메시지")
-                        )));
+                        )
+                ));
     }
 
     @Test
@@ -187,7 +192,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 RestDocumentationRequestBuilders.get("/api/v1/accompanyboards/articles/user/{userId}", requestUserId)
         )
                 .andExpect(status().isOk())
-                .andDo(document("get-articles-By-User",
+                .andDo(document("get-articles-by-user",
                         preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
@@ -206,7 +211,50 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response.articles[].description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
                                 fieldWithPath("error").description("에러 메시지")
-                        )));
+                        )
+                ));
 
+    }
+
+    @Test
+    @DisplayName("제목 검색 조회 API")
+    void getArticlesByTitleTest() throws Exception {
+        AccompanyBoardArticlePreviewDto accompanyBoardArticlePreviewDto = new AccompanyBoardArticlePreviewDto(
+                1L,
+                1L,
+                1L,
+                "testTitle"
+        );
+
+        AccompanyBoardArticlesByTitleResponse response = AccompanyBoardArticlesByTitleResponse.of(List.of(accompanyBoardArticlePreviewDto));
+
+        given(accompanyBoardArticleService.getArticlesByTitle(anyString())).willReturn(response);
+
+        mockMvc.perform(
+                        MockMvcRequestBuilders.get("/api/v1/accompanyboards/articles/search")
+                                .param("title", "검색제목")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+        )
+                .andExpect(status().isOk())
+                .andDo(document("get-articles-by-title",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("title").description("검색 제목")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.articles[].id").type(JsonFieldType.NUMBER)
+                                        .description("동행 게시글 ID"),
+                                fieldWithPath("response.articles[].userId").type(JsonFieldType.NUMBER)
+                                        .description("작성자 ID"),
+                                fieldWithPath("response.articles[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
+                                        .description("동행 게시글 제목"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
     }
 }

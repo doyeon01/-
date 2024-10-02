@@ -1,0 +1,9 @@
+spring:
+  application:
+    name: plan
+
+  profiles:
+    active: dev
+
+server:
+  port: 8082

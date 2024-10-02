@@ -7,5 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface AccompanyBoardArticleJpaRepository extends JpaRepository <Article, Long>{
+
     List<Article> findByUserId(Long userId);
+    List<Article> findByTitleContains(String title);
 }

@@ -19,10 +19,7 @@ public class AccompanyBoardArticleRepositoryImpl implements AccompanyBoardArticl
     }
 
     @Override
-    public Article save(Article article) {
-        Article savedArticle = accompanyBoardArticleJpaRepository.save(article);
-        return savedArticle;
-    }
+    public Article save(Article article) { return accompanyBoardArticleJpaRepository.save(article); }
 
     @Override
     public List<Article> findAll() { return accompanyBoardArticleJpaRepository.findAll(); }
@@ -31,4 +28,7 @@ public class AccompanyBoardArticleRepositoryImpl implements AccompanyBoardArticl
     public List<Article> findByUserId(Long userId) {
         return accompanyBoardArticleJpaRepository.findByUserId(userId);
     }
+
+    @Override
+    public List<Article> findByTitleContains(String title) { return accompanyBoardArticleJpaRepository.findByTitleContains(title); }
 }

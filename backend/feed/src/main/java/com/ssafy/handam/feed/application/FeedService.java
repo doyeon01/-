@@ -103,7 +103,7 @@ public class FeedService {
             outputStream.write(imageFile.getBytes());
             return hdfsPath;
         } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to save image");
+            throw new IllegalArgumentException("Failed to sa ve image");
         }
     }
 
