@@ -22,12 +22,13 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class AccompanyBoardArticleService {
 
+    private final int INIT_COMMENT_COUNT = 0;
     private final AccompanyBoardArticleDomainService accompanyBoardArticleDomainService;
     private final AccompanyBoardCommentDomainService accompanyBoardCommentDomainService;
 
     public AccompanyBoardArticleDetailResponse createArticle(AccompanyBoardArticleCreationRequest request) {
         Article article = accompanyBoardArticleDomainService.createArticle(request);
-        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, 0));
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, INIT_COMMENT_COUNT));
     }
 
     public AccompanyBoardArticlesResponse getArticles(Pageable pageable) {
