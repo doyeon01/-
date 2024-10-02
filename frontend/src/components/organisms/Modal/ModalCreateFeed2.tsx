@@ -6,18 +6,24 @@ import DaumPostcode from 'react-daum-postcode';
 import ModalCreateFeed1 from './ModalCreateFeed1';
 import axios from 'axios'; 
 import { FeedCreate } from '../../../services/api/FeedService';
+import { useRecoilValue } from 'recoil';
+import { UserId } from '../../../Recoil/atoms/Auth';
 
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
+  const [location, setLocation] = useState<string>('')//장소
   const [content, setContent] = useState<string>('');  // 내용
   const [selectedCategory, setSelectedCategory] = useState<string>('전체'); // 카테고리
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
+  const [scheduleId, setScheduleId] = useState<number>(0);
   const [isScheduleSelected, setIsScheduleSelected] = useState(false); // 일정 선택 상태
   const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
   const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
+  const userId = useRecoilValue(UserId);
+
 
   const apikey = import.meta.env.VITE_KAKAO_SPOT_API_KEY; 
 
@@ -33,6 +39,9 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     TitleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setTitle(e.target.value);
     },
+    LocationChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setLocation(e.target.value);
+    },    
     ContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setContent(e.target.value);
     },
@@ -61,14 +70,14 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
         console.error(error); 
       });
     },
-    completeScheduleSelection: (title: string) => {
+    completeScheduleSelection: (id: number, title: string) => {
+      setScheduleId(id);
       setSchedule(title); // 선택된 일정 ID를 상태로 설정
       setIsScheduleSelected(true); // 일정 선택 완료 상태로 변경
     },
     goBackToSchedule: () => {
       setIsScheduleSelected(false); // 게시글 작성 모달에서 일정 선택 모달로 돌아감
     },
-    // 완료 버튼 클릭 시 유효성 검사
     validateAndComplete: () => {
       if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude) {
         Swal.fire({
@@ -82,6 +91,8 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
 
       const formData = new FormData();
       formData.append('title', title);
+      formData.append('scheduleId', String(scheduleId));
+      formData.append('location', location)
       formData.append('content', content);
       formData.append('file', selectedImage);
       formData.append('address1', calendarlocation);
@@ -89,7 +100,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
       formData.append('longitude', String(longitude));
       formData.append('latitude', String(latitude));
       formData.append('placeType', selectedCategory);
-      formData.append('userId', String(1));
+      formData.append('userId', String(userId));
 
       FeedCreate(formData)
         .then(() => {
@@ -189,8 +200,24 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                   </div>
                 </div>
 
+                <div className="mb-4">
+                  <div className="flex flex-col items-start">
+                    <textarea
+                      className="w-full p-2 border rounded-lg resize-none focus:outline-none"
+                      spellCheck="false"
+                      placeholder="장소를 입력하세요."
+                      rows={1}
+                      value={location}
+                      onChange={handle.LocationChange}
+                    />
+                    <div className="mt-4 w-full">
+                      <hr className="border-gray-300" />
+                    </div>
+                  </div>
+                </div>
+
                 <textarea
-                  className="w-full h-[260px] p-4 border rounded-lg resize-none focus:outline-none"
+                  className="w-full h-[200px] p-4 border rounded-lg resize-none focus:outline-none"
                   placeholder="내용을 입력하세요."
                   spellCheck="false"
                   value={content}
@@ -248,6 +275,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     <div className="bg-white rounded-lg shadow-lg p-6 relative w-[600px]">
                       <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                        onClick={() => setOpenPostcode(false)} // 여기에 onClick 추가
                       >
                         &times;
                       </button>
@@ -258,6 +286,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     </div>
                   </div>
                 )}
+
               </div>
             </div>
           </div>

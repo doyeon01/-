@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react';
 import { FeedCard } from './FeedCard';
-import { CardProps } from '../../../model/MyPage/MyPageType';
+import { CardProps } from '../../../model/MyPageType';
 
 export default {
   title: 'Components/Card',

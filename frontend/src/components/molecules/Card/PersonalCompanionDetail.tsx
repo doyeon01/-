@@ -1,77 +1,45 @@
-import React from 'react';
-import testImg1 from './../../../assets/statics/test1.jpg';
-import testImg2 from './../../../assets/statics/test2.jpg';
-import testImg3 from './../../../assets/statics/test3.png';
-import testImg4 from './../../../assets/statics/test4.jpg';
-import testImg5 from './../../../assets/statics/test5.jpg';
+import {useState, useEffect} from 'react';
 import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import { FeedCard } from './FeedCard';
+import ArticleList from '../../../dummydata/companion/accompnyBoardsUserArticleList.json'
+// import { articleList } from '../../../services/api/AccompanyBoardAPI';
+import { UserArticle, UserArticleApiResponse } from '../../../model/AccompanyBoardType';
+// import { useRecoilValue } from 'recoil';
+// import { UserId } from '../../../Recoil/atoms/Auth';
 
-interface TravelPlans {
-  title: string;
-  address: string;
-  description: string;
-  createdDate: string;
-  comment: number;
-  like: number;
-  image: string;
-}
 
-const travelPlans: TravelPlans[] = [
-  {
-    title: '퇴사 기념 혼자 여행',
-    address: '부산',
-    description: '해운대 야경 같이 보실 분 구해요',
-    createdDate: '2024-09-07',
-    comment: 6,
-    like: 12,
-    image: testImg1,
-  },
-  {
-    title: '경기도 즉석 여행',
-    address: '파주',
-    description: '돛단배 같이 타실 분 2명 구해요',
-    createdDate: '2024-09-06',
-    comment: 8,
-    like: 20,
-    image: testImg2,
-  },
-  {
-    title: '나홀로 창원 1박 2일',
-    address: '창원',
-    description: '맛집 탐방하실 분 구해요',
-    createdDate: '2024-09-11',
-    comment: 5,
-    like: 18,
-    image: testImg3,
-  },
-  {
-    title: '나홀로 창원 1박 2일',
-    address: '창원',
-    description: '맛집 탐방하실 분 구해요',
-    createdDate: '2024-09-20',
-    comment: 5,
-    like: 17,
-    image: testImg4,
-  },
-  {
-    title: '나홀로 창원 1박 2일',
-    address: '창원',
-    description: '맛집 탐방하실 분 구해요',
-    createdDate: '2024-09-18',
-    comment: 5,
-    like: 19,
-    image: testImg5,
-  },
-];
+// 1. 우선 json 더미데이터 가져와서 리스트로 만들어놓기
+// 2. axios 연결해서 response 값으로 리스트 만들어서 적어놓기
+
 
 export const PersonalCompanionDetail: React.FC = () => {
-  const { filteredArr, onSearch, onSortChange, showAllItems } = useSearchAndSort<TravelPlans>(
-    travelPlans,
-    ['title', 'address', 'description'], // 검색에 사용할 필드 배열
+  
+  const [userArticleList, setUserArticleList] = useState<UserArticle[]>([])
+  // const userId = useRecoilValue(UserId);
+
+
+  useEffect(()=>{
+    const typedArticleList = ArticleList as UserArticleApiResponse
+    if(typedArticleList.success){
+      setUserArticleList(typedArticleList.response.articles)
+    }
+    // articleList(userId)
+    // .then((res)=>{
+    //   setUserArticleList(res.response.articles)
+    // })
+    // .catch((error)=>{
+    //   console.log(error)})
+
+  },[])
+  
+
+  const { filteredArr, onSearch, onSortChange, showAllItems } = useSearchAndSort<UserArticle>(
+    userArticleList,
+    ['title', 'description'], // 검색에 사용할 필드 배열(address추가해야함)
     'createdDate' // 정렬에 사용할 날짜 필드
   );
+
 
   return (
     <>
@@ -89,9 +57,8 @@ export const PersonalCompanionDetail: React.FC = () => {
               address={plan.address}
               content={plan.description}
               createdDate={plan.createdDate}
-              comment={plan.comment}
-              like={plan.like}
-              image={plan.image}
+              comment={plan.commentCount}
+              image={plan.imageUrl}
              
               />
             </div>
