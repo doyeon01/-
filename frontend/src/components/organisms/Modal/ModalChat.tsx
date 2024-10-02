@@ -43,6 +43,7 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
       webSocketFactory: () => socket,
       onConnect: () => {
         console.log(`Connected to chat room ${roomId}`);
+        setStompClient(client); 
         client.subscribe(`/topic/chatroom/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
           setMessages((prevMessages) => [...prevMessages, receivedMessage]);
@@ -98,8 +99,11 @@ const ModalChat: React.FC<ModalChatProps> = ({ isOpen, onClose }) => {
   
 
   const sendMessage = () => {
-    
-    if (stompClient &&stompClient.connected && newMessage.trim() !== '') {
+    console.log(1);
+    console.log('stompClient:', stompClient);
+    console.log('newMessage:', newMessage);
+    if (stompClient && newMessage.trim() !== '') {
+      console.log(2);
       
       const chatMessage = {
         senderId: userId,
