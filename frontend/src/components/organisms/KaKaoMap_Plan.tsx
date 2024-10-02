@@ -16,6 +16,8 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
     const [placesService, setPlacesService] = useState<any>(null); // 장소 검색 서비스 상태
     const [searchinTab, setSearchingTab] = useState(true)
 
+    const [_, setDragging] = useState(false);
+
     const script = document.createElement('script');
     script.type = 'text/javascript'
     script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_PLAN_API_KEY}&libraries=services&autoload=false`
@@ -23,9 +25,17 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
     document.body.appendChild(script);
 
     const handleSearchingTab = () => {
-    setSearchingTab(searchinTab => !searchinTab)
+        setSearchingTab(searchinTab => !searchinTab)
     } 
 
+    const handleDragStart = (e: React.DragEvent<HTMLDivElement>, place: any) => {
+        setDragging(true);
+        e.dataTransfer.setData('place', JSON.stringify(place));
+    };
+    
+    const handleDragEnd = () => {
+        setDragging(false);
+    };
 
     if (isSearch == true){
     useEffect(() => {
@@ -133,7 +143,9 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
     const renderPlaces = () => {
         return places.map((place, index) => (
             <li key={index} className="flex items-start w-full border-b border-gray-200 py-2">
-                <div className="ml-4">
+                <div className={`ml-4 cursor-move`} draggable
+                    onDragStart={(e) => handleDragStart(e, place)}
+                    onDragEnd={handleDragEnd}>
                     <p className='text-blue-400 text-[18px] cursor-pointer hover:underline hover:underline-offset-1' onClick={() => window.open(place.place_url, '_blank')}>{place.place_name}</p>
                     {place.road_address_name ? (
                         <>

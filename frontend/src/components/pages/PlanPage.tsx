@@ -8,11 +8,7 @@ import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
-import test1 from '../../assets/statics/test1.jpg'
-// import test2 from '../../assets/statics/test2.jpg'
-// import test3 from '../../assets/statics/test3.png'
-// import test4 from '../../assets/statics/test4.jpg'
-// import test5 from '../../assets/statics/test5.jpg'
+import test1 from '../../assets/statics/Duli.png'
 
 export const PlanPage: React.FC = () => {
   const [Ismodal, setismodal] = useState(false)
@@ -21,6 +17,18 @@ export const PlanPage: React.FC = () => {
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
   const [searchinTab, setSearchingTab] = useState(false)
+
+  // const [_, setDragging] = useState(false);
+  // const [droppedText, setDroppedText] = useState<any>(null);
+
+  // const handleDragStart = (e: React.DragEvent<HTMLDivElement>, place: any) => {
+  //   setDragging(true);
+  //   e.dataTransfer.setData('place', JSON.stringify(place));
+  // };
+
+  // const handleDragEnd = () => {
+  //     setDragging(false);
+  // };
 
   const handleSearchingTab = () => {
     setSearchingTab(searchinTab => !searchinTab)
@@ -142,13 +150,6 @@ export const PlanPage: React.FC = () => {
                 />
               )
             ))}
-            {/* {currentDate && (
-                <ScheduleRegister
-                  currentDate={currentDate}
-                  data={scheduleData[currentDate] || {}} // 숫자에 맞는 데이터 전달
-                  index={index}
-                />
-              )} */}
           </div>
           
 
