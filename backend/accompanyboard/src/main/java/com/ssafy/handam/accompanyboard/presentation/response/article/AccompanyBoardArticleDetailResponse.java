@@ -7,7 +7,9 @@ public record AccompanyBoardArticleDetailResponse(
         Long userId,
         Long scheduleId,
         String title,
-        String description
+        String description,
+        String createdDate,
+        int commentCount
 ) {
 
     public static AccompanyBoardArticleDetailResponse of(
@@ -18,7 +20,9 @@ public record AccompanyBoardArticleDetailResponse(
                 accompanyBoardArticleDetailDto.userId(),
                 accompanyBoardArticleDetailDto.scheduleId(),
                 accompanyBoardArticleDetailDto.title(),
-                accompanyBoardArticleDetailDto.description()
+                accompanyBoardArticleDetailDto.description(),
+                accompanyBoardArticleDetailDto.createdDate(),
+                accompanyBoardArticleDetailDto.commentCount()
         );
     }
 }

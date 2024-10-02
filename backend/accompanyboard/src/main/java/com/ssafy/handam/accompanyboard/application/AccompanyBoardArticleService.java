@@ -4,6 +4,7 @@ import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDeta
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardArticleDomainService;
+import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardCommentDomainService;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByTitleResponse;
@@ -20,10 +21,11 @@ import org.springframework.stereotype.Service;
 public class AccompanyBoardArticleService {
 
     private final AccompanyBoardArticleDomainService accompanyBoardArticleDomainService;
+    private final AccompanyBoardCommentDomainService accompanyBoardCommentDomainService;
 
     public AccompanyBoardArticleDetailResponse createArticle(AccompanyBoardArticleCreationRequest request) {
         Article article = accompanyBoardArticleDomainService.createArticle(request);
-        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article));
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, 0));
     }
 
     public AccompanyBoardArticlesResponse getArticles() {
@@ -34,7 +36,8 @@ public class AccompanyBoardArticleService {
 
     public AccompanyBoardArticleDetailResponse getArticleDetails(Long articleId) {
         Article article = accompanyBoardArticleDomainService.getArticleDetails(articleId);
-        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article));
+        int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(articleId);
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, commentCount));
     }
 
     public AccompanyBoardArticlesByUserResponse getArticlesByUser(Long userId) {
@@ -57,7 +60,10 @@ public class AccompanyBoardArticleService {
 
     private List<AccompanyBoardArticleDetailDto> getAccompanyBoardArticleDetailDtoList(List<Article> articles) {
         return articles.stream()
-                .map(AccompanyBoardArticleDetailDto::of)
+                .map(article -> {
+                    int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(article.getId());
+                    return AccompanyBoardArticleDetailDto.of(article, commentCount);
+                })
                 .toList();
     }
 }

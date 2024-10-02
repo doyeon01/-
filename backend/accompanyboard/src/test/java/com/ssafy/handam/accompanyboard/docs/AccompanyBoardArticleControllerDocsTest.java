@@ -47,7 +47,9 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 "testTitle",
-                "testDescription"
+                "testDescription",
+                "2024-10-02",
+                0
         );
 
         given(accompanyBoardArticleService.createArticle(any())).willReturn(response);
@@ -86,6 +88,10 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
+                                fieldWithPath("response.createDate").type(JsonFieldType.STRING)
+                                        .description("작성 날짜"),
+                                fieldWithPath("response.commentCount").type(JsonFieldType.NUMBER)
+                                        .description("댓글 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -135,7 +141,9 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 "testTitle",
-                "testDescription"
+                "testDescription",
+                "2024-10-02",
+                5
         );
 
         Long requestId = 1L;
@@ -166,6 +174,10 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
+                                fieldWithPath("response.createDate").type(JsonFieldType.STRING)
+                                        .description("작성 날짜"),
+                                fieldWithPath("response.commentCount").type(JsonFieldType.NUMBER)
+                                        .description("댓글 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -179,7 +191,9 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 "testTitle",
-                "testDescription"
+                "testDescription",
+                "2024-10-02",
+                5
         );
 
         Long requestUserId = 1L;
@@ -210,6 +224,10 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.articles[].description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
+                                fieldWithPath("response.articles[].createDate").type(JsonFieldType.STRING)
+                                        .description("작성 날짜"),
+                                fieldWithPath("response.articles[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("댓글 수"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
