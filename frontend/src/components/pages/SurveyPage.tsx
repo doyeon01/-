@@ -13,13 +13,13 @@ import IMG_STEP07 from '../../assets/statics/survey_step07.png'
 import IMG_STEP08 from '../../assets/statics/survey_step08.png'
 import VID_start from '../../assets/statics/survey_strart.mp4'
 
-import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
+// import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
-  const [Gender,setGender] = useState('')
+  // const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
   const [Fading,setFading] = useState(false)
 
@@ -31,11 +31,11 @@ export const SurveyPage: React.FC = () => {
     setIsHide(IsHide=>!IsHide)
   }
 
-  const handleGender = (e:React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setGender(value);
-    console.log('Current Gender : ', value);
-  };
+  // const handleGender = (e:React.ChangeEvent<HTMLInputElement>) => {
+  //   const value = e.target.value;
+  //   setGender(value);
+  //   console.log('Current Gender : ', value);
+  // };
 
   const handleMBTI = (e:React.MouseEvent<HTMLButtonElement>)=> {
     const value = MBTI + e.currentTarget.value
@@ -104,13 +104,13 @@ export const SurveyPage: React.FC = () => {
                       className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
                       placeholder="닉네임"
                     />
-                    <input
+                    {/* <input
                       type="text"
                       id="birth"
                       className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
                       placeholder="생년월일"
-                    />
-                    <GenderSelector Gender={Gender} OnGenderChange={handleGender} />
+                    /> */}
+                    {/* <GenderSelector Gender={Gender} OnGenderChange={handleGender} /> */}
                     <textarea
                       id="address"
                       className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"

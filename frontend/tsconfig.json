@@ -9,6 +9,10 @@
     "noUnusedLocals": false, 
     "noUnusedParameters": false,
     "resolveJsonModule": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "module": "esnext",
+    "target": "esnext",
+    "moduleResolution": "node" // 추가된 부분
   }
 }
