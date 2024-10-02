@@ -5,7 +5,33 @@ import {
   CommentApiResponse,
   CreateCommentRequest,
   CreateCommentResponse,
+  CreateArticle,
+  CreateArticleApiResponse,
 } from '../../model/AccompanyBoardType';
+
+//동행 게시글 등록
+export const createArticles = async (data: CreateArticle): Promise<CreateArticleApiResponse> => {
+  try {
+    const response = await axios.post<CreateArticleApiResponse>(
+      'http://localhost:8080/api/v1/accompanyboards/articles/create',
+      data,
+      {
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+      }
+    );
+    return response.data;
+  } catch (error: any) {
+    return {
+      success: false,
+      response: { id: 0, userId: 0,scheduleId:0, title: '',description:''},
+      error: error.message,
+    };
+  }
+};  
+
 
 // 게시글 목록 요청
 export const fetchArticles = async () => {
