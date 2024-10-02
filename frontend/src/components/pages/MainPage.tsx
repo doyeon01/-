@@ -16,22 +16,24 @@ const MainPage: React.FC = () => {
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
   
-  // Recoil로 userId 상태 관리
   const [userId, setUserId] = useRecoilState(UserIdAtom);  
 
   // userId 가져오기 및 저장 로직
   useEffect(() => {
-    UserInfo()  // API 호출
-      .then((res) => {
-        const data: UserInfoResponseType = res.data;
-        if (data.success) {
-          const info: UserInfoType = data.response;
+    const fetchUserInfo = async () => {
+      const res = await UserInfo(); 
+      const data: UserInfoResponseType = res.data;
+      if (data.success) {
+        const info: UserInfoType = data.response;
+        if (info.id !== userId) { 
           setUserId(info.id); 
         }
-      })
-      .catch((error) => console.error(error));
-  }, [setUserId]);
-
+      }
+    };
+  
+    fetchUserInfo();  
+  }, [userId]);  
+  
   // 스크롤 핸들링 로직
   const handleScroll = (event: WheelEvent) => {
     event.preventDefault();
