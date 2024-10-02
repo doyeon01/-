@@ -194,9 +194,6 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
                 
             {/* 지도 표시 영역 */}
             <div id="map" className="w-full h-full" ref={mapRef}></div>
-
-
-
         </>
     );
 }
