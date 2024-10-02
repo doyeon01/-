@@ -46,6 +46,10 @@ spring:
             - Path=/accompanyboards/docs/**
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.ssafy.handam.scg.filters.LoggingGlobalFilter: DEBUG
 
 server:
   port: 8080
