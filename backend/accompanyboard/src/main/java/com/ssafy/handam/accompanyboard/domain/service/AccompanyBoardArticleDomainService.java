@@ -37,4 +37,7 @@ public class AccompanyBoardArticleDomainService {
         return accompanyBoardArticleRepository.findByUserId(userId);
     }
 
+    public List<Article> getArticlesByTitle(String title) {
+        return accompanyBoardArticleRepository.findByTitleContains(title); }
+
 }

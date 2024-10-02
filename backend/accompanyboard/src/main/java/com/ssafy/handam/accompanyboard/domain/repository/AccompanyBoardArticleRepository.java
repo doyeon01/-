@@ -10,4 +10,5 @@ public interface AccompanyBoardArticleRepository {
     Article save(Article article);
     List<Article> findAll();
     List<Article> findByUserId(Long userId);
+    List<Article> findByTitleContains(String title);
 }
