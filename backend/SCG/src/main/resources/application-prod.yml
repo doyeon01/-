@@ -46,6 +46,11 @@ spring:
             - Path=/accompanyboards/docs/**
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: plan
+          uri: http://j11c205a.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/plans/**
 logging:
   level:
     org.springframework.security: DEBUG

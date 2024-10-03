@@ -1,8 +1,8 @@
 spring:
   application:
-    name: user
+    name: plan
   datasource:
-    url: jdbc:mysql://j11c205.p.ssafy.io:3306/user_database
+    url: jdbc:mysql://j11c205a.p.ssafy.io:3307/plan_db
     username: handam
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -12,3 +12,6 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 8082
