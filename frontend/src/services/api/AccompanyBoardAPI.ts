@@ -7,7 +7,6 @@ import {
   CreateCommentResponse,
   CreateArticle,
   CreateArticleApiResponse,
-  UserArticleApiResponse
 } from '../../model/AccompanyBoardType';
 
 //동행 게시글 등록
