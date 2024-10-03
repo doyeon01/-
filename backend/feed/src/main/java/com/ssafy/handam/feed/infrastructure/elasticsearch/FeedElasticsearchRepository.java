@@ -8,6 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface FeedElasticsearchRepository extends ElasticsearchRepository<FeedDocument, Long> {
     
-    Page<FeedDocument> findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2Containing(
-            String title, String content, String address1, String address2, Pageable pageable);
+    Page<FeedDocument> findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingOrPlaceTypeOrderByLikeCount(
+            String title, String content, String address1, String address2, String placeType, Pageable pageable);
 }

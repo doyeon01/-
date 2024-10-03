@@ -3,7 +3,7 @@ package com.ssafy.handam.feed.application;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
-import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
+import com.ssafy.handam.feed.infrastructure.client.UserServiceClient;
 import java.time.Instant;
 import java.util.HashMap;
 import java.util.Map;
@@ -18,7 +18,7 @@ public class LikeService {
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final FeedDomainService feedDomainService;
-    private final UserApiClient userApiClient;
+    private final UserServiceClient userServiceClient;
 
     public void sendLikeEvent(Long feedId, Long userId, String eventType) {
         Map<String, Object> message = new HashMap<>();

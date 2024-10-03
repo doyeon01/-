@@ -7,5 +7,5 @@ public interface CommentRepository {
 
     Comment save(Comment comment);
 
-    List<Comment> findAllByFeedId();
+    List<Comment> findAllByFeedId(Long feedId);
 }

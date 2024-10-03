@@ -1,12 +1,23 @@
 package com.ssafy.handam.feed.infrastructure.client.dto;
 
-public record UserDto(Long id, String name, String email, String profileImageUrl) {
+import com.ssafy.handam.feed.infrastructure.client.Gender;
+import lombok.Builder;
 
-    public static UserDto of(
-            Long id,
-            String name,
-            String email,
-            String profileImageUrl) {
-        return new UserDto(id, name, email, profileImageUrl);
-    }
+@Builder
+public record UserDto(
+        Long id,
+        String email,
+        String name,
+        String nickname,
+        Gender gender,
+        String age,
+        String profileImage,
+        String residence,
+        String introduction,
+        String travelStyl1,
+        String travelStyl2,
+        String travelStyl3,
+        String travelStyl4,
+        double accompanyTemperature
+) {
 }

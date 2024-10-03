@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.infrastructure.jpa;
 
+import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import java.util.List;
 import org.springframework.data.domain.Page;
@@ -13,4 +14,10 @@ public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
     Page<Feed> findByUserId(Long userId, Pageable pageable);
 
     Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
+
+    Page<Feed> findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingAndPlaceTypeOrderByLikeCountDesc(
+            String title, String content, String address1, String address2, PlaceType placeType, Pageable pageable
+    );
+
+    List<Feed> findAll();
 }

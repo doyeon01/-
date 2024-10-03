@@ -73,10 +73,25 @@ dependencies {
     implementation 'org.apache.hadoop:hadoop-common:3.3.6'              // Hadoop Core
     implementation 'org.apache.hadoop:hadoop-hdfs:3.3.6'                // Hadoop HDFS
     implementation 'org.apache.hadoop:hadoop-client:3.3.6'              // Hadoop Client
+
+    // Spring Cloud Dependencies
+    implementation 'org.springframework.cloud:spring-cloud-starter-openfeign'
+
+
 }
+
+
+
 
 ext {
     set('snippetsDir', file("build/generated-snippets"))
+    set('springCloudVersion', "2023.0.3")
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+    }
 }
 
 asciidoctor {

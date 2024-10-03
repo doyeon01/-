@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.presentation.api.feed;
 
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
@@ -14,12 +15,11 @@ import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
+import com.ssafy.handam.feed.infrastructure.client.Gender;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -29,7 +29,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,8 +79,8 @@ class FeedControllerIntegrationTest {
         Feed savedFeed = feedJpaRepository.save(feed);
         savedFeedId = savedFeed.getId();
 
-        UserDto mockUserDto = UserDto.of(1L, "testUser", "test@example.com", "http://example.com/profile.jpg");
-        when(userApiClient.getUserById(anyLong())).thenReturn(mockUserDto);
+        UserDto mockUserDto = createUserDto();
+        when(userApiClient.getUserById(anyLong(),any())).thenReturn(mockUserDto);
     }
 
     @AfterEach
@@ -229,5 +228,24 @@ class FeedControllerIntegrationTest {
 //                .andExpect(jsonPath("$.response.placeType").value("CAFE"))
 //                .andExpect(jsonPath("$.response.likeCount").value(0));
 //    }
+
+    private UserDto createUserDto(){
+        return UserDto.builder().
+                id(1L).
+                email("testUser").
+                name("testUser").
+                nickname("testUser").
+                gender(Gender.FEMALE).
+                age("20").
+                profileImage("http://example.com/profile.jpg").
+                residence("Test Address").
+                introduction("Test Introduction").
+                travelStyl1("Test Travel Style").
+                travelStyl2("Test Travel Style").
+                travelStyl3("Test Travel Style").
+                travelStyl4("Test Travel Style").
+                accompanyTemperature(36.5).
+                build();
+    }
 }
 
