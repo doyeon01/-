@@ -2,6 +2,8 @@ import React, {useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
+import { GetFeedFood } from '../../services/api/RegisterUser';
+
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
 import IMG_STEP01 from '../../assets/statics/survey_step01.png'
@@ -31,7 +33,14 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-
+  const fetchFeeds = async (keyword: string, page: number, size: number) => {
+    try {
+      const data = await GetFeedFood(keyword, page, size);
+      console.log('API Data:', data);
+    } catch (error) {
+      console.error('Error fetching feeds:', error);
+    }
+  };
 
  // 주소 검색 완료 시 호출되는 함수
  const handleComplete = (data: any) => {
@@ -359,11 +368,10 @@ const handlePageNum = () => {
                 어떤 음식이 마음에 드시나요?
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-                5개 이상 선택해주세요
+                {fetchFeeds('RESTAURANT', 0, 10)}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
-                사진 들어갈 곳 <br />
-                애니메이션으로 순차적으로 위로 따다닥 붙게 만들면 멋있지 않을까
+              
               </div>
             </>
           )}
