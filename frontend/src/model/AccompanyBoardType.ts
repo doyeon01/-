@@ -102,6 +102,8 @@ export interface ArticleApiResponse {
     success: boolean;
     response: {
       articles: UserArticle[];
+      currentPage: number;
+      hasNextPage: boolean;
     };
     error: Error  | null;
   }
