@@ -89,13 +89,16 @@ export const createComment = async (data: CreateCommentRequest): Promise<CreateC
 
 // 특정 사용자의 전체 동행 게시글 조회
 
-export const articleList = async (userId: number) => {
-  try {
-    const response = await axios.get<UserArticleApiResponse>(`http://localhost:8080/api/v1/accompanyboards/articles/user/${userId}`);
-    return response.data;
-  } catch (error) {
-    throw new Error('API 요청 중 오류가 발생했습니다.');
-  }
+export const articleList = (userId: number, page: number, size = 6) => {
+  return axios.get(`http://localhost:8080/api/v1/accompanyboards/articles/user/${userId}`, {
+    params: {
+      page: page,
+      size: size,
+    },
+    headers: {
+      // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
+    },
+  });
 };
 
 

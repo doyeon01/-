@@ -5,6 +5,7 @@ import { Feed, FeedResponse } from '../../../model/MyPageType';
 // import { useRecoilValue } from 'recoil';
 // import { UserId } from '../../../Recoil/atoms/Auth';
 // import { FeedList } from '../../../services/api/FeedService'; // 실제 API 요청
+// import { useInView } from 'react-intersection-observer';
 
 // 피드 상세 컴포넌트
 export const PersonalFeedDetail: React.FC = () => {
@@ -12,8 +13,8 @@ export const PersonalFeedDetail: React.FC = () => {
   const [page, setPage] = useState(0); // 페이지 번호 저장
   const [loading, setLoading] = useState(false); // 로딩 상태 관리
   const [hasMore, setHasMore] = useState(true); // 더 많은 데이터를 가져올 수 있는지 여부
-    // const userId = useRecoilValue(UserId);
-
+  // const [ref, inView] = useInView();
+  // const userId = useRecoilValue(UserId);
   
   // API 요청 및 더미 데이터 설정
   useEffect(() => {
