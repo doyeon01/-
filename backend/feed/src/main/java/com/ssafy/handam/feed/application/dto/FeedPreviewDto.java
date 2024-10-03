@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
         Long id,
+        Long scheduleId,
+        String placeName,
         String title,
         String content,
         String imageUrl,
@@ -28,6 +30,8 @@ public record FeedPreviewDto(
                 "N/A";
         return new FeedPreviewDto(
                 feed.getId(),
+                feed.getScheduleId(),
+                feed.getPlaceName(),
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
