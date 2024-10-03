@@ -59,7 +59,7 @@ public class ChatRoomControllerDocsTest extends RestDocsSupport {
 
         when(chatService.getChatRoomsByUserId(userId, token)).thenReturn(chatRoomsResponses);
 
-        mockMvc.perform(get("/api/v1/chatroom/user")
+        mockMvc.perform(get("/api/v1/chat/user")
                         .param("userId", userId.toString())
                         .cookie(new Cookie("accessToken", token))
                         .accept(MediaType.APPLICATION_JSON))
@@ -104,7 +104,7 @@ public class ChatRoomControllerDocsTest extends RestDocsSupport {
         ));
 
         // When & Then
-        mockMvc.perform(get("/api/v1/chatroom/{roomId}", roomId)
+        mockMvc.perform(get("/api/v1/chat/{roomId}", roomId)
                         .cookie(new Cookie("accessToken", token))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -153,7 +153,7 @@ public class ChatRoomControllerDocsTest extends RestDocsSupport {
         when(chatService.createChatRoom(userId, partnerId)).thenReturn(chatRoom);
 
         // When & Then
-        mockMvc.perform(post("/api/v1/chatroom")
+        mockMvc.perform(post("/api/v1/chat")
                         .param("partnerId", partnerId.toString())
                         .param("userId", userId.toString())
                         .cookie(new Cookie("accessToken", token))

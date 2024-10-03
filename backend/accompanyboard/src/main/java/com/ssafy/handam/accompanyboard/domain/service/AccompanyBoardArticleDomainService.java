@@ -7,6 +7,8 @@ import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoa
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -25,16 +27,19 @@ public class AccompanyBoardArticleDomainService {
                 .build());
     }
 
-    public List<Article> getArticles() {
-        return accompanyBoardArticleRepository.findAll();
+    public Page<Article> getArticles(Pageable pageable) {
+        return accompanyBoardArticleRepository.findAll(pageable);
     }
 
     public Article getArticleDetails(Long articleId) {
         return accompanyBoardArticleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
     }
 
-    public List<Article> getArticlesByUser(Long userId) {
-        return accompanyBoardArticleRepository.findByUserId(userId);
+    public Page<Article> getArticlesByUser(Long userId, Pageable pageable) {
+        return accompanyBoardArticleRepository.findByUserId(userId, pageable);
     }
+
+    public Page<Article> getArticlesByTitle(String title, Pageable pageable) {
+        return accompanyBoardArticleRepository.findByTitleContains(title, pageable); }
 
 }
