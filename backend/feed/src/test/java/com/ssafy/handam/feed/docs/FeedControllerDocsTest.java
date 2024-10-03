@@ -25,8 +25,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
+import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
+import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServiceResponse;
 import com.ssafy.handam.feed.domain.PlaceType;
+import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
@@ -198,7 +202,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
-
 
     @DisplayName("좋아요 API")
     @Test
@@ -565,21 +568,34 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void createCommentTest() throws Exception {
         // given
-        CommentCreateResponse response = new CommentCreateResponse(1L, 1L, 1L, "content");
-        // when
-        given(feedService.createComment(any(), any(), any())).willReturn(response);
+        Long feedId = 1L;
+        Long userId = 1L;
+        String content = "댓글 내용";
+
+        // Create the request DTO
+        CreateCommentRequest createCommentRequest = new CreateCommentRequest(userId, content);
+
+        // Create the expected response
+        CreateCommentServiceResponse serviceResponse = new CreateCommentServiceResponse(userId, content);
+        CreateCommentResponse response = CreateCommentResponse.from(serviceResponse);
+
+        // Mock the service layer
+        given(commentService.save(any(CreateCommentServiceRequest.class))).willReturn(response);
+
+        // Serialize the request DTO to JSON
+        String requestJson = objectMapper.writeValueAsString(createCommentRequest);
 
         // then
         mockMvc.perform(
-                        post("/api/v1/feeds/{feedId}/comments", 1)
+                        post("/api/v1/feeds/{feedId}/comments", feedId)
                                 .cookie(new Cookie("accessToken", "token"))
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .param("userId", "1")
-                                .param("content", "content")
+                                .content(requestJson)  // 요청 본문에 JSON 추가
                 )
                 .andExpect(status().isOk())
                 .andDo(document("create-comment",
+                        preprocessRequest(prettyPrint()),
                         preprocessResponse(prettyPrint()),
                         pathParameters(
                                 parameterWithName("feedId").description("피드 ID")
@@ -587,12 +603,14 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         requestCookies(
                                 cookieWithName("accessToken").description("인증을 위한 액세스 토큰")
                         ),
+                        requestFields(
+                                fieldWithPath("userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("content").type(JsonFieldType.STRING)
+                                        .description("댓글 내용")
+                        ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
-                                fieldWithPath("response.id").type(JsonFieldType.NUMBER)
-                                        .description("댓글 ID"),
-                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
-                                        .description("피드 ID"),
                                 fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
                                 fieldWithPath("response.content").type(JsonFieldType.STRING)
@@ -630,19 +648,19 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
-                                fieldWithPath("response[].id").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.comments[].id").type(JsonFieldType.NUMBER)
                                         .description("댓글 ID"),
-                                fieldWithPath("response[].feedId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.comments[].feedId").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response[].userId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.comments[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("response[].content").type(JsonFieldType.STRING)
+                                fieldWithPath("response.comments[].content").type(JsonFieldType.STRING)
                                         .description("댓글 내용"),
-                                fieldWithPath("response[].username").type(JsonFieldType.STRING)
+                                fieldWithPath("response.comments[].username").type(JsonFieldType.STRING)
                                         .description("사용자 이름"),
-                                fieldWithPath("response[].userProfileImageUrl").type(JsonFieldType.STRING)
+                                fieldWithPath("response.comments[].userProfileImageUrl").type(JsonFieldType.STRING)
                                         .description("사용자 프로필 이미지 URL"),
-                                fieldWithPath("response[].createdDate").type(JsonFieldType.STRING)
+                                fieldWithPath("response.comments[].createdDate").type(JsonFieldType.STRING)
                                         .description("댓글 생성일자"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
