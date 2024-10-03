@@ -25,7 +25,7 @@ pipeline {
             steps {
                 // backend 브랜치의 accompanyboard 폴더만 체크아웃
                 checkout([$class: 'GitSCM',
-                    branches: [[name: '*/backend']],
+                    branches: [[name: '*/be/feature/accompany-board-S11P21C205-329-be-동행-api-테스트']],
                     userRemoteConfigs: [[
                         url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
                         credentialsId: 'PERSONAL_ACCESS_TOKEN'
