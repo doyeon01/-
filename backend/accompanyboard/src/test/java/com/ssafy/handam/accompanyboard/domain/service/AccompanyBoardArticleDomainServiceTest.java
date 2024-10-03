@@ -16,9 +16,6 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 
 @SpringBootTest
@@ -67,9 +64,7 @@ class AccompanyBoardArticleDomainServiceTest {
         accompanyBoardArticleRepository.save(article1);
         accompanyBoardArticleRepository.save(article2);
 
-        Pageable pageable = PageRequest.of(0, 10);
-
-        List<Article> result = accompanyBoardArticleDomainService.getArticles(pageable).getContent();
+        List<Article> result = accompanyBoardArticleDomainService.getArticles();
 
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getUserId());

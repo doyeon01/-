@@ -181,53 +181,53 @@ class FeedControllerIntegrationTest {
                 .andExpect(jsonPath("$.response.feeds[0].likeCount").value(0));
     }
 
-//    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 피드 생성")
-//    @Test
-//    void createFeedTest() throws Exception {
-//        byte[] content = Files.readAllBytes(Paths.get("C:/Users/JK/Documents/원룸 사진/KakaoTalk_20231222_175652125_02.jpg"));
-//        MockMultipartFile imageFile = new MockMultipartFile(
-//                "image",
-//                "feed.jpg",
-//                MediaType.IMAGE_JPEG_VALUE,
-//                content
-//        );
-//
-//        String requestJson = "{\n" +
-//                "  \"userId\": 1,\n" +
-//                "  \"title\": \"Test Title\",\n" +
-//                "  \"content\": \"Test Content\",\n" +
-//                "  \"address1\": \"Test Address\",\n" +
-//                "  \"address2\": \"Test Address\",\n" +
-//                "  \"longitude\": 127.123123,\n" +
-//                "  \"latitude\": 32.1323,\n" +
-//                "  \"placeType\": \"CAFE\"\n" +
-//                "}";
-//
-//        MockMultipartFile jsonPart = new MockMultipartFile(
-//                "data",
-//                "",
-//                MediaType.APPLICATION_JSON_VALUE,
-//                requestJson.getBytes()
-//        );
+    @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 피드 생성")
+    @Test
+    void createFeedTest() throws Exception {
+        byte[] content = Files.readAllBytes(Paths.get("C:/Users/JK/Documents/원룸 사진/KakaoTalk_20231222_175652125_02.jpg"));
+        MockMultipartFile imageFile = new MockMultipartFile(
+                "image",
+                "feed.jpg",
+                MediaType.IMAGE_JPEG_VALUE,
+                content
+        );
+
+        String requestJson = "{\n" +
+                "  \"userId\": 1,\n" +
+                "  \"title\": \"Test Title\",\n" +
+                "  \"content\": \"Test Content\",\n" +
+                "  \"address1\": \"Test Address\",\n" +
+                "  \"address2\": \"Test Address\",\n" +
+                "  \"longitude\": 127.123123,\n" +
+                "  \"latitude\": 32.1323,\n" +
+                "  \"placeType\": \"CAFE\"\n" +
+                "}";
+
+        MockMultipartFile jsonPart = new MockMultipartFile(
+                "data",
+                "",
+                MediaType.APPLICATION_JSON_VALUE,
+                requestJson.getBytes()
+        );
 
         // Multipart 요청을 구성하고 기대하는 응답 값을 테스트
-//        mockMvc.perform(multipart("/api/v1/feeds/create")
-//                        .file(imageFile) // 'image' 파트로 이미지 파일 전송
-//                        .file(jsonPart)  // 'data' 파트로 FeedCreationRequest JSON 전송
-//                        .contentType(MediaType.MULTIPART_FORM_DATA) // multipart/form-data 형식
-//                        .accept(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isOk())
-//                .andExpect(jsonPath("$.response.userId").value(1L))
-//                .andExpect(jsonPath("$.response.username").value("testUser"))
-//                .andExpect(jsonPath("$.response.userProfileImageUrl").value("http://example.com/profile.jpg"))
-//                .andExpect(jsonPath("$.response.title").value("Test Title"))
-//                .andExpect(jsonPath("$.response.content").value("Test Content"))
-//                .andExpect(jsonPath("$.response.address1").value("Test Address"))
-//                .andExpect(jsonPath("$.response.address2").value("Test Address"))
-//                .andExpect(jsonPath("$.response.longitude").value(127.123123))
-//                .andExpect(jsonPath("$.response.latitude").value(32.1323))
-//                .andExpect(jsonPath("$.response.placeType").value("CAFE"))
-//                .andExpect(jsonPath("$.response.likeCount").value(0));
-//    }
+        mockMvc.perform(multipart("/api/v1/feeds/create")
+                        .file(imageFile) // 'image' 파트로 이미지 파일 전송
+                        .file(jsonPart)  // 'data' 파트로 FeedCreationRequest JSON 전송
+                        .contentType(MediaType.MULTIPART_FORM_DATA) // multipart/form-data 형식
+                        .accept(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.response.userId").value(1L))
+                .andExpect(jsonPath("$.response.username").value("testUser"))
+                .andExpect(jsonPath("$.response.userProfileImageUrl").value("http://example.com/profile.jpg"))
+                .andExpect(jsonPath("$.response.title").value("Test Title"))
+                .andExpect(jsonPath("$.response.content").value("Test Content"))
+                .andExpect(jsonPath("$.response.address1").value("Test Address"))
+                .andExpect(jsonPath("$.response.address2").value("Test Address"))
+                .andExpect(jsonPath("$.response.longitude").value(127.123123))
+                .andExpect(jsonPath("$.response.latitude").value(32.1323))
+                .andExpect(jsonPath("$.response.placeType").value("CAFE"))
+                .andExpect(jsonPath("$.response.likeCount").value(0));
+    }
 }
 

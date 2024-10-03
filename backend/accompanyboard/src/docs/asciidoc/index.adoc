@@ -59,17 +59,8 @@ include::{snippets}/get-comments-by-accompanyboard-article-id/response-fields.ad
 
 === 특정 사용자의 전체 동행 게시글 조회
 ==== HTTP Request
-include::{snippets}/get-articles-by-user/http-request.adoc[]
+include::{snippets}/get-articles-By-User/http-request.adoc[]
 ==== HTTP Response
-include::{snippets}/get-articles-by-user/http-response.adoc[]
-include::{snippets}/get-articles-by-user/path-parameters.adoc[]
-include::{snippets}/get-articles-by-user/response-fields.adoc[]
-
-
-=== 제목 검색 조회
-==== HTTP Request
-include::{snippets}/get-articles-by-title/http-request.adoc[]
-==== HTTP Response
-include::{snippets}/get-articles-by-title/http-response.adoc[]
-include::{snippets}/get-articles-by-title/query-parameters.adoc[]
-include::{snippets}/get-articles-by-title/response-fields.adoc[]
+include::{snippets}/get-articles-By-User/http-response.adoc[]
+include::{snippets}/get-articles-By-User/path-parameters.adoc[]
+include::{snippets}/get-articles-By-User/response-fields.adoc[]

@@ -5,8 +5,6 @@ import com.ssafy.handam.accompanyboard.infrastructure.jpa.AccompanyBoardArticleJ
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -21,20 +19,16 @@ public class AccompanyBoardArticleRepositoryImpl implements AccompanyBoardArticl
     }
 
     @Override
-    public Article save(Article article) { return accompanyBoardArticleJpaRepository.save(article); }
-
-    @Override
-    public Page<Article> findAll(Pageable pageable) {
-        return accompanyBoardArticleJpaRepository.findAll(pageable);
+    public Article save(Article article) {
+        Article savedArticle = accompanyBoardArticleJpaRepository.save(article);
+        return savedArticle;
     }
 
     @Override
-    public Page<Article> findByUserId(Long userId, Pageable pageable) {
-        return accompanyBoardArticleJpaRepository.findByUserId(userId, pageable);
-    }
+    public List<Article> findAll() { return accompanyBoardArticleJpaRepository.findAll(); }
 
     @Override
-    public Page<Article> findByTitleContains(String title, Pageable pageable) {
-        return accompanyBoardArticleJpaRepository.findByTitleContains(title, pageable);
+    public List<Article> findByUserId(Long userId) {
+        return accompanyBoardArticleJpaRepository.findByUserId(userId);
     }
 }
