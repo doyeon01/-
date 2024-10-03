@@ -20,11 +20,14 @@ public class UserApiClient {
     public UserDto getUserById(Long userId) {
 
         Map<String, Object> userMap = restTemplate.getForObject(userServiceUrl + "/user/" + userId, Map.class);
+        System.out.println(userMap);
         return convertMapToUserDto(userMap);
     }
 
     public UserDto convertMapToUserDto(Map map) {
         Map<String, Object> userResponse = (Map<String, Object>)map.get("response");
+        System.out.println("사용자 이름");
+        System.out.println((String)userResponse.get("nickname"));
         return UserDto.of(((Integer) userResponse.get("id")).longValue(), (String)userResponse.get("nickname"), (String)userResponse.get("email"), (String)userResponse.get("profileImageUrl"));
     }
 }
