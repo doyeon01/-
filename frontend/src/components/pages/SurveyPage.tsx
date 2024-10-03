@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
@@ -33,14 +33,25 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-  const fetchFeeds = async (keyword: string, page: number, size: number) => {
-    try {
-      const data = await GetFeedFood(keyword, page, size);
-      console.log('API Data:', data);
-    } catch (error) {
-      console.error('Error fetching feeds:', error);
-    }
-  };
+  const [feeds,setFeeds] = useState<String>('')
+
+  let keyword = ''
+  let page = 0
+  let size = 0
+
+  useEffect(() => {
+    const fetchFeedsData = async () => {
+      try {
+        const data = await GetFeedFood(keyword, page, size); // 전달받은 인자를 사용
+        setFeeds(data); // 데이터 상태 업데이트
+      } catch (error) {
+        console.error('Error fetching feeds:', error);
+      } 
+    };
+
+    fetchFeedsData(); // 함수 호출
+  }, [keyword, page, size]); // 의존성 배열에 변수를 추가
+
 
  // 주소 검색 완료 시 호출되는 함수
  const handleComplete = (data: any) => {
@@ -368,7 +379,7 @@ const handlePageNum = () => {
                 어떤 음식이 마음에 드시나요?
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-                {fetchFeeds('RESTAURANT', 0, 10)}
+                {feeds}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
