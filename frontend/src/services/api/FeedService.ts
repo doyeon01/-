@@ -16,7 +16,7 @@ export const FeedCreate = async (formData: FormData) => {
 };
 
 // 마이페이지 피드 목록 조회 API
-export const FeedList = (userId: number, page = 0, size = 10) => {
+export const FeedList = (userId: number, page: number, size = 10) => {
   return axios.get(`${BaseUrl}/created`, {
     params: {
       userId: userId, 
@@ -30,7 +30,7 @@ export const FeedList = (userId: number, page = 0, size = 10) => {
 };
 
 
-export const LikeFeedList = (userId: number,page = 0, size = 10) => {
+export const LikeFeedList = (userId: number, page: number, size = 10) => {
   return axios.get(`${BaseUrl}/liked`, {
     params: {
       userId: userId, 
