@@ -2,12 +2,16 @@ package com.ssafy.handam.feed.presentation.api.feed;
 
 import static com.ssafy.handam.feed.presentation.api.ApiUtils.success;
 
+import com.ssafy.handam.feed.application.CommentService;
 import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.application.LikeService;
+import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
+import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
+import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
@@ -18,6 +22,7 @@ import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -36,6 +41,7 @@ public class FeedController {
 
     private final FeedService feedService;
     private final LikeService likeService;
+    private final CommentService commentService;
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
@@ -85,7 +91,7 @@ public class FeedController {
         return success(feedService.getLikedFeedsByUser(userId, pageable));
     }
 
-    @GetMapping("users/created")
+    @GetMapping("/users/created")
     public ApiResult<CreatedFeedsByUserResponse> getCreatedFeedsByUser(Pageable pageable, @RequestParam Long userId) {
         return success(feedService.getCreatedFeedsByUser(userId, pageable));
     }
@@ -98,6 +104,14 @@ public class FeedController {
     @PostMapping("/hadoopTest")
     public void hadoopTest(@RequestPart("image") MultipartFile imageFile) {
         feedService.saveImage(imageFile);
+    }
+
+    @PostMapping("/{feedId}/comment")
+    public ApiResult<CreateCommentResponse> createComment(
+            @CookieValue(name = "accessToken", required = false) String accessToken,
+            @PathVariable Long feedId,
+            CreateCommentRequest request) {
+        return success(commentService.save(CreateCommentServiceRequest.of(feedId, request)));
     }
 }
 

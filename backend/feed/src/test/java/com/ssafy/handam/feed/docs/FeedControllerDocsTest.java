@@ -204,7 +204,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 ));
     }
 
-
     @DisplayName("좋아요 API")
     @Test
     void likeFeedTest() throws Exception {
@@ -335,19 +334,19 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.createFeed(any(), any())).willReturn(response);
 
         // JSON 데이터 파트 생성
-    String requestBody = objectMapper.writeValueAsString(request);
-    MockMultipartFile data = new MockMultipartFile("data", "", "application/json", requestBody.getBytes());
+        String requestBody = objectMapper.writeValueAsString(request);
+        MockMultipartFile data = new MockMultipartFile("data", "", "application/json", requestBody.getBytes());
 
-    // 이미지 파일 파트 생성
-    MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
+        // 이미지 파일 파트 생성
+        MockMultipartFile image = new MockMultipartFile("image", "image.jpg", "image/jpeg", "test image".getBytes());
 
         mockMvc.perform(
-                    multipart("/api/v1/feeds/create")
-                            .file(data) // JSON 데이터
-                            .file(image) // 이미지 파일
-                            .contentType(MediaType.MULTIPART_FORM_DATA) // Content-Type 설정
-                            .accept(MediaType.APPLICATION_JSON)
-            )
+                        multipart("/api/v1/feeds/create")
+                                .file(data) // JSON 데이터
+                                .file(image) // 이미지 파일
+                                .contentType(MediaType.MULTIPART_FORM_DATA) // Content-Type 설정
+                                .accept(MediaType.APPLICATION_JSON)
+                )
                 .andExpect(status().isOk())
                 .andDo(document("create-feed",
                         preprocessRequest(prettyPrint()),
@@ -575,5 +574,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         )
                 ));
     }
+
 }
 

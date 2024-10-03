@@ -67,4 +67,8 @@ public class Feed extends BaseEntity {
             this.likeCount--;
         }
     }
+
+    public void increamentCommentCount() {
+        this.commentCount++;
+    }
 }
