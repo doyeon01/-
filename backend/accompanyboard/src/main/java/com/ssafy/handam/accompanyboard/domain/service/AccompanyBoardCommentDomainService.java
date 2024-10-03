@@ -26,4 +26,8 @@ public class AccompanyBoardCommentDomainService {
     public List<Comment> getCommentsByAccompanyBoardArticleId (Long accompanyBoardArticleId) {
         return accompanyBoardCommentRepository.findByAccompanyBoardArticleId(accompanyBoardArticleId);
     }
+
+    public int getCommentCountByAccompanyBoardArticleId (Long accompanyBoardArticleId) {
+        return accompanyBoardCommentRepository.findByAccompanyBoardArticleId(accompanyBoardArticleId).size();
+    }
 }

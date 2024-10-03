@@ -1,6 +1,5 @@
 package com.ssafy.handam.feed.domain.entity;
 
-import com.ssafy.handam.feed.domain.dto.request.comment.CreateCommentDomainRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -28,13 +27,5 @@ public class Comment extends BaseEntity{
         this.userId = userId;
         this.feedId = feedId;
         this.content = content;
-    }
-
-    public static Comment create(CreateCommentDomainRequest request) {
-        return Comment.builder()
-                .feedId(request.feedId())
-                .userId(request.userId())
-                .content(request.content())
-                .build();
     }
 }
