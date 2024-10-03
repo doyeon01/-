@@ -18,7 +18,7 @@ public class CommentRepositoryImpl implements CommentRepository {
     }
 
     @Override
-    public List<Comment> findAllByFeedId() {
-        return null;
+    public List<Comment> findAllByFeedId(Long feedId) {
+        return commentJpaRepository.findAllByFeedId(feedId);
     }
 }

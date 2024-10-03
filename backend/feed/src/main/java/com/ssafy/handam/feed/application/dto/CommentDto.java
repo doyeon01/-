@@ -1,6 +1,7 @@
 package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Comment;
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import java.time.LocalDateTime;
 
 public record CommentDto(
@@ -12,7 +13,7 @@ public record CommentDto(
         String userProfileImageUrl,
         LocalDateTime createdDate
 ) {
-    public static CommentDto of(Comment comment , UserDetailDto userDetailDto) {
+    public static CommentDto of(Comment comment , UserDto userDetailDto) {
         return new CommentDto(
                 comment.getId(),
                 comment.getUserId(),

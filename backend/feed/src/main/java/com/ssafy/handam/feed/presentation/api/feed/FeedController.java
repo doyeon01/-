@@ -132,8 +132,7 @@ public class FeedController {
     public ApiResult<CommentsResponse> getComments(
             @CookieValue(name = "accessToken", required = false) String accessToken,
             @PathVariable Long feedId) {
-        return success(new CommentsResponse(
-                List.of(new CommentDto(1L, 1L, 1L, "content", "username", "profileImageUrl", LocalDateTime.now()))));
+        return success(commentService.findAllByFeedId(feedId));
     }
 }
 

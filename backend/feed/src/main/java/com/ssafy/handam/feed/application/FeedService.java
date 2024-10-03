@@ -175,18 +175,4 @@ public class FeedService {
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
-
-    public CommentCreateResponse createComment(Long feedId, Long userId, String content) {
-//        return CommentCreateResponse.of(feedDomainService.createComment(feedId, userId, content));
-        // TODO : feedId에 댓글을 추가하는 기능을 구현하세요.
-        return new CommentCreateResponse(1L, 1L, 1L, "content");
-    }
-
-    public List<CommentDto> getComments(Long feedId) {
-//        feedDomainService.getComments(feedId);
-        // TODO : feedId에 해당하는 댓글 목록을 조회하는 기능을 구현하세요.
-        CommentDto commentDto = new CommentDto(1L, 1L, 1L, "content", "username", "userProfileImageUrl",
-                LocalDateTime.now());
-        return List.of(commentDto);
-    }
 }

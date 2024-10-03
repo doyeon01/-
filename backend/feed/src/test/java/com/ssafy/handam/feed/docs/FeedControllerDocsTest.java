@@ -32,6 +32,7 @@ import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
 import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
+import com.ssafy.handam.feed.presentation.response.feed.CommentsResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
@@ -120,9 +121,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
-                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지 번호"),
-                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
@@ -194,9 +195,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
-                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지 번호"),
-                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
@@ -481,9 +482,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
-                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지 번호"),
-                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
@@ -555,9 +556,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
-                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
                                         .description("현재 페이지 번호"),
-                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
                                         .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
@@ -626,9 +627,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
         // given
         CommentDto commentDto = new CommentDto(1L, 1L, 1L, "content", "username", "profileImageUrl",
                 LocalDateTime.now());
-
+        CommentsResponse response = CommentsResponse.of(List.of(commentDto));
         // when
-        given(feedService.getComments(any())).willReturn(List.of(commentDto));
+        given(commentService.findAllByFeedId(any())).willReturn(response);
 
         // then
         mockMvc.perform(
@@ -691,4 +692,3 @@ class FeedControllerDocsTest extends RestDocsSupport {
         );
     }
 }
-

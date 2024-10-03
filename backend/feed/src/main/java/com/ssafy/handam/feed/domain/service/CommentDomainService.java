@@ -7,6 +7,7 @@ import com.ssafy.handam.feed.domain.entity.Comment;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.repository.CommentRepository;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -24,5 +25,9 @@ public class CommentDomainService {
         feed.incrementCommentCount();
         feedRepository.save(feed);
         return CreateCommentServiceResponse.from(CreateCommentDomainResponse.from(saved));
+    }
+
+    public List<Comment> findAllByFeedId(Long feedId) {
+        return commentRepository.findAllByFeedId(feedId);
     }
 }
