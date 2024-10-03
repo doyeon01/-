@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.presentation.api;
+package com.ssafy.handam.feed.infrastructure.presentation.api;
 
 import lombok.Getter;
 import org.springframework.http.HttpStatus;

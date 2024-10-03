@@ -28,18 +28,17 @@ import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServiceResponse;
 import com.ssafy.handam.feed.domain.PlaceType;
-import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
-import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
-import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
-import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
-import com.ssafy.handam.feed.presentation.response.feed.CommentsResponse;
-import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.request.comment.CreateCommentRequest;
+import com.ssafy.handam.feed.infrastructure.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.infrastructure.presentation.response.comment.CreateCommentResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CommentsResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CreatedFeedsByUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedLikeResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.RecommendedFeedsForUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.SearchedFeedsResponse;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -138,7 +137,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
 
         SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto), 0, false);
 
-        given(feedService.searchFeedsByKeywordSortedByLikeCount(anyString(), anyInt(), anyInt())).willReturn(response);
+        given(feedService.searchFeedsByKeywordSortedByLikeCount(anyString(), anyInt(), anyInt() , any())).willReturn(response);
 
         mockMvc.perform(
                         get("/api/v1/feeds/search")
@@ -255,7 +254,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 false
         );
 
-        given(feedService.getFeedDetails(any(Long.class))).willReturn(feedDetailResponse);
+        given(feedService.getFeedDetails(any(Long.class) , any())).willReturn(feedDetailResponse);
 
         mockMvc.perform(
                         get("/api/v1/feeds/{feedId}", 1)
@@ -332,7 +331,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 0
         );
 
-        given(feedService.createFeed(any(), any())).willReturn(response);
+        given(feedService.createFeed(any(), any(),any())).willReturn(response);
 
         // JSON 데이터 파트 생성
         String requestBody = objectMapper.writeValueAsString(request);
@@ -426,7 +425,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
 
         LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto), 0, false);
 
-        given(feedService.getLikedFeedsByUser(any(), any())).willReturn(response);
+        given(feedService.getLikedFeedsByUser(any(), any() , any())).willReturn(response);
 
         mockMvc.perform(
                         get("/api/v1/feeds/liked")
@@ -498,7 +497,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
 
         CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto), 0, false);
 
-        given(feedService.getCreatedFeedsByUser(any(), any())).willReturn(response);
+        given(feedService.getCreatedFeedsByUser(any(), any() , any())).willReturn(response);
 
         mockMvc.perform(
                         get("/api/v1/feeds/users/created")
@@ -629,7 +628,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 LocalDateTime.now());
         CommentsResponse response = CommentsResponse.of(List.of(commentDto));
         // when
-        given(commentService.findAllByFeedId(any())).willReturn(response);
+        given(commentService.findAllByFeedId(any(), any())).willReturn(response);
 
         // then
         mockMvc.perform(

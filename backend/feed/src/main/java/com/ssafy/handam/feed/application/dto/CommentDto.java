@@ -20,7 +20,7 @@ public record CommentDto(
                 comment.getFeedId(),
                 comment.getContent(),
                 userDetailDto.name(),
-                userDetailDto.profileImageUrl(),
+                userDetailDto.profileImage(),
                 comment.getCreatedDate()
         );
     }

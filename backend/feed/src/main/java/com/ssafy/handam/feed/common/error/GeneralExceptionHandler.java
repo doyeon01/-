@@ -1,7 +1,7 @@
 package com.ssafy.handam.feed.common.error;
 
-import static com.ssafy.handam.feed.presentation.api.ApiUtils.error;
-import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
+import static com.ssafy.handam.feed.infrastructure.presentation.api.ApiUtils.error;
+import com.ssafy.handam.feed.infrastructure.presentation.api.ApiUtils.ApiResult;
 import java.util.Locale;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

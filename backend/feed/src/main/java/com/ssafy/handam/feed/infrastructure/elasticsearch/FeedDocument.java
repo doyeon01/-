@@ -1,7 +1,7 @@
 package com.ssafy.handam.feed.infrastructure.elasticsearch;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -9,8 +9,9 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
-import org.springframework.data.elasticsearch.annotations.GeoPointField;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+
+import java.time.LocalDateTime;
 
 @Data
 @Builder
@@ -21,11 +22,11 @@ public class FeedDocument {
     @Id
     private Long id;
 
-    @Field (type = FieldType.Long)
-    private Long scheduleId;
-
     @Field(type = FieldType.Text)
     private String placeName;
+
+    @Field(type = FieldType.Long)
+    private Long scheduleId;
 
     @Field(type = FieldType.Long)
     private Long userId;
@@ -57,18 +58,20 @@ public class FeedDocument {
     @Field(type = FieldType.Double)
     private double latitude;
 
-    @GeoPointField
-    private GeoPoint location;
+    @Field(type = FieldType.Date)
+    private LocalDate createdDate;
 
     @Field(type = FieldType.Keyword)
     private String placeType;
 
-    @Field(type = FieldType.Date)
-    private LocalDateTime createdDate;
+    @Field(type = FieldType.Object)
+    private GeoPoint location;
 
     public static FeedDocument from(Feed feed) {
         return FeedDocument.builder()
                 .id(feed.getId())
+                .placeName(feed.getPlaceName())
+                .scheduleId(feed.getScheduleId())
                 .userId(feed.getUserId())
                 .title(feed.getTitle())
                 .content(feed.getContent())
@@ -77,10 +80,11 @@ public class FeedDocument {
                 .commentCount(feed.getCommentCount())
                 .address1(feed.getAddress1())
                 .address2(feed.getAddress2())
+                .latitude(feed.getLatitude())
+                .longitude(feed.getLongitude())
                 .location(new GeoPoint(feed.getLatitude(), feed.getLongitude()))
                 .placeType(feed.getPlaceType().name())
-                .createdDate(feed.getCreatedDate())
+                .createdDate(feed.getCreatedDate().toLocalDate())
                 .build();
     }
 }
-

@@ -1,6 +1,5 @@
 package com.ssafy.handam.feed.application;
 
-import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
@@ -11,14 +10,13 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
-import com.ssafy.handam.feed.presentation.response.feed.CommentCreateResponse;
-import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
-import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CreatedFeedsByUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedLikeResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.RecommendedFeedsForUserResponse;
+import com.ssafy.handam.feed.infrastructure.presentation.response.feed.SearchedFeedsResponse;
 import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -74,29 +72,30 @@ public class FeedService {
         return RecommendedFeedsForUserResponse.of(previewDtos, 0, false);
     }
 
-    public SearchedFeedsResponse searchFeedsByKeywordSortedByLikeCount(String keyword, int page, int size) {
+    public SearchedFeedsResponse searchFeedsByKeywordSortedByLikeCount(String keyword, int page, int size,
+                                                                       String accessToken) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
         Page<FeedDocument> feedDocuments = feedDomainService.searchFeedsByKeywordSortedByLikeCount(keyword, pageable);
 
         List<FeedPreviewDto> feedPreviewDtos = feedDocuments.stream()
                 .map(feedDocument -> {
-                    UserDto userDto = userApiClient.getUserById(feedDocument.getUserId());
+                    UserDto userDto = userApiClient.getUserById(feedDocument.getUserId(), accessToken);
                     return convertToFeedPreviewDto(feedDocument, userDto);
                 }).toList();
 
         return SearchedFeedsResponse.of(feedPreviewDtos, feedDocuments.getNumber(), feedDocuments.hasNext());
     }
 
-    public FeedDetailResponse getFeedDetails(Long feedId) {
+    public FeedDetailResponse getFeedDetails(Long feedId, String accessToken) {
         Feed feed = feedDomainService.findById(feedId);
-        UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId());
+        UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId(), accessToken);
         return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDetailDto.id())),
                 userDetailDto.name(), userDetailDto.profileImageUrl());
     }
 
-    public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath) {
+    public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath, String accessToken) {
         Feed feed = feedDomainService.createFeed(request, savedImagePath);
-        return FeedResponse.from(feed, userApiClient.getUserById(feed.getUserId()));
+        return FeedResponse.from(feed, userApiClient.getUserById(feed.getUserId(), accessToken));
     }
 
     public String saveImage(MultipartFile imageFile) {
@@ -121,26 +120,26 @@ public class FeedService {
     }
 
     @Transactional(readOnly = true)
-    public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable) {
+    public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable, String accessToken) {
         Page<Feed> likedFeedsByUser = feedDomainService.getLikedFeedsByUser(userId, pageable);
         List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser.getContent(),
-                userApiClient.getUserById(userId));
+                userApiClient.getUserById(userId, accessToken));
         return LikedFeedsByUserResponse.of(likedFeeds, likedFeedsByUser.getNumber(), likedFeedsByUser.hasNext());
     }
 
     @Transactional(readOnly = true)
-    public CreatedFeedsByUserResponse getCreatedFeedsByUser(Long userId, Pageable pageable) {
+    public CreatedFeedsByUserResponse getCreatedFeedsByUser(Long userId, Pageable pageable, String accessToken) {
         Page<Feed> createdFeedsByUser = feedDomainService.getCreatedFeedsByUser(userId, pageable);
         List<FeedPreviewDto> createdFeeds = getFeedPreviewDtoList(
                 createdFeedsByUser.getContent(),
-                userApiClient.getUserById(userId));
+                userApiClient.getUserById(userId, accessToken));
         return CreatedFeedsByUserResponse.of(createdFeeds, createdFeedsByUser.getNumber(),
                 createdFeedsByUser.hasNext());
     }
 
     private List<FeedPreviewDto> getFeedPreviewDtoList(List<Feed> feeds, UserDto user) {
         return feeds.stream()
-                .map(feed -> FeedPreviewDto.from(feed, user.name(), user.profileImageUrl(),
+                .map(feed -> FeedPreviewDto.from(feed, user.name(), user.profileImage(),
                         isLikedFeed(feed, user.id())))
                 .toList();
     }
@@ -149,8 +148,8 @@ public class FeedService {
         return feedDomainService.isLikedFeed(feed.getId(), userId);
     }
 
-    private UserDetailDto getUserDetailDto(Long userId) {
-        return UserDetailDto.from(userApiClient.getUserById(userId));
+    private UserDetailDto getUserDetailDto(Long userId, String accessToken) {
+        return UserDetailDto.from(userApiClient.getUserById(userId, accessToken));
     }
 
     private FeedPreviewDto convertToFeedPreviewDto(FeedDocument feedDocument, UserDto userDto) {
@@ -170,7 +169,7 @@ public class FeedService {
                 feedDocument.getLatitude(),
                 feedDocument.getPlaceType(),
                 userDto.name(),
-                userDto.profileImageUrl(),
+                userDto.profileImage(),
                 feedDomainService.isLikedFeed(feedDocument.getId(), userDto.id()),
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );

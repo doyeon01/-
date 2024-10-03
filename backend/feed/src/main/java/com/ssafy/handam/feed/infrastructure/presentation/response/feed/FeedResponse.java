@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.presentation.response.feed;
+package com.ssafy.handam.feed.infrastructure.presentation.response.feed;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
@@ -23,7 +23,7 @@ public record FeedResponse(
                 feed.getId(),
                 userDto.id(),
                 userDto.name(),
-                userDto.profileImageUrl(),
+                userDto.profileImage(),
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),

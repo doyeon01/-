@@ -13,7 +13,7 @@ public record UserDetailDto(
                 userDto.id(),
                 userDto.name(),
                 userDto.email(),
-                userDto.profileImageUrl()
+                userDto.profileImage()
         );
     }
 }
