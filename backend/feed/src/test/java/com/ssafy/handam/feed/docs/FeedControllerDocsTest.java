@@ -47,7 +47,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 class FeedControllerDocsTest extends RestDocsSupport {
 
@@ -56,7 +55,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     void getRecommendedFeedsForUser() throws Exception {
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
-        RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto));
+        RecommendedFeedsForUserResponse response = RecommendedFeedsForUserResponse.of(List.of(feedPreviewDto), 1, true);
 
         given(feedService.getRecommendedFeedsForUser(any())).willReturn(response);
 
@@ -87,6 +86,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
+                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
                                 fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
@@ -117,6 +120,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
+                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -128,7 +135,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
 
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
-        SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto));
+        SearchedFeedsResponse response = SearchedFeedsResponse.of(List.of(feedPreviewDto), 0, false);
 
         given(feedService.searchFeedsByKeywordSortedByLikeCount(anyString(), anyInt(), anyInt())).willReturn(response);
 
@@ -153,6 +160,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
+                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
                                 fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
@@ -183,6 +194,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
+                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -289,6 +304,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void createFeedTest() throws Exception {
         FeedCreationRequest request = FeedCreationRequest.builder()
+                .scheduleId(1L)
                 .userId(1L)
                 .title("Test Title")
                 .content("Test Content")
@@ -407,7 +423,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     void getLikedFeedsByUserTest() throws Exception {
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
-        LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto));
+        LikedFeedsByUserResponse response = LikedFeedsByUserResponse.of(List.of(feedPreviewDto), 0, false);
 
         given(feedService.getLikedFeedsByUser(any(), any())).willReturn(response);
 
@@ -431,6 +447,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
+                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
                                 fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
@@ -461,6 +481,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
+                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -471,7 +495,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     void getCreatedFeedsByUserTest() throws Exception {
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
 
-        CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto));
+        CreatedFeedsByUserResponse response = CreatedFeedsByUserResponse.of(List.of(feedPreviewDto), 0, false);
 
         given(feedService.getCreatedFeedsByUser(any(), any())).willReturn(response);
 
@@ -496,6 +520,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
+                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
                                 fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
                                 fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
@@ -527,6 +555,10 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("좋아요 여부"),
                                 fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
                                         .description("피드 생성일자"),
+                                fieldWithPath("response.currentPageNumber").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("response.hasNext").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -639,6 +671,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
     private static FeedPreviewDto getFeedPreviewDto() {
         return new FeedPreviewDto(
                 1L,
+                1L,
+                "placeName",
                 "title",
                 "content",
                 "imageUrl",

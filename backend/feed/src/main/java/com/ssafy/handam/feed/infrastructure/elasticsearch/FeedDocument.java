@@ -21,6 +21,12 @@ public class FeedDocument {
     @Id
     private Long id;
 
+    @Field (type = FieldType.Long)
+    private Long scheduleId;
+
+    @Field(type = FieldType.Text)
+    private String placeName;
+
     @Field(type = FieldType.Long)
     private Long userId;
 

@@ -1,8 +1,10 @@
 package com.ssafy.handam.feed.application.dto.request.feed;
 
-public record RecommendedFeedsForUserServiceRequest(Long userId, int page, int size) {
+import org.springframework.data.domain.Pageable;
 
-    public static RecommendedFeedsForUserServiceRequest of(long userId, int page, int size) {
-        return new RecommendedFeedsForUserServiceRequest(userId, page, size);
+public record RecommendedFeedsForUserServiceRequest(Long userId, Pageable pageable) {
+
+    public static RecommendedFeedsForUserServiceRequest of(long userId, Pageable pageable) {
+        return new RecommendedFeedsForUserServiceRequest(userId, pageable);
     }
 }
