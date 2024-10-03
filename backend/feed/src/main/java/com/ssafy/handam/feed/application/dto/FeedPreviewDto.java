@@ -5,11 +5,14 @@ import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
         Long id,
+        Long scheduleId,
+        String placeName,
         String title,
         String content,
         String imageUrl,
         Long userId,
         int likeCount,
+        int commentCount,
         String address1,
         String address2,
         Double longitude,
@@ -27,11 +30,14 @@ public record FeedPreviewDto(
                 "N/A";
         return new FeedPreviewDto(
                 feed.getId(),
+                feed.getScheduleId(),
+                feed.getPlaceName(),
                 feed.getTitle(),
                 feed.getContent(),
                 feed.getImageUrl(),
                 feed.getUserId(),
                 feed.getLikeCount(),
+                feed.getCommentCount(),
                 feed.getAddress1(),
                 feed.getAddress2(),
                 feed.getLongitude(),

@@ -87,6 +87,8 @@ public class AccompanyBoardCommentControllerDocsTest extends RestDocsSupport {
                 1L,
                 1L,
                 1L,
+                "http://example.com/profile.jpg",
+                "김민주",
                 "testContent"
         );
 
@@ -114,6 +116,10 @@ public class AccompanyBoardCommentControllerDocsTest extends RestDocsSupport {
                                         .description("댓글 작성자 ID"),
                                 fieldWithPath("response.comments[].accompanyBoardArticleId").type(JsonFieldType.NUMBER)
                                         .description("동행 게시글 ID"),
+                                fieldWithPath("response.comments[].profileImageUrl").type(JsonFieldType.STRING)
+                                        .description("작성자 프로필 사진 경로"),
+                                fieldWithPath("response.comments[].name").type(JsonFieldType.STRING)
+                                        .description("작성자 이름"),
                                 fieldWithPath("response.comments[].content").type(JsonFieldType.STRING)
                                         .description("댓글 내용"),
                                 fieldWithPath("error").description("에러 메시지")

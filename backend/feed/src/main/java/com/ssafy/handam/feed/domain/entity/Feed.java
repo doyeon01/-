@@ -21,6 +21,8 @@ public class Feed extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String placeName;
+    private Long scheduleId;
     private Long userId;
     private String title;
     private String content;
@@ -30,12 +32,16 @@ public class Feed extends BaseEntity {
     private Double longitude;
     private Double latitude;
     private int likeCount;
+    private int commentCount;
+
 
     @Enumerated(EnumType.STRING)
     private PlaceType placeType;
 
     @Builder
     private Feed(
+            String placeName,
+            Long scheduleId,
             String title,
             String content,
             String imageUrl,
@@ -46,6 +52,8 @@ public class Feed extends BaseEntity {
             PlaceType placeType,
             Long userId
     ) {
+        this.placeName = placeName;
+        this.scheduleId = scheduleId;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
@@ -56,6 +64,7 @@ public class Feed extends BaseEntity {
         this.placeType = placeType;
         this.userId = userId;
         this.likeCount = 0;
+        this.commentCount = 0;
     }
 
     public void incrementLikeCount() {
@@ -65,6 +74,16 @@ public class Feed extends BaseEntity {
     public void decrementLikeCount() {
         if (this.likeCount > 0) {
             this.likeCount--;
+        }
+    }
+
+    public void incrementCommentCount() {
+        this.commentCount++;
+    }
+
+    public void decrementCommentCount() {
+        if (this.commentCount > 0) {
+            this.commentCount--;
         }
     }
 }

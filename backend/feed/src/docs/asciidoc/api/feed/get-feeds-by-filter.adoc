@@ -4,7 +4,7 @@
 ==== HTTP Request
 
 include::{snippets}/get-feeds-by-filter/http-request.adoc[]
-include::{snippets}/get-feeds-by-filter/request-fields.adoc[]
+include::{snippets}/get-feeds-by-filter/query-parameters.adoc[]
 
 ==== HTTP Response
 

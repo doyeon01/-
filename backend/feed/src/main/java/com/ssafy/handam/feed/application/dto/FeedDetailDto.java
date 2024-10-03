@@ -5,6 +5,8 @@ import java.time.format.DateTimeFormatter;
 
 public record FeedDetailDto(
         Long id,
+        Long scheduleId,
+        String placeName,
         Long userId,
         String title,
         String content,
@@ -16,15 +18,18 @@ public record FeedDetailDto(
         String placeType,
         String createdDate,
         int likeCount,
+        int commentCount,
         boolean isLiked
 ) {
 
     public static FeedDetailDto of(Feed feed, boolean isLiked) {
-         String formattedCreatedDate = (feed.getCreatedDate() != null) ?
+        String formattedCreatedDate = (feed.getCreatedDate() != null) ?
                 feed.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
                 "N/A";
         return new FeedDetailDto(
                 feed.getId(),
+                feed.getScheduleId(),
+                feed.getPlaceName(),
                 feed.getUserId(),
                 feed.getTitle(),
                 feed.getContent(),
@@ -36,6 +41,7 @@ public record FeedDetailDto(
                 feed.getPlaceType().name(),
                 formattedCreatedDate,
                 feed.getLikeCount(),
+                feed.getCommentCount(),
                 isLiked
         );
     }

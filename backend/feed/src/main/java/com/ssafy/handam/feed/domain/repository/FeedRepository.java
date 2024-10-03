@@ -12,7 +12,9 @@ public interface FeedRepository {
 
     Feed save(Feed feed);
 
-    List<Feed> findByUserId(Long userId, Pageable pageable);
+    Page<Feed> findByUserId(Long userId, Pageable pageable);
 
     Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable);
+
+    Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
 }

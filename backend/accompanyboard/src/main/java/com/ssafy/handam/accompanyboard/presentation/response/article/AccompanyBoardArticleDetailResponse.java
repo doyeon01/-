@@ -6,9 +6,12 @@ public record AccompanyBoardArticleDetailResponse(
         Long id,
         Long userId,
         Long scheduleId,
+        String profileImageUrl,
+        String name,
         String title,
-        String description
-) {
+        String description,
+        String createdDate,
+        int commentCount) {
 
     public static AccompanyBoardArticleDetailResponse of(
             AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto
@@ -17,8 +20,11 @@ public record AccompanyBoardArticleDetailResponse(
                 accompanyBoardArticleDetailDto.id(),
                 accompanyBoardArticleDetailDto.userId(),
                 accompanyBoardArticleDetailDto.scheduleId(),
+                accompanyBoardArticleDetailDto.name(),
+                accompanyBoardArticleDetailDto.profileImageUrl(),
                 accompanyBoardArticleDetailDto.title(),
-                accompanyBoardArticleDetailDto.description()
-        );
+                accompanyBoardArticleDetailDto.description(),
+                accompanyBoardArticleDetailDto.createdDate(),
+                accompanyBoardArticleDetailDto.commentCount());
     }
 }
