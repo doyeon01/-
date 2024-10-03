@@ -1,0 +1,13 @@
+[[get-comments]]
+=== 댓글 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-comments/http-request.adoc[]
+include::{snippets}/get-comments/request-cookies.adoc[]
+include::{snippets}/get-comments/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-comments/http-response.adoc[]
+include::{snippets}/get-comments/response-fields.adoc[]

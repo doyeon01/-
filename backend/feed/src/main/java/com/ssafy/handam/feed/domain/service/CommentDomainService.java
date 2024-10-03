@@ -21,7 +21,8 @@ public class CommentDomainService {
         Comment saved = commentRepository.save(Comment.create(request));
         Long feedId = request.feedId();
         Feed feed = feedRepository.findById(feedId).orElseThrow(IllegalArgumentException::new);
-        feed.
+        feed.incrementCommentCount();
+        feedRepository.save(feed);
         return CreateCommentServiceResponse.from(CreateCommentDomainResponse.from(saved));
     }
 }

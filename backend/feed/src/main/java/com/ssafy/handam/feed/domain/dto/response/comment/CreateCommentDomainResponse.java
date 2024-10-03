@@ -10,7 +10,7 @@ public record CreateCommentDomainResponse(
 ) {
     public static CreateCommentDomainResponse from(Comment comment) {
         return new CreateCommentDomainResponse(
-                comment.getCommentId(),
+                comment.getId(),
                 comment.getFeedId(),
                 comment.getUserId(),
                 comment.getContent());

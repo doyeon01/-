@@ -1,6 +1,5 @@
 package com.ssafy.handam.feed.domain.entity;
 
-import com.fasterxml.jackson.databind.ser.Serializers.Base;
 import com.ssafy.handam.feed.domain.dto.request.comment.CreateCommentDomainRequest;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -14,18 +13,18 @@ import lombok.NoArgsConstructor;
 @Getter
 @Entity
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Comment extends Base {
+public class Comment extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long commentId;
+    private Long id;
 
     private Long userId;
     private Long feedId;
     private String content;
 
     @Builder
-    public Comment(Long userId, Long feedId, String content) {
+    private Comment(Long userId, Long feedId, String content) {
         this.userId = userId;
         this.feedId = feedId;
         this.content = content;

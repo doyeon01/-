@@ -36,6 +36,9 @@ public class FeedDocument {
     @Field(type = FieldType.Integer)
     private int likeCount;
 
+    @Field(type = FieldType.Integer)
+    private int commentCount;
+
     @Field(type = FieldType.Text)
     private String address1;
 
@@ -65,6 +68,7 @@ public class FeedDocument {
                 .content(feed.getContent())
                 .imageUrl(feed.getImageUrl())
                 .likeCount(feed.getLikeCount())
+                .commentCount(feed.getCommentCount())
                 .address1(feed.getAddress1())
                 .address2(feed.getAddress2())
                 .location(new GeoPoint(feed.getLatitude(), feed.getLongitude()))

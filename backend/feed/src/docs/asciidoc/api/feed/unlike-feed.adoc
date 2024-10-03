@@ -1,4 +1,4 @@
-[[like-feed]]
+[[unlike-feed]]
 === 피드 좋아요 취소 API
 
 ==== HTTP Request
