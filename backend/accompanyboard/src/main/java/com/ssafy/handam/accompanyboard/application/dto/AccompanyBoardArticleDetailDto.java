@@ -10,12 +10,14 @@ public record AccompanyBoardArticleDetailDto(
         Long id,
         Long userId,
         Long scheduleId,
+        String profileImageUrl,
+        String name,
         String title,
         String description,
         String createdDate,
         int commentCount) {
 
-    public static AccompanyBoardArticleDetailDto of(Article article, int commentCount) {
+    public static AccompanyBoardArticleDetailDto from(Article article, int commentCount, UserDetailDto userDetailDto) {
 
             String formattedCreatedDate = (article.getCreatedDate() != null) ?
             article.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
@@ -24,6 +26,8 @@ public record AccompanyBoardArticleDetailDto(
                 article.getId(),
                 article.getUserId(),
                 article.getScheduleId(),
+                userDetailDto.profileImageUrl(),
+                userDetailDto.name(),
                 article.getTitle(),
                 article.getDescription(),
                 formattedCreatedDate,

@@ -2,9 +2,11 @@ package com.ssafy.handam.accompanyboard.application;
 
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
+import com.ssafy.handam.accompanyboard.application.dto.UserDetailDto;
 import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardArticleDomainService;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardCommentDomainService;
+import com.ssafy.handam.accompanyboard.infrastructure.client.UserApiClient;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByTitleResponse;
@@ -25,10 +27,12 @@ public class AccompanyBoardArticleService {
     private final int INIT_COMMENT_COUNT = 0;
     private final AccompanyBoardArticleDomainService accompanyBoardArticleDomainService;
     private final AccompanyBoardCommentDomainService accompanyBoardCommentDomainService;
+    private final UserApiClient userApiClient;
 
     public AccompanyBoardArticleDetailResponse createArticle(AccompanyBoardArticleCreationRequest request) {
         Article article = accompanyBoardArticleDomainService.createArticle(request);
-        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, INIT_COMMENT_COUNT));
+        UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.from(article, INIT_COMMENT_COUNT, userDetailDto));
     }
 
     public AccompanyBoardArticlesResponse getArticles(Pageable pageable) {
@@ -41,7 +45,8 @@ public class AccompanyBoardArticleService {
     public AccompanyBoardArticleDetailResponse getArticleDetails(Long articleId) {
         Article article = accompanyBoardArticleDomainService.getArticleDetails(articleId);
         int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(articleId);
-        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.of(article, commentCount));
+        UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
+        return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.from(article, commentCount, userDetailDto));
     }
 
     public AccompanyBoardArticlesByUserResponse getArticlesByUser(Long userId, Pageable pageable) {
@@ -59,8 +64,12 @@ public class AccompanyBoardArticleService {
     }
 
     private List<AccompanyBoardArticlePreviewDto> getAccompanyBoardArticlePreviewDtoList(List<Article> articles) {
+
         return articles.stream()
-                .map(AccompanyBoardArticlePreviewDto::of)
+                .map(article -> {
+                    UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
+                    return AccompanyBoardArticlePreviewDto.from(article, userDetailDto);
+                })
                 .toList();
     }
 
@@ -68,8 +77,13 @@ public class AccompanyBoardArticleService {
         return articles.stream()
                 .map(article -> {
                     int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(article.getId());
-                    return AccompanyBoardArticleDetailDto.of(article, commentCount);
+                    UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
+                    return AccompanyBoardArticleDetailDto.from(article, commentCount, userDetailDto);
                 })
                 .toList();
+    }
+
+    private UserDetailDto getUserDetailDto(Long userId) {
+        return UserDetailDto.from(userApiClient.getUserById(userId));
     }
 }
