@@ -45,6 +45,8 @@ export interface FeedResponse {
   success: boolean;
   response: {
     feeds: Feed[];
+    currentPage: number;
+    hasNextPage: boolean;
   };
   error: null;
 }
