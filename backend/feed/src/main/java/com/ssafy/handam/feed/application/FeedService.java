@@ -52,6 +52,8 @@ public class FeedService {
         // FeedPreviewDto 생성 시 createdDate 추가
         FeedPreviewDto feedPreviewDto = new FeedPreviewDto(
                 1L,
+                1L,
+                "placeName",
                 "title",
                 "content",
                 "image-url",
@@ -69,7 +71,7 @@ public class FeedService {
                 createdDate // 생성일자
         );
         List<FeedPreviewDto> previewDtos = List.of(feedPreviewDto);
-        return RecommendedFeedsForUserResponse.of(previewDtos);
+        return RecommendedFeedsForUserResponse.of(previewDtos, 0, false);
     }
 
     public SearchedFeedsResponse searchFeedsByKeywordSortedByLikeCount(String keyword, int page, int size) {
@@ -82,7 +84,7 @@ public class FeedService {
                     return convertToFeedPreviewDto(feedDocument, userDto);
                 }).toList();
 
-        return SearchedFeedsResponse.of(feedPreviewDtos);
+        return SearchedFeedsResponse.of(feedPreviewDtos, feedDocuments.getNumber(), feedDocuments.hasNext());
     }
 
     public FeedDetailResponse getFeedDetails(Long feedId) {
@@ -120,17 +122,20 @@ public class FeedService {
 
     @Transactional(readOnly = true)
     public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable) {
-        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(feedDomainService.getLikedFeedsByUser(userId, pageable),
+        Page<Feed> likedFeedsByUser = feedDomainService.getLikedFeedsByUser(userId, pageable);
+        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser.getContent(),
                 userApiClient.getUserById(userId));
-        return LikedFeedsByUserResponse.of(likedFeeds);
+        return LikedFeedsByUserResponse.of(likedFeeds, likedFeedsByUser.getNumber(), likedFeedsByUser.hasNext());
     }
 
     @Transactional(readOnly = true)
     public CreatedFeedsByUserResponse getCreatedFeedsByUser(Long userId, Pageable pageable) {
+        Page<Feed> createdFeedsByUser = feedDomainService.getCreatedFeedsByUser(userId, pageable);
         List<FeedPreviewDto> createdFeeds = getFeedPreviewDtoList(
-                feedDomainService.getCreatedFeedsByUser(userId, pageable),
+                createdFeedsByUser.getContent(),
                 userApiClient.getUserById(userId));
-        return CreatedFeedsByUserResponse.of(createdFeeds);
+        return CreatedFeedsByUserResponse.of(createdFeeds, createdFeedsByUser.getNumber(),
+                createdFeedsByUser.hasNext());
     }
 
     private List<FeedPreviewDto> getFeedPreviewDtoList(List<Feed> feeds, UserDto user) {
@@ -151,6 +156,8 @@ public class FeedService {
     private FeedPreviewDto convertToFeedPreviewDto(FeedDocument feedDocument, UserDto userDto) {
         return new FeedPreviewDto(
                 feedDocument.getId(),
+                feedDocument.getScheduleId(),
+                feedDocument.getPlaceName(),
                 feedDocument.getTitle(),
                 feedDocument.getContent(),
                 feedDocument.getImageUrl(),

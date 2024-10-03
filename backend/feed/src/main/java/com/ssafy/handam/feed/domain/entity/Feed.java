@@ -21,6 +21,8 @@ public class Feed extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    private String placeName;
+    private Long scheduleId;
     private Long userId;
     private String title;
     private String content;
@@ -38,6 +40,8 @@ public class Feed extends BaseEntity {
 
     @Builder
     private Feed(
+            String placeName,
+            Long scheduleId,
             String title,
             String content,
             String imageUrl,
@@ -48,6 +52,8 @@ public class Feed extends BaseEntity {
             PlaceType placeType,
             Long userId
     ) {
+        this.placeName = placeName;
+        this.scheduleId = scheduleId;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;
