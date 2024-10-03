@@ -25,6 +25,6 @@ public class UserApiClient {
 
     public UserDto convertMapToUserDto(Map map) {
         Map<String, Object> userResponse = (Map<String, Object>)map.get("response");
-        return UserDto.of((Long)userResponse.get("id"), (String)userResponse.get("nickname"), (String)userResponse.get("email"), (String)userResponse.get("profileImageUrl"));
+        return UserDto.of(((Integer) userResponse.get("id")).longValue(), (String)userResponse.get("nickname"), (String)userResponse.get("email"), (String)userResponse.get("profileImageUrl"));
     }
 }
