@@ -1,7 +1,10 @@
 package com.ssafy.handam.accompanyboard.infrastructure.client;
 
+import com.ssafy.handam.accompanyboard.infrastructure.client.dto.UserDto;
+import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
-import lombok.Value;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -11,8 +14,17 @@ public class UserApiClient {
 
     private final RestTemplate restTemplate;
 
-//    @Value("http://j11c205.p.ssafy.io:8081")
+    @Value("${user.service.url}")
     private String userServiceUrl;
 
-//    public
+    public UserDto getUserById(Long userId) {
+
+        Map<String, Object> userMap = restTemplate.getForObject(userServiceUrl + "/user/" + userId, Map.class);
+        return convertMapToUserDto(userMap);
+    }
+
+    public UserDto convertMapToUserDto(Map map) {
+        Map<String, Object> userResponse = (Map<String, Object>)map.get("response");
+        return UserDto.of((Long)userResponse.get("id"), (String)userResponse.get("nickname"), (String)userResponse.get("email"), (String)userResponse.get("profileImageUrl"));
+    }
 }

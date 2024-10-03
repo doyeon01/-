@@ -34,7 +34,7 @@ public class AccompanyBoardArticleController {
     }
 
     @GetMapping
-    public ApiResult<AccompanyBoardArticlesResponse> getArticles(@PageableDefault(size = 10) Pageable pageable) {
+    public ApiResult<AccompanyBoardArticlesResponse> getArticles(@PageableDefault(size = 6) Pageable pageable) {
         return success(accompanyBoardArticleService.getArticles(pageable));
     }
 
@@ -44,12 +44,12 @@ public class AccompanyBoardArticleController {
     }
 
     @GetMapping("/user/{userId}")
-    public ApiResult<AccompanyBoardArticlesByUserResponse> getArticlesByUser(@PathVariable Long userId, @PageableDefault(size = 10) Pageable pageable) {
+    public ApiResult<AccompanyBoardArticlesByUserResponse> getArticlesByUser(@PathVariable Long userId, @PageableDefault(size = 6) Pageable pageable) {
         return success(accompanyBoardArticleService.getArticlesByUser(userId, pageable));
     }
 
     @GetMapping("/search")
-    public ApiResult<AccompanyBoardArticlesByTitleResponse> getArticlesByTitle(@RequestParam String title, @PageableDefault(size = 10) Pageable pageable) {
+    public ApiResult<AccompanyBoardArticlesByTitleResponse> getArticlesByTitle(@RequestParam String title, @PageableDefault(size = 6) Pageable pageable) {
         return success(accompanyBoardArticleService.getArticlesByTitle(title, pageable));
     }
 }

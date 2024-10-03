@@ -6,14 +6,18 @@ public record AccompanyBoardCommentDto(
         Long id,
         Long userId,
         Long accompanyBoardArticleId,
+        String name,
+        String profileImageUrl,
         String content
 ) {
 
-    public static AccompanyBoardCommentDto of(Comment comment) {
+    public static AccompanyBoardCommentDto from(Comment comment, UserDetailDto userDetailDto) {
         return new AccompanyBoardCommentDto(
                 comment.getId(),
                 comment.getUserId(),
                 comment.getAccompanyBoardArticleId(),
+                userDetailDto.name(),
+                userDetailDto.profileImageUrl(),
                 comment.getContent()
         );
     }

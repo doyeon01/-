@@ -18,3 +18,7 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/, classpath:/public/, classpath:/docs/
+
+user:
+  service:
+    url: http://j11c205.p.ssafy.io:8081/api/v1
