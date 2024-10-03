@@ -6,6 +6,8 @@ public record AccompanyBoardCommentResponse(
         Long id,
         Long userId,
         Long accompanyBoardArticleId,
+        String name,
+        String profileImageUrl,
         String content
 ) {
 
@@ -16,6 +18,8 @@ public record AccompanyBoardCommentResponse(
                 accompanyBoardCommentDto.id(),
                 accompanyBoardCommentDto.userId(),
                 accompanyBoardCommentDto.accompanyBoardArticleId(),
+                accompanyBoardCommentDto.name(),
+                accompanyBoardCommentDto.profileImageUrl(),
                 accompanyBoardCommentDto.content()
         );
     }

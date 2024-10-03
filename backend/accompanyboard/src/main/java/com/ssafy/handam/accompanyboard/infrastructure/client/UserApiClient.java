@@ -25,6 +25,7 @@ public class UserApiClient {
     }
 
     public UserDto convertMapToUserDto(Map map) {
+
         Map<String, Object> userResponse = (Map<String, Object>)map.get("response");
         System.out.println("사용자 이름");
         System.out.println((String)userResponse.get("nickname"));
