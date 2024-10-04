@@ -119,6 +119,9 @@ pipeline {
                     ]){
                         sh """
                              ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                             SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                             CLIENT_ID=${CLIENT_ID} \
+                             CLIENT_SECRET=${CLIENT_SECRET} \
                              docker stop user || true
                              docker rm user || true
                              docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
