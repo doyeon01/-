@@ -1,0 +1,28 @@
+{
+    "success" : true,
+    "response" : {
+      "feeds" : [ {
+        "id" : 1,
+        "scheduleId" : 1,
+        "placeName" : "placeName",
+        "title" : "title",
+        "content" : "content",
+        "imageUrl" : "imageUrl",
+        "userId" : 1,
+        "likeCount" : 10,
+        "commentCount" : 0,
+        "address1" : "123 Main Street",
+        "address2" : "123 Main Street2",
+        "longitude" : 37.7749,
+        "latitude" : 122.4194,
+        "placeType" : "CAFE",
+        "username" : "username",
+        "userProfileImageUrl" : "profile-image-url",
+        "isLiked" : true,
+        "createdDate" : "2024-10-03"
+      } ],
+      "currentPage" : 0,
+      "hasNextPage" : false
+    },
+    "error" : null
+  }

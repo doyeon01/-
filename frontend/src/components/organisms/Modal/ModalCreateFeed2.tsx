@@ -14,7 +14,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
   const [title, setTitle] = useState<string>(''); // 제목
   const [location, setLocation] = useState<string>('')//장소
   const [content, setContent] = useState<string>('');  // 내용
-  const [selectedCategory, setSelectedCategory] = useState<string>('전체'); // 카테고리
+  const [selectedCategory, setSelectedCategory] = useState<string>(''); // 카테고리
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
@@ -109,6 +109,12 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
         })
         .catch((error) => {
           console.error(error);
+          Swal.fire({
+            icon: 'error',
+            title: '피드 생성에 실패했습니다.',
+            text: '다시 시도해주세요.',
+            confirmButtonText: '확인'
+          });
         });
     },
   };
@@ -226,37 +232,30 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
 
                 <div className="flex justify-center space-x-2 my-4">
                   <ButtonLikeCategory
-                    label="# 전체"
-                    initialClicked={selectedCategory === '전체'}
-                    onClick={() => handle.CategoryClick('전체')}
-                    px={2}
-                    py={1}
-                  />
-                  <ButtonLikeCategory
                     label="# 명소"
-                    initialClicked={selectedCategory === '명소'}
-                    onClick={() => handle.CategoryClick('명소')}
+                    initialClicked={selectedCategory === 'TOURIST_ATTRACTION'}
+                    onClick={() => handle.CategoryClick('TOURIST_ATTRACTION')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
                     label="# 숙박"
-                    initialClicked={selectedCategory === '숙박'}
-                    onClick={() => handle.CategoryClick('숙박')}
+                    initialClicked={selectedCategory === 'ACCOMMODATION'}
+                    onClick={() => handle.CategoryClick('ACCOMMODATION')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
                     label="# 음식점"
-                    initialClicked={selectedCategory === '음식점'}
-                    onClick={() => handle.CategoryClick('음식점')}
+                    initialClicked={selectedCategory === 'RESTAURANT'}
+                    onClick={() => handle.CategoryClick('RESTAURANT')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
-                    label="# 카페"
-                    initialClicked={selectedCategory === '카페'}
-                    onClick={() => handle.CategoryClick('카페')}
+                    label="# 기타"
+                    initialClicked={selectedCategory === 'ETC'}
+                    onClick={() => handle.CategoryClick('ETC')}
                     px={2}
                     py={1}
                   />

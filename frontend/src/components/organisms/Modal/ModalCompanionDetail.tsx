@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 // import { fetchArticleDetail,createComment,CommentApiResponse } from '../../../services/api/AccompanyBoardAPI';
-import { ArticleDetail,Comment } from '../../../model/AccompanyBoardType';
+import { ArticleDetailType,CommentType } from '../../../model/AccompanyBoardType';
 import ArticleDetailjson from '../../../dummydata/companion/accompanyBoardsArticlesDetail.json';
 import Commentjson from '../../../dummydata/companion/accompanyBoardsComment.json';
 
@@ -10,14 +10,14 @@ interface ModalCompanionDetailProps {
 
 const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId }) => {
   const [commentContent, setCommentContent] = useState('');
-  const [articleDetail, setArticleDetail] = useState<ArticleDetail | null>(null);
-  const [Comment, setComment] = useState<Comment[] | null>(null);
+  const [articleDetail, setArticleDetail] = useState<ArticleDetailType | null>(null);
+  const [Comment, setComment] = useState<CommentType[] | null>(null);
 
   // const [error, setError] = useState('');
 
   useEffect(() => {
     const loadArticles = async () => {
-      const data: ArticleDetail = ArticleDetailjson[0].response; 
+      const data: ArticleDetailType = ArticleDetailjson[0].response; 
       setArticleDetail(data);
       // try {
       //   const data = await CommentApiResponse(selectedId);
@@ -35,7 +35,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
 
   useEffect(() => {
     const loadComment = async () => {
-      const data: Comment[] = Commentjson.response.comments; 
+      const data: CommentType[] = Commentjson.response.comments; 
       
       setComment(data);
       // try {

@@ -1,5 +1,9 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom';
+import DaumPostcode from 'react-daum-postcode';
+
+import { getFeed } from '../../services/api/RegisterUser';
+import {FeedType} from '../../model/SearchingFeedType'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
@@ -17,15 +21,76 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
-  const [PageNum, setPageNum] = useState(0)
+  const [PageNum, setPageNum] = useState(6)
   const [IsHide,setIsHide] = useState(true)
   // const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
   const [Fading,setFading] = useState(false)
 
-  const handlePageNum =()=>{
-    setPageNum(PageNum=>PageNum+1)
+  const [address, setAddress] = useState(''); // 선택된 주소 상태
+  const [openPostcode, setOpenPostcode] = useState(false);
+
+  const [nickname, setNickname] = useState(''); // 닉네임 상태
+  const [introduce, setIntroduce] = useState(''); // 자기소개 상태
+  const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
+
+  const [feeds, setFeeds] = useState<FeedType[]>([]);
+
+  let keyword = 'RESTAURANT'
+  let page = 0
+  let size = 15
+
+  useEffect(() => {
+    const fetchFeedsData = async () => {
+      try {
+        const data = await getFeed(keyword, page, size); // 배열 반환
+        console.log('Fetched feeds data:', data); // 전체 데이터 로그
+        console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
+        setFeeds(data.response.feeds); // 상태로 배열을 설정
+      } catch (error) {
+        console.error('Error fetching feeds:', error);
+      }
+    };
+  
+    fetchFeedsData(); // 함수 호출
+  }, [keyword, page, size]);
+
+ // 주소 검색 완료 시 호출되는 함수
+ const handleComplete = (data: any) => {
+  let fullAddress = data.address;
+  let extraAddress = '';
+
+  // 상세 주소를 추가로 확인 (법정동, 건물명 등)
+  if (data.addressType === 'R') {
+    if (data.bname !== '') {
+      extraAddress += data.bname;
+    }
+    if (data.buildingName !== '') {
+      extraAddress += extraAddress !== '' ? `, ${data.buildingName}` : data.buildingName;
+    }
+    fullAddress += extraAddress !== '' ? ` (${extraAddress})` : '';
   }
+
+  setAddress(fullAddress); // 선택한 주소를 상태로 저장
+  setOpenPostcode(false); // 주소 선택 후 모달 닫기
+};
+
+// 주소 검색 모달 열기
+const handleOpenPostcode = () => {
+  setOpenPostcode(true);
+};
+const handlePageNum = () => {
+  if (!nickname || !address) {
+      alert('닉네임과 주소를 입력해 주세요.');
+    } else {
+      setUserData({
+        nickname: nickname,
+        address: address,
+        introduce: introduce,
+      });
+    console.log('저장된 userData:', userData); // 저장된 값 확인
+    setPageNum(PageNum=>PageNum+1)
+}}
 
   const handleIsHide = ()=>{
     setIsHide(IsHide=>!IsHide)
@@ -49,6 +114,8 @@ export const SurveyPage: React.FC = () => {
     console.log('Current MBTI : ', value)
   }
   
+  // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
+
   return (
     <>
       <div
@@ -93,7 +160,7 @@ export const SurveyPage: React.FC = () => {
                   <div className="right-[8px] top-[5px] absolute">
                     <ButtonNext text="다음" onClick={handlePageNum} />
                   </div>
-                  <span className="block mt-[80px] mb-[20px] text-[18px] whitespace-nowrap text-center">
+                  <span className="block mt-[120px] mb-[20px] text-[18px] whitespace-nowrap text-center">
                     여행을 떠나기 전에 <br />
                     간단한 소개를 부탁드려요
                   </span>
@@ -101,8 +168,11 @@ export const SurveyPage: React.FC = () => {
                     <input
                       type="text"
                       id="nickname"
+                      value={nickname}
+                      onChange={(e) => setNickname(e.target.value)} // 닉네임 변경 시 상태 업데이트
                       className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
                       placeholder="닉네임"
+                      maxLength={10}
                     />
                     {/* <input
                       type="text"
@@ -111,14 +181,33 @@ export const SurveyPage: React.FC = () => {
                       placeholder="생년월일"
                     /> */}
                     {/* <GenderSelector Gender={Gender} OnGenderChange={handleGender} /> */}
-                    <textarea
-                      id="address"
-                      className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
-                      placeholder="거주지"
-                    />
+                    <div
+                      className="flex flex-row justify-center items-center w-64 min-h-12 h-full p-6 bg-white rounded-lg text-center text-lg focus:outline-none resize-none border border-gray-300 text-wrap"
+                      onClick={handleOpenPostcode} // 클릭 시 모달 열기
+                    >
+                      {address ? address: 
+                      <div className='text-[#9CA3AF]'>주소를 입력해주세요</div>}
+                    </div>
+
+                    {/* 주소 검색 모달 */}
+                    {openPostcode && (
+                      <div className="fixed top-0 left-0 w-full h-full flex items-center justify-center z-50">
+                        <div className="bg-white p-6 rounded-lg shadow-lg relative w-96">
+                          <button
+                            onClick={() => setOpenPostcode(false)}
+                            className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                          >
+                            &times;
+                          </button>
+                          <DaumPostcode onComplete={handleComplete} />
+                        </div>
+                      </div>
+                    )}
                     <textarea
                       id="introduce"
-                      className="w-[250px] h-[100px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
+                      value={introduce}
+                      onChange={(e) => setIntroduce(e.target.value)} // 자기소개 변경 시 상태 업데이트
+                      className="w-[250px] min-h-[200px] h-full rounded-[10px] text-center text-[18px] p-6 focus:outline-none resize-none"
                       placeholder="자기소개"
                     />
                   </div>
@@ -291,12 +380,20 @@ export const SurveyPage: React.FC = () => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 어떤 음식이 마음에 드시나요?
               </span>
-              <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-                5개 이상 선택해주세요
+              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                      <div>{feed.title}</div>
+                    </div>
+                  )) : 'No feeds available'}
+                {/* {numbers.map((number) => (
+                  <div key={number} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                    {number}
+                  </div>
+                ))} */}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
-                사진 들어갈 곳 <br />
-                애니메이션으로 순차적으로 위로 따다닥 붙게 만들면 멋있지 않을까
+              
               </div>
             </>
           )}

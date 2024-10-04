@@ -22,7 +22,7 @@ export interface UserInfoResponseType {
 
 
 // 마이페이지 피드 목록 api
-export interface Feed {
+export interface FeedType {
   id: number;
   title: string;
   content: string;
@@ -41,10 +41,12 @@ export interface Feed {
   createdDate: string;
 }
 
-export interface FeedResponse {
+export interface FeedResponseType {
   success: boolean;
   response: {
-    feeds: Feed[];
+    feeds: FeedType[];
+    currentPage: number;
+    hasNextPage: boolean;
   };
   error: null;
 }

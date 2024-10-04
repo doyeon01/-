@@ -1,0 +1,15 @@
+{
+    "success" : true,
+    "response" : {
+      "comments" : [ {
+        "id" : 1,
+        "userId" : 1,
+        "feedId" : 1,
+        "content" : "content",
+        "username" : "username",
+        "userProfileImageUrl" : "profileImageUrl",
+        "createdDate" : "2024-10-03T10:30:54.486150397"
+      } ]
+    },
+    "error" : null
+  }

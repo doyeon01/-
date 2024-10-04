@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from 'react';
-import { ModalChatProps, ChatRoom, user,Message } from '../../../model/ChatType';
+import { ModalChatTypeProps, ChatRoomType, userType,MessageType } from '../../../model/ChatType';
 import SockJS from 'sockjs-client';
 import { Client } from '@stomp/stompjs'; // Client를 사용
 import axios from 'axios';
 
 
 
-const ModalChat: React.FC<ModalChatProps> = ({ onClose }) => {
+const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
-  const [chatRooms, setChatRooms] = useState<ChatRoom[]>([]);
+  const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
   const [newMessage, setNewMessage] = useState('');
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [messages, setMessages] = useState<MessageType[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
-  const [partnerUser, setPartnerUser] = useState<user | null>(null);
+  const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [userId] = useState(1); 
 
   useEffect(() => {
@@ -66,13 +66,15 @@ const ModalChat: React.FC<ModalChatProps> = ({ onClose }) => {
   
   
 
-  const selectChatRoom = (roomId: number, user: user) => {
+  const selectChatRoom = (roomId: number, user: userType) => {
     setPartnerUser(user);
     setSelectedRoomId(roomId);
     setMessages([]);
       axios
       .get(`http://localhost:8080/api/v1/chat/${roomId}`)
       .then((response) => {
+        console.log(response.data);
+        
         setMessages(response.data.response);
       })
       .catch((error) => {

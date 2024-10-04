@@ -37,8 +37,8 @@ const App: React.FC = () => {
         </Routes>
       </div>
       
-
-      <ButtonChat/>
+      {location.pathname !== '/' &&  <ButtonChat/>}
+     
     </>
   );
 };
