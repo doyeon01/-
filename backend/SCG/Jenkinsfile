@@ -103,7 +103,9 @@ pipeline {
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
-                    docker run -it -d --name scg -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
+                    docker run -it -d --name scg -p $USER_PORT:$USER_PORT \
+                    -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                    $DOCKER_REPO_USR/$DOCKER_REPO_PSW:scg-latest
                     EOF
                     """.stripIndent()
                 }
