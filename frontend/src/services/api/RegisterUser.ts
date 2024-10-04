@@ -11,7 +11,7 @@ export const RegisterUser = async (id:number)=>{
       }
 }
 //RegisterUser.ts
-export const GetFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType> => {
+export const getFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType> => {
   try {
     const response = await axios.get<FilterFeedType>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`);
     // const reponseFeed = response.data.respons

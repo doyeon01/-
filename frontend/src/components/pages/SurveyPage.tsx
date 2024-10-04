@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
-import { GetFeed } from '../../services/api/RegisterUser';
+import { getFeed } from '../../services/api/RegisterUser';
 import {FeedResponse} from '../../model/SearchingFeedType'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
@@ -43,7 +43,7 @@ export const SurveyPage: React.FC = () => {
   useEffect(() => {
     const fetchFeedsData = async () => {
       try {
-        const data = await GetFeed(keyword, page, size); // 배열 반환
+        const data = await getFeed(keyword, page, size); // 배열 반환
         console.log('Fetched feeds data:', data); // 전체 데이터 로그
         console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
         setFeeds(data.response); // 상태로 배열을 설정
@@ -383,14 +383,23 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
               {feeds && feeds.length > 0 ? (
                 feeds.map(feedResponse => (
-                  feedResponse.feeds.map(feed => (
-                    <div key={feed.id}>
-                      <div>{feed.title}</div>
-                      <img src={feed.imageUrl} alt={feed.title} />
-                    </div>
-                  ))
+                  feedResponse.feeds.length > 0 ? (
+                    feedResponse.feeds.map(feed => (
+                      <div key={feed.id}>
+                        <div>{feed.title}</div>
+                        <img src={feed.imageUrl} alt={feed.title} />
+                      </div>
+                    ))
+                  ) : (
+                    <div>No feeds available in this response</div>
+                  )
                 ))
               ) : 'No feeds available'}
+              {/* {feeds.feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id}>{feed.title}
+                    <img src={feed.imageUrl}/>
+                    </div>
+                  )) : 'No feeds available'} */}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
