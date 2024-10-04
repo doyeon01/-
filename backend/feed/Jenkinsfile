@@ -40,13 +40,18 @@ pipeline {
             }
             steps {
                 script {
+                    withCredentials([
+                        string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                    ])
                     skipRemainingStages = false
                     sh """
                     cd backend/feed
                     chmod +x ./gradlew
                     ./gradlew build
                     ls build/libs
-                    docker build -t feed:latest .
+                    docker build \
+                    --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                    -t feed:latest .
                     """
                 }
             }
@@ -92,8 +97,6 @@ pipeline {
                         sh """
                         ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
                         export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
-                        export CLIENT_ID=${CLIENT_ID}
-                        export CLIENT_SECRET=${CLIENT_SECRET}
                         docker stop feed || true
                         docker rm feed || true
                         docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest || true
