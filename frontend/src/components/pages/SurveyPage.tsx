@@ -90,13 +90,13 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
-  if (PageNum === 8){
+  if (PageNum === 6){
     setkeyword('커피')
   }
-  if (PageNum === 9){
+  if (PageNum === 7){
     setkeyword('TOURIST_ATTRACTION')
   }
-  if (PageNum === 10){
+  if (PageNum === 8){
     setkeyword('ACCOMMODATION')
   }
 }}
