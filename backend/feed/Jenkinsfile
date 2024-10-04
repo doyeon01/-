@@ -43,16 +43,18 @@ pipeline {
                     withCredentials([
                         string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
                     ])
-                    skipRemainingStages = false
-                    sh """
-                    cd backend/feed
-                    chmod +x ./gradlew
-                    ./gradlew build
-                    ls build/libs
-                    docker build \
-                    --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                    -t feed:latest .
-                    """
+                    {
+                        skipRemainingStages = false
+                        sh """
+                        cd backend/feed
+                        chmod +x ./gradlew
+                        ./gradlew build
+                        ls build/libs
+                        docker build \
+                        --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                        -t feed:latest .
+                        """
+                    }
                 }
             }
         }
