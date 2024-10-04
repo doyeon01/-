@@ -27,6 +27,6 @@ export interface Feed {
   
   export interface FilterFeedType {
     success: boolean;
-    response: FeedResponse[];
+    response: FeedResponse;
     error: string | null; // 에러가 없을 경우 null
   }
