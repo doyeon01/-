@@ -2,8 +2,8 @@ import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
-import { GetFeed } from '../../services/api/RegisterUser';
-import {FeedResponse} from '../../model/SearchingFeedType'
+import { getFeed } from '../../services/api/RegisterUser';
+import {Feed} from '../../model/SearchingFeedType'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
@@ -34,7 +34,7 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-  const [feeds, setFeeds] = useState<FeedResponse[]>([]);
+  const [feeds, setFeeds] = useState<Feed[]>([]);
 
   let keyword = 'RESTAURANT'
   let page = 0
@@ -43,9 +43,10 @@ export const SurveyPage: React.FC = () => {
   useEffect(() => {
     const fetchFeedsData = async () => {
       try {
-        const data = await GetFeed(keyword, page, size); // 배열 반환
+        const data = await getFeed(keyword, page, size); // 배열 반환
         console.log('Fetched feeds data:', data); // 전체 데이터 로그
-        setFeeds(data.response); // 상태로 배열을 설정
+        console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
+        setFeeds(data.response.feeds); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
       }
@@ -380,21 +381,11 @@ const handlePageNum = () => {
                 어떤 음식이 마음에 드시나요?
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-              {feeds && feeds.length > 0 ? (
-                feeds.map(feedResponse => (
-                  feedResponse.feeds.map(feed => (
-                    <div key={feed.id}>
-                      <div>{feed.title}</div>
-                      <img src={feed.imageUrl} alt={feed.title} />
-                    </div>
-                  ))
-                ))
-              ) : 'No feeds available'}
-              {/* {feeds.feeds && feeds.length > 0 ? feeds.map(feed => (
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id}>{feed.title}
                     <img src={feed.imageUrl}/>
                     </div>
-                  )) : 'No feeds available'} */}
+                  )) : 'No feeds available'}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
