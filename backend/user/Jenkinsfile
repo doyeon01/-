@@ -112,16 +112,27 @@ pipeline {
             }
             steps {
                 script {
+                    withCredentials([
+                         string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                         string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
+                         string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
+                    ]){
+                        ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                        docker stop user || true
+                        docker rm user || true
+                        docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
+                        docker system prune -f --volumes
+                        docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                        docker run -it -d --name user -p $USER_PORT:$USER_PORT \
+                                -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                                -e CLIENT_ID=${CLIENT_ID} \
+                                -e CLIENT_SECRET=${CLIENT_SECRET} \
+                                $DOCKER_REPO_USR/user-latest
+                        EOF
+                        """.stripIndent()
+                    }
                     sh """
-                    ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
-                    docker stop user || true
-                    docker rm user || true
-                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
-                    docker system prune -f --volumes
-                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
-                    docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
-                    EOF
-                    """.stripIndent()
+
                 }
             }
         }
