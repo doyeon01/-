@@ -66,7 +66,7 @@ public class UserService {
                 .name(oAuthUserInfo.name())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
-                .profileImage(oAuthUserInfo.profileImage())
+                .profileImageUrl(oAuthUserInfo.profileImageUrl())
                 .build();
 
         User savedUser = userRepository.save(user);
