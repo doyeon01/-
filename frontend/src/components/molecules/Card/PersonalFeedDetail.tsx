@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터
-import { Feed, FeedResponse } from '../../../model/MyPageType';
+import { FeedType, FeedResponseType } from '../../../model/MyPageType';
 // import { useRecoilValue } from 'recoil';
 // import { UserId } from '../../../Recoil/atoms/Auth';
 // import { FeedList } from '../../../services/api/FeedService'; // 실제 API 요청
 import { useInView } from 'react-intersection-observer';
 
 export const PersonalFeedDetail: React.FC = () => {
-  const [feedInfos, setFeedInfos] = useState<Feed[]>([]); // 피드 데이터 저장
+  const [feedInfos, setFeedInfos] = useState<FeedType[]>([]); // 피드 데이터 저장
   const [page, setPage] = useState(0); // 페이지 번호 저장
   const [hasNextPage, setHasNextPage] = useState(true); // 다음 페이지 여부
   const [ref, inView] = useInView(); // 무한스크롤 구현을 위한 ref, inView
@@ -32,7 +32,7 @@ export const PersonalFeedDetail: React.FC = () => {
   // 피드 데이터를 불러오는 함수
   const loadMoreFeeds = () => {
     // 더미 데이터 
-    const typedFeedData = feedData as FeedResponse;
+    const typedFeedData = feedData as FeedResponseType;
     if (typedFeedData.success) {
       const newFeeds = typedFeedData.response.feeds.slice(page * 10, (page + 1) * 10); // 페이지별 데이터
       if (newFeeds.length > 0) {
@@ -46,7 +46,7 @@ export const PersonalFeedDetail: React.FC = () => {
     // 실제 API 요청 부분 (실제 사용 시 여기를 활성화)
     // FeedList(page, userId)
     //   .then((res) => {
-    //     const data: FeedResponse = res.data;
+    //     const data: FeedResponseType = res.data;
     //     if (data.success) {
     //       if (data.response.feeds.length > 0) {
     //         setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]); // 피드 데이터 추가

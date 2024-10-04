@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
 import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { Feed, FeedResponse } from '../../../model/MyPageType'; // Feed 타입을 import
+import { FeedType, FeedResponseType } from '../../../model/MyPageType'; // Feed 타입을 import
 import { useInView } from 'react-intersection-observer';
 // import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청 import
 // import { useRecoilValue } from 'recoil';
@@ -10,8 +10,8 @@ import { useInView } from 'react-intersection-observer';
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
   const [selectedButton, setSelectedButton] = useState(0); // 선택된 버튼 상태
-  const [filteredFeeds, setFilteredFeeds] = useState<Feed[]>([]); // 필터링된 피드 리스트
-  const [allFeeds, setAllFeeds] = useState<Feed[]>([]); // 모든 피드 리스트
+  const [filteredFeeds, setFilteredFeeds] = useState<FeedType[]>([]); // 필터링된 피드 리스트
+  const [allFeeds, setAllFeeds] = useState<FeedType[]>([]); // 모든 피드 리스트
   const [page, setPage] = useState(0); // 페이지 번호 저장
   const [hasNextPage, setHasNextPage] = useState(true); // 다음 페이지 여부 저장
   const [ref, inView] = useInView(); // 무한 스크롤을 감지하기 위한 ref, inView
@@ -31,7 +31,7 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
 
 
   const loadMoreFeeds = () => {
-    const typedFeedData = feedData as FeedResponse; // 더미 데이터를 사용
+    const typedFeedData = feedData as FeedResponseType; // 더미 데이터를 사용
     const newFeeds = typedFeedData.response.feeds.slice(page * 10, (page + 1) * 10); // 페이지별 데이터
 
     if (newFeeds.length > 0) {
@@ -45,7 +45,7 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     // 실제 API 요청 (필요시 사용)
     // LikeFeedList(userId, page)
     //   .then((res) => {
-    //     const data: FeedResponse = res.data;
+    //     const data: FeedResponseType = res.data;
     //     if (data.success) {
     //       const newFeeds = data.response.feeds;
     //       if (newFeeds.length > 0) {
