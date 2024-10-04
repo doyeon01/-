@@ -85,21 +85,26 @@ pipeline {
             }
             steps {
                 script {
-                    sh """
-                    ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
-                    export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
-                    export CLIENT_ID=${CLIENT_ID}
-                    export CLIENT_SECRET=${CLIENT_SECRET}
-                    docker stop feed || true
-                    docker rm feed || true
-                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest || true
-                    docker system prune -f --volumes
-                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
-                    docker run -it -d --name feed -p $USER_PORT:$USER_PORT \
-                    -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                    $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
-                    EOF
-                    """.stripIndent()
+                    withCredentials([
+                         string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                    ])
+                    {
+                        sh """
+                        ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                        export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
+                        export CLIENT_ID=${CLIENT_ID}
+                        export CLIENT_SECRET=${CLIENT_SECRET}
+                        docker stop feed || true
+                        docker rm feed || true
+                        docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest || true
+                        docker system prune -f --volumes
+                        docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
+                        docker run -it -d --name feed -p $USER_PORT:$USER_PORT \
+                        -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                        $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
+                        EOF
+                        """.stripIndent()
+                    }
                 }
             }
         }

@@ -95,20 +95,22 @@ pipeline {
                 script {
                     withCredentials([
                           string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
-                    ])
-                    sh """
-                    ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
-                    export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
-                    docker stop ${SERVER_NAME} || true
-                    docker rm ${SERVER_NAME} || true
-                    docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest || true
-                    docker system prune -f --volumes
-                    docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
-                    docker run -it -d --name ${SERVER_NAME} -p $SERVER_PORT:$SERVER_PORT \
-                    -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                    $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
-                    EOF
-                    """.stripIndent()
+                    ]){
+                        sh """
+                             ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                             export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
+                             docker stop ${SERVER_NAME} || true
+                             docker rm ${SERVER_NAME} || true
+                             docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest || true
+                             docker system prune -f --volumes
+                             docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
+                             docker run -it -d --name ${SERVER_NAME} -p $SERVER_PORT:$SERVER_PORT \
+                             -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                             $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
+                             EOF
+                        """.stripIndent()
+                        }
+
                 }
             }
         }
