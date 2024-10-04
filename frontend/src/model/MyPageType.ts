@@ -25,9 +25,11 @@ export interface UserInfoResponseType {
 export interface Feed {
   id: number;
   title: string;
+  content: string;
   imageUrl: string;
   userId: number;
   likeCount: number;
+  commentCount: number;
   address1: string;
   address2: string;
   longitude: number;
@@ -37,14 +39,14 @@ export interface Feed {
   userProfileImageUrl: string;
   isLiked: boolean;
   createdDate: string;
-  commentCount: number;
-  content: string;
 }
 
 export interface FeedResponse {
   success: boolean;
   response: {
     feeds: Feed[];
+    currentPage: number;
+    hasNextPage: boolean;
   };
   error: null;
 }
@@ -57,7 +59,7 @@ export interface CardProps {
   content: string;
   createdDate: string;
   comment: number;
-  like: number;
+  like?: number;
   image: string;
 }
 

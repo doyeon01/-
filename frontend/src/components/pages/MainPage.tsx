@@ -1,3 +1,7 @@
+import { useRecoilState } from 'recoil';
+import { UserId as UserIdAtom } from '../../Recoil/atoms/Auth'; 
+import { UserInfo } from '../../services/api/UserService';
+import { UserInfoType, UserInfoResponseType } from '../../model/MyPageType';
 import React, { useEffect, useState } from 'react';
 import CarouselMain from '../organisms/Carousel/CarouselMain';
 import CardSetMainRec from '../molecules/Card/CardSetMainRec';
@@ -11,12 +15,28 @@ const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
-
   
-  const handleScroll = (event: WheelEvent) => {
-    
-    event.preventDefault();
+  const [userId, setUserId] = useRecoilState(UserIdAtom);  
 
+  // userId 가져오기 및 저장 로직
+  useEffect(() => {
+    const fetchUserInfo = async () => {
+      const res = await UserInfo(); 
+      const data: UserInfoResponseType = res.data;
+      if (data.success) {
+        const info: UserInfoType = data.response;
+        if (info.id !== userId) { 
+          setUserId(info.id); 
+        }
+      }
+    };
+  
+    fetchUserInfo();  
+  }, [userId]);  
+  
+  // 스크롤 핸들링 로직
+  const handleScroll = (event: WheelEvent) => {
+    event.preventDefault();
     if (isScrolling) return; 
     setIsScrolling(true); 
     if (event.deltaY > 0) {
@@ -24,12 +44,10 @@ const MainPage: React.FC = () => {
     } else if (event.deltaY < 0) {
       setCurrentSection(prev => Math.max(prev - 1, 0)); 
     }
-
     setTimeout(() => {
       setIsScrolling(false); 
     }, 500); 
   };
-
 
   useEffect(() => {
     window.addEventListener('wheel', handleScroll, { passive: false });
@@ -37,7 +55,6 @@ const MainPage: React.FC = () => {
       window.removeEventListener('wheel', handleScroll);
     };
   }, [isScrolling]);
-
 
   useEffect(() => {
     const targetSection = document.getElementById(sections[currentSection]);
@@ -64,7 +81,7 @@ const MainPage: React.FC = () => {
 
         {/* 3번째 섹션 */}
         <div id="section2" className={`${styles.section} ${currentSection === 2 ? styles.visible : styles.hidden} pt-[150px]`}>
-          <div  className='text-[25px] flex items-center justify-center'>핫플 여행지</div>
+          <div className='text-[25px] flex items-center justify-center'>핫플 여행지</div>
           <div className="text-[#878787] flex items-center justify-center">사용자와 비슷한 사람들이 많이 다녀온 여행지를 추천해 드려요.</div>
           <CardSetHotPlace />
         </div>

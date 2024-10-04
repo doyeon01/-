@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { CommentType } from '../../model/AccompanyBoardType';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io:8080/api/v1/feeds';
 const userId: number = 1; // userId에 숫자 타입 지정
