@@ -3,7 +3,7 @@ import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
 import { getFeed } from '../../services/api/RegisterUser';
-import {Feed} from '../../model/SearchingFeedType'
+import {FeedType} from '../../model/SearchingFeedType'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
@@ -21,7 +21,7 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
-  const [PageNum, setPageNum] = useState(0)
+  const [PageNum, setPageNum] = useState(6)
   const [IsHide,setIsHide] = useState(true)
   // const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
@@ -34,11 +34,11 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-  const [feeds, setFeeds] = useState<Feed[]>([]);
+  const [feeds, setFeeds] = useState<FeedType[]>([]);
 
   let keyword = 'RESTAURANT'
   let page = 0
-  let size = 10
+  let size = 15
 
   useEffect(() => {
     const fetchFeedsData = async () => {
@@ -114,7 +114,7 @@ const handlePageNum = () => {
     console.log('Current MBTI : ', value)
   }
   
-  
+  const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
 
   return (
     <>
@@ -380,12 +380,17 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 어떤 음식이 마음에 드시나요?
               </span>
-              <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id}>{feed.title}
-                    <img src={feed.imageUrl}/>
+                    <div key={feed.id} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                      <div>{feed.title}</div>
                     </div>
                   )) : 'No feeds available'}
+                {/* {numbers.map((number) => (
+                  <div key={number} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                    {number}
+                  </div>
+                ))} */}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
