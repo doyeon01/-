@@ -7,7 +7,7 @@ spring:
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
   jwt:
-    secret: ${SPRING_JWT_SECRET}
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
   jpa:
     hibernate:
       ddl-auto: none
