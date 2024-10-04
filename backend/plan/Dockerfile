@@ -28,6 +28,7 @@ COPY --from=builder /home/gradle/project/build/libs/plan-0.0.1-SNAPSHOT.jar /pla
 
 # 실행
 ENTRYPOINT ["java", "-jar", "-Dserver.port=8082", "-Duser.timezone=Asia/Seoul", \
-            "-Dspring.jwt.secret=${SPRING_JWT_SECRET}", \
-            "-Dclient.id=${CLIENT_ID}", \
-            "-Dclient.secret=${CLIENT_SECRET}", "/plan.jar"]
+"-Dspring.profiles.active=prod", \
+"-Dspring.jwt.secret=${SPRING_JWT_SECRET}", \
+"-Dclient.id=${CLIENT_ID}", \
+"-Dclient.secret=${CLIENT_SECRET}", "/plan.jar"]
