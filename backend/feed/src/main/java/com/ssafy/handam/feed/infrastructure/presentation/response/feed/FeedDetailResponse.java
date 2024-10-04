@@ -7,7 +7,7 @@ import lombok.Builder;
 public record FeedDetailResponse(
         Long id,
         Long userId,
-        String username,
+        String nickName,
         String profileImageUrl,
         String feedImageUrl,
         String title,
@@ -22,12 +22,12 @@ public record FeedDetailResponse(
 ) {
 
     public static FeedDetailResponse of(
-            FeedDetailDto feedDetailDto, String username, String profileImageUrl) {
+            FeedDetailDto feedDetailDto, String nickName, String profileImageUrl) {
 
         return FeedDetailResponse.builder()
                 .id(feedDetailDto.id())
                 .userId(feedDetailDto.userId())
-                .username(username)
+                .nickName(nickName)
                 .profileImageUrl(profileImageUrl)
                 .feedImageUrl(feedDetailDto.imageUrl())
                 .title(feedDetailDto.title())

@@ -18,13 +18,13 @@ public record FeedPreviewDto(
         Double longitude,
         Double latitude,
         String placeType,
-        String username,
-        String userProfileImageUrl,
+        String nickName,
+        String profileImageUrl,
         boolean isLiked,
         String createdDate
 ) {
 
-    public static FeedPreviewDto from(Feed feed, String username, String userProfileImageUrl, boolean isLiked) {
+    public static FeedPreviewDto from(Feed feed, String nickName, String profileImageUrl, boolean isLiked) {
         String formattedCreatedDate = (feed.getCreatedDate() != null) ?
                 feed.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
                 "N/A";
@@ -43,8 +43,8 @@ public record FeedPreviewDto(
                 feed.getLongitude(),
                 feed.getLatitude(),
                 feed.getPlaceType().name(),
-                username,
-                userProfileImageUrl,
+                nickName,
+                profileImageUrl,
                 isLiked,
                 formattedCreatedDate
         );

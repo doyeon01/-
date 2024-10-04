@@ -9,11 +9,11 @@ public record CommentDto(
         Long userId,
         Long feedId,
         String content,
-        String username,
-        String userProfileImageUrl,
+        String nickName,
+        String profileImageUrl,
         LocalDateTime createdDate
 ) {
-    public static CommentDto of(Comment comment , UserDto userDetailDto) {
+    public static CommentDto of(Comment comment, UserDto userDetailDto) {
         return new CommentDto(
                 comment.getId(),
                 comment.getUserId(),

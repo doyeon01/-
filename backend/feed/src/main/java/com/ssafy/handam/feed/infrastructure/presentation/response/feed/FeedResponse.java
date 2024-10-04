@@ -6,8 +6,8 @@ import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 public record FeedResponse(
         Long id,
         Long userId,
-        String username,
-        String userProfileImageUrl,
+        String nickName,
+        String profileImageUrl,
         String title,
         String content,
         String feedImageUrl,
