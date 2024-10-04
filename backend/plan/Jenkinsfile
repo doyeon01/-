@@ -104,7 +104,9 @@ pipeline {
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
-                    docker run -it -d --name ${SERVER_NAME} -p $SERVER_PORT:$SERVER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
+                    docker run -it -d --name ${SERVER_NAME} -p $SERVER_PORT:$SERVER_PORT \
+                    -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                    $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest
                     EOF
                     """.stripIndent()
                 }
