@@ -116,6 +116,14 @@ const handlePageNum = () => {
   
   // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
 
+  const toggleLike = (id:number) => {
+    setFeeds(prevFeeds =>
+      prevFeeds.map(feed =>
+        feed.id === id ? { ...feed, isLiked: !feed.isLiked } : feed
+      )
+    );
+  };
+
   return (
     <>
       <div
@@ -382,7 +390,7 @@ const handlePageNum = () => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
                     </div>
                   )) : 'No feeds available'}
