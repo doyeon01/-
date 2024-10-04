@@ -51,7 +51,7 @@ pipeline {
                         ls build/libs
                         docker build \
                         --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                        -t user:latest .
+                        -t scg:latest .
                         """
                     }
                 }
