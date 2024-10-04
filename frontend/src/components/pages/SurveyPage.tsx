@@ -50,7 +50,8 @@ export const SurveyPage: React.FC = () => {
       try {
         const data = await GetFeedFood(keyword, page, size); // 전달받은 인자를 사용
         console.log('Fetched feeds data:', data);
-        setFeeds(data); // 데이터 상태 업데이트
+        console.log('Fetched feeds data:', data.response.feeds);
+        setFeeds(data.response.feeds); // 데이터 상태 업데이트
       } catch (error) {
         console.error('Error fetching feeds:', error);
       } 
