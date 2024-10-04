@@ -16,9 +16,6 @@ pipeline {
         DOCKER_REPO = credentials('DOCKER_REPO')
         EC2_IP = credentials('EC2_SERVER1_IP')
         SSH_INFO = credentials('EC2_SERVER1_SSH')
-        SPRING_JWT_SECRET = credentials('SPRING_JWT_SECRET')
-        CLIENT_ID = credentials('client-id')
-        CLIENT_SECRET = credentials('client-secret')
     }
 
     stages {
@@ -60,6 +57,11 @@ pipeline {
             }
             steps {
                 script {
+                     withCredentials([
+                          string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                          string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
+                          string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
+                     ]) {
                           skipRemainingStages = false
                           sh """
                            cd backend/user
@@ -67,11 +69,12 @@ pipeline {
                            ./gradlew build
                            ls build/libs
                            docker build \
-                           --build-arg SPRING_JWT_SECRET=$SPRING_JWT_SECRET \
-                           --build-arg CLIENT_ID=$CLIENT_ID \
-                           --build-arg CLIENT_SECRET=$CLIENT_SECRET \
+                           --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                           --build-arg CLIENT_ID=${CLIENT_ID} \
+                           --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
                            -t user:latest .
                            """
+                     }
                 }
             }
         }
@@ -116,11 +119,7 @@ pipeline {
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
                     docker system prune -f --volumes
                     docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
-                    docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR \
-                    -e SPRING_JWT_SECRET=$SPRING_JWT_SECRET \
-                    -e CLIENT_ID=$CLIENT_ID \
-                    -e CLIENT_SECRET=$CLIENT_SECRET \
-                    $DOCKER_REPO_PSW:user-latest
+                    docker run -it -d --name user -p $USER_PORT:$USER_PORT $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                     EOF
                     """.stripIndent()
                 }
