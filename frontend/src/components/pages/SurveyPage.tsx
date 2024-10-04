@@ -381,8 +381,7 @@ const handlePageNum = () => {
                 어떤 음식이 마음에 드시나요?
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-              {feeds ? (
-                feeds.map(feedResponse => (
+                {feeds.map(feedResponse => (
                   feedResponse.feeds.length > 0 ? (
                     feedResponse.feeds.map(feed => (
                       <div key={feed.id}>
@@ -393,8 +392,8 @@ const handlePageNum = () => {
                   ) : (
                     <div>No feeds available in this response</div>
                   )
-                ))
-              ) : 'No feeds available'}
+                ))}
+          
               {/* {feeds.feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id}>{feed.title}
                     <img src={feed.imageUrl}/>
