@@ -388,7 +388,9 @@ const handlePageNum = () => {
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id}>{feed.title}</div>
+                    <div key={feed.id}>{feed.title}
+                    <img src="http://j11c205a.p.ssafy.io:9870/webhdfs/v1/images/e00091401004p0006.jpg?op=OPEN"/>
+                    </div>
                   )) : 'No feeds available'}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
