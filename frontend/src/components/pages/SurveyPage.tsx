@@ -19,6 +19,12 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 // import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
+interface Feed {
+  id: number;
+  title: string;
+  // 필요한 다른 속성도 정의할 수 있습니다.
+}
+
 export const SurveyPage: React.FC = () => {
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
@@ -33,7 +39,7 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-  const [feeds,setFeeds] = useState<String>('')
+  const [feeds,setFeeds] = useState<Feed[]>([])
 
   let keyword = 'RESTAURANT'
   let page = 0
@@ -379,7 +385,9 @@ const handlePageNum = () => {
                 어떤 음식이 마음에 드시나요?
               </span>
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
-                {feeds}
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id}>{feed.title}</div>
+                  )) : 'No feeds available'}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
