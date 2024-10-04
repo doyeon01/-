@@ -114,7 +114,7 @@ const handlePageNum = () => {
     console.log('Current MBTI : ', value)
   }
   
-  const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
+  // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
 
   return (
     <>
