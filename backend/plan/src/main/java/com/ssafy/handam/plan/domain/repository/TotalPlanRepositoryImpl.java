@@ -5,6 +5,8 @@ import com.ssafy.handam.plan.infrastructure.repository.TotalPlanJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class TotalPlanRepositoryImpl implements TotalPlanRepository {
@@ -13,5 +15,10 @@ public class TotalPlanRepositoryImpl implements TotalPlanRepository {
     @Override
     public TotalPlan save(TotalPlan totalPlan) {
         return totalPlanJpaRepository.save(totalPlan);
+    }
+
+    @Override
+    public List<TotalPlan> findAllByUserId(Long userId) {
+        return totalPlanJpaRepository.findAllByUserId(userId);
     }
 }

@@ -7,7 +7,7 @@ import java.util.Optional;
 
 public interface UserRepository {
     Optional<User> findById(Long id);
-    void save(User user);
+    User save(User user);
     List<User> findByNicknameContaining(String keyword);
     boolean existsByEmail(String email);
     Optional<User> findByEmail(String email);

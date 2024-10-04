@@ -1,6 +1,11 @@
 # 빌드 단계
 FROM gradle:7.6.1-jdk17 AS builder
+ARG JAR_FILE=build/libs/user-0.0.1-SNAPSHOT.jar
+ARG SPRING_JWT_SECRET
+ARG CLIENT_ID
+ARG CLIENT_SECRET
 
+#
 # 작업 디렉토리 설정
 WORKDIR /home/gradle/project
 

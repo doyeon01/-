@@ -52,14 +52,15 @@ public class JwtUtil {
         return null;
     }
 
-    public String createJwtToken(OAuthUserInfo userInfo) {
-        JwtPayload jwtPayload = JwtPayload.of(userInfo.providerId(), userInfo.email());
+    public String createJwtToken(OAuthUserInfo userInfo,Long userId) {
+        JwtPayload jwtPayload = JwtPayload.of(userInfo.providerId(),userId ,userInfo.email());
         return generateToken(jwtPayload);
     }
 
     public String generateToken(JwtPayload jwtPayload) {
         return Jwts.builder()
                 .setSubject(jwtPayload.providerId())
+                .claim("userId", jwtPayload.userId())
                 .claim("email", jwtPayload.email())
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expirationTime))

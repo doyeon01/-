@@ -11,6 +11,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @RequiredArgsConstructor
 @Service
 @Transactional
@@ -48,5 +50,8 @@ public class PlanService {
                             .build()
             ));
         });
+    }
+    public List<TotalPlan> getTotalPlans(Long userId) {
+        return totalPlanRepository.findAllByUserId(userId);
     }
 }
