@@ -1,58 +1,63 @@
 import { useEffect, useState } from 'react';
 import { FeedCard } from './FeedCard';
-import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { Feed, FeedResponse } from '../../../model/MyPage/MyPageType';
+import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터
+import { Feed, FeedResponse } from '../../../model/MyPageType';
+// import { useRecoilValue } from 'recoil';
+// import { UserId } from '../../../Recoil/atoms/Auth';
 // import { FeedList } from '../../../services/api/FeedService'; // 실제 API 요청
+import { useInView } from 'react-intersection-observer';
 
-// 피드 상세 컴포넌트
 export const PersonalFeedDetail: React.FC = () => {
   const [feedInfos, setFeedInfos] = useState<Feed[]>([]); // 피드 데이터 저장
   const [page, setPage] = useState(0); // 페이지 번호 저장
-  const [loading, setLoading] = useState(false); // 로딩 상태 관리
-  const [hasMore, setHasMore] = useState(true); // 더 많은 데이터를 가져올 수 있는지 여부
-  
-  // API 요청 및 더미 데이터 설정
-  useEffect(() => {
-    // 초기 더미 데이터 설정
-    const typedFeedData = feedData as FeedResponse;
-    if (typedFeedData.success) {
-      setFeedInfos(typedFeedData.response.feeds);
-    }
+  const [hasNextPage, setHasNextPage] = useState(true); // 다음 페이지 여부
+  const [ref, inView] = useInView(); // 무한스크롤 구현을 위한 ref, inView
 
-    // 페이지마다 API 요청을 통해 데이터를 추가
-    if (hasMore) {
-      loadMoreFeeds(); // 첫 페이지 데이터 로드
+  // const userId = useRecoilValue(UserId);
+
+  // 첫 페이지 로드 및 페이지가 변경될 때 데이터 로드
+  useEffect(() => {
+    if (hasNextPage) {
+      loadMoreFeeds(); // 페이지 데이터 로드
     }
-  }, [page, hasMore]);
+  }, [page, hasNextPage]);
+
+  // 스크롤이 하단에 도달할 때 페이지 증가
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      setPage((prevPage) => prevPage + 1); // 페이지 증가
+    }
+  }, [inView, hasNextPage]);
 
   // 피드 데이터를 불러오는 함수
   const loadMoreFeeds = () => {
-    if (loading || !hasMore) return; // 중복 호출 방지
+    // 더미 데이터 
+    const typedFeedData = feedData as FeedResponse;
+    if (typedFeedData.success) {
+      const newFeeds = typedFeedData.response.feeds.slice(page * 10, (page + 1) * 10); // 페이지별 데이터
+      if (newFeeds.length > 0) {
+        setFeedInfos((prevFeeds) => [...prevFeeds, ...newFeeds]); // 기존 데이터에 추가
+        setHasNextPage(typedFeedData.response.hasNextPage); // 다음 페이지 여부를 갱신
+      } else {
+        setHasNextPage(false); // 더 이상 데이터가 없으면 hasNextPage를 false로 설정
+      }
+    }
 
-    setLoading(true);
-
-    // // 실제 API 요청
-    // FeedList(page)
+    // 실제 API 요청 부분 (실제 사용 시 여기를 활성화)
+    // FeedList(page, userId)
     //   .then((res) => {
     //     const data: FeedResponse = res.data;
     //     if (data.success) {
     //       if (data.response.feeds.length > 0) {
-    //         // 더 많은 데이터가 있다면 추가
-    //         setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
-            setPage((prevPage) => prevPage + 1); // 페이지 번호 증가
+    //         setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]); // 피드 데이터 추가
+    //         setHasNextPage(data.response.hasNextPage); // 다음 페이지 여부 갱신
     //       } else {
-    //         // 더 이상 데이터가 없으면 hasMore를 false로 설정
-            setHasMore(false);
+    //         setHasNextPage(false); // 더 이상 데이터가 없으면 false로 설정
     //       }
-    //     } else {
-    //       console.error(data.error);
     //     }
     //   })
     //   .catch((error) => {
     //     console.error(error);
-    //   })
-    //   .finally(() => {
-    //     setLoading(false); // 로딩 상태 해제
     //   });
   };
 
@@ -63,13 +68,15 @@ export const PersonalFeedDetail: React.FC = () => {
           key={feed.id}
           title={feed.title}
           content={feed.content}
-          createdDate={feed.createdDate} 
-          comment={feed.commentCount} 
-          like={feed.likeCount} 
-          image={feed.imageUrl} 
+          createdDate={feed.createdDate}
+          comment={feed.commentCount}
+          like={feed.likeCount}
+          image={feed.imageUrl}
         />
       ))}
 
+      {/* 무한스크롤 감지를 위한 ref */}
+      <div ref={ref} />
     </div>
   );
 };

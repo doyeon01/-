@@ -1,3 +1,22 @@
+//동행게시글 등록타입
+export interface CreateArticle {
+  userId: number;
+  scheduleId: number;
+  title: string;
+  description: string;
+}
+
+export interface CreateArticleWithId extends CreateArticle {
+  id: number; 
+}
+
+export interface CreateArticleApiResponse {
+  success: boolean;
+  response: CreateArticleWithId;
+  error: Error | null;
+}
+
+
 //동행게시글 전체타입
 export interface Article {
   id: number;
@@ -66,3 +85,29 @@ export interface ArticleApiResponse {
     };
     error: null | string;
   }
+
+
+  // 마이페이지 동행게시글 
+
+  export interface UserArticle {
+    id: number;
+    userId: number;
+    scheduleId: number;
+    title: string;
+    description: string; 
+    createdDate : string;
+    commentCount: number;
+    imageUrl: string;
+    address: string;
+  }
+  
+  export interface UserArticleApiResponse {
+    success: boolean;
+    response: {
+      articles: UserArticle[];
+      currentPage: number;
+      hasNextPage: boolean;
+    };
+    error: Error  | null;
+  }
+  

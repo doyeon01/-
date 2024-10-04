@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Calendar from 'react-calendar';
-import 'react-calendar/dist/Calendar.css'; // 기본 react-calendar 스타일
-import './ModalCalender.css'; // 커스텀 CSS 파일
+import 'react-calendar/dist/Calendar.css';
+import './ModalCalender.css';
 import moment from 'moment';
 import { ButtonPersonalInfo } from '../../atoms/button/ButtonPersonalInfo';
 
