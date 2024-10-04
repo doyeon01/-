@@ -131,7 +131,7 @@ pipeline {
                                      -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
                                      -e CLIENT_ID=${CLIENT_ID} \
                                      -e CLIENT_SECRET=${CLIENT_SECRET} \
-                                     $DOCKER_REPO_USR/user-latest
+                             $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
                             EOF
                         """.stripIndent()
 
