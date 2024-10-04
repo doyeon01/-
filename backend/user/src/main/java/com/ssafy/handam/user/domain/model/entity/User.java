@@ -27,7 +27,7 @@ public class User extends BaseEntity{
     @Enumerated(EnumType.STRING)
     private Gender gender;
     private String age;
-    private String profileImage;
+    private String profileImageUrl;
     private String travelStyl1;
     private String travelStyl2;
     private String travelStyl3;
@@ -49,12 +49,12 @@ public class User extends BaseEntity{
                  String name,
                  Gender gender,
                  String age,
-                 String profileImage) {
+                 String profileImageUrl) {
         this.email = email;
         this.name = name;
         this.gender = gender;
         this.age = age;
-        this.profileImage = profileImage;
+        this.profileImageUrl = profileImageUrl;
         this.accompanyTemperature = 36.5;
     }
 

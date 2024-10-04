@@ -8,7 +8,7 @@ public record OAuthUserInfo(String provider,
                             String name,
                             Gender gender,
                             String age,
-                            String profileImage) {
+                            String profileImageUrl) {
 
     public static OAuthUserInfo of(Map<String, Object> attributes) {
 
