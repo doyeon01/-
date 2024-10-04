@@ -1,4 +1,4 @@
-export interface Feed {
+export interface FeedType {
     id: number;
     scheduleId: number;
     placeName: string;
@@ -19,14 +19,14 @@ export interface Feed {
     createdDate: string; // ISO 8601 날짜 형식
   }
   
-  export interface FeedResponse {
-    feeds: Feed[];
+  export interface FeedResponseType {
+    feeds: FeedType[];
     currentPage: number;
     hasNextPage: boolean;
   }
   
   export interface FilterFeedType {
     success: boolean;
-    response: FeedResponse;
+    response: FeedResponseType;
     error: string | null; // 에러가 없을 경우 null
   }
