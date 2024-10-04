@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { RegisterUserType } from '../../model/RegisterUserType';
+import { FilterFeedType } from '../../model/SearchingFeedType';
 
 export const RegisterUser = async (id:number)=>{
     try {
@@ -10,11 +11,11 @@ export const RegisterUser = async (id:number)=>{
       }
 }
 //RegisterUser.ts
-export const GetFeedFood = async(keyword:String,page:number,size:number)=>{
-  try{
-    const response = await axios.get(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`)
-    return response.data
-  } catch(error){
-    throw new Error('API error')
+export const GetFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType[]> => {
+  try {
+    const response = await axios.get<FilterFeedType[]>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`);
+    return response.data; // 데이터가 배열로 반환되어야 합니다
+  } catch (error) {
+    throw new Error('API error');
   }
 }

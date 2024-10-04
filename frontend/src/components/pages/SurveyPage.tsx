@@ -2,7 +2,8 @@ import React, {useEffect, useState} from 'react'
 import { NavLink } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
-import { GetFeedFood } from '../../services/api/RegisterUser';
+import { GetFeed } from '../../services/api/RegisterUser';
+import {FilterFeedType} from '../../model/SearchingFeedType'
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
@@ -19,12 +20,6 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 // import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
-interface Feed {
-  id: number;
-  title: string;
-  // 필요한 다른 속성도 정의할 수 있습니다.
-}
-
 export const SurveyPage: React.FC = () => {
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
@@ -39,7 +34,7 @@ export const SurveyPage: React.FC = () => {
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
-  const [feeds,setFeeds] = useState<Feed[]>([])
+  const [feeds, setFeeds] = useState<FilterFeedType[]>([]);
 
   let keyword = 'RESTAURANT'
   let page = 0
@@ -48,10 +43,10 @@ export const SurveyPage: React.FC = () => {
   useEffect(() => {
     const fetchFeedsData = async () => {
       try {
-        const data = await GetFeedFood(keyword, page, size); // 전달받은 인자를 사용
+        const data = await GetFeed(keyword, page, size); // 전달받은 인자를 사용
         console.log('Fetched feeds data:', data);
-        console.log('Fetched feeds data:', data.response.feeds);
-        setFeeds(data.response.feeds); // 데이터 상태 업데이트
+        // console.log('Fetched feeds data:', data.feeds);
+        setFeeds(data); // 데이터 상태 업데이트
       } catch (error) {
         console.error('Error fetching feeds:', error);
       } 
@@ -389,7 +384,7 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id}>{feed.title}
-                    <img src="http://j11c205a.p.ssafy.io:9870/webhdfs/v1/images/e00091401004p0006.jpg?op=OPEN"/>
+                    <img src={feed.imageUrl}/>
                     </div>
                   )) : 'No feeds available'}
               </span>
