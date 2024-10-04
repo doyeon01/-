@@ -1,4 +1,4 @@
-export interface FilterFeedType {
+export interface Feed {
     id: number;
     scheduleId: number;
     placeName: string;
@@ -16,7 +16,17 @@ export interface FilterFeedType {
     username: string;
     userProfileImageUrl: string;
     isLiked: boolean;
-    createdDate: string;
-
-    // 필요한 다른 속성도 정의할 수 있습니다.
+    createdDate: string; // ISO 8601 날짜 형식
+  }
+  
+  export interface FeedResponse {
+    feeds: Feed[];
+    currentPage: number;
+    hasNextPage: boolean;
+  }
+  
+  export interface FilterFeedType {
+    success: boolean;
+    response: FeedResponse[];
+    error: string | null; // 에러가 없을 경우 null
   }

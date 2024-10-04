@@ -11,10 +11,11 @@ export const RegisterUser = async (id:number)=>{
       }
 }
 //RegisterUser.ts
-export const GetFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType[]> => {
+export const GetFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType> => {
   try {
-    const response = await axios.get<FilterFeedType[]>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`);
-    return response.data; // 데이터가 배열로 반환되어야 합니다
+    const response = await axios.get<FilterFeedType>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`);
+    // const reponseFeed = response.data.respons
+    return response.data;
   } catch (error) {
     throw new Error('API error');
   }
