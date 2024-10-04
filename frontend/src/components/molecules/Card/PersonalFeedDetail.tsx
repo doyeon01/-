@@ -20,7 +20,7 @@ export const PersonalFeedDetail: React.FC = () => {
     if (hasNextPage) {
       loadMoreFeeds(); // 페이지 데이터 로드
     }
-  }, [page, hasNextPage]);
+  }, [page, hasNextPage]); 
 
   // 스크롤이 하단에 도달할 때 페이지 증가
   useEffect(() => {
