@@ -1,24 +1,24 @@
 //동행게시글 등록타입
-export interface CreateArticle {
+export interface CreateArticleType {
   userId: number;
   scheduleId: number;
   title: string;
   description: string;
 }
 
-export interface CreateArticleWithId extends CreateArticle {
+export interface CreateArticleWithIdType extends CreateArticleType {
   id: number; 
 }
 
-export interface CreateArticleApiResponse {
+export interface CreateArticleApiResponseType {
   success: boolean;
-  response: CreateArticleWithId;
+  response: CreateArticleWithIdType;
   error: Error | null;
 }
 
 
 //동행게시글 전체타입
-export interface Article {
+export interface ArticleType {
   id: number;
   userId: number;
   scheduleId: number;
@@ -28,17 +28,17 @@ export interface Article {
   accompanyDate: string;
 }
 
-export interface ArticleApiResponse {
+export interface ArticleApiResponseType {
   success: boolean;
   response: {
-    articles: Article[];
+    articles: ArticleType[];
   };
   error: Error  | null;
 }
 
 
 //동행게시글 상세 타입
-  export interface ArticleDetail {
+  export interface ArticleDetailType {
     id: number;     
     userId: number; 
     scheduleId: number; 
@@ -49,33 +49,33 @@ export interface ArticleApiResponse {
     accompanyDate:string;
   }
 
-  export  interface ArticleDetailApiResponse {
+  export  interface ArticleDetailApiResponseType {
     success: boolean;
-    response: ArticleDetail;
+    response: ArticleDetailType;
     error: null | Error; 
   }
 
 //동행게시글 댓글
-  export interface Comment{
+  export interface CommentType{
     id:number;
     userId:number;
     accompanyBoardArticleId:number;
     content:string;
   }
 
-  export  interface CommentApiResponse {
+  export  interface CommentApiResponseType {
     success: boolean;
     response: Comment;
     error: null | Error; 
   }
 //댓글등록
- export interface CreateCommentRequest {
+ export interface CreateCommentRequestType {
     userId: number;
     accompanyBoardArticleId: number;
     content: string;
   }
   
- export interface CreateCommentResponse {
+ export interface CreateCommentResponseType {
     success: boolean;
     response: {
       id: number;
@@ -83,7 +83,7 @@ export interface ArticleApiResponse {
       accompanyBoardArticleId: number;
       content: string;
     };
-    error: null | string;
+    error: null | Error;
   }
 
 

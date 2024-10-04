@@ -1,9 +1,9 @@
-export interface ModalChatProps {
+export interface ModalChatTypeProps {
     onClose: () => void;
   }
 
 
-  export interface user {
+  export interface userType {
     birthday:string;
     gender:string;
     id:number;
@@ -11,22 +11,22 @@ export interface ModalChatProps {
     profileImage:string;
   }
 
-  export interface ChatRoom {
+  export interface ChatRoomType {
     chatRoomId: number;
     lastMessage:string;
     lastMessageTime:string;
     lastUserName:string;
-    users:user[];
+    users:userType[];
   }
   
-  export interface Message {
+  export interface MessageType {
     senderId: number;
     chatRoomId:number;
     content: string;
     timeStamp:null|string;
   }
 
-  export interface ClientOptions {
+  export interface ClientOptionsType {
     brokerURL: string;
     onConnect?: (frame: any) => void; 
     onStompError?: (frame: any) => void;
