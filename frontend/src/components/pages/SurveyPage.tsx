@@ -35,8 +35,8 @@ export const SurveyPage: React.FC = () => {
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
   const [feeds, setFeeds] = useState<FeedType[]>([]);
+  const [keyword,setkeyword] = useState('RESTAURANT')
 
-  let keyword = 'RESTAURANT'
   let page = 0
   let size = 15
 
@@ -90,6 +90,15 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
+  if (PageNum === 7){
+    setkeyword('커피')
+  }
+  if (PageNum === 8){
+    setkeyword('TOURIST_ATTRACTION')
+  }
+  if (PageNum === 9){
+    setkeyword('ACCOMMODATION')
+  }
 }}
 
   const handleIsHide = ()=>{
@@ -421,7 +430,6 @@ const handlePageNum = () => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {keyword = '커피'}
               {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
@@ -447,7 +455,6 @@ const handlePageNum = () => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {keyword = 'TOURIST_ATTRACTION'}
               {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
@@ -472,7 +479,6 @@ const handlePageNum = () => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {keyword = 'ACCOMMODATION'}
               {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
