@@ -51,9 +51,9 @@ pipeline {
                     ./gradlew build
                     ls build/libs
                     docker build \
-                     --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                     --build-arg CLIENT_ID=${CLIENT_ID} \
-                     --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
+                     --build-arg SPRING_JWT_SECRET=$SPRING_JWT_SECRET \
+                     --build-arg CLIENT_ID=$CLIENT_ID \
+                     --build-arg CLIENT_SECRET=$CLIENT_SECRET \
                      -t ${SERVER_NAME}:latest .
                     """
                 }
