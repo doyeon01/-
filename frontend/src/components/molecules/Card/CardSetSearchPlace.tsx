@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Feed } from '../../../model/SearchingFeedType';
 import feedFillter from '../../../dummydata/feed/feedFillter.json';
-// import { GetFeed } from '../../../services/api/RegisterUser';
+// import { getFeed } from '../../../services/api/RegisterUser';
 
 interface CardSetSearchPlaceProps {
   keyword: string;
@@ -15,7 +15,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
     const fetchData = async () => {
       setPlaces(feedFillter.response.feeds);
       // try {
-      //   const response = await GetFeed(keyword, 1, 10);
+      //   const response = await getFeed(keyword, 1, 10);
       //   setPlaces(response.response.feeds);
       // } catch (error) {
       //   console.error('Error fetching recommended feeds:', error);

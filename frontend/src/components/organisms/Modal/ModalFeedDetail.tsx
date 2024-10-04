@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ModalFeedDetailTypeProps,FeedDetailType, FeedCommentType } from '../../../model/FeedType';
 import feedDetailjson from '../../../dummydata/feed/feedDetail.json'
 import feedCommentsjson from '../../../dummydata/feed/feedComments.json'
+import useLike from '../../../hooks/useLike';
 // import { postComment, postLike, postUnlike } from '../../../services/api/FeedService';
 
 
@@ -10,13 +11,12 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
   const [commentContent, setCommentContent] = useState('');
   const [detailFeed,setDetailFeed] = useState<FeedDetailType|null>(null);
   const [comments,setComments] = useState<FeedCommentType[]|[]>([]);
-  const [isLike,setIsLike] = useState(false)
+  const { isLike, toggleLike } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
 
   useEffect(() => {
     const fetchDetailFeed = async () => {
       
       setDetailFeed(feedDetailjson.response)      
-      setIsLike(feedDetailjson.response.isLiked)
       // try {
       //   const response = await getFeedDetail(selectedId);
       //   setRecommendedFeeds(response.response.feeds);
@@ -59,25 +59,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
     setCommentContent('');
   };
 
-  const toggleLike = async () => {
-    setIsLike(prev => !prev); 
 
-    // try {
-    //   if (detailFeed !== null) {
-    //     if (isLike) {
-    //       await postUnlike(detailFeed.id);
-    //     } else {
-    //       await postLike(detailFeed.id);
-    //     }
-    //     setIsLike(prev => !prev); 
-    //   } else {
-    //     console.error('detailFeed가 null입니다.'); 
-    //   }
-    // } catch (error) {
-    //   console.error('좋아요 처리 중 오류 발생:', error);
-    // }
-  };
-  
 
   
   return (
