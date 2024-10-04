@@ -27,4 +27,7 @@ RUN ln -snf /usr/share/zoneinfo/Asia/Seoul /etc/localtime && echo Asia/Seoul > /
 COPY --from=builder /home/gradle/project/build/libs/plan-0.0.1-SNAPSHOT.jar /plan.jar
 
 # 실행
-ENTRYPOINT ["java", "-jar", "-Dserver.port=8082", "-Duser.timezone=Asia/Seoul", "/plan.jar"]
+ENTRYPOINT ["java", "-jar", "-Dserver.port=8082", "-Duser.timezone=Asia/Seoul", \
+            "-Dspring.jwt.secret=${SPRING_JWT_SECRET}", \
+            "-Dclient.id=${CLIENT_ID}", \
+            "-Dclient.secret=${CLIENT_SECRET}", "/plan.jar"]
