@@ -45,6 +45,7 @@ export const SurveyPage: React.FC = () => {
       try {
         const data = await GetFeed(keyword, page, size); // 배열 반환
         console.log('Fetched feeds data:', data); // 전체 데이터 로그
+        console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
         setFeeds(data.response); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
@@ -390,11 +391,6 @@ const handlePageNum = () => {
                   ))
                 ))
               ) : 'No feeds available'}
-              {/* {feeds.feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id}>{feed.title}
-                    <img src={feed.imageUrl}/>
-                    </div>
-                  )) : 'No feeds available'} */}
               </span>
               <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
               
