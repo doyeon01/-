@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Feed } from '../../../model/SearchingFeedType';
+import { FeedType } from '../../../model/SearchingFeedType';
 import feedFillter from '../../../dummydata/feed/feedFillter.json';
 // import { getFeed } from '../../../services/api/RegisterUser';
 
@@ -9,7 +9,7 @@ interface CardSetSearchPlaceProps {
 }
 
 const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItemClick }) => {
-  const [places, setPlaces] = useState<Feed[] | null>(null);
+  const [places, setPlaces] = useState<FeedType[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
