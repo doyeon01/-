@@ -3,8 +3,6 @@ package com.ssafy.handam.user.presentation.response;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.Gender;
 
-import java.time.MonthDay;
-
 public record UserInfoResponse(Long id,
                                String email,
                                String name,

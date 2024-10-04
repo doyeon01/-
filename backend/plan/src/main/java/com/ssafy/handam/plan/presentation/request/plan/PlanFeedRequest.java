@@ -1,11 +1,14 @@
-package com.ssafy.handam.plan.application.dto;
+package com.ssafy.handam.plan.presentation.request.plan;
 
-import com.ssafy.handam.plan.domain.valueobject.PlanData;
+import com.ssafy.handam.plan.application.dto.PlanServiceRequest;
 import lombok.Builder;
 
 @Builder
-public record PlanServiceRequest(
+public record PlanFeedRequest(
+        Long userId,
         String placeName,
+        String title,
+        String content,
         String imageUrl,
         String address1,
         String address2,
@@ -13,9 +16,10 @@ public record PlanServiceRequest(
         Double latitude,
         String placeType,
         String details
-){
-    public PlanData toPlanData() {
-        return PlanData.builder()
+) implements PlanRequest {
+    @Override
+    public PlanServiceRequest toPlanServiceRequest() {
+        return PlanServiceRequest.builder()
                 .placeName(this.placeName)
                 .imageUrl(this.imageUrl)
                 .address1(this.address1)
@@ -26,4 +30,5 @@ public record PlanServiceRequest(
                 .details(this.details)
                 .build();
     }
+
 }

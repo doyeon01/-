@@ -47,6 +47,11 @@ spring:
           filters:
             - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
 
+        - id: plan
+          uri: http://j11c205a.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/plans/**
+
         - id: chat
           uri: http://j11c205.p.ssafy.io:8083
           predicates:
@@ -62,9 +67,6 @@ logging:
   level:
     org.springframework.security: DEBUG
     com.ssafy.handam.scg.filters.LoggingGlobalFilter: DEBUG
-
-
-
 
 server:
   port: 8080

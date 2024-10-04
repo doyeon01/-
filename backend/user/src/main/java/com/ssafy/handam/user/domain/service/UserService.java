@@ -17,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class UserService {
