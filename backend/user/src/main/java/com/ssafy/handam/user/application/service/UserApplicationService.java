@@ -21,7 +21,7 @@ public class UserApplicationService {
     public UserInfoResponse getCurrentUserInfo(HttpServletRequest request) {
         String accessToken = cookieUtil.getJwtFromCookies(request);
         String email = jwtUtil.extractUserEmail(accessToken);
-        return UserInfoResponse.of(userService.getCurrentUserInfo(email));
+        return UserInfoResponse.of(userService.getCurrentUserByEmail(email));
     }
 
     public void updateUserSurvey(HttpServletRequest request, UserSurveyServiceRequest surveyRequest) {

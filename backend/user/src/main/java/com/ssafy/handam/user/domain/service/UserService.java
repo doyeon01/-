@@ -25,14 +25,19 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
-    public void handleUserLogin(OAuthUserInfo oAuthUserInfo) {
+    public Long handleUserLogin(OAuthUserInfo oAuthUserInfo) {
         String email = oAuthUserInfo.email();
+        Long userId;
+
         if (doesUserNotExist(email)) {
-            saveUser(oAuthUserInfo);
+            userId = saveUser(oAuthUserInfo);
+        } else {
+            userId = getCurrentUserByEmail(email).getId();
         }
+        return userId;
     }
 
-    public User getCurrentUserInfo(String email) {
+    public User getCurrentUserByEmail(String email) {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
     }
@@ -55,7 +60,7 @@ public class UserService {
         userRepository.save(user);
     }
 
-    public void saveUser(OAuthUserInfo oAuthUserInfo) {
+    public Long saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .email((oAuthUserInfo.email()))
                 .name(oAuthUserInfo.name())
@@ -64,7 +69,8 @@ public class UserService {
                 .profileImage(oAuthUserInfo.profileImage())
                 .build();
 
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
+        return savedUser.getId();
     }
 
     public UserInfoResponse findUserById(Long id) {
