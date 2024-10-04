@@ -16,6 +16,9 @@ pipeline {
         DOCKER_REPO = credentials('DOCKER_REPO')
         EC2_IP = credentials('EC2_SERVER1_IP')
         SSH_INFO = credentials('EC2_SERVER1_SSH')
+        SPRING_JWT_SECRET = credentials('SPRING_JWT_SECRET')
+        CLIENT_ID = credentials('client-id')
+        CLIENT_SECRET = credentials('client-secret')
     }
 
     stages {
@@ -57,11 +60,6 @@ pipeline {
             }
             steps {
                 script {
-                     withCredentials([
-                          string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
-                          string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
-                          string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
-                     ]) {
                           skipRemainingStages = false
                           sh """
                            cd backend/user
@@ -74,7 +72,6 @@ pipeline {
                            --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
                            -t user:latest .
                            """
-                     }
                 }
             }
         }
