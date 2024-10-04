@@ -43,8 +43,6 @@ pipeline {
                 script {
                 withCredentials([
                      string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
-                     string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
-                     string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
                 ]){
                     skipRemainingStages = false
                         sh """
@@ -54,8 +52,6 @@ pipeline {
                         ls build/libs
                         docker build \
                         --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                        --build-arg CLIENT_ID=${CLIENT_ID} \
-                        --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
                         -t ${SERVER_NAME}:latest .
                         """
                     }
@@ -97,8 +93,12 @@ pipeline {
             }
             steps {
                 script {
+                    withCredentials([
+                          string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                    ])
                     sh """
                     ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                    export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
                     docker stop ${SERVER_NAME} || true
                     docker rm ${SERVER_NAME} || true
                     docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:${SERVER_NAME}-latest || true
