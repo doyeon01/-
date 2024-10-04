@@ -35,9 +35,9 @@ export const SurveyPage: React.FC = () => {
 
   const [feeds,setFeeds] = useState<String>('')
 
-  let keyword = ''
+  let keyword = 'RESTAURANT'
   let page = 0
-  let size = 0
+  let size = 10
 
   useEffect(() => {
     const fetchFeedsData = async () => {
