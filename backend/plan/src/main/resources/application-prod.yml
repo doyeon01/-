@@ -6,6 +6,8 @@ spring:
     username: handam
     password: ssafy
     driver-class-name: com.mysql.cj.jdbc.Driver
+  jwt:
+    secret: ${SPRING_JWT_SECRET}
   jpa:
     hibernate:
       ddl-auto: none

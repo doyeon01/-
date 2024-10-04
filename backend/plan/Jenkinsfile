@@ -17,6 +17,9 @@ pipeline {
         DOCKER_REPO = credentials('DOCKER_REPO')
         EC2_IP = credentials('EC2_SERVER2_IP')
         SSH_INFO = credentials('EC2_SERVER2_SSH')
+        SPRING_JWT_SECRET = credentials('SPRING_JWT_SECRET')
+        CLIENT_ID = credentials('client-id')
+        CLIENT_SECRET = credentials('client-secret')
     }
 
     stages {
@@ -47,7 +50,11 @@ pipeline {
                     chmod +x ./gradlew
                     ./gradlew build
                     ls build/libs
-                    docker build -t ${SERVER_NAME}:latest .
+                    docker build \
+                     --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                     --build-arg CLIENT_ID=${CLIENT_ID} \
+                     --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
+                     -t ${SERVER_NAME}:latest .
                     """
                 }
             }
