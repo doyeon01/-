@@ -13,6 +13,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 @RestController
 @RequestMapping("/api/v1/user")
 @RequiredArgsConstructor
+@Slf4j
 public class UserController {
 
     private final UserApplicationService userApplicationService;
@@ -28,6 +30,7 @@ public class UserController {
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponse> getCurrentUserInfo(HttpServletRequest request) {
         UserInfoResponse userInfoResponse = userApplicationService.getCurrentUserInfo(request);
+        log.info("userInfoResponse: {}", userInfoResponse.toString());
         return success(userInfoResponse);
     }
 
