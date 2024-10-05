@@ -5,6 +5,7 @@ import com.ssafy.handam.plan.domain.entity.Plan;
 import com.ssafy.handam.plan.domain.entity.TotalPlan;
 import com.ssafy.handam.plan.domain.service.PlanService;
 import com.ssafy.handam.plan.presentation.jwt.JwtUtil;
+import com.ssafy.handam.plan.presentation.response.plan.PlanResponse;
 import com.ssafy.handam.plan.presentation.response.totalplan.TotalPlanResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -32,6 +33,20 @@ public class PlanApplicationService {
                     String imageUrl = extractImage(totalPlan);
                     String address = extractAddress(firstPlan);
                     return TotalPlanResponse.of(totalPlan, address, imageUrl);
+                })
+                .collect(Collectors.toList());
+    }
+    public List<PlanResponse> getAllPlans(Long totalPlanId){
+        List<Long> dayPlanIds = planService.getDayPlanIdsByTotalPlanId(totalPlanId);
+
+        List<Plan> plans = dayPlanIds.stream()
+                .flatMap(dayPlanId -> planService.getPlansByDayPlanId(dayPlanId).stream())
+                .collect(Collectors.toList());
+
+        return plans.stream()
+                .map(plan -> {
+                    String address = (plan.getAddress1() != null) ? plan.getAddress1() : plan.getAddress2();
+                    return PlanResponse.of(plan, address);
                 })
                 .collect(Collectors.toList());
     }

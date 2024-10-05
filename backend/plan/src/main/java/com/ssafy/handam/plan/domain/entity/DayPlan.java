@@ -15,7 +15,7 @@ public class DayPlan extends BaseEntity{
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String day;
+    private Long day;
 
     @OneToMany(mappedBy = "dayPlan")
     private List<Plan> plans;
@@ -25,7 +25,7 @@ public class DayPlan extends BaseEntity{
     private TotalPlan totalPlan;
 
     @Builder
-    public DayPlan(String day, List<Plan> plans, TotalPlan totalPlan) {
+    public DayPlan(Long day, List<Plan> plans, TotalPlan totalPlan) {
         this.day = day;
         this.plans = plans;
         this.totalPlan = totalPlan;

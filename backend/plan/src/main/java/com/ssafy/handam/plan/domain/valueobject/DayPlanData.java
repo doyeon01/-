@@ -5,7 +5,7 @@ import java.util.List;
 
 @Builder
 public record DayPlanData(
-        String day,
+        Long day,
         List<PlanData> plansData
 ) {
 }
