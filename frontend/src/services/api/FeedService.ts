@@ -1,14 +1,16 @@
 import axios from 'axios';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
-const userId: number = 1; // userId에 숫자 타입 지정
-	
+const userId = 1
+
+
 // 피드 생성 API
 export const FeedCreate = async (formData: FormData) => {
   const response = await axios.post(`${BaseUrl}/create`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
+    withCredentials: true, 
   });
 
   console.log('피드 생성 완료:', response.data);  
@@ -22,6 +24,7 @@ export const FeedList = (userId: number, page: number, size = 6) => {
       page: page,
       size: size,
     },
+    withCredentials: true, 
   });
 };
 
@@ -33,8 +36,10 @@ export const LikeFeedList = (userId: number, page: number, size = 10) => {
       page: page,
       size: size,
     },
+    withCredentials: true, 
   });
 };
+
 
 // 맞춤 피드 추천 API
 export const postFeedRecommend = (page = 1, size = 10) => {
