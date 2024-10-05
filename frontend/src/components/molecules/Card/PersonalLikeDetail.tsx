@@ -36,6 +36,7 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
         const data: FeedResponseType = res.data;
         if (data.success) {
           const newFeeds = data.response.feeds;
+          console.log(data.response.feeds)
           if (newFeeds.length > 0) {
             setAllFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
             setFilteredFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);

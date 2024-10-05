@@ -30,7 +30,7 @@ export const PersonalFeedDetail: React.FC = () => {
 
   // 피드 데이터를 더 불러오는 함수
   const loadMoreFeeds = () => {
-    FeedList(page, userId)  // API 호출, userId와 페이지 번호를 인자로 전달
+    FeedList(userId, page)  // API 호출, userId와 페이지 번호를 인자로 전달
       .then((res) => {
         const data: FeedResponseType = res.data;
         if (data.success) {
