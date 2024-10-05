@@ -1,30 +1,34 @@
-import React, { useState } from 'react';
-import testImg1 from '../../../assets/statics/test1.jpg';
-import testImg2 from '../../../assets/statics/test2.jpg';
-import testImg3 from '../../../assets/statics/test3.png';
-import testImg4 from '../../../assets/statics/test4.jpg';
-import testImg5 from '../../../assets/statics/test5.jpg';
+import React, { useEffect, useState } from 'react';
+import { FeedsType } from '../../../model/FeedType';
+import { postFeedRecommend } from '../../../services/api/FeedService';
+import useLike from '../../../hooks/useLike';
 
-interface TestArr {
-  title: string;
-  address: string;
-  testimg: string;
+interface CardSetMainRecProps {
+  page: number;
 }
 
-const testArr: TestArr[] = [
-  { title: '에스파크', address: '경기도 이천시', testimg: testImg1 },
-  { title: '망상해변', address: '강원도 동해시', testimg: testImg2 },
-  { title: '기백산 용추계곡', address: '경상남도 밀양시', testimg: testImg3 },
-  { title: '연천미라클', address: '경기도 연천군', testimg: testImg4 },
-  { title: '뮤직컴플렉스', address: '서울특별시', testimg: testImg5 },
-];
-
-const CardSetMainRec: React.FC = () => {
+const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
+  const [hoveredItem, setHoveredItem] = useState<FeedsType | null>(null);
+  const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
+  const { isLike, toggleLike } = useLike(hoveredItem?.isLiked ?? false, hoveredItem?.id ?? null);
+
+  useEffect(() => {
+    const fetchRecommendedFeeds = async () => {
+      try {
+        const response = await postFeedRecommend(page, 5);
+        setRecommendedFeeds(response.data.response.feeds);
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
+    };
+
+    fetchRecommendedFeeds(); 
+  }, [page]);
 
   return (
     <div className="flex gap-4">
-      {testArr.map((item, index) => {
+      {recommendedFeeds.map((item, index) => {
         const isHovered = hoveredIndex === index;
 
         const widthClass = isHovered
@@ -35,27 +39,37 @@ const CardSetMainRec: React.FC = () => {
           <div
             key={index}
             className={`relative transition-all duration-300 ease-in-out ${widthClass} overflow-hidden cursor-pointer`}
-            onMouseEnter={() => setHoveredIndex(index)}
+            onMouseEnter={() => {
+              setHoveredIndex(index);
+              setHoveredItem(item); 
+            }}
           >
             <img
-              src={item.testimg}
+              src={item.imageUrl}
               alt={item.title}
               className="object-cover w-full h-[320px] rounded-lg shadow-lg"
             />
             <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
               <h3 className="text-lg font-bold">{item.title}</h3>
-              <p className="text-sm">{item.address}</p>
+              <p className="text-sm">{item.placeName}</p>
             </div>
             {isHovered && (
               <div className="absolute top-2 right-2">
-                <button className="bg-white rounded-full p-2 shadow-md">
-                  ❤️
+                <button className="bg-white rounded-full p-2 shadow-md" onClick={toggleLike}>
+                  {isLike ? '❤️' : '🤍'} 
                 </button>
               </div>
             )}
           </div>
         );
       })}
+      
+      {hoveredItem && (
+        <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-lg">
+          <h3 className="text-lg font-bold">호버된 아이템: {hoveredItem.title}</h3>
+          <p>위치: {hoveredItem.placeName}</p>
+        </div>
+      )}
     </div>
   );
 };

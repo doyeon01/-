@@ -13,7 +13,7 @@ export const SearchPage: React.FC = () => {
   const [searchCategory, setSearchCategory] = useState<'user' | 'place'>('user');
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]); // 추천 피드 데이터를 저장할 상태
+  const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
 
 
   useEffect(() => {
