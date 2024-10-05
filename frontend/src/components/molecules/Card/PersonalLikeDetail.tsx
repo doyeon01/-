@@ -1,65 +1,53 @@
 import { useState, useEffect } from 'react';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
 import { FeedCard } from './FeedCard';
-import feedData from '../../../dummydata/profile/FeedList.json'; // 더미 데이터를 가져옴
-import { FeedType, FeedResponseType } from '../../../model/MyPageType'; // Feed 타입을 import
+import { FeedType, FeedResponseType } from '../../../model/MyPageType'; 
 import { useInView } from 'react-intersection-observer';
-// import { LikeFeedList } from '../../../services/api/FeedService'; // 실제 API 요청 import
-// import { useRecoilValue } from 'recoil';
-// import { UserId } from '../../../Recoil/atoms/Auth'; // Recoil을 통한 userId 가져오기
+import { LikeFeedList } from '../../../services/api/FeedService'; 
+import { useRecoilValue } from 'recoil';
+import { UserId } from '../../../Recoil/atoms/Auth'; 
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
-  const [selectedButton, setSelectedButton] = useState(0); // 선택된 버튼 상태
-  const [filteredFeeds, setFilteredFeeds] = useState<FeedType[]>([]); // 필터링된 피드 리스트
-  const [allFeeds, setAllFeeds] = useState<FeedType[]>([]); // 모든 피드 리스트
-  const [page, setPage] = useState(0); // 페이지 번호 저장
-  const [hasNextPage, setHasNextPage] = useState(true); // 다음 페이지 여부 저장
-  const [ref, inView] = useInView(); // 무한 스크롤을 감지하기 위한 ref, inView
-  // const userId = useRecoilValue(UserId); // Recoil을 통한 userId 가져오기
+  const [selectedButton, setSelectedButton] = useState(0); 
+  const [filteredFeeds, setFilteredFeeds] = useState<FeedType[]>([]); 
+  const [allFeeds, setAllFeeds] = useState<FeedType[]>([]); 
+  const [page, setPage] = useState(0); 
+  const [hasNextPage, setHasNextPage] = useState(true); 
+  const [ref, inView] = useInView(); 
+  const userId = useRecoilValue(UserId); 
 
   useEffect(() => {
     if (hasNextPage) {
-      loadMoreFeeds(); // 페이지 변경 시 데이터를 추가로 로드
+      loadMoreFeeds(); 
     }
   }, [page, hasNextPage]);
 
   useEffect(() => {
     if (inView && hasNextPage) {
-      setPage((prevPage) => prevPage + 1); // 페이지 증가
+      setPage((prevPage) => prevPage + 1); 
     }
   }, [inView, hasNextPage]);
 
 
   const loadMoreFeeds = () => {
-    const typedFeedData = feedData as FeedResponseType; // 더미 데이터를 사용
-    const newFeeds = typedFeedData.response.feeds.slice(page * 10, (page + 1) * 10); // 페이지별 데이터
-
-    if (newFeeds.length > 0) {
-      setAllFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]); // 기존 데이터에 새 데이터 추가
-      setFilteredFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]); // 필터링된 데이터에도 추가
-      setHasNextPage(typedFeedData.response.hasNextPage); // 다음 페이지 여부 갱신
-    } else {
-      setHasNextPage(false); // 더 이상 데이터가 없을 경우
-    }
-
-    // 실제 API 요청 (필요시 사용)
-    // LikeFeedList(userId, page)
-    //   .then((res) => {
-    //     const data: FeedResponseType = res.data;
-    //     if (data.success) {
-    //       const newFeeds = data.response.feeds;
-    //       if (newFeeds.length > 0) {
-    //         setAllFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
-    //         setFilteredFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
-    //         setHasNextPage(data.response.hasNextPage);
-    //       } else {
-    //         setHasNextPage(false);
-    //       }
-    //     }
-    //   })
-    //   .catch((error) => {
-    //     console.error(error);
-    //   });
+   
+    LikeFeedList(userId, page)
+      .then((res) => {
+        const data: FeedResponseType = res.data;
+        if (data.success) {
+          const newFeeds = data.response.feeds;
+          if (newFeeds.length > 0) {
+            setAllFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
+            setFilteredFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
+            setHasNextPage(data.response.hasNextPage);
+          } else {
+            setHasNextPage(false);
+          }
+        }
+      })
+      .catch((error) => {
+        console.error(error);
+      });
   };
 
   // 좋아요 탭에서 전체 카테고리 선택 시 '전체' 버튼으로 리셋
