@@ -64,9 +64,8 @@ export const getFeedDetail = (id: number) => {
   return axios.get(`${BaseUrl}/${id}`, {
     headers: {
       'Content-Type': 'application/json',
-      // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
-      'Cookie': 'accessToken=token', // 쿠키 헤더 추가
-    },
+    },   
+    withCredentials: true, 
   });
 };
 
