@@ -59,10 +59,14 @@ public class UserController {
                 .collect(Collectors.toList());
         return success(response);
     }
-    @PostMapping("/toggle-follow/{followTargetId}")
-    public ApiResult<Void> toggleFollow(@PathVariable Long followTargetId) {
-        Long userId = 1L;
-        userService.toggleFollow(userId, followTargetId);
+    @PostMapping("/follow/{followTargetId}")
+    public ApiResult<Void> followUser(@CookieValue(value = "accessToken", required = false) String token, @PathVariable Long followTargetId) {
+        userApplicationService.followUser(token,followTargetId);
+        return success(null);
+    }
+    @PostMapping("/unfollow/{followTargetId}")
+    public ApiResult<Void> unfollowUser(@CookieValue(value = "accessToken", required = false) String token, @PathVariable Long followTargetId) {
+        userApplicationService.unfollowUser(token,followTargetId);
         return success(null);
     }
 }

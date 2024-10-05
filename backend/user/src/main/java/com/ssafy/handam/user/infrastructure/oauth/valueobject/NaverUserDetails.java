@@ -16,7 +16,7 @@ public class NaverUserDetails implements OAuth2UserDetails {
     private final String birth;
     private final String gender;
     private final String age;
-    private final String profileImage;
+    private final String profile_image;
 
     public NaverUserDetails(Map<String, Object> attribute) {
         Map<String, Object> response = NullCheckUtil.handleAttributes((Map<String, Object>) attribute.get("response"));
@@ -25,11 +25,11 @@ public class NaverUserDetails implements OAuth2UserDetails {
         this.providerId = response.get("id").toString();
         this.email = response.get("email").toString();
         this.name = response.get("name").toString();
-        this.nickname = response.containsKey("nickname") ? response.get("nickname").toString() : this.name;  // 닉네임이 없으면 이름 사용
+        this.nickname = response.get("nickname").toString();
         this.birth = response.get("birthday").toString();
         this.gender = response.get("gender").toString();
         this.age = response.get("age").toString();
-        this.profileImage = response.get("profileImage").toString();
+        this.profile_image = response.get("profile_image").toString();
     }
 
 }

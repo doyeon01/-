@@ -8,7 +8,7 @@ public record OAuthUserInfo(String provider,
                             String name,
                             Gender gender,
                             String age,
-                            String profileImageUrl) {
+                            String profile_image) {
 
     public static OAuthUserInfo of(Map<String, Object> attributes) {
 
@@ -19,7 +19,7 @@ public record OAuthUserInfo(String provider,
                 attributes.get("name").toString(),
                 "M".equalsIgnoreCase(attributes.get("gender").toString()) ? Gender.MALE : Gender.FEMALE,
                 attributes.get("age").toString(),
-                attributes.get("profileImage").toString()
+                attributes.get("profile_image").toString()
         );
     }
 }

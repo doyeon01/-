@@ -14,7 +14,7 @@ public class NullCheckUtil {
         result.put("birthday", attribute.getOrDefault("birthday", "01-01"));
         result.put("gender", attribute.getOrDefault("gender", "F"));
         result.put("age", attribute.getOrDefault("age", "unknown"));
-        result.put("profileImage", attribute.getOrDefault("profileImage", "default_profile.png"));
+        result.put("profile_image", attribute.getOrDefault("profile_image", "default_profile.png"));
 
         return result;
     }

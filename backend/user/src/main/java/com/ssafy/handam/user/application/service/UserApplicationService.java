@@ -29,4 +29,13 @@ public class UserApplicationService {
         String email = jwtUtil.extractUserEmail(accessToken);
         userService.updateUserSurvey(email, surveyRequest.toSurveyData(surveyRequest));
     }
+    public void followUser(String token,Long followTargetId){
+        Long userId = jwtUtil.extractUserId(token);
+        userService.followUser(userId,followTargetId);
+    }
+    public void unfollowUser(String token,Long followTargetId){
+        Long userId = jwtUtil.extractUserId(token);
+        userService.unfollowUser(userId,followTargetId);
+    }
+
 }
