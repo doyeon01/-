@@ -24,6 +24,7 @@ const MainPage: React.FC = () => {
       const res = await UserInfo(); 
       const data: UserInfoResponseType = res.data;
       if (data.success) {
+        console.log(data)
         const info: UserInfoType = data.response;
         if (info.id !== userId) { 
           setUserId(info.id); 
