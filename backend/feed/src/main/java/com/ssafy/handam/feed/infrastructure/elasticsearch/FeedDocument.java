@@ -11,8 +11,6 @@ import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
-import java.time.LocalDateTime;
-
 @Data
 @Builder
 @AllArgsConstructor

@@ -1,7 +1,7 @@
 package com.ssafy.handam.feed.infrastructure.client;
 
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
-import com.ssafy.handam.feed.infrastructure.presentation.api.ApiUtils.ApiResult;
+import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,0 +1,12 @@
+[[get-feed-cluster-refresh]]
+=== 피드 군집 새로고침  API
+
+==== HTTP Request
+
+include::{snippets}/get-feed-cluster-refresh/http-request.adoc[]
+include::{snippets}/get-feed-cluster-refresh/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-feed-cluster-refresh/http-response.adoc[]
+include::{snippets}/get-feed-cluster-refresh/response-fields.adoc[]

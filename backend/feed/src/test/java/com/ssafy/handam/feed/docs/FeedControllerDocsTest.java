@@ -28,25 +28,30 @@ import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServiceResponse;
 import com.ssafy.handam.feed.domain.PlaceType;
-import com.ssafy.handam.feed.infrastructure.presentation.request.comment.CreateCommentRequest;
-import com.ssafy.handam.feed.infrastructure.presentation.request.feed.FeedCreationRequest;
-import com.ssafy.handam.feed.infrastructure.presentation.response.comment.CreateCommentResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CommentsResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CreatedFeedsByUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedDetailResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedLikeResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.LikedFeedsByUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.RecommendedFeedsForUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.SearchedFeedsResponse;
+import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
+import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.presentation.response.cluster.ClusterResponse;
+import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
+import com.ssafy.handam.feed.presentation.response.feed.CommentsResponse;
+import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
+import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.UUID;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.RequestParam;
 
 class FeedControllerDocsTest extends RestDocsSupport {
 
@@ -666,8 +671,243 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
-
     }
+
+    @DisplayName("좋아요 군집화 API")
+    @Test
+    void getFeedClusterTest() throws Exception {
+        // given
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
+        List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
+        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+
+        // when
+        given(feedService.getClusteredFeeds(any(), any())).willReturn(List.of(response));
+
+        // then
+        mockMvc.perform(
+                        get("/api/v1/feeds/like/clustering")
+                                .cookie(new Cookie("accessToken", "token"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .queryParam("userId", "1")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-feed-cluster",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestCookies(
+                                cookieWithName("accessToken").description("인증을 위한 액세스 토큰")
+                        ),
+                        queryParameters(
+                                parameterWithName("userId").description("사용자 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response[].clusterId").type(JsonFieldType.STRING)
+                                        .description("군집 ID"),
+                                fieldWithPath("response[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("response[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("response[].feeds[].id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response[].feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response[].feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("response[].feeds[].userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response[].feeds[].imageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response[].feeds[].title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
+                                fieldWithPath("response[].feeds[].content").type(JsonFieldType.STRING)
+                                        .description("피드 내용"),
+                                fieldWithPath("response[].feeds[].likeCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 좋아요 수"),
+                                fieldWithPath("response[].feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
+                                fieldWithPath("response[].feeds[].address1").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response[].feeds[].address2").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response[].feeds[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 경도"),
+                                fieldWithPath("response[].feeds[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 위도"),
+                                fieldWithPath("response[].feeds[].placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입"),
+                                fieldWithPath("response[].feeds[].nickName").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response[].feeds[].profileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response[].feeds[].isLiked").type(JsonFieldType.BOOLEAN)
+                                        .description("좋아요 여부"),
+                                fieldWithPath("response[].feeds[].createdDate").type(JsonFieldType.STRING)
+                                        .description("피드 생성일자"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("좋아요 군집화 새로고침 API")
+    @Test
+    void getFeedClusterRefreshTest() throws Exception {
+        // given
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
+        List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
+        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+
+        // when
+        given(feedService.refreshClusteredFeeds(any(), any())).willReturn(List.of(response));
+
+        // then
+        mockMvc.perform(
+                        get("/api/v1/feeds/like/clustering/refresh")
+                                .cookie(new Cookie("accessToken", "token"))
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .queryParam("userId", "1")
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-feed-cluster-refresh",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        requestCookies(
+                                cookieWithName("accessToken").description("인증을 위한 액세스 토큰")
+                        ),
+                        queryParameters(
+                                parameterWithName("userId").description("사용자 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response[].clusterId").type(JsonFieldType.STRING)
+                                        .description("군집 ID"),
+                                fieldWithPath("response[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("위도"),
+                                fieldWithPath("response[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("경도"),
+                                fieldWithPath("response[].feeds[].id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response[].feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response[].feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("response[].feeds[].userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response[].feeds[].imageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response[].feeds[].title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
+                                fieldWithPath("response[].feeds[].content").type(JsonFieldType.STRING)
+                                        .description("피드 내용"),
+                                fieldWithPath("response[].feeds[].likeCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 좋아요 수"),
+                                fieldWithPath("response[].feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
+                                fieldWithPath("response[].feeds[].address1").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response[].feeds[].address2").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response[].feeds[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 경도"),
+                                fieldWithPath("response[].feeds[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 위도"),
+                                fieldWithPath("response[].feeds[].placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입"),
+                                fieldWithPath("response[].feeds[].nickName").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response[].feeds[].profileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response[].feeds[].isLiked").type(JsonFieldType.BOOLEAN)
+                                        .description("좋아요 여부"),
+                                fieldWithPath("response[].feeds[].createdDate").type(JsonFieldType.STRING)
+                                        .description("피드 생성일자"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
+    @DisplayName("거리기반 피드 조회 API")
+    @Test
+    void getNearbyClusterCenterTest() throws Exception {
+
+        FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
+
+        NearbyClusterCenterResponse response = NearbyClusterCenterResponse.of(List.of(feedPreviewDto), 0, false);
+
+        given(feedService.getNearbyClusterCenter(any())).willReturn(response);
+
+        mockMvc.perform(
+                        get("/api/v1/feeds/cluster/center/nearby")
+                                .param("latitude", "37.7749")
+                                .param("longitude", "122.4194")
+                                .param("distance", "10")
+                                .param("page", "0")
+                                .param("size", "10")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .accept(MediaType.APPLICATION_JSON)
+                                .cookie(new Cookie("accessToken", "token"))
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-nearby-cluster-center",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        queryParameters(
+                                parameterWithName("latitude").description("위도"),
+                                parameterWithName("longitude").description("경도"),
+                                parameterWithName("distance").description("거리"),
+                                parameterWithName("page").description("페이지 번호 (0부터 시작)"),
+                                parameterWithName("size").description("페이지 당 항목 수")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
+                                        .description("장소 이름"),
+                                fieldWithPath("response.feeds[].userId").type(JsonFieldType.NUMBER)
+                                        .description("사용자 ID"),
+                                fieldWithPath("response.feeds[].imageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
+                                fieldWithPath("response.feeds[].title").type(JsonFieldType.STRING)
+                                        .description("피드 제목"),
+                                fieldWithPath("response.feeds[].content").type(JsonFieldType.STRING)
+                                        .description("피드 내용"),
+                                fieldWithPath("response.feeds[].likeCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 좋아요 수"),
+                                fieldWithPath("response.feeds[].commentCount").type(JsonFieldType.NUMBER)
+                                        .description("피드의 댓글 수"),
+                                fieldWithPath("response.feeds[].address1").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response.feeds[].address2").type(JsonFieldType.STRING)
+                                        .description("피드의 주소"),
+                                fieldWithPath("response.feeds[].longitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 경도"),
+                                fieldWithPath("response.feeds[].latitude").type(JsonFieldType.NUMBER)
+                                        .description("피드의 위도"),
+                                fieldWithPath("response.feeds[].placeType").type(JsonFieldType.STRING)
+                                        .description("장소 타입"),
+                                fieldWithPath("response.feeds[].nickName").type(JsonFieldType.STRING)
+                                        .description("사용자 이름"),
+                                fieldWithPath("response.feeds[].profileImageUrl").type(JsonFieldType.STRING)
+                                        .description("사용자 프로필 이미지 URL"),
+                                fieldWithPath("response.feeds[].isLiked").type(JsonFieldType.BOOLEAN)
+                                        .description("좋아요 여부"),
+                                fieldWithPath("response.feeds[].createdDate").type(JsonFieldType.STRING)
+                                        .description("피드 생성일자"),
+                                fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
+                                        .description("현재 페이지 번호"),
+                                fieldWithPath("response.hasNextPage").type(JsonFieldType.BOOLEAN)
+                                        .description("다음 페이지 존재 여부"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
+
 
     private static FeedPreviewDto getFeedPreviewDto() {
         return new FeedPreviewDto(
@@ -691,4 +931,6 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 LocalDateTime.now().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
+
+
 }

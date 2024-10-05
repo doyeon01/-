@@ -19,7 +19,7 @@ public class UserApiClient {
 
     public UserDto getUserById(Long userId) {
 
-        Map<String, Object> userMap = restTemplate.getForObject(userServiceUrl + "/user/" + userId, Map.class);
+        Map<String, Object> userMap = restTemplate.getForObject(userServiceUrl + "/users/" + userId, Map.class);
         System.out.println(userMap);
         return convertMapToUserDto(userMap);
     }

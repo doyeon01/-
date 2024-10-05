@@ -104,7 +104,7 @@ pipeline {
                         docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest || true
                         docker system prune -f --volumes
                         docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
-                        docker run -it -d --name feed -p $USER_PORT:$USER_PORT \
+                        docker run -it -d --name feed -v ~/VS_photo:/app/photos -p $USER_PORT:$USER_PORT \
                         -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
                         $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
                         EOF
