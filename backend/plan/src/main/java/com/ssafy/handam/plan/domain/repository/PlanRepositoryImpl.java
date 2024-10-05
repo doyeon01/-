@@ -5,6 +5,8 @@ import com.ssafy.handam.plan.infrastructure.repository.PlanJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 @RequiredArgsConstructor
 public class PlanRepositoryImpl implements PlanRepository {
@@ -15,7 +17,10 @@ public class PlanRepositoryImpl implements PlanRepository {
        return planJpaRepository.save(plan);
     }
 
-
+    @Override
+    public List<Plan> findAllByDayPlanId(Long dayPlanId) {
+        return planJpaRepository.findAllByDayPlanId(dayPlanId);
+    }
 
 
 }

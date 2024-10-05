@@ -7,7 +7,7 @@ import java.util.stream.Collectors;
 
 @Builder
 public record DayPlansServiceRequest(
-        String day,
+        Long day,
         List<PlanServiceRequest> planServiceRequests
 ) {
     public DayPlanData toDayPlansData() {

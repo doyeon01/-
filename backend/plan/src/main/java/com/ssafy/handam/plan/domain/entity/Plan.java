@@ -20,7 +20,6 @@ public class Plan extends BaseEntity{
     private String address2;
     private Double longitude;
     private Double latitude;
-
     private String placeType;
     private String details;
 

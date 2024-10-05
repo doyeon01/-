@@ -12,6 +12,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -56,4 +57,14 @@ public class PlanService {
     public List<TotalPlan> getTotalPlans(Long userId) {
         return totalPlanRepository.findAllByUserId(userId);
     }
+    public List<Long> getDayPlanIdsByTotalPlanId(Long totalPlanId) {
+        return dayPlanRepository.findAllByTotalPlanId(totalPlanId)
+                .stream()
+                .map(DayPlan::getId)
+                .collect(Collectors.toList());
+    }
+    public List<Plan> getPlansByDayPlanId(Long dayPlanId) {
+        return planRepository.findAllByDayPlanId(dayPlanId);
+    }
+
 }
