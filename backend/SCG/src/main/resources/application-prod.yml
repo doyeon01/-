@@ -71,7 +71,7 @@ logging:
 frontend:
   servers:
     - "http://localhost:5173"
-    - "http://j11c205.p.ssafy.io:3000"
+    - "https://j11c205.p.ssafy.io"
 
 server:
   port: 8080
