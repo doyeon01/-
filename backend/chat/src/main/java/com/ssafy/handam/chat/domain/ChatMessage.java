@@ -28,16 +28,13 @@ public class ChatMessage extends BaseEntity {
 
     private String content;
 
-    private LocalDateTime timestamp;
-
     public ChatMessage(ChatRoom chatRoom, Long senderId, String content) {
         this.chatRoom = chatRoom;
         this.senderId = senderId;
         this.content = content;
-        this.timestamp = LocalDateTime.now();
     }
 
-    public ChatMessage(Long messageId, ChatRoom chatRoom, Long senderId, String content, LocalDateTime timestamp) {
+    public ChatMessage(Long messageId, ChatRoom chatRoom, Long senderId, String content) {
         super();
     }
 
