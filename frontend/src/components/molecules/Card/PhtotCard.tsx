@@ -7,13 +7,24 @@ interface PhotoCardProps {
   title: string;
   address?: string; 
   testimg: string;
+  startDate ?: string;
+  endDate ?: string;
   showButton?: boolean; // 여행 일정 보기, 포토카드 생성 버튼 보여줄지 여부를 결정하는 속성
   showDownLoadButton?: boolean;
 }
 
-export const PhotoCard: React.FC<PhotoCardProps> = ({ title, address, testimg, showButton, showDownLoadButton = false }) => {
+export const PhotoCard: React.FC<PhotoCardProps> = ({ title, address, testimg, showButton, startDate, endDate, showDownLoadButton = false }) => {
   const [showModal, setShowModal] = useState(false); // 모달 상태 관리
   const nav = useNavigate();
+
+// 날짜 형식 변환
+const formatDate = (dateString: string) => {
+  const date = new Date(dateString);
+  const year = String(date.getFullYear()).slice(2); // 년도를 뒤 두자리만 추출
+  const month = String(date.getMonth() + 1).padStart(2, '0'); // 두 자리 수로 변환
+  const day = String(date.getDate()).padStart(2, '0'); // 두 자리 수로 변환
+  return `${year}.${month}.${day}`;
+};
 
   // 모달 열기 함수
   const handleOpenModal = () => {
@@ -77,7 +88,9 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({ title, address, testimg, s
 
         <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
           <h3 className="text-lg font-bold">{title}</h3>
+          {startDate && endDate && <p className="text-sm">{formatDate(startDate)} ~ {formatDate(endDate)}</p> }
           {address && <p className="text-sm">{address}</p>}
+
         </div>
       </div>
 
