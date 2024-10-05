@@ -22,6 +22,7 @@ export const PersonalPlanDetail: React.FC = () => {
     // };
 
     // loadDummyData();
+    console.log(1)
     PlanListApi()
     .then((res) => {
       const data: PlanListResponseType = res.data
