@@ -52,12 +52,9 @@ public class UserController {
     }
 
     @GetMapping("/search")
-    public ApiResult<List<UserInfoResponse>> searchUsers(@RequestParam("keyword") String keyword) {
-        List<User> users = userService.searchUsersByKeyword(keyword);
-        List<UserInfoResponse> response = users.stream()
-                .map(UserInfoResponse::of)
-                .collect(Collectors.toList());
-        return success(response);
+    public ApiResult<List<UserInfoResponse>> searchUsersByKeyword(@CookieValue(value = "accessToken", required = false) String token, @RequestParam("keyword") String keyword) {
+        List<UserInfoResponse> userInfoResponses = userApplicationService.searchUsersByKeyword(token,keyword);
+        return success(userInfoResponses);
     }
     @PostMapping("/follow/{followTargetId}")
     public ApiResult<Void> followUser(@CookieValue(value = "accessToken", required = false) String token, @PathVariable Long followTargetId) {
