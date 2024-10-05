@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.infrastructure.presentation.request.feed;
+package com.ssafy.handam.feed.presentation.request.feed;
 
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByFiltersServiceRequest;
 

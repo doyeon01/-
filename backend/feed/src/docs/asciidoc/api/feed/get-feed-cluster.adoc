@@ -1,0 +1,12 @@
+[[get-feed-cluster]]
+=== 피드 군집 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-feed-cluster/http-request.adoc[]
+include::{snippets}/get-feed-cluster/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-feed-cluster/http-response.adoc[]
+include::{snippets}/get-feed-cluster/response-fields.adoc[]

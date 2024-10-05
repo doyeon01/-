@@ -1,6 +1,6 @@
 package com.ssafy.handam.feed.application.dto.request.comment;
 
-import com.ssafy.handam.feed.infrastructure.presentation.request.comment.CreateCommentRequest;
+import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 
 public record CreateCommentServiceRequest(
         Long feedId,

@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.infrastructure.presentation.request.comment;
+package com.ssafy.handam.feed.presentation.request.comment;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
