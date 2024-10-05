@@ -4,6 +4,7 @@ import com.ssafy.handam.plan.application.common.ApiUtils.ApiResult;
 import com.ssafy.handam.plan.application.service.PlanApplicationService;
 import com.ssafy.handam.plan.domain.entity.TotalPlan;
 import com.ssafy.handam.plan.presentation.request.totalplan.TotalPlansRequest;
+import com.ssafy.handam.plan.presentation.response.PlanResponse;
 import com.ssafy.handam.plan.presentation.response.totalplan.TotalPlanResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -26,9 +27,10 @@ public class PlanController {
     }
 
     @GetMapping("/total")
-    public ApiResult<List<TotalPlanResponse>> getTotalPlan(@CookieValue(value = "accessToken", required = false) String token) {
+    public ApiResult<List<TotalPlanResponse>> getTotalPlans(@CookieValue(value = "accessToken", required = false) String token) {
         List<TotalPlanResponse> totalPlanResponses = planApplicationService.getTotalPlans(token);
         return success(totalPlanResponses);
     }
+    
 
 }

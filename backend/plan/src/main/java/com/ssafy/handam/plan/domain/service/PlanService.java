@@ -25,6 +25,8 @@ public class PlanService {
         TotalPlan savedTotalPlan = totalPlanRepository.save( //전체일정
                 TotalPlan.builder()
                         .userId(totalPlanData.userId())
+                        .startDate(totalPlanData.startDate())
+                        .endDate(totalPlanData.endDate())
                         .title(totalPlanData.title())
                         .build()
         );
