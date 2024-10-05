@@ -15,6 +15,7 @@ export const PersonalFeedDetail: React.FC = () => {
   const userId = useRecoilValue(UserId);  
 
   useEffect(() => {
+    console.log(1)
     if (hasNextPage) {
       loadMoreFeeds();  
     }
