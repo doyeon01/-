@@ -1,6 +1,7 @@
 package com.ssafy.handam.plan.presentation.response.plan;
 
 import com.ssafy.handam.plan.domain.entity.Plan;
+import com.ssafy.handam.plan.domain.valueobject.PlaceType;
 
 
 public record PlanResponse(
@@ -9,7 +10,7 @@ public record PlanResponse(
         String placeName,
         String imageUrl,
         String address,
-        String placeType,
+        PlaceType placeType,
         String details
 ) {
     public static PlanResponse of(Plan plan,String address) {

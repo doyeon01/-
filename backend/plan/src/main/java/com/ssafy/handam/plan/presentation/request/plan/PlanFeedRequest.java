@@ -1,6 +1,7 @@
 package com.ssafy.handam.plan.presentation.request.plan;
 
 import com.ssafy.handam.plan.application.dto.PlanServiceRequest;
+import com.ssafy.handam.plan.domain.valueobject.PlaceType;
 import lombok.Builder;
 
 @Builder
@@ -14,7 +15,7 @@ public record PlanFeedRequest(
         String address2,
         Double longitude,
         Double latitude,
-        String placeType,
+        PlaceType placeType,
         String details
 ) implements PlanRequest {
     @Override

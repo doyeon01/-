@@ -1,6 +1,7 @@
 package com.ssafy.handam.plan.presentation.request.plan;
 
 import com.ssafy.handam.plan.application.dto.PlanServiceRequest;
+import com.ssafy.handam.plan.infrastructure.PlaceTypeMapper;
 import lombok.Builder;
 
 @Builder
@@ -22,7 +23,7 @@ public record PlanPlaceRequest(
                 .address2(this.addressName)
                 .longitude(this.x)
                 .latitude(this.y)
-                .placeType(this.placeType)
+                .placeType(PlaceTypeMapper.mapToPlaceType(this.placeType))
                 .details(this.details)
                 .build();
     }

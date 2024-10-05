@@ -16,9 +16,9 @@
             LocalDate endDate,
             List<DayPlanRequest> dayPlans
     ) {
-        public TotalPlansServiceRequest toTotalPlansServiceRequest() {
+        public TotalPlansServiceRequest toTotalPlansServiceRequest(Long userId) {
             return TotalPlansServiceRequest.builder()
-                    .userId(this.userId)
+                    .userId(userId)
                     .title(this.title)
                     .startDate(this.startDate)
                     .endDate(this.endDate)

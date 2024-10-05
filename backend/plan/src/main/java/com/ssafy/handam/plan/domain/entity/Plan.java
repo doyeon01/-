@@ -1,5 +1,6 @@
 package com.ssafy.handam.plan.domain.entity;
 
+import com.ssafy.handam.plan.domain.valueobject.PlaceType;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,7 +21,9 @@ public class Plan extends BaseEntity{
     private String address2;
     private Double longitude;
     private Double latitude;
-    private String placeType;
+
+    @Enumerated(EnumType.STRING)
+    private PlaceType placeType;
     private String details;
 
     @ManyToOne
@@ -35,7 +38,7 @@ public class Plan extends BaseEntity{
             String address2,
             Double longitude,
             Double latitude,
-            String placeType,
+            PlaceType placeType,
             String details,
             DayPlan dayPlan
     ) {
