@@ -21,7 +21,7 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
-  const [PageNum, setPageNum] = useState(6)
+  const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
   // const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
@@ -35,8 +35,8 @@ export const SurveyPage: React.FC = () => {
   const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
 
   const [feeds, setFeeds] = useState<FeedType[]>([]);
+  const [keyword,setkeyword] = useState('RESTAURANT')
 
-  let keyword = 'RESTAURANT'
   let page = 0
   let size = 15
 
@@ -90,6 +90,15 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
+  if (PageNum === 6){
+    setkeyword('커피')
+  }
+  if (PageNum === 7){
+    setkeyword('TOURIST_ATTRACTION')
+  }
+  if (PageNum === 8){
+    setkeyword('ACCOMMODATION')
+  }
 }}
 
   const handleIsHide = ()=>{
@@ -115,6 +124,14 @@ const handlePageNum = () => {
   }
   
   // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
+
+  const toggleLike = (id:number) => {
+    setFeeds(prevFeeds =>
+      prevFeeds.map(feed =>
+        feed.id === id ? { ...feed, isLiked: !feed.isLiked } : feed
+      )
+    );
+  };
 
   return (
     <>
@@ -380,9 +397,12 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 어떤 음식이 마음에 드시나요?
               </span>
+              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+                5개 이상 선택해주세요
+              </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
                     </div>
                   )) : 'No feeds available'}
@@ -392,9 +412,6 @@ const handlePageNum = () => {
                   </div>
                 ))} */}
               </span>
-              <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
-              
-              </div>
             </>
           )}
           {PageNum === 7 && (
@@ -409,13 +426,16 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 후식으로는 어떤 게 좋을까요?
               </span>
-              <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
                 5개 이상 선택해주세요
               </span>
-              <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 text-[#878787]">
-                사진 들어갈 곳22 <br />
-                애니메이션으로 순차적으로 위로 따다닥 붙게 만들면 멋있지 않을까
-              </div>
+              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
+                      <div>{feed.title}</div>
+                    </div>
+                  )) : 'No feeds available'}
+              </span>
             </>
           )}
           {PageNum === 8 && (
@@ -431,13 +451,16 @@ const handlePageNum = () => {
                 친구에게 연락이 왔어요!<br />
                 어디로 여행을 가는게 좋을까요?
               </span>
-              <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-white">
+              <span className="text-[15px] top-[65px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
                 5개 이상 선택해주세요
               </span>
-              <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 ">
-                사진 들어갈 곳33 <br />
-                애니메이션으로 순차적으로 위로 따다닥 붙게 만들면 멋있지 않을까
-              </div>
+              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
+                      <div>{feed.title}</div>
+                    </div>
+                  )) : 'No feeds available'}
+              </span>
             </>
           )}
           {PageNum === 9 && (
@@ -452,12 +475,16 @@ const handlePageNum = () => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 숙소는 어디가 좋을까요?
               </span>
-              <span className="text-[15px] top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-white">
+              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
                 5개 이상 선택해주세요
               </span>
-              <div className="text-[15px] top-[150px] absolute text-center left-1/2 transform -translate-x-1/2 ">
-              사진 들어갈 곳44 <br/>애니메이션으로 순차적으로 위로 따다닥 붙게 만들면 멋있지 않을까
-              </div>
+              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
+              {feeds && feeds.length > 0 ? feeds.map(feed => (
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
+                      <div>{feed.title}</div>
+                    </div>
+                  )) : 'No feeds available'}
+              </span>
             </>
           )}
           {PageNum === 10 &&(
@@ -468,7 +495,7 @@ const handlePageNum = () => {
                 {PageNum}/10
               </span>
               <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                내일은 신사는 주말이에요!<br/>
+                내일은 신나는 주말이에요!<br/>
                 어떻게 보내면 좋을까요?
               </span>
               <button

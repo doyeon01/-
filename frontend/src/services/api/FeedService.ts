@@ -8,7 +8,6 @@ export const FeedCreate = async (formData: FormData) => {
   const response = await axios.post(`${BaseUrl}/create`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      // 'Authorization': `Bearer ${token}`, // 토큰이 필요하면 추가
     },
   });
 
@@ -16,29 +15,23 @@ export const FeedCreate = async (formData: FormData) => {
 };
 
 // 마이페이지 피드 목록 조회 API
-export const FeedList = (page = 0, size = 10) => {
-  return axios.get(`${BaseUrl}/created`, {
+export const FeedList = (userId: number, page: number, size = 6) => {
+  return axios.get(`${BaseUrl}/users/created`, {
     params: {
       userId: userId, 
       page: page,
       size: size,
-    },
-    headers: {
-      // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
     },
   });
 };
 
 // 좋아요한 피드 목록 조회 API
-export const LikeFeedList = (page = 0, size = 10) => {
+export const LikeFeedList = (userId: number, page: number, size = 10) => {
   return axios.get(`${BaseUrl}/liked`, {
     params: {
       userId: userId, 
       page: page,
       size: size,
-    },
-    headers: {
-      // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
     },
   });
 };

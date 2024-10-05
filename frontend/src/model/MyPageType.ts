@@ -21,7 +21,7 @@ export interface UserInfoResponseType {
 }
 
 
-// 마이페이지 피드 목록 api
+// 마이페이지 피드 목록 
 export interface FeedType {
   id: number;
   title: string;
@@ -51,6 +51,24 @@ export interface FeedResponseType {
   error: null;
 }
 
+// 마이페이지 여행 일정 목록 
+export interface PlanListType {
+  id: number;
+  startDate: string;
+  endDate: string;
+  title: string;
+  thumbNailImageUrl: string;
+  address: string;
+  createdDate: string;
+}
+
+// 마이페이지 여행 일정 응답
+export interface PlanListResponseType {
+  success: boolean;
+  response: PlanListType[];
+  error: null;
+  
+}
 
 // FeedCard 컴포넌트 Props
 export interface CardProps {
