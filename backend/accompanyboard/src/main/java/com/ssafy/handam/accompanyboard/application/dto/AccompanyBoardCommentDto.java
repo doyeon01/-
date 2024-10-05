@@ -6,8 +6,8 @@ public record AccompanyBoardCommentDto(
         Long id,
         Long userId,
         Long accompanyBoardArticleId,
-        String name,
         String profileImageUrl,
+        String nickName,
         String content
 ) {
 
@@ -16,8 +16,8 @@ public record AccompanyBoardCommentDto(
                 comment.getId(),
                 comment.getUserId(),
                 comment.getAccompanyBoardArticleId(),
-                userDetailDto.name(),
                 userDetailDto.profileImageUrl(),
+                userDetailDto.nickName(),
                 comment.getContent()
         );
     }

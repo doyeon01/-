@@ -9,7 +9,7 @@ public record AccompanyBoardArticlePreviewDto(
         Long userId,
         Long scheduleId,
         String profileImageUrl,
-        String name,
+        String nickName,
         String title,
         String createdDate) {
 
@@ -23,7 +23,7 @@ public record AccompanyBoardArticlePreviewDto(
                 article.getUserId(),
                 article.getScheduleId(),
                 userDetailDto.profileImageUrl(),
-                userDetailDto.name(),
+                userDetailDto.nickName(),
                 article.getTitle(),
                 formattedCreatedDate);
     }
