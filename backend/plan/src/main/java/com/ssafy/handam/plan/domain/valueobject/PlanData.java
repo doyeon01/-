@@ -10,7 +10,7 @@ public record PlanData(
         String address2,
         Double longitude,
         Double latitude,
-        String placeType,
+        PlaceType placeType,
         String details
 ) {
 }

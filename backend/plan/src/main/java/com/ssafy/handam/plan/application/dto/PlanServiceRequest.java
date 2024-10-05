@@ -1,5 +1,6 @@
 package com.ssafy.handam.plan.application.dto;
 
+import com.ssafy.handam.plan.domain.valueobject.PlaceType;
 import com.ssafy.handam.plan.domain.valueobject.PlanData;
 import lombok.Builder;
 
@@ -11,7 +12,7 @@ public record PlanServiceRequest(
         String address2,
         Double longitude,
         Double latitude,
-        String placeType,
+        PlaceType placeType,
         String details
 ){
     public PlanData toPlanData() {

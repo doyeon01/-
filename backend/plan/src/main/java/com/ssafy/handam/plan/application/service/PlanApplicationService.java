@@ -5,12 +5,16 @@ import com.ssafy.handam.plan.domain.entity.Plan;
 import com.ssafy.handam.plan.domain.entity.TotalPlan;
 import com.ssafy.handam.plan.domain.service.PlanService;
 import com.ssafy.handam.plan.presentation.jwt.JwtUtil;
+import com.ssafy.handam.plan.presentation.request.totalplan.TotalPlansRequest;
+import com.ssafy.handam.plan.presentation.response.dayplan.DayPlanResponse;
 import com.ssafy.handam.plan.presentation.response.plan.PlanResponse;
 import com.ssafy.handam.plan.presentation.response.totalplan.TotalPlanResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
@@ -21,7 +25,9 @@ public class PlanApplicationService {
     private final PlanService planService;
     private final JwtUtil jwtUtil;
 
-    public void createPlan(TotalPlansServiceRequest totalPlansServiceRequest) {
+    public void createPlan(TotalPlansRequest totalPlansRequest, String token) {
+        Long userId = jwtUtil.extractUserId(token);
+        TotalPlansServiceRequest totalPlansServiceRequest = totalPlansRequest.toTotalPlansServiceRequest(userId);
         planService.createPlan(totalPlansServiceRequest.toTotalPlansData());
     }
     public List<TotalPlanResponse> getTotalPlans(String token) {
@@ -36,20 +42,22 @@ public class PlanApplicationService {
                 })
                 .collect(Collectors.toList());
     }
-    public List<PlanResponse> getAllPlans(Long totalPlanId){
+    public List<DayPlanResponse> getAllPlans(Long totalPlanId) {
         List<Long> dayPlanIds = planService.getDayPlanIdsByTotalPlanId(totalPlanId);
 
-        List<Plan> plans = dayPlanIds.stream()
+        Map<Long, List<PlanResponse>> groupedByDay = dayPlanIds.stream()
                 .flatMap(dayPlanId -> planService.getPlansByDayPlanId(dayPlanId).stream())
-                .collect(Collectors.toList());
-
-        return plans.stream()
                 .map(plan -> {
                     String address = (plan.getAddress1() != null) ? plan.getAddress1() : plan.getAddress2();
                     return PlanResponse.of(plan, address);
                 })
+                .collect(Collectors.groupingBy(PlanResponse::day));
+
+        return groupedByDay.keySet().stream()
+                .map(day -> new DayPlanResponse(day, groupedByDay.get(day)))
                 .collect(Collectors.toList());
     }
+
     private Plan getFirstPlan(TotalPlan totalPlan) { //첫번째 플랜 반환
         return totalPlan.getDayPlans().stream()
                 .flatMap(dayPlan -> dayPlan.getPlans().stream())
