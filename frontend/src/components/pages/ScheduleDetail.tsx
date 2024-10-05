@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { DayPlan } from '../organisms/DayPlan';
 import testImg1 from './../../assets/statics/test1.jpg'
@@ -11,6 +11,7 @@ import PaginationItem from "@mui/material/PaginationItem";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import ArrowForwardIcon from "@mui/icons-material/ArrowForward";
 import { ButtonPersonalInfo } from '../atoms/button/ButtonPersonalInfo';
+import { PlanDetailApi } from '../../services/api/PlanService';
 
 const dummyData = {
   title: "퇴사 기념 혼자서 부산 여행",
@@ -185,6 +186,16 @@ const dummyData = {
 };
 
 export const ScheduleDetail = () => {
+
+  useEffect(() => {
+    PlanDetailApi()
+    .then()
+    .catch((error) => {
+      console.log(error)
+    })
+
+  },[])
+
   const nav = useNavigate()
   const [currentPage, setCurrentPage] = useState(0);
   const daysPerPage = 3;
