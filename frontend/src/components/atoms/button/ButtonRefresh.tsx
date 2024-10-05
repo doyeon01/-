@@ -2,6 +2,7 @@ import React from 'react';
 
 export interface ButtonRefreshProps {
   text: string;
+  onClick: () => void;
 }
 
 const ButtonRefresh: React.FC<ButtonRefreshProps> = ({ text }) => {
