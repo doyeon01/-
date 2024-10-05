@@ -7,17 +7,17 @@ spring:
     gateway:
       routes:
         - id: user-login-signup
-          uri: http://user:8081
+          uri: http://j11c205.p.ssafy.io:8081
           predicates:
               - Path=/login,/oauth2/**
 
         - id: user
-          uri: http://user:8081
+          uri: http://j11c205.p.ssafy.io:8081
           predicates:
             - Path=/api/v1/user/**
 
         - id: user-docs
-          uri: http://user:8081
+          uri: http://j11c205.p.ssafy.io:8081
           predicates:
             - Path=/user/docs/**
           filters:
