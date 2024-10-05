@@ -36,7 +36,7 @@ export const MyPage = () => {
         if (data.success) {
           const info: UserInfoType = data.response;
           setImage(info.profileImage);
-          setNickName(info.nickname);
+          setNickName(info.name);
           setIntroduce(info.introduction);
           setAccompanyTemperature(info.accompanyTemperature);
         }
