@@ -7,4 +7,5 @@ import java.util.List;
 public interface TotalPlanRepository {
     TotalPlan save(TotalPlan totalPlan);
     List<TotalPlan> findAllByUserId(Long userId);
+    TotalPlan findByTotalPlanId(Long totalPlanId);
 }

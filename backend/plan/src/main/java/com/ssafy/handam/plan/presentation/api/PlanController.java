@@ -33,10 +33,18 @@ public class PlanController {
         List<TotalPlanResponse> totalPlanResponses = planApplicationService.getTotalPlans(token);
         return success(totalPlanResponses);
     }
+
+    @GetMapping("/{totalPlanId}")
+    public ApiResult<TotalPlanResponse> getTotalPlan(@PathVariable Long totalPlanId) {
+        TotalPlanResponse totalPlanResponse = planApplicationService.getTotalPlan(totalPlanId);
+        return success(totalPlanResponse);
+    }
+
     @GetMapping("/{totalPlanId}/all")
     public ApiResult<List<DayPlanResponse>> getAllPlans(@PathVariable Long totalPlanId, @CookieValue(value = "accessToken", required = false) String token) {
         List<DayPlanResponse> planResponses = planApplicationService.getAllPlans(totalPlanId);
         return success(planResponses);
     }
+
 
 }
