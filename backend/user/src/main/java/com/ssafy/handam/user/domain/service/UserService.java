@@ -72,10 +72,17 @@ public class UserService {
         return savedUser.getId();
     }
 
-    public UserInfoResponse findUserById(Long id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + id));
-        return UserInfoResponse.of(user,true);
+    public UserInfoResponse findUserById(Long userId,Long targetUserId) {
+
+        User currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("현재 사용자를 찾을 수 없습니다."));
+
+        User targetUser = userRepository.findById(targetUserId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + targetUserId));
+
+        boolean isFollowing = followRepository.findByFollowerAndFollowing(currentUser, targetUser).isPresent();
+
+        return UserInfoResponse.of(targetUser, isFollowing);
     }
     public List<UserInfoResponse> searchUsersByKeyword(Long userId,String keyword) {
         User currentUser = userRepository.findById(userId)
