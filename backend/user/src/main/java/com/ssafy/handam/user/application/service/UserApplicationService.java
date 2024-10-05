@@ -1,6 +1,7 @@
 package com.ssafy.handam.user.application.service;
 
 import com.ssafy.handam.user.application.dto.request.UserSurveyServiceRequest;
+import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.service.UserService;
 import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
 import com.ssafy.handam.user.infrastructure.util.CookieUtil;
@@ -9,6 +10,8 @@ import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -21,13 +24,18 @@ public class UserApplicationService {
     public UserInfoResponse getCurrentUserInfo(HttpServletRequest request) {
         String accessToken = cookieUtil.getJwtFromCookies(request);
         String email = jwtUtil.extractUserEmail(accessToken);
-        return UserInfoResponse.of(userService.getCurrentUserByEmail(email));
+        return UserInfoResponse.of(userService.getCurrentUserByEmail(email),true);
     }
 
     public void updateUserSurvey(HttpServletRequest request, UserSurveyServiceRequest surveyRequest) {
         String accessToken = cookieUtil.getJwtFromCookies(request);
         String email = jwtUtil.extractUserEmail(accessToken);
         userService.updateUserSurvey(email, surveyRequest.toSurveyData(surveyRequest));
+    }
+    public List<UserInfoResponse> searchUsersByKeyword(String token, String keyword){
+        Long userId = jwtUtil.extractUserId(token);
+        return userService.searchUsersByKeyword(userId,keyword);
+
     }
     public void followUser(String token,Long followTargetId){
         Long userId = jwtUtil.extractUserId(token);

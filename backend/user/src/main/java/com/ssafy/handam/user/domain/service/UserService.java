@@ -12,6 +12,8 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Transactional
 @RequiredArgsConstructor
@@ -54,7 +56,9 @@ public class UserService {
 
         userRepository.save(user);
     }
-
+    public Optional<Follow> findFollowStatus(User follower, User following) {
+        return followRepository.findByFollowerAndFollowing(follower, following);
+    }
     public Long saveUser(OAuthUserInfo oAuthUserInfo) {
         User user = User.builder()
                 .email((oAuthUserInfo.email()))
@@ -71,10 +75,21 @@ public class UserService {
     public UserInfoResponse findUserById(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다. ID: " + id));
-        return UserInfoResponse.of(user);
+        return UserInfoResponse.of(user,true);
     }
-    public List<User> searchUsersByKeyword(String keyword) {
-        return userRepository.findByNameContaining(keyword);
+    public List<UserInfoResponse> searchUsersByKeyword(Long userId,String keyword) {
+        User currentUser = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("내정보를 찾을 수 없습니다."));
+
+        List<User> users = userRepository.findByNameContaining(keyword);
+
+        return users.stream()
+                .map(user -> {
+                    Optional<Follow> follow = findFollowStatus(currentUser, user);
+                    boolean isFollowing = follow.isPresent();
+                    return UserInfoResponse.of(user, isFollowing);
+                })
+                .collect(Collectors.toList());
     }
 
 

@@ -16,9 +16,10 @@ public record UserInfoResponse(Long id,
                                String travelStyl2,
                                String travelStyl3,
                                String travelStyl4,
+                               boolean isFollowed,
                                double accompanyTemperature) {
 
-    public static UserInfoResponse of(User user) {
+    public static UserInfoResponse of(User user,boolean isFollowed) {
         return new UserInfoResponse(
                 user.getId(),
                 user.getEmail(),
@@ -33,6 +34,7 @@ public record UserInfoResponse(Long id,
                 user.getTravelStyl2(),
                 user.getTravelStyl3(),
                 user.getTravelStyl4(),
+                isFollowed,
                 user.getAccompanyTemperature()
         );
     }
