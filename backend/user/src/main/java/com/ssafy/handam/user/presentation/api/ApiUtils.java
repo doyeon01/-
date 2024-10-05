@@ -1,4 +1,4 @@
-package com.ssafy.handam.user.application.common;
+package com.ssafy.handam.user.presentation.api;
 
 import lombok.*;
 import org.springframework.http.HttpStatus;

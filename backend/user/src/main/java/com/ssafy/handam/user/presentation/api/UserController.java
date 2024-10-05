@@ -1,9 +1,8 @@
-package com.ssafy.handam.user.presentation;
+package com.ssafy.handam.user.presentation.api;
 
-import static com.ssafy.handam.user.application.common.ApiUtils.success;
+import static com.ssafy.handam.user.presentation.api.ApiUtils.success;
 
-import com.ssafy.handam.user.UserApplication;
-import com.ssafy.handam.user.application.common.ApiUtils.ApiResult;
+import com.ssafy.handam.user.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.user.application.service.UserApplicationService;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
@@ -19,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/v1/user")
+@RequestMapping("/api/v1/users")
 @RequiredArgsConstructor
 @Slf4j
 public class UserController {

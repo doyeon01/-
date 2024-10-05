@@ -79,7 +79,7 @@ public class UserService {
         return UserInfoResponse.of(user);
     }
     public List<User> searchUsersByKeyword(String keyword) {
-        return userRepository.findByNicknameContaining(keyword);
+        return userRepository.findByNameContaining(keyword);
     }
 
     @Transactional
