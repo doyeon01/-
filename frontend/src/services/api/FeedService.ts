@@ -46,6 +46,7 @@ export const postFeedRecommend = (page = 1, size = 10) => {
     headers: {
       'Content-Type': 'application/json',
       // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
+      'Cookie': 'accessToken=token', // 쿠키 헤더 추가
     },
   });
 };
@@ -57,6 +58,7 @@ export const getFeedDetail = (id: number) => {
     headers: {
       'Content-Type': 'application/json',
       // 'Authorization': `Bearer ${token}`,  // 인증이 필요하면 토큰 추가
+      'Cookie': 'accessToken=token', // 쿠키 헤더 추가
     },
   });
 };
@@ -101,6 +103,7 @@ export const getFeedDetail = (id: number) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           // 'Authorization': `Bearer ${token}`, // 인증이 필요하면 토큰 추가
+          'Cookie': 'accessToken=token', // 쿠키 헤더 추가
         },
       });
       console.log(`피드 ${feedId}에 좋아요가 등록되었습니다.`);
@@ -118,6 +121,8 @@ export const getFeedDetail = (id: number) => {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
           // 'Authorization': `Bearer ${token}`, // 인증이 필요하면 토큰 추가
+          'Cookie': 'accessToken=token', // 쿠키 헤더 추가
+
         },
       });
       console.log(`피드 ${feedId}에 좋아요가 취소되었습니다.`);
