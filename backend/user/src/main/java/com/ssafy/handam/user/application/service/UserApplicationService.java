@@ -37,6 +37,10 @@ public class UserApplicationService {
         return userService.searchUsersByKeyword(userId,keyword);
 
     }
+    public UserInfoResponse findUserById(String token,Long targetUserId) {
+        Long userId = jwtUtil.extractUserId(token);
+        return userService.findUserById(userId,targetUserId);
+    }
     public void followUser(String token,Long followTargetId){
         Long userId = jwtUtil.extractUserId(token);
         userService.followUser(userId,followTargetId);
