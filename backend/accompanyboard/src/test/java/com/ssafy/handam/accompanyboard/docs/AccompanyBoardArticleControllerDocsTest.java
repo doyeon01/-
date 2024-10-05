@@ -91,7 +91,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.profileImageUrl").type(JsonFieldType.STRING)
                                         .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.name").type(JsonFieldType.STRING)
+                                fieldWithPath("response.nickName").type(JsonFieldType.STRING)
                                         .description("작성자 이름"),
                                 fieldWithPath("response.title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
@@ -144,7 +144,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].profileImageUrl").type(JsonFieldType.STRING)
                                         .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.articles[].name").type(JsonFieldType.STRING)
+                                fieldWithPath("response.articles[].nickName").type(JsonFieldType.STRING)
                                         .description("작성자 이름"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
@@ -200,7 +200,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.profileImageUrl").type(JsonFieldType.STRING)
                                         .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.name").type(JsonFieldType.STRING)
+                                fieldWithPath("response.nickName").type(JsonFieldType.STRING)
                                         .description("작성자 이름"),
                                 fieldWithPath("response.title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
@@ -260,7 +260,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].profileImageUrl").type(JsonFieldType.STRING)
                                         .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.articles[].name").type(JsonFieldType.STRING)
+                                fieldWithPath("response.articles[].nickName").type(JsonFieldType.STRING)
                                         .description("작성자 이름"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
@@ -326,7 +326,7 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("일정 ID"),
                                 fieldWithPath("response.articles[].profileImageUrl").type(JsonFieldType.STRING)
                                         .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.articles[].name").type(JsonFieldType.STRING)
+                                fieldWithPath("response.articles[].nickName").type(JsonFieldType.STRING)
                                         .description("작성자 이름"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
