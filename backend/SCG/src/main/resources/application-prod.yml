@@ -68,6 +68,11 @@ logging:
     org.springframework.security: DEBUG
     com.ssafy.handam.scg.filters.LoggingGlobalFilter: DEBUG
 
+frontend:
+  servers:
+    - "http://localhost:5173"
+    - "http://j11c205.p.ssafy.io:3000"
+
 server:
   port: 8080
 
