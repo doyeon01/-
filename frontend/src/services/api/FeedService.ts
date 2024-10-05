@@ -16,7 +16,7 @@ export const FeedCreate = async (formData: FormData) => {
 
 // 마이페이지 피드 목록 조회 API
 export const FeedList = (userId: number, page: number, size = 6) => {
-  return axios.get(`${BaseUrl}/created`, {
+  return axios.get(`${BaseUrl}/users/created`, {
     params: {
       userId: userId, 
       page: page,
