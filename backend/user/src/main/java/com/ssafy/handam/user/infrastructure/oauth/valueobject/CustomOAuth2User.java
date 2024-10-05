@@ -22,10 +22,10 @@ public class CustomOAuth2User implements OAuth2User {
                 "name", oAuth2UserDetails.getName(),
                 "provider", oAuth2UserDetails.getProvider(),
                 "nickname", oAuth2UserDetails.getNickname(),
-                "birthday", oAuth2UserDetails.getBirth() != null ? oAuth2UserDetails.getBirth().toString() : null,  // 생일 추가 (MonthDay를 문자열로 변환)
+                "birthday", oAuth2UserDetails.getBirth() != null ? oAuth2UserDetails.getBirth().toString() : null,
                 "gender", oAuth2UserDetails.getGender().toString(),
                 "age", oAuth2UserDetails.getAge(),
-                "profileImage", oAuth2UserDetails.getProfileImage()
+                "profile_image", oAuth2UserDetails.getProfile_image()
         );
     }
 

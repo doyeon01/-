@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Follow {
+public class Follow extends BaseEntity{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,12 +30,8 @@ public class Follow {
         this.following = following;
         this.status = status;
     }
-
-    public void toggleStatus() {
-        if (this.status == FollowStatus.ACTIVE) {
-            this.status = FollowStatus.INACTIVE;
-        } else {
-            this.status = FollowStatus.ACTIVE;
-        }
+    public void unfollow() {
+        this.status = FollowStatus.UNFOLLOWED;
     }
+
 }

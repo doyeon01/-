@@ -9,5 +9,5 @@ public interface OAuth2UserDetails {
     String getBirth();
     String getGender();
     String getAge();
-    String getProfileImage();
+    String getProfile_image();
 }

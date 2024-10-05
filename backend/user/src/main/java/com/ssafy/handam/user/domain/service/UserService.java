@@ -1,17 +1,13 @@
 package com.ssafy.handam.user.domain.service;
 
-import com.ssafy.handam.user.application.dto.request.UserSurveyServiceRequest;
 import com.ssafy.handam.user.domain.model.entity.Follow;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.FollowStatus;
 import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
 import com.ssafy.handam.user.domain.model.valueobject.UserSurveyData;
+import com.ssafy.handam.user.domain.repository.FollowRepository;
 import com.ssafy.handam.user.domain.repository.UserRepository;
-import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
-import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
-import com.ssafy.handam.user.infrastructure.repository.FollowRepository;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,7 +17,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Service
 public class UserService {
-    private final JwtUtil jwtUtil;
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
@@ -66,7 +61,7 @@ public class UserService {
                 .name(oAuthUserInfo.name())
                 .gender(oAuthUserInfo.gender())
                 .age(oAuthUserInfo.age())
-                .profileImageUrl(oAuthUserInfo.profileImageUrl())
+                .profileImageUrl(oAuthUserInfo.profile_image())
                 .build();
 
         User savedUser = userRepository.save(user);
@@ -82,18 +77,28 @@ public class UserService {
         return userRepository.findByNameContaining(keyword);
     }
 
-    @Transactional
-    public void toggleFollow(Long followerId, Long followingId) {
+
+    public void followUser(Long followerId, Long followingId) {
         User follower = userRepository.findById(followerId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 하는 사용자를 찾을 수 없습니다."));
         User following = userRepository.findById(followingId)
                 .orElseThrow(() -> new IllegalArgumentException("팔로우 대상 사용자를 찾을 수 없습니다."));
 
         Follow follow = followRepository.findByFollowerAndFollowing(follower, following)
-                .orElseGet(() -> new Follow(follower, following, FollowStatus.ACTIVE));
+                .orElseGet(() -> new Follow(follower, following, FollowStatus.FOLLOWING));
 
-        follow.toggleStatus();
+        followRepository.save(follow);
+    }
+    public void unfollowUser(Long followerId, Long followingId) {
+        User follower = userRepository.findById(followerId)
+                .orElseThrow(() -> new IllegalArgumentException("언팔로우 하는 사용자를 찾을 수 없습니다."));
+        User following = userRepository.findById(followingId)
+                .orElseThrow(() -> new IllegalArgumentException("언팔로우 대상 사용자를 찾을 수 없습니다."));
 
+        Follow follow = followRepository.findByFollowerAndFollowing(follower, following)
+                .orElseThrow(() -> new IllegalArgumentException("팔로우 관계를 찾을 수 없습니다."));
+
+        follow.unfollow();
         followRepository.save(follow);
     }
 
