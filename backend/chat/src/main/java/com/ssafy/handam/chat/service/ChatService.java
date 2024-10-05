@@ -57,7 +57,7 @@ public class ChatService {
                         chatMessage.getChatRoom().getChatRoomId(),
                         chatMessage.getSenderId(),
                         chatMessage.getContent(),
-                        chatMessage.getTimestamp()))
+                        chatMessage.getCreatedDate()))
                 .toList();
     }
 
