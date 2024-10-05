@@ -1,8 +1,8 @@
 import axios from 'axios';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
-const userId = 1
-
+const userId: number = 1; // userId에 숫자 타입 지정
+	
 // 피드 생성 API
 export const FeedCreate = async (formData: FormData) => {
   const response = await axios.post(`${BaseUrl}/create`, formData, {
