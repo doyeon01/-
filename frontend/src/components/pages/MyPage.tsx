@@ -9,6 +9,7 @@ import { UserIcon } from '../../assets/icons/svg'; // UserIcon import
 
 export const MyPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [reloadFeed, setReloadFeed] = useState(false); // 피드 리로드 트리거 상태 추가
   const nav = useNavigate();
   const [image, setImage] = useState<string | null>(null); // 초기값을 null로 변경
   const [nickName, setNickName] = useState<string | null>(''); // string | null 허용
@@ -23,9 +24,10 @@ export const MyPage = () => {
     setIsModalOpen(false);
   };
 
-  // 글 작성 완료 후 탭을 1번으로 설정하고 모달을 닫음
+  // 글 작성 완료 후 탭을 1번으로 설정하고 모달을 닫음 + 피드 리로드
   const handleCompleteModal = () => {
     setIsModalOpen(false);
+    setReloadFeed(prev => !prev); // 피드를 리로드하도록 상태 변경
     nav('/my', { state: { activeTab: 'tab1' } });
   };
 
@@ -79,7 +81,7 @@ export const MyPage = () => {
         </div>
       </div>
       <hr />
-      <PersonalDetailTab />
+      <PersonalDetailTab reloadFeed={reloadFeed} /> {/* reloadFeed prop 추가 */}
     </div>
   );
 };

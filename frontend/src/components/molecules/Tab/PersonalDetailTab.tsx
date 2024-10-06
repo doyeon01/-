@@ -16,9 +16,8 @@ import {
   TETabsPane,
 } from 'tw-elements-react';
 
-export const PersonalDetailTab: React.FC = () => {
+export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = ({ reloadFeed }) => { // reloadFeed prop 추가
   const [fillActive, setFillActive] = useState<string>('tab1');
-  const [reload, setReload] = useState(false);  // 새로고침 트리거 상태 추가
   const nav = useNavigate();
   const location = useLocation();
   
@@ -26,7 +25,7 @@ export const PersonalDetailTab: React.FC = () => {
   const resetSortOrder = useSetRecoilState(PlanSortState);
 
   const tabs = [
-    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail reload={reload} /> },
+    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail reload={reloadFeed} /> }, // reload prop 추가
     { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail resetSelectedButton={fillActive === 'tab2'}/> },
     { id: 'tab3', label: '여행일정', icon: <RouteIcon active={fillActive === 'tab3'} />, content: <PersonalPlanDetail /> },
     { id: 'tab4', label: '게시글', icon: <UsersIcon active={fillActive === 'tab4'} />, content: <PersonalCompanionDetail /> },
@@ -36,7 +35,6 @@ export const PersonalDetailTab: React.FC = () => {
   useEffect(() => {
     if (location.state?.activeTab) {
       setFillActive(location.state.activeTab);
-      setReload(prev => !prev);  // 탭이 변경될 때마다 reload 상태 변경
     } else {
       setFillActive('tab1');
     }
@@ -49,7 +47,6 @@ export const PersonalDetailTab: React.FC = () => {
     resetSortOrder('최신순'); 
     setFillActive(tabId);
     nav(location.pathname, { state: { activeTab: tabId } });
-    setReload(prev => !prev);  // 탭 전환 시 reload 상태 변경
   };
 
   return (
