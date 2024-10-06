@@ -90,16 +90,19 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
-  if (PageNum === 6){
-    setkeyword('커피')
   }
   if (PageNum === 7){
-    setkeyword('TOURIST_ATTRACTION')
+    setkeyword('커피')
   }
   if (PageNum === 8){
+    setkeyword('TOURIST_ATTRACTION')
+  }
+  if (PageNum === 9){
     setkeyword('ACCOMMODATION')
   }
-}}
+  console.log("PageNum :",PageNum);
+  
+}
 
   const handleIsHide = ()=>{
     setIsHide(IsHide=>!IsHide)
