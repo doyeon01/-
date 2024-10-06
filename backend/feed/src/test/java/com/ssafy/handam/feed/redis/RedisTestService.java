@@ -1,12 +1,13 @@
 package com.ssafy.handam.feed.redis;
 
+import com.ssafy.handam.feed.IntegrationTestSupport;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.redis.core.RedisTemplate;
 
-@SpringBootTest
-public class RedisTestService {
+
+public class RedisTestService extends IntegrationTestSupport {
 
     @Autowired
     private RedisTemplate<String, Object> redisTemplate;

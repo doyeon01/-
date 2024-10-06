@@ -142,7 +142,7 @@ public class FeedController {
         return success(feedService.getClusteredFeeds(userId , token));
     }
 
-    @PostMapping("/like/clustering/refresh")
+    @GetMapping("/like/clustering/refresh")
     public ApiResult<List<ClusterResponse>> refreshClusteredFeeds(
             @CookieValue(value = "accessToken", required = false) String token,
             @RequestParam Long userId) {
