@@ -6,7 +6,7 @@ import { UserId } from '../../../Recoil/atoms/Auth';
 import { FeedList } from '../../../services/api/FeedService';  
 import { useInView } from 'react-intersection-observer'; 
 
-export const PersonalFeedDetail: React.FC = () => {
+export const PersonalFeedDetail: React.FC<{ reload: boolean }> = ({ reload }) => {
   const [feedInfos, setFeedInfos] = useState<FeedType[]>([]); 
   const [page, setPage] = useState(0); 
   const [hasNextPage, setHasNextPage] = useState(true); 
@@ -15,30 +15,28 @@ export const PersonalFeedDetail: React.FC = () => {
   const userId = useRecoilValue(UserId);  
 
   useEffect(() => {
-    console.log(1)
-    if (hasNextPage) {
-      loadMoreFeeds();  
-    }
-  }, [page, hasNextPage]);
+    setFeedInfos([]);  // 초기화
+    setPage(0);  // 페이지 초기화
+    setHasNextPage(true);  // 다음 페이지 여부 초기화
+    loadMoreFeeds();  // 새로운 데이터를 로드
+  }, [reload]);  // reload prop 변경 시 데이터 다시 로드
 
-  // 스크롤이 하단에 도달했을 때 페이지를 증가시키는 로직
   useEffect(() => {
     if (inView && hasNextPage) {
-      setPage((prevPage) => prevPage + 1);  // 페이지를 1씩 증가
+      setPage((prevPage) => prevPage + 1);
     }
   }, [inView, hasNextPage]);
 
-  // 피드 데이터를 더 불러오는 함수
   const loadMoreFeeds = () => {
-    FeedList(userId, page)  // API 호출, userId와 페이지 번호를 인자로 전달
+    FeedList(userId, page)
       .then((res) => {
         const data: FeedResponseType = res.data;
         if (data.success) {
           if (data.response.feeds.length > 0) {
-            setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);  // 피드 데이터 추가
-            setHasNextPage(data.response.hasNextPage);  // 다음 페이지 여부 갱신
+            setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
+            setHasNextPage(data.response.hasNextPage);
           } else {
-            setHasNextPage(false);  // 더 이상 데이터가 없으면 false로 설정
+            setHasNextPage(false);
           }
         }
       })

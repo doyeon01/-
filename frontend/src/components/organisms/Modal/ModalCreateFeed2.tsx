@@ -109,7 +109,6 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
       data.append('data', jsonBlob);
       data.append('image', selectedImage);
 
-      // 로딩 스피너 표시
       Swal.fire({
         title: '피드 생성 중입니다...',
         allowOutsideClick: false,
