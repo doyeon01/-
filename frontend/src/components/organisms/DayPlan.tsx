@@ -52,7 +52,7 @@ const ScheduleItemComponent: React.FC<{ item: ScheduleItem; isLast: boolean }> =
 };
 
 // 날짜별 일정 컴포넌트
-export const DayPlan: React.FC<{ daySchedule: DaySchedule }> = ({ daySchedule, title }) => {
+export const DayPlan: React.FC<{ daySchedule: DaySchedule }> = ({ daySchedule }) => {
   return (
     <div className="my-8">
       <div className="flex justify-center items-center space-x-4 mb-4">
