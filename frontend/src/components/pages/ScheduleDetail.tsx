@@ -185,16 +185,17 @@ const dummyData = {
   ]
 };
 
-export const ScheduleDetail = () => {
+export const ScheduleDetail = (scheduleId: number, title: string) => {
 
   useEffect(() => {
-    PlanDetailApi()
+    PlanDetailApi(scheduleId)
     .then()
     .catch((error) => {
       console.log(error)
     })
 
   },[])
+
 
   const nav = useNavigate()
   const [currentPage, setCurrentPage] = useState(0);
@@ -225,7 +226,7 @@ export const ScheduleDetail = () => {
   return (
     <div className='mt-28'>
       <div className='relative mb-10'>
-        <h1 className="text-4xl font-bold flex justify-center items-center">{dummyData.title}</h1>
+        <h1 className="text-4xl font-bold flex justify-center items-center">{title}</h1>
         <div className='absolute top-0 right-28'>
           <ButtonPersonalInfo label="수정하기" onClick={() => nav('/plan')} px={4} py={2} size={'lg'}/>
         </div>

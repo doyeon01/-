@@ -3,8 +3,7 @@ import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import { PhotoCard } from './PhtotCard';
 import { PlanListApi } from '../../../services/api/PlanService'
-import { PlanListType, PlanListResponseType } from '../../../model/MyPageType'; // PlanListResponseType 추가할 것
-// import dummyData from '../../../dummydata/plan/userPlanList.json'
+import { PlanListType, PlanListResponseType } from '../../../model/MyPageType'; 
 
 export const PersonalPlanDetail: React.FC = () => {
 
@@ -16,13 +15,7 @@ export const PersonalPlanDetail: React.FC = () => {
   );
 
   useEffect(()=>{
-    // // // 더미데이터 연결
-    // const loadDummyData = () => {
-    //   setPlanList(dummyData.response);  // dummyData에서 response 속성만 사용
-    // };
 
-    // loadDummyData();
-    console.log(1)
     PlanListApi()
     .then((res) => {
       const data: PlanListResponseType = res.data
@@ -52,6 +45,7 @@ export const PersonalPlanDetail: React.FC = () => {
           filteredArr.map((item, index) => (
             <PhotoCard
               key={index}
+              scheduleId={item.id}
               title={item.title}
               startDate={item.startDate}
               endDate={item.endDate}
