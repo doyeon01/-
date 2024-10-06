@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.infrastructure.presentation.response.feed;
+package com.ssafy.handam.feed.presentation.response.feed;
 
 public record CommentCreateResponse(
         Long id,

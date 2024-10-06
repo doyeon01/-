@@ -1,4 +1,4 @@
-package com.ssafy.handam.feed.infrastructure.presentation.response.comment;
+package com.ssafy.handam.feed.presentation.response.comment;
 
 import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServiceResponse;
 

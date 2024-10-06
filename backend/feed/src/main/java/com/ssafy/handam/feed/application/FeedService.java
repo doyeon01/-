@@ -1,5 +1,6 @@
 package com.ssafy.handam.feed.application;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
@@ -10,24 +11,31 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CreatedFeedsByUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedDetailResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedLikeResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.LikedFeedsByUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.RecommendedFeedsForUserResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.SearchedFeedsResponse;
+import com.ssafy.handam.feed.presentation.response.cluster.ClusterResponse;
+import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import java.time.Duration;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.math3.ml.clustering.Cluster;
+import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
+import org.apache.commons.math3.ml.clustering.DoublePoint;
 import org.apache.hadoop.fs.FSDataOutputStream;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,8 +48,8 @@ public class FeedService {
     private final FeedDomainService feedDomainService;
     private final UserApiClient userApiClient;
     private final FileSystem fileSystem;
-    @Value("${hadoop.replication.factor:2}") // default to 2
-    private short replicationFactor;
+    private final RedisTemplate<String, Object> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         String createdDate = LocalDateTime.parse("2021-07-01T00:00:00")
@@ -100,7 +108,8 @@ public class FeedService {
 
     public String saveImage(MultipartFile imageFile) {
         String hdfsPath = "/images/" + imageFile.getOriginalFilename();
-        try (FSDataOutputStream outputStream = fileSystem.create(new Path(hdfsPath), replicationFactor)) {
+        int replicationFactor = 1;
+        try (FSDataOutputStream outputStream = fileSystem.create(new Path(hdfsPath), (short) replicationFactor)) {
             outputStream.write(imageFile.getBytes());
             return hdfsPath;
         } catch (Exception e) {
@@ -135,6 +144,92 @@ public class FeedService {
                 userApiClient.getUserById(userId, accessToken));
         return CreatedFeedsByUserResponse.of(createdFeeds, createdFeedsByUser.getNumber(),
                 createdFeedsByUser.hasNext());
+    }
+
+    public List<ClusterResponse> getClusteredFeeds(Long userId, String token) {
+        String redisKey = "userCluster:" + userId;
+        List<Object> cachedData = redisTemplate.opsForList().range(redisKey, 0, -1);
+        List<ClusterResponse> clusteredFeeds = new ArrayList<>();
+
+        if (cacheHit(cachedData)) {
+            for (Object obj : cachedData) {
+                ClusterResponse cluster = objectMapper.convertValue(obj, ClusterResponse.class);
+                clusteredFeeds.add(cluster);
+            }
+        } else {
+            clusteredFeeds = performClustering(userId, token);
+            redisTemplate.opsForList().rightPushAll(redisKey, clusteredFeeds);
+            redisTemplate.expire(redisKey, Duration.ofHours(1));
+        }
+
+        return clusteredFeeds;
+    }
+
+    public List<ClusterResponse> refreshClusteredFeeds(Long userId, String token) {
+        String redisKey = "userCluster:" + userId;
+        redisTemplate.delete(redisKey);
+        List<ClusterResponse> refreshedFeeds = performClustering(userId, token);
+        redisTemplate.opsForList().rightPushAll(redisKey, refreshedFeeds);
+        redisTemplate.expire(redisKey, Duration.ofHours(1));
+        return refreshedFeeds;
+    }
+
+    private boolean cacheHit(List<Object> cachedData) {
+        return cachedData == null || cachedData.isEmpty();
+    }
+
+    private List<ClusterResponse> performClustering(Long userId, String token) {
+        Pageable allFeedsPageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.unsorted());
+        List<Feed> feeds = feedDomainService.getLikedFeedsByUser(userId, allFeedsPageable).getContent();
+
+        DBSCANClusterer<DoublePoint> dbscanClusterer = new DBSCANClusterer<>(0.09, 2);
+        List<DoublePoint> points = feeds.stream()
+                .map(feed -> new DoublePoint(new double[]{feed.getLatitude(), feed.getLongitude()}))
+                .toList();
+
+        List<Cluster<DoublePoint>> clusters = dbscanClusterer.cluster(points);
+        List<ClusterResponse> clusteredFeeds = new ArrayList<>();
+
+        for (Cluster<DoublePoint> cluster : clusters) {
+            double[] centroid = calculateCentroid(cluster);
+            List<FeedPreviewDto> feedsInCluster = new ArrayList<>();
+
+            List<DoublePoint> points1 = cluster.getPoints();
+            double[] point = points1.get(0).getPoint();
+            double latitude = point[0];
+            double longitude = point[1];
+            Feed feed = searchFeedByLatitudeAndLongitude(latitude, longitude, feeds);
+            if (feed != null) {
+                UserDto userDto = userApiClient.getUserById(feed.getUserId(), token);
+                feedsInCluster.add(FeedPreviewDto.from(feed, userDto.name(), userDto.profileImage(),
+                        isLikedFeed(feed, userId)));
+            }
+            String clusterId = UUID.randomUUID().toString();
+            clusteredFeeds.add(ClusterResponse.of(clusterId, centroid[0], centroid[1], feedsInCluster));
+        }
+        return clusteredFeeds;
+    }
+
+    private Feed searchFeedByLatitudeAndLongitude(double latitude, double longitude, List<Feed> feeds) {
+        for (Feed feed : feeds) {
+            if (feed.getLatitude() == latitude && feed.getLongitude() == longitude) {
+                return feed;
+            }
+        }
+        return null;
+    }
+
+    private double[] calculateCentroid(Cluster<DoublePoint> cluster) {
+        double sumLat = 0;
+        double sumLon = 0;
+        int count = cluster.getPoints().size();
+
+        for (DoublePoint point : cluster.getPoints()) {
+            sumLat += point.getPoint()[0];
+            sumLon += point.getPoint()[1];
+        }
+
+        return new double[]{sumLat / count, sumLon / count};
     }
 
     private List<FeedPreviewDto> getFeedPreviewDtoList(List<Feed> feeds, UserDto user) {

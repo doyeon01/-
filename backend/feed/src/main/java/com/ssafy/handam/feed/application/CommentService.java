@@ -7,10 +7,9 @@ import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServi
 import com.ssafy.handam.feed.domain.dto.request.comment.CreateCommentDomainRequest;
 import com.ssafy.handam.feed.domain.service.CommentDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
-import com.ssafy.handam.feed.infrastructure.client.UserServiceClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
-import com.ssafy.handam.feed.infrastructure.presentation.response.comment.CreateCommentResponse;
-import com.ssafy.handam.feed.infrastructure.presentation.response.feed.CommentsResponse;
+import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
+import com.ssafy.handam.feed.presentation.response.feed.CommentsResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

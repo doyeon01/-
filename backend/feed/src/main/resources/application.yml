@@ -44,6 +44,11 @@ spring:
     template:
       default-topic: like-events
 
+  data:
+    redis:
+      host: j11c205a.p.ssafy.io
+      port: 6379
+
 user:
   service:
     url: http://j11c205.p.ssafy.io:8081
