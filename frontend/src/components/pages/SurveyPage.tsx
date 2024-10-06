@@ -144,25 +144,24 @@ useEffect(() => {
 
   const handleRegister = async () => {
     try {
-      // 상태 업데이트를 비동기로 처리하기 위해 promise all 사용
-      const updates = [];
-      for (let i = 1; i < 5; i++) {
-        updates.push(
-          setUserData((prevState) => ({
-            ...prevState,
-            [`travelStyl${i}`]: MBTI.charAt(i - 1),
-          }))
-        );
-      }
-  
-      // 모든 상태 업데이트가 완료된 후에 API 호출
-      await Promise.all(updates);
-      console.log(userData);
-      const data = await RegisterUser(userData);
-      console.log('등록 성공:', data);
-  
-      // 페이지 이동
-      navigate('/main');
+      // 현재 상태를 바탕으로 새로운 객체를 만들어 업데이트
+    const updatedUserData = {
+      ...userData,
+      travelStyl1: MBTI.charAt(0),
+      travelStyl2: MBTI.charAt(1),
+      travelStyl3: MBTI.charAt(2),
+      travelStyl4: MBTI.charAt(3),
+    };
+
+    // userData 업데이트
+    setUserData(updatedUserData);
+
+    // 업데이트된 객체를 바로 사용하여 API 호출
+    const data = await RegisterUser(updatedUserData);
+    console.log('등록 성공:', data);
+
+    // 페이지 이동
+    navigate('/main');
     } catch (error: any) {
       console.error('등록 실패:', error.message);
     }
