@@ -12,7 +12,7 @@ import { UserId } from '../../../Recoil/atoms/Auth';
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
-  const [placeName, setPlaceName] = useState<string>('')//장소
+  const [placeName, setPlaceName] = useState<string>('');// 장소
   const [content, setContent] = useState<string>('');  // 내용
   const [selectedCategory, setSelectedCategory] = useState<string>(''); // 카테고리
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
@@ -23,7 +23,6 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
   const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
   const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
   const userId = useRecoilValue(UserId);
-
 
   const apikey = import.meta.env.VITE_KAKAO_SPOT_API_KEY; 
 
@@ -103,15 +102,32 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
           placeType: selectedCategory,
           userId
       };
+
+      const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+
       
-      data.append('data', JSON.stringify(jsonData));
+      data.append('data', jsonBlob);
       data.append('image', selectedImage);
-      
+
+      // 로딩 스피너 표시
+      Swal.fire({
+        title: '피드 생성 중입니다...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
 
       FeedCreate(data)
         .then(() => {
           console.log('피드 생성 완료');
-          onComplete();
+          Swal.fire({
+            icon: 'success',
+            title: '피드 생성이 완료되었습니다!',
+            confirmButtonText: '확인',
+          }).then(() => {
+            onComplete();
+          });
         })
         .catch((error) => {
           console.error(error);
