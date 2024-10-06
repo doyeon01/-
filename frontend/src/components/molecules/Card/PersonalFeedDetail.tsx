@@ -22,12 +22,13 @@ export const PersonalFeedDetail: React.FC<{ reload: boolean }> = ({ reload }) =>
 
   // 새로고침 발생 시 데이터 리로드
   useEffect(() => {
+    console.log(reload)
     if (reload) {
       setPage(0); // 페이지 초기화
       setFeedInfos([]); // 피드 초기화
       setHasNextPage(true); // hasNextPage 초기화
     }
-  }, [reload]);
+  }, []);
 
   // 스크롤이 하단에 도달했을 때 페이지를 증가시키는 로직
   useEffect(() => {
