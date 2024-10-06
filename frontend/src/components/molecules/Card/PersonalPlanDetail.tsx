@@ -45,7 +45,7 @@ export const PersonalPlanDetail: React.FC = () => {
           filteredArr.map((item, index) => (
             <PhotoCard
               key={index}
-              scheduleId={4} //item.id로 변경할 것 
+              scheduleId={item.id}
               title={item.title}
               startDate={item.startDate}
               endDate={item.endDate}
