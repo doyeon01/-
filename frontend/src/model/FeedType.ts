@@ -80,7 +80,7 @@ export interface FeedCommentType {
   export interface FeedCommentsAPiResponseType {
     success: boolean;
     response: {
-      comments: Comment[];
+      comments: FeedCommentType[];
     };
     error: null|Error;
   }

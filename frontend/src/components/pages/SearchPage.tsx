@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react';
 import CardSetSearchUser from '../../components/molecules/Card/CardSetSearchUser';
 import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPlace';
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
-// import { fetchFeedRecommend } from '../../services/api/FeedService';
-import feedjson from '../../dummydata/feed/feed.json'
+import { postFeedRecommend } from '../../services/api/FeedService';
 import { FeedsType } from '../../model/FeedType';
 
 
@@ -19,14 +18,13 @@ export const SearchPage: React.FC = () => {
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
       
-      setRecommendedFeeds(feedjson.response.feeds)
       
-      // try {
-      //   const response = await FeedRecommend(1, 10);
-      //   setRecommendedFeeds(response.data.response.feeds);
-      // } catch (error) {
-      //   console.error('Error fetching recommended feeds:', error);
-      // }
+      try {
+        const response = await postFeedRecommend(1, 10);
+        setRecommendedFeeds(response.data.response.feeds);
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
     };
 
     fetchRecommendedFeeds(); 

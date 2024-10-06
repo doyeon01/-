@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { UserProfileType } from '../../../model/User';
-import userSearchjson from '../../../dummydata/user/userSearch.json';
+import { UserDataType } from '../../../model/User';
+import { getUserSearch } from '../../../services/api/UserService';
 
 interface CardSetSearchUserProps {
   keyword: string;
@@ -8,17 +8,16 @@ interface CardSetSearchUserProps {
 }
 
 const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword}) => {
-  const [users, setUsers] = useState<UserProfileType[] | null>(null);
+  const [users, setUsers] = useState<UserDataType[] | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
-      setUsers(userSearchjson.response);
-      // try {
-      //   const response = await getFeed(keyword, 1, 10);
-      //   setPlaces(response.response.feeds);
-      // } catch (error) {
-      //   console.error('Error fetching recommended feeds:', error);
-      // }
+      try {
+        const response = await getUserSearch(keyword);
+        setUsers(response.response);
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
     };
     fetchData();
   }, [keyword]);
