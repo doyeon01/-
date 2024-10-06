@@ -27,13 +27,12 @@ export const PersonalFeedDetail: React.FC<{ reload: boolean }> = ({ reload }) =>
       setFeedInfos([]); // 피드 초기화
       setHasNextPage(true); // hasNextPage 초기화
       
-
     }
   }, [reload]);
 
   // 스크롤이 하단에 도달했을 때 페이지를 증가시키는 로직
   useEffect(() => {
-    console.log(1)
+    console.log('피드생성')
     if (inView && hasNextPage) {
       setPage((prevPage) => prevPage + 1);  // 페이지를 1씩 증가
     }
