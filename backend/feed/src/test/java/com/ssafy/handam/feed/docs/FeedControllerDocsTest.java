@@ -221,7 +221,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         post("/api/v1/feeds/like/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .param("userId", "1")
+                                .queryParam("userId", "1")
                 )
                 .andExpect(status().isOk())
                 .andDo(document("like-feed",
@@ -406,7 +406,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         post("/api/v1/feeds/unlike/{feedId}", 1)
                                 .contentType(MediaType.APPLICATION_JSON)
                                 .accept(MediaType.APPLICATION_JSON)
-                                .param("userId", "1")
+                                .queryParam("userId", "1")
                 )
                 .andExpect(status().isOk())
                 .andDo(document("unlike-feed",

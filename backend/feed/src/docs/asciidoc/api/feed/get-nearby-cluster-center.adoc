@@ -1,5 +1,5 @@
-[[recommended-feeds-for-user]]
-=== 사용자 맞춤 피드 조회
+[[get-nearby-cluster-center]]
+=== 좌표 기반 가까운 피드 검색
 
 ==== HTTP Request
 

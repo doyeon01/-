@@ -88,14 +88,18 @@ public class FeedController {
     }
 
     @PostMapping("/like/{feedId}")
-    public ApiResult<FeedLikeResponse> likeFeed(@CookieValue(value = "accessToken", required = false) String token,
-                                                @PathVariable Long feedId, @RequestParam Long userId) {
+    public ApiResult<FeedLikeResponse> likeFeed(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable Long feedId,
+            @RequestParam Long userId) {
         return success(feedService.likeFeed(feedId, userId));
     }
 
     @PostMapping("/unlike/{feedId}")
-    public ApiResult<FeedLikeResponse> unlikeFeed(@CookieValue(value = "accessToken", required = false) String token,
-                                                  @PathVariable Long feedId, @RequestParam Long userId) {
+    public ApiResult<FeedLikeResponse> unlikeFeed(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable Long feedId,
+            @RequestParam Long userId) {
         return success(feedService.unlikeFeed(feedId, userId));
     }
 
