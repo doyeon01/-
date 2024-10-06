@@ -93,9 +93,9 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
 
       const jsonData = {
           scheduleId,
+          placeName,
           title,
           content,
-          placeName,
           address1: calendarlocation,    
           address2: calendarlocation, 
           longitude,
