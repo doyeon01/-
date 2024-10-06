@@ -155,9 +155,12 @@ useEffect(() => {
 
     // userData 업데이트
     setUserData(updatedUserData);
-
+    console.log('updateUserData:',updatedUserData);
+    console.log('userdata:',userData);
+    
+    
     // 업데이트된 객체를 바로 사용하여 API 호출
-    const data = await RegisterUser(updatedUserData);
+    const data = await RegisterUser(userData);
     console.log('등록 성공:', data);
 
     // 페이지 이동
