@@ -109,7 +109,7 @@ public class FeedService {
     }
 
     public String saveImage(MultipartFile imageFile) {
-        String UPLOAD_PATH = "/home/ubuntu/VS_photo/";
+        String UPLOAD_PATH = "/app/photos/";
         String fileName = imageFile.getOriginalFilename();
         Path path = Paths.get(UPLOAD_PATH + fileName);
 
