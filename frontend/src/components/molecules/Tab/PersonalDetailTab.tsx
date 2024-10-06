@@ -16,7 +16,7 @@ import {
   TETabsPane,
 } from 'tw-elements-react';
 
-export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = () => {
+export const PersonalDetailTab: React.FC = () => {
   const [fillActive, setFillActive] = useState<string>('tab1');
   const [tabKey, setTabKey] = useState<number>(0); // 탭 리렌더링을 위한 key 상태 추가
   const nav = useNavigate();
