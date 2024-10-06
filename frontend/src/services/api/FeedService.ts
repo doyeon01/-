@@ -23,6 +23,7 @@ export const FeedList = (userId: number, page: number, size = 6) => {
       userId: userId, 
       page: page,
       size: size,
+      sort: "createdDate,asc"
     },
     withCredentials: true, 
   });
