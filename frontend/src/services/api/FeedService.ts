@@ -2,7 +2,7 @@ import axios from 'axios';
 import { FeedCommentsAPiResponseType, FeedDetailAPiResponseType } from '../../model/FeedType';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
-const userId = 1
+const userId = 2896
 
 
 // 피드 생성 API
