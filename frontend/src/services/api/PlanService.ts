@@ -10,8 +10,8 @@ export const PlanListApi = () => {
   });
 };
 
-export const PlanDetailApi = () => {
-  return axios.get(`${BaseUrl}/${totalPlanId}/all`, {
+export const PlanDetailApi = (scheduleId) => {
+  return axios.get(`${BaseUrl}/scheduleId}/all`, {
     withCredentials: true, 
   });
 };

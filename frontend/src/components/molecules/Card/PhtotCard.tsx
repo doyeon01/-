@@ -4,6 +4,7 @@ import { ModalPhotoCard } from '../../organisms/Modal/ModalPhotoCard';
 import { DownLoadIcon } from '../../../assets/icons/svg';
 
 interface PhotoCardProps {
+  scheduleId ?: number;
   title: string;
   address?: string; 
   testimg: string;
@@ -13,7 +14,7 @@ interface PhotoCardProps {
   showDownLoadButton?: boolean;
 }
 
-export const PhotoCard: React.FC<PhotoCardProps> = ({ title, address, testimg, showButton, startDate, endDate, showDownLoadButton = false }) => {
+export const PhotoCard: React.FC<PhotoCardProps> = ({ scheduleId, title, address, testimg, showButton, startDate, endDate, showDownLoadButton = false }) => {
   const [showModal, setShowModal] = useState(false); // 모달 상태 관리
   const nav = useNavigate();
 
@@ -56,13 +57,12 @@ const formatDate = (dateString: string) => {
           className="w-full h-72 object-cover rounded-lg"
         />
         
-        {/* 클릭할 때 userid, 여행 일정 id를 props로 보내줘야함 */}
         {showButton && (
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-50">
             <button 
               className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg transition-opacity duration-300 group-hover:opacity-100"
-              onClick={() => nav('/schedule')}
-            >
+              onClick={() => nav('/schedule', { state: { scheduleId, title } })}  
+              >            
               여행 일정 보기
             </button>
             <button 
