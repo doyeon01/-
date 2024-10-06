@@ -110,7 +110,8 @@ public class FeedService {
 
     public String saveImage(MultipartFile imageFile) {
         String UPLOAD_PATH = "/app/photos/";
-        String fileName = imageFile.getOriginalFilename();
+        String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename()
+                .replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
         Path path = Paths.get(UPLOAD_PATH + fileName);
 
         try {
