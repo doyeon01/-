@@ -5,6 +5,7 @@ import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
+import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
 import com.ssafy.handam.feed.application.dto.request.feed.RecommendedFeedsForUserServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
@@ -17,6 +18,7 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import java.time.Duration;
@@ -174,6 +176,33 @@ public class FeedService {
         return refreshedFeeds;
     }
 
+    public NearbyClusterCenterResponse getNearbyClusterCenter(
+            NearByClusterCenterServiceReuqest nearByClusterCenterServiceReuqest) {
+        int page = nearByClusterCenterServiceReuqest.page();
+        int size = nearByClusterCenterServiceReuqest.size();
+        double latitude = nearByClusterCenterServiceReuqest.latitude();
+        double longitude = nearByClusterCenterServiceReuqest.longitude();
+        int distance = nearByClusterCenterServiceReuqest.distance();
+        String accessToken = nearByClusterCenterServiceReuqest.token();
+
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
+        String distanceString = distance + "km";
+        Page<FeedDocument> nearbyClusterCenter = feedDomainService.getNearbyClusterCenter(latitude, longitude,
+                distanceString, pageable);
+
+        List<FeedPreviewDto> feedPreviewDtoList = nearbyClusterCenter.stream()
+                .map(feedDocument -> {
+                    UserDto userDto = userApiClient.getUserById(feedDocument.getUserId(), accessToken);
+                    return convertToFeedPreviewDto(feedDocument, userDto);
+                }).toList();
+
+        return NearbyClusterCenterResponse.of(
+                feedPreviewDtoList,
+                nearbyClusterCenter.getNumber(),
+                nearbyClusterCenter.hasNext()
+        );
+    }
+
     private boolean cacheHit(List<Object> cachedData) {
         return cachedData == null || cachedData.isEmpty();
     }
@@ -269,4 +298,5 @@ public class FeedService {
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
+
 }

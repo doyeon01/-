@@ -10,6 +10,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -46,5 +47,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable) {
         return feedJpaRepository.findByIdIn(feedIds, pageable);
+    }
+
+    @Override
+    public Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable) {
+        return feedElasticsearchRepository.findByLocationNear(geoPoint, distance, pageable);
     }
 }

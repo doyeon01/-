@@ -12,6 +12,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -92,5 +93,14 @@ public class FeedDomainService {
 
     public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
         return feedRepository.searchFeedsByKeywordSortedByLikeCount(keyword, pageable);
+    }
+
+    public Page<FeedDocument> getNearbyClusterCenter(
+            Double latitude,
+            Double longitude,
+            String distance,
+            Pageable pageable) {
+        GeoPoint geoPoint = new GeoPoint(latitude, longitude);
+        return feedRepository.getNearbyClusterCenter(geoPoint, distance, pageable);
     }
 }

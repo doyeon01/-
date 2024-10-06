@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestHeader;
 @FeignClient(name = "user-service", url = "${user.service.url}")
 public interface UserServiceClient {
 
-    @GetMapping("/api/v1/user/{id}")
+    @GetMapping("/api/v1/users/{id}")
     ApiResult<UserDto> getUserById(
             @PathVariable("id") Long userId,
             @RequestHeader("Cookie") String cookie

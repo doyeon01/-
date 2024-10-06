@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 
 public interface FeedRepository {
     Optional<Feed> findById(Long id);
@@ -17,4 +18,6 @@ public interface FeedRepository {
     Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable);
 
     Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
+
+    Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable);
 }
