@@ -5,7 +5,7 @@ import { DownLoadIcon } from '../../../assets/icons/svg';
 
 interface PhotoCardProps {
   scheduleId ?: number;
-  title: string;
+  title ?: string;
   address?: string; 
   testimg: string;
   startDate ?: string;
