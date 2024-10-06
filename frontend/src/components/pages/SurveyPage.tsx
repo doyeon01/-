@@ -90,6 +90,7 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
+    }
   if (PageNum === 7){
     setkeyword('커피')
   }
