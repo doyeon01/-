@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ModalFeedDetailTypeProps,FeedDetailType, FeedCommentType } from '../../../model/FeedType';
-import feedDetailjson from '../../../dummydata/feed/feedDetail.json'
-import feedCommentsjson from '../../../dummydata/feed/feedComments.json'
 import useLike from '../../../hooks/useLike';
-// import { postComment, postLike, postUnlike } from '../../../services/api/FeedService';
+import { getFeedComment, getFeedDetail, postComment } from '../../../services/api/FeedService';
 
 
 
@@ -16,13 +14,12 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
   useEffect(() => {
     const fetchDetailFeed = async () => {
       
-      setDetailFeed(feedDetailjson.response)      
-      // try {
-      //   const response = await getFeedDetail(selectedId);
-      //   setRecommendedFeeds(response.response.feeds);
-      // } catch (error) {
-      //   console.error('Error fetching recommended feeds:', error);
-      // }
+      try {
+        const response = await getFeedDetail(selectedId);
+        setDetailFeed(response.response);
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
       console.log(selectedId);
       
     };
@@ -31,13 +28,12 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
 
   useEffect(() => {
     const fetchDetailFeed = async () => {
-      setComments(feedCommentsjson.response.comments)
-      // try {
-      //   const response = await getFeedComment(selectedId);
-      //   setRecommendedFeeds(response.response.comments);
-      // } catch (error) {
-      //   console.error('Error fetching recommended comments:', error);
-      // }
+      try {
+        const response = await getFeedComment(selectedId);
+        setComments(response.response.comments);
+      } catch (error) {
+        console.error('Error fetching recommended comments:', error);
+      }
     };
 
     fetchDetailFeed(); 
@@ -50,11 +46,10 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
 
   const handleCommentSubmit = async() => {
     console.log('댓글 내용:', commentContent);
-    setComments(feedCommentsjson.response.comments)
-    
-    // if (detailFeed !== null){
-    //   await postComment(detailFeed.id,commentContent)
-    // }
+
+    if (detailFeed !== null){
+      await postComment(detailFeed.id,commentContent)
+    }
 
     setCommentContent('');
   };

@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { FeedCommentsAPiResponseType, FeedDetailAPiResponseType } from '../../model/FeedType';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
 const userId = 1
@@ -58,7 +59,7 @@ export const postFeedRecommend = (page = 1, size = 10) => {
 
 
 //맞춤피드 상세조회 API
-export const getFeedDetail = (id: number) => {
+export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => {
   return axios.get(`${BaseUrl}/${id}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -68,7 +69,7 @@ export const getFeedDetail = (id: number) => {
 };
 
 //피드 댓글 API
-  export const getFeedComment = (id: number) => {
+  export const getFeedComment = (id: number):Promise<FeedCommentsAPiResponseType> => {
     return axios.get(`${BaseUrl}/${id}/comments`, {
       headers: {
         'Content-Type': 'application/json',
