@@ -17,14 +17,14 @@ spring:
         - id: user
           uri: http://localhost:8081
           predicates:
-            - Path=/api/v1/user/**
+            - Path=/api/v1/users/**
           filters:
             - name: JwtAuthFilter
 
         - id: user-docs
           uri: http://localhost:8081
           predicates:
-            - Path=/user/docs/**
+            - Path=/users/docs/**
           filters:
             - name: RewritePath
               args:

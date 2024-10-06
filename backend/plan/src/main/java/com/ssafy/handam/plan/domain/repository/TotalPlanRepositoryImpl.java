@@ -21,4 +21,9 @@ public class TotalPlanRepositoryImpl implements TotalPlanRepository {
     public List<TotalPlan> findAllByUserId(Long userId) {
         return totalPlanJpaRepository.findAllByUserId(userId);
     }
+
+    @Override
+    public TotalPlan findByTotalPlanId(Long totalPlanId) {
+        return totalPlanJpaRepository.findTotalPlanById(totalPlanId);
+    }
 }

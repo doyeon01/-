@@ -57,6 +57,9 @@ public class PlanService {
     public List<TotalPlan> getTotalPlans(Long userId) {
         return totalPlanRepository.findAllByUserId(userId);
     }
+    public TotalPlan getTotalPlan(Long totalPlanId) {
+        return totalPlanRepository.findByTotalPlanId(totalPlanId);
+    }
     public List<Long> getDayPlanIdsByTotalPlanId(Long totalPlanId) {
         return dayPlanRepository.findAllByTotalPlanId(totalPlanId)
                 .stream()

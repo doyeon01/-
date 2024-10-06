@@ -42,6 +42,14 @@ public class PlanApplicationService {
                 })
                 .collect(Collectors.toList());
     }
+    public TotalPlanResponse getTotalPlan(Long totalPlanId) {
+
+        TotalPlan totalPlan = planService.getTotalPlan(totalPlanId);
+        Plan firstPlan = getFirstPlan(totalPlan);
+        String imageUrl = extractImage(totalPlan);
+        String address = extractAddress(firstPlan);
+        return TotalPlanResponse.of(totalPlan, address, imageUrl);
+    }
     public List<DayPlanResponse> getAllPlans(Long totalPlanId) {
         List<Long> dayPlanIds = planService.getDayPlanIdsByTotalPlanId(totalPlanId);
 
