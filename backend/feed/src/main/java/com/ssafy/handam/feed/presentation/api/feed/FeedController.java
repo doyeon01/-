@@ -67,8 +67,7 @@ public class FeedController {
     }
 
     @PostMapping(value = "/create", consumes = {
-            MediaType.MULTIPART_FORM_DATA_VALUE,
-            MediaType.APPLICATION_OCTET_STREAM_VALUE}
+            MediaType.MULTIPART_FORM_DATA_VALUE}
     )
     public ApiResult<FeedResponse> createFeed(
             @CookieValue(value = "accessToken", required = false) String token,
