@@ -21,6 +21,10 @@ import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,9 +34,6 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
-import org.apache.hadoop.fs.FSDataOutputStream;
-import org.apache.hadoop.fs.FileSystem;
-import org.apache.hadoop.fs.Path;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -49,7 +50,6 @@ public class FeedService {
 
     private final FeedDomainService feedDomainService;
     private final UserApiClient userApiClient;
-    private final FileSystem fileSystem;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
 
@@ -109,14 +109,19 @@ public class FeedService {
     }
 
     public String saveImage(MultipartFile imageFile) {
-        String hdfsPath = "/images/" + imageFile.getOriginalFilename();
-        int replicationFactor = 1;
-        try (FSDataOutputStream outputStream = fileSystem.create(new Path(hdfsPath), (short) replicationFactor)) {
-            outputStream.write(imageFile.getBytes());
-            return hdfsPath;
-        } catch (Exception e) {
-            throw new IllegalArgumentException("Failed to sa ve image");
+        String UPLOAD_PATH = "/app/photos/";
+        String fileName = imageFile.getOriginalFilename();
+        Path path = Paths.get(UPLOAD_PATH + fileName);
+
+        try {
+            // 파일을 지정된 경로에 저장
+            Files.copy(imageFile.getInputStream(), path);
+        } catch (IOException e) {
+            e.printStackTrace();
+            return "Failed to save image";
         }
+
+        return path.toString();
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
