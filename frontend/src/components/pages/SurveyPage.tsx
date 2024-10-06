@@ -90,7 +90,6 @@ const handlePageNum = () => {
       });
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
-  }
   if (PageNum === 7){
     setkeyword('커피')
   }
@@ -407,6 +406,7 @@ const handlePageNum = () => {
               {feeds && feeds.length > 0 ? feeds.map(feed => (
                     <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
+                      <div>{keyword}</div>
                     </div>
                   )) : 'No feeds available'}
                 {/* {numbers.map((number) => (
