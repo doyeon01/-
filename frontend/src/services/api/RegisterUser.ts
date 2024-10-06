@@ -4,7 +4,11 @@ import { FilterFeedType } from '../../model/SearchingFeedType';
 
 export const RegisterUser = async (userData: RegisterUserType[])=>{
     try {
-        const response = await axios.post<RegisterUserType[]>(`https://j11c205.p.ssafy.io/api/v1/users/survey`,userData);
+        const response = await axios.post<RegisterUserType[]>(`https://j11c205.p.ssafy.io/api/v1/users/survey`,userData, {
+          headers: {
+            'Content-Type': 'application/json', // JSON 형식으로 데이터를 보낼 때 필요
+          },
+        });
         return response.data;
       } catch (error) {
         throw new Error('API 요청 중 오류가 발생했습니다.');
