@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { DayPlan } from '../organisms/DayPlan';
 import testImg1 from './../../assets/statics/test1.jpg'
 import testImg2 from './../../assets/statics/test2.jpg'
@@ -185,7 +185,7 @@ const dummyData = {
   ]
 };
 
-export const ScheduleDetail = (scheduleId: number, title: string) => {
+export const ScheduleDetail = () => {
 
   useEffect(() => {
     PlanDetailApi(scheduleId)
@@ -198,6 +198,8 @@ export const ScheduleDetail = (scheduleId: number, title: string) => {
 
 
   const nav = useNavigate()
+  const location = useLocation(); // useLocation을 통해 state 접근
+  const { scheduleId, title } = location.state || {}; // location.state에서 scheduleId와 title 추출
   const [currentPage, setCurrentPage] = useState(0);
   const daysPerPage = 3;
 
