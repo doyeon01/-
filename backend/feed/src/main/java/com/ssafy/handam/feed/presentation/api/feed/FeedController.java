@@ -7,7 +7,7 @@ import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.application.LikeService;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
-import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
@@ -20,6 +20,7 @@ import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
+import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
 import java.util.List;
@@ -98,7 +99,8 @@ public class FeedController {
 
     @GetMapping("/liked")
     public ApiResult<LikedFeedsByUserResponse> getLikedByUser(
-            @CookieValue(value = "accessToken", required = false) String token, Pageable pageable,
+            @CookieValue(value = "accessToken", required = false) String token,
+            Pageable pageable,
             @RequestParam Long userId) {
         return success(feedService.getLikedFeedsByUser(userId, pageable, token));
     }
@@ -139,14 +141,37 @@ public class FeedController {
     public ApiResult<List<ClusterResponse>> getClusteredFeeds(
             @CookieValue(value = "accessToken", required = false) String token,
             @RequestParam Long userId) {
-        return success(feedService.getClusteredFeeds(userId , token));
+        return success(feedService.getClusteredFeeds(userId, token));
     }
 
     @GetMapping("/like/clustering/refresh")
     public ApiResult<List<ClusterResponse>> refreshClusteredFeeds(
             @CookieValue(value = "accessToken", required = false) String token,
             @RequestParam Long userId) {
-        return success(feedService.refreshClusteredFeeds(userId , token));
+        return success(feedService.refreshClusteredFeeds(userId, token));
+    }
+
+    @GetMapping("/cluster/center/nearby")
+    public ApiResult<NearbyClusterCenterResponse> getNearbyClusterCenter(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @RequestParam Double latitude,
+            @RequestParam Double longitude,
+            @RequestParam Integer distance,
+            @RequestParam(defaultValue = "0") Integer page,
+            @RequestParam(defaultValue = "10") Integer size) {
+        {
+            return success(feedService
+                    .getNearbyClusterCenter(
+                            NearByClusterCenterServiceReuqest.of(
+                                    latitude,
+                                    longitude,
+                                    distance,
+                                    page,
+                                    size,
+                                    token)
+                    )
+            );
+        }
     }
 }
 
