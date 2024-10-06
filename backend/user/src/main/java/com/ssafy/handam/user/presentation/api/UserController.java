@@ -41,7 +41,7 @@ public class UserController {
 
     @Valid
     @GetMapping("/{id}")
-    public ApiResult<UserInfoResponse> getUserInfo(@CookieValue(value = "accessToken", required = false) String token,@NotNull @PathVariable("id") Long id) {
+    public ApiResult<UserInfoResponse> getUserInfo(@CookieValue(value = "accessToken", required = false) String token, @PathVariable("id") Long id) {
         UserInfoResponse userInfoResponse = userApplicationService.findUserById(token,id);
         return success(userInfoResponse);
     }
