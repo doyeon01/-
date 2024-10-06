@@ -67,14 +67,14 @@ spring:
         - id: photocard
           uri: http://j11c205.p.ssafy.io:8084
           predicates:
-            - Path=/api/v1/accompanyboards/**
+            - Path=/api/v1/photocards/**
 
         - id: photocard-docs
           uri: http://j11c205.p.ssafy.io:8084
           predicates:
-            - Path=/accompanyboards/docs/**
+            - Path=/photocards/docs/**
           filters:
-            - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+            - RewritePath=/photocards/docs/(?<remaining>.*),/docs/${remaining}
 logging:
   level:
     org.springframework.security: DEBUG
