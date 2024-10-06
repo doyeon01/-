@@ -89,14 +89,41 @@ export interface DayPlanType {
   plans: PlanDetailType[];
 }
 
-// 전체 API 응답 타입
+// 마이페이지 일정 API 응답 타입
 export interface PlanDetailResponseType {
   success: boolean;
   response: DayPlanType[];
   error: string | null;
 }
 
+// 포토카드 타입 정의
+export interface PhotoCardType {
+  id: number;
+  userId: number;
+  totalPlanId: number;
+  planTitle: string;
+  photoCardUrl: string;
+  createdDate: string;
+}
 
+// 마이페이지 특정 포토카드 조회 API 응답 타입 
+export interface PhotoCardDetailResponseType {
+  success: boolean;
+  response: PhotoCardType
+  error: string | null;
+}
+
+
+// 마이페이지 포토카드 전체 조회 API 응답 타입
+export interface PhotoCardResponseType {
+  success: boolean;
+  response: {
+    photoCards: PhotoCardType[];
+    currentPage: number;
+    hasNextPage: boolean;
+  };
+  error: string | null;
+}
 
 // FeedCard 컴포넌트 Props
 export interface CardProps {

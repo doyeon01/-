@@ -15,7 +15,7 @@ import { PlanDetailResponseType, DayPlanType } from '../../model/MyPageType';
 export const ScheduleDetail = () => {
 
   useEffect(() => {
-    PlanDetailApi(scheduleId)
+    PlanDetailApi(totalPlanId)
     .then((res)=>{
       const data: PlanDetailResponseType = res.data
       if(data.success) {
@@ -33,7 +33,7 @@ export const ScheduleDetail = () => {
 
   const nav = useNavigate()
   const location = useLocation();
-  const {scheduleId, title} = location.state || {}; 
+  const {totalPlanId, title} = location.state || {}; 
   const [currentPage, setCurrentPage] = useState(0);
   const [scheduleDetailList, setScheduleDetailList] = useState<DayPlanType[]>([])
   const daysPerPage = 3;
