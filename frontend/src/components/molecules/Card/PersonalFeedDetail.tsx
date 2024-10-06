@@ -6,7 +6,7 @@ import { UserId } from '../../../Recoil/atoms/Auth';
 import { FeedList } from '../../../services/api/FeedService';  
 import { useInView } from 'react-intersection-observer'; 
 
-export const PersonalFeedDetail: React.FC<{ reload: boolean }> = ({ reload }) => { // reload prop 추가
+export const PersonalFeedDetail: React.FC = () => { // reload prop 추가
   const [feedInfos, setFeedInfos] = useState<FeedType[]>([]); 
   const [page, setPage] = useState(0); 
   const [hasNextPage, setHasNextPage] = useState(true); 
@@ -20,19 +20,18 @@ export const PersonalFeedDetail: React.FC<{ reload: boolean }> = ({ reload }) =>
     }
   }, [page, hasNextPage]);
 
-  // 새로고침 발생 시 데이터 리로드
-  useEffect(() => {
-    if (reload) {
-      setPage(0); // 페이지 초기화
-      setFeedInfos([]); // 피드 초기화
-      setHasNextPage(true); // hasNextPage 초기화
+  // // 새로고침 발생 시 데이터 리로드
+  // useEffect(() => {
+  //   if (reload) {
+  //     setPage(0); // 페이지 초기화
+  //     setFeedInfos([]); // 피드 초기화
+  //     setHasNextPage(true); // hasNextPage 초기화
       
-    }
-  }, [reload]);
+  //   }
+  // }, [reload]);
 
   // 스크롤이 하단에 도달했을 때 페이지를 증가시키는 로직
   useEffect(() => {
-    console.log('피드생성 ㅇㅇ')
     if (inView && hasNextPage) {
       setPage((prevPage) => prevPage + 1);  // 페이지를 1씩 증가
     }
