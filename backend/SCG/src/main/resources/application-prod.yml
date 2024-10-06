@@ -14,12 +14,12 @@ spring:
         - id: user
           uri: http://j11c205.p.ssafy.io:8081
           predicates:
-            - Path=/api/v1/user/**
+            - Path=/api/v1/users/**
 
         - id: user-docs
           uri: http://j11c205.p.ssafy.io:8081
           predicates:
-            - Path=/user/docs/**
+            - Path=/users/docs/**
           filters:
             - RewritePath=/user/docs/(?<remaining>.*),/docs/${remaining}
 
