@@ -66,7 +66,10 @@ public class FeedController {
         return success(feedService.searchFeedsByKeywordSortedByLikeCount(keyword, page, size, token));
     }
 
-    @PostMapping(value = "/create", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping(value = "/create", consumes = {
+            MediaType.MULTIPART_FORM_DATA_VALUE,
+            MediaType.APPLICATION_OCTET_STREAM_VALUE}
+    )
     public ApiResult<FeedResponse> createFeed(
             @CookieValue(value = "accessToken", required = false) String token,
             @RequestPart("data") FeedCreationRequest request,
