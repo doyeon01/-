@@ -40,11 +40,19 @@ public class UserController {
     }
 
     @Valid
-    @GetMapping("/{id}")
-    public ApiResult<UserInfoResponse> getUserInfo(@CookieValue(value = "accessToken", required = false) String token, @PathVariable("id") Long id) {
-        UserInfoResponse userInfoResponse = userApplicationService.findUserById(token,id);
+    @GetMapping("/follow-status/{targetId}")
+    public ApiResult<UserInfoResponse> getUserInfoAndFollowStatus(@CookieValue(value = "accessToken", required = false) String token,
+                                                                  @PathVariable("targetId") Long targetId) {
+        UserInfoResponse userInfoResponse = userApplicationService.findUserWithFollowStatus(token,targetId);
         return success(userInfoResponse);
     }
+
+    @GetMapping("/{id}")
+    public ApiResult<UserInfoResponse> getUserInfo(@PathVariable("id") Long id) {
+        UserInfoResponse userInfoResponse = userService.findUserById(id);
+        return success(userInfoResponse);
+    }
+
 
     @GetMapping("/test")
     public void test(){
