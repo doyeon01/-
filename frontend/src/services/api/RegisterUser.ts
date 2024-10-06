@@ -2,9 +2,9 @@ import axios from 'axios';
 import { RegisterUserType } from '../../model/RegisterUserType';
 import { FilterFeedType } from '../../model/SearchingFeedType';
 
-export const RegisterUser = async (id:number)=>{
+export const RegisterUser = async (userData: RegisterUserType[])=>{
     try {
-        const response = await axios.post<RegisterUserType>(`https://j11c205.p.ssafy.io/api/v1/user/${id}/survey`);
+        const response = await axios.post<RegisterUserType[]>(`https://j11c205.p.ssafy.io/api/v1/users/survey`,userData);
         return response.data;
       } catch (error) {
         throw new Error('API 요청 중 오류가 발생했습니다.');
