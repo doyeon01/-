@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from 'react'
-import { NavLink } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import DaumPostcode from 'react-daum-postcode';
 
 import { getFeed } from '../../services/api/RegisterUser';
@@ -23,6 +23,8 @@ import VID_start from '../../assets/statics/survey_strart.mp4'
 import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
+  const navigate = useNavigate()
+
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
   // const [Gender,setGender] = useState('')
@@ -45,8 +47,8 @@ export const SurveyPage: React.FC = () => {
     const fetchFeedsData = async () => {
       try {
         const data = await getFeed(keyword, page, size); // 배열 반환
-        console.log('Fetched feeds data:', data); // 전체 데이터 로그
-        console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
+        // console.log('Fetched feeds data:', data); // 전체 데이터 로그
+        // console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
         setFeeds(data.response.feeds); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
@@ -142,16 +144,27 @@ useEffect(() => {
 
   const handleRegister = async () => {
     try {
-      for(let i =1;i<5;i++){
-        setUserData((prevState)=>({
-          ...prevState,
-          [`travelStyl${i}`]: MBTI.charAt(i-1)
-        }))
+      // 상태 업데이트를 비동기로 처리하기 위해 promise all 사용
+      const updates = [];
+      for (let i = 1; i < 5; i++) {
+        updates.push(
+          setUserData((prevState) => ({
+            ...prevState,
+            [`travelStyl${i}`]: MBTI.charAt(i - 1),
+          }))
+        );
       }
+  
+      // 모든 상태 업데이트가 완료된 후에 API 호출
+      await Promise.all(updates);
+  
       const data = await RegisterUser(userData);
       console.log('등록 성공:', data);
-    } catch (error:any) {
-      console.error(error.message);
+  
+      // 페이지 이동
+      navigate('/main');
+    } catch (error: any) {
+      console.error('등록 실패:', error.message);
     }
   };
 
@@ -561,13 +574,12 @@ useEffect(() => {
               <div className="text-[18px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 {MBTI}
               </div>
-              <NavLink
-                to="/main"
+              <button
                 className="absolute w-[200px] h-[50px] bg-[#B8B1AB] top-[150px] left-1/2 transform -translate-x-1/2 rounded-[25px] flex justify-center items-center text-[24px] text-white"
                 onClick={handleRegister}
               >
                 여행가기
-              </NavLink>
+              </button>
               <div className="text-[15px] top-[300px] absolute text-center left-1/2 transform -translate-x-1/2">
                 텍스트 들어갈 곳 + 이미지 들어갈 곳
               </div>
