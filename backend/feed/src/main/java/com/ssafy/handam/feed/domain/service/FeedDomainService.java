@@ -80,6 +80,7 @@ public class FeedDomainService {
     public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath) {
         return feedRepository.save(Feed.builder()
                 .placeName(request.placeName())
+                .scheduleId(request.scheduleId())
                 .title(request.title())
                 .content(request.content())
                 .imageUrl(savedImagePath)
