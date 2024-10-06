@@ -129,7 +129,7 @@ useEffect(() => {
       setFading(false)
       setPageNum(PageNum=>PageNum+1)
     },500)
-    console.log('Current MBTI : ', value)
+    // console.log('Current MBTI : ', value)
   }
   
   // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
@@ -155,12 +155,12 @@ useEffect(() => {
 
     // userData 업데이트
     setUserData(updatedUserData);
-    console.log('updateUserData:',updatedUserData);
+    // console.log('updateUserData:',updatedUserData);
     
     
     // 업데이트된 객체를 바로 사용하여 API 호출
     const data = await RegisterUser(updatedUserData);
-    console.log('등록 성공:', data);
+    // console.log('등록 성공:', data);
 
     // 페이지 이동
     navigate('/main');
@@ -438,10 +438,11 @@ useEffect(() => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
-                      <div>{feed.title}</div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden`} onClick={() => toggleLike(feed.id)}>
+                      {/* <div>{feed.title}</div> */}
+                      <div className={`w-full h-full bg-black ${feed.isLiked ? 'bg-opacity-80':'bg-opacity-0'} z-10`}/>
                       <img src={feed.imageUrl} className="w-full h-full object-cover"/>
-                      <div>{keyword}</div>
+                      {/* <div>{keyword}</div> */}
                     </div>
                   )) : 'No feeds available'}
                 {/* {numbers.map((number) => (
