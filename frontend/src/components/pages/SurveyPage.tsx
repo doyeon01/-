@@ -90,8 +90,8 @@ const handlePageNum = () => {
       setUserData((prevState) => ({
         ...prevState,
         nickname: nickname,
-        address: address,
-        introduce: introduce,
+        residence: address,
+        introduction: introduce,
       }));
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
@@ -156,11 +156,10 @@ useEffect(() => {
     // userData 업데이트
     setUserData(updatedUserData);
     console.log('updateUserData:',updatedUserData);
-    console.log('userdata:',userData);
     
     
     // 업데이트된 객체를 바로 사용하여 API 호출
-    const data = await RegisterUser(userData);
+    const data = await RegisterUser(updatedUserData);
     console.log('등록 성공:', data);
 
     // 페이지 이동
