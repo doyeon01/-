@@ -12,7 +12,7 @@ import { UserId } from '../../../Recoil/atoms/Auth';
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
-  const [location, setLocation] = useState<string>('')//장소
+  const [placeName, setPlaceName] = useState<string>('')//장소
   const [content, setContent] = useState<string>('');  // 내용
   const [selectedCategory, setSelectedCategory] = useState<string>(''); // 카테고리
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
@@ -39,8 +39,8 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     TitleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setTitle(e.target.value);
     },
-    LocationChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-      setLocation(e.target.value);
+    PlaceNameChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setPlaceName(e.target.value);
     },    
     ContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setContent(e.target.value);
@@ -79,30 +79,36 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
       setIsScheduleSelected(false); // 게시글 작성 모달에서 일정 선택 모달로 돌아감
     },
     validateAndComplete: () => {
-      if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude) {
+      if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude || !placeName) {
         Swal.fire({
           icon: 'warning',
           title: '내용을 입력하세요',
-          text: '이미지, 제목, 내용, 위치를 모두 작성해 주세요.',
+          text: '이미지, 제목, 장소, 내용, 위치를 모두 작성해 주세요.',
           confirmButtonText: '확인'
         });
         return;
       }
 
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('scheduleId', String(scheduleId));
-      formData.append('location', location)
-      formData.append('content', content);
-      formData.append('file', selectedImage);
-      formData.append('address1', calendarlocation);
-      formData.append('address2', calendarlocation); 
-      formData.append('longitude', String(longitude));
-      formData.append('latitude', String(latitude));
-      formData.append('placeType', selectedCategory);
-      formData.append('userId', String(userId));
+      const data = new FormData();
 
-      FeedCreate(formData)
+      const jsonData = {
+          scheduleId,
+          title,
+          content,
+          placeName,
+          address1: calendarlocation,    
+          address2: calendarlocation, 
+          longitude,
+          latitude,
+          placeType: selectedCategory,
+          userId
+      };
+      
+      data.append('data', JSON.stringify(jsonData));
+      data.append('image', selectedImage);
+      
+
+      FeedCreate(data)
         .then(() => {
           console.log('피드 생성 완료');
           onComplete();
@@ -213,8 +219,8 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                       spellCheck="false"
                       placeholder="장소를 입력하세요."
                       rows={1}
-                      value={location}
-                      onChange={handle.LocationChange}
+                      value={placeName}
+                      onChange={handle.PlaceNameChange}
                     />
                     <div className="mt-4 w-full">
                       <hr className="border-gray-300" />

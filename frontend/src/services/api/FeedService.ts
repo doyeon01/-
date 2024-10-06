@@ -5,8 +5,8 @@ const userId = 1
 
 
 // 피드 생성 API
-export const FeedCreate = async (formData: FormData) => {
-  const response = await axios.post(`${BaseUrl}/create`, formData, {
+export const FeedCreate = async (data: FormData) => {
+  const response = await axios.post(`${BaseUrl}/create`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
