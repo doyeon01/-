@@ -4,6 +4,8 @@ import DaumPostcode from 'react-daum-postcode';
 
 import { getFeed } from '../../services/api/RegisterUser';
 import {FeedType} from '../../model/SearchingFeedType'
+import { RegisterUser } from '../../services/api/RegisterUser';
+import { RegisterUserType } from '../../model/RegisterUserType';
 
 import IMG_BG from '../../assets/statics/survey_background.png'
 import IMG_Logo from '../../assets/statics/handam_logo.png'
@@ -32,11 +34,10 @@ export const SurveyPage: React.FC = () => {
 
   const [nickname, setNickname] = useState(''); // 닉네임 상태
   const [introduce, setIntroduce] = useState(''); // 자기소개 상태
-  const [userData, setUserData] = useState({ nickname: '', address: '', introduce: '' }); // 최종 저장 상태
+  const [userData, setUserData] =  useState<RegisterUserType[]>([]); // 최종 저장 상태
 
   const [feeds, setFeeds] = useState<FeedType[]>([]);
   const [keyword,setkeyword] = useState('RESTAURANT')
-
   let page = 0
   let size = 15
 
@@ -51,8 +52,9 @@ export const SurveyPage: React.FC = () => {
         console.error('Error fetching feeds:', error);
       }
     };
-  
-    fetchFeedsData(); // 함수 호출
+    if (keyword) {
+      fetchFeedsData(); // keyword가 설정된 후에 API 호출
+    }
   }, [keyword, page, size]);
 
  // 주소 검색 완료 시 호출되는 함수
@@ -83,26 +85,28 @@ const handlePageNum = () => {
   if (!nickname || !address) {
       alert('닉네임과 주소를 입력해 주세요.');
     } else {
-      setUserData({
+      setUserData((prevState) => ({
+        ...prevState,
         nickname: nickname,
         address: address,
         introduce: introduce,
-      });
+      }));
     console.log('저장된 userData:', userData); // 저장된 값 확인
     setPageNum(PageNum=>PageNum+1)
     }
-  if (PageNum === 7){
-    setkeyword('커피')
-  }
-  if (PageNum === 8){
-    setkeyword('TOURIST_ATTRACTION')
-  }
-  if (PageNum === 9){
-    setkeyword('ACCOMMODATION')
-  }
-  console.log("PageNum :",PageNum);
-  
 }
+
+useEffect(() => {
+  // PageNum이 변경될 때 keyword 설정
+  if (PageNum === 7) {
+    setkeyword('커피');
+  } else if (PageNum === 8) {
+    setkeyword('TOURIST_ATTRACTION');
+  } else if (PageNum === 9) {
+    setkeyword('ACCOMMODATION');
+  }
+}, [PageNum]); // PageNum이 변경될 때 keyword를 설정
+
 
   const handleIsHide = ()=>{
     setIsHide(IsHide=>!IsHide)
@@ -134,6 +138,21 @@ const handlePageNum = () => {
         feed.id === id ? { ...feed, isLiked: !feed.isLiked } : feed
       )
     );
+  };
+
+  const handleRegister = async () => {
+    try {
+      for(let i =1;i<5;i++){
+        setUserData((prevState)=>({
+          ...prevState,
+          [`travelStyl${i}`]: MBTI.charAt(i-1)
+        }))
+      }
+      const data = await RegisterUser(userData);
+      console.log('등록 성공:', data);
+    } catch (error:any) {
+      console.error(error.message);
+    }
   };
 
   return (
@@ -405,8 +424,9 @@ const handlePageNum = () => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
                       <div>{feed.title}</div>
+                      <img src={feed.imageUrl} className="w-full h-full object-cover"/>
                       <div>{keyword}</div>
                     </div>
                   )) : 'No feeds available'}
@@ -435,9 +455,11 @@ const handlePageNum = () => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
-                      <div>{feed.title}</div>
-                    </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
+                    <div>{feed.title}</div>
+                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
+                    <div>{keyword}</div>
+                  </div>
                   )) : 'No feeds available'}
               </span>
             </>
@@ -460,9 +482,11 @@ const handlePageNum = () => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
-                      <div>{feed.title}</div>
-                    </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
+                    <div>{feed.title}</div>
+                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
+                    <div>{keyword}</div>
+                  </div>
                   )) : 'No feeds available'}
               </span>
             </>
@@ -484,9 +508,11 @@ const handlePageNum = () => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'}`} onClick={() => toggleLike(feed.id)}>
-                      <div>{feed.title}</div>
-                    </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
+                    <div>{feed.title}</div>
+                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
+                    <div>{keyword}</div>
+                  </div>
                   )) : 'No feeds available'}
               </span>
             </>
@@ -538,6 +564,7 @@ const handlePageNum = () => {
               <NavLink
                 to="/main"
                 className="absolute w-[200px] h-[50px] bg-[#B8B1AB] top-[150px] left-1/2 transform -translate-x-1/2 rounded-[25px] flex justify-center items-center text-[24px] text-white"
+                onClick={handleRegister}
               >
                 여행가기
               </NavLink>
