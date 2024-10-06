@@ -160,7 +160,7 @@ useEffect(() => {
     
     // 업데이트된 객체를 바로 사용하여 API 호출
     const data = await RegisterUser(updatedUserData);
-    // console.log('등록 성공:', data);
+    console.log('등록 성공:', data);
 
     // 페이지 이동
     navigate('/main');
