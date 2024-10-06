@@ -128,7 +128,7 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
               onClick={handleCreatePhotoCard}
               disabled={isCreating}
             >
-              포토카드 생성하기
+              포토카드 생성
             </button>
           </div>
         )}

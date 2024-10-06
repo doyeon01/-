@@ -16,8 +16,9 @@ import {
   TETabsPane,
 } from 'tw-elements-react';
 
-export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = ({ reloadFeed }) => { // reloadFeed prop 추가
+export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = () => {
   const [fillActive, setFillActive] = useState<string>('tab1');
+  const [tabKey, setTabKey] = useState<number>(0); // 탭 리렌더링을 위한 key 상태 추가
   const nav = useNavigate();
   const location = useLocation();
   
@@ -25,7 +26,7 @@ export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = ({ reloadFee
   const resetSortOrder = useSetRecoilState(PlanSortState);
 
   const tabs = [
-    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail reload={reloadFeed} /> }, // reload prop 추가
+    { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail key={tabKey} /> }, // key 값 추가
     { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail resetSelectedButton={fillActive === 'tab2'}/> },
     { id: 'tab3', label: '여행일정', icon: <RouteIcon active={fillActive === 'tab3'} />, content: <PersonalPlanDetail /> },
     { id: 'tab4', label: '게시글', icon: <UsersIcon active={fillActive === 'tab4'} />, content: <PersonalCompanionDetail /> },
@@ -35,6 +36,9 @@ export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = ({ reloadFee
   useEffect(() => {
     if (location.state?.activeTab) {
       setFillActive(location.state.activeTab);
+      if (location.state.activeTab === 'tab1') {
+        setTabKey(prev => prev + 1); // 피드 탭이 활성화될 때 key 변경
+      }
     } else {
       setFillActive('tab1');
     }
@@ -46,6 +50,12 @@ export const PersonalDetailTab: React.FC<{ reloadFeed: boolean }> = ({ reloadFee
     resetInputValue('');
     resetSortOrder('최신순'); 
     setFillActive(tabId);
+
+    // 피드 탭 클릭 시 key 변경하여 리렌더링 유도
+    if (tabId === 'tab1') {
+      setTabKey(prev => prev + 1); // key 값을 변경하여 컴포넌트 리렌더링
+    }
+
     nav(location.pathname, { state: { activeTab: tabId } });
   };
 
