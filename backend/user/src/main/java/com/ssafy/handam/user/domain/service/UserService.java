@@ -71,8 +71,12 @@ public class UserService {
         User savedUser = userRepository.save(user);
         return savedUser.getId();
     }
-
-    public UserInfoResponse findUserById(Long userId,Long targetUserId) {
+    public UserInfoResponse findUserById(Long userId) {
+        User user = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("현재 사용자를 찾을 수 없습니다."));
+        return UserInfoResponse.of(user,true);
+    }
+    public UserInfoResponse findUserWithFollowStatus(Long userId,Long targetUserId) {
 
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("현재 사용자를 찾을 수 없습니다."));
