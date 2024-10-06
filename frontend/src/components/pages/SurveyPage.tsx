@@ -438,15 +438,20 @@ useEffect(() => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative`} onClick={() => toggleLike(feed.id)}>
-                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-80' : 'bg-opacity-0'} z-10`} />
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                        {feed.isLiked && '✔'}
+                        </div>
                         <img src={feed.imageUrl} className="w-full h-full object-cover" />
                     </div>
                   )) : 'No feeds available'}
                 {/* {numbers.map((number) => (
-                  <div key={number} className='bg-green-500 w-full max-h-[110px] h-[110px] border'>
-                    {number}
-                  </div>
+                   <div key={number} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative`}>
+                    <div className={`absolute inset-0 bg-black bg-opacity-50 z-10 flex justify-center items-center text-[20px] text-white`}>
+                      ✔
+                    </div>
+                   <div className='bg-green-300'></div>
+               </div>
                 ))} */}
               </span>
             </>
@@ -468,11 +473,12 @@ useEffect(() => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
-                    <div>{feed.title}</div>
-                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
-                    <div>{keyword}</div>
-                  </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                        {feed.isLiked && '✔'}
+                        </div>
+                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                    </div>
                   )) : 'No feeds available'}
               </span>
             </>
@@ -495,11 +501,12 @@ useEffect(() => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
-                    <div>{feed.title}</div>
-                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
-                    <div>{keyword}</div>
-                  </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                        {feed.isLiked && '✔'}
+                        </div>
+                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                    </div>
                   )) : 'No feeds available'}
               </span>
             </>
@@ -516,16 +523,17 @@ useEffect(() => {
               <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 숙소는 어디가 좋을까요?
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border ${feed.isLiked ? 'bg-black':'bg-green-500'} overflow-hidden`} onClick={() => toggleLike(feed.id)}>
-                    <div>{feed.title}</div>
-                    <img src={feed.imageUrl} className="w-full h-full object-cover"/>
-                    <div>{keyword}</div>
-                  </div>
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                        {feed.isLiked && '✔'}
+                        </div>
+                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                    </div>
                   )) : 'No feeds available'}
               </span>
             </>
