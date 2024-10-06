@@ -72,6 +72,32 @@ export interface PlanListResponseType {
   
 }
 
+// 각 장소 계획(플랜)의 타입
+export interface PlanDetailType {
+  id: number;
+  day: number;
+  placeName: string;
+  imageUrl: string;
+  address: string;
+  placeType: string;
+  details: string;
+}
+
+// 날짜별로 포함된 여러 플랜들의 타입
+export interface DayPlanType {
+  day: number;
+  plans: PlanDetailType[];
+}
+
+// 전체 API 응답 타입
+export interface PlanDetailResponseType {
+  success: boolean;
+  response: DayPlanType[];
+  error: string | null;
+}
+
+
+
 // FeedCard 컴포넌트 Props
 export interface CardProps {
   title: string;
