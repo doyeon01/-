@@ -19,7 +19,7 @@ export const PersonalPhotoDetail: React.FC = () => {
   // 검색과 정렬을 위한 커스텀 훅
   const { filteredArr, onSearch, onSortChange, showAllItems } = useSearchAndSort(
     photoCards,
-    ['feedId'], // 저거 대신 PlanTitle... 있어야 함. 검색 검색 검색할 거 
+    ['planTitle'],  
     'createdDate' 
   );
 
@@ -65,7 +65,8 @@ export const PersonalPhotoDetail: React.FC = () => {
           filteredArr.map((item: PhotoCardType) => ( 
             <PhotoCard
               key={item.id} 
-              // title={item.PlanTitle}
+              title={item.planTitle}
+              totalPlanId = {item.totalPlanId}
               testimg={item.photoCardUrl} 
               showDownLoadButton={true}
             />

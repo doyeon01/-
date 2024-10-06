@@ -100,8 +100,8 @@ export interface PlanDetailResponseType {
 export interface PhotoCardType {
   id: number;
   userId: number;
-  feedId: number;
-  PlanTitle: string;
+  totalPlanId: number;
+  planTitle: string;
   photoCardUrl: string;
   createdDate: string;
 }

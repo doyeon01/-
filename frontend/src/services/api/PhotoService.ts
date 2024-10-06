@@ -1,4 +1,5 @@
 import axios from "axios";
+import { PhotoCardType, PhotoCardResponseType } from "../../model/MyPageType";
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/photocards';
 
@@ -12,7 +13,7 @@ export const GetPhotoCardList = async (userId: number, page: number, size = 6) =
       },
       withCredentials: true, 
     });
-    return response.data; 
+    return response.data as PhotoCardResponseType;
   } catch (error) {
     console.error('포토카드 목록 조회 중 오류 발생:', error);
     throw error; 
@@ -20,12 +21,12 @@ export const GetPhotoCardList = async (userId: number, page: number, size = 6) =
 };
 
 // 마이페이지 특정 포토카드 조회 API
-export const GetPhotoCardDetail = async (feedId: number) => {
+export const GetPhotoCardDetail = async (totalPlanId: number) => {
   try {
-    const response = await axios.get(`${BaseUrl}/detail/${feedId}`, {
+    const response = await axios.get(`${BaseUrl}/detail/${totalPlanId}`, {
       withCredentials: true, 
     });
-    return response.data; 
+    return response.data.response as PhotoCardType;
   } catch (error) {
     console.error('포토카드 상세 조회 중 오류 발생:', error);
     throw error;
