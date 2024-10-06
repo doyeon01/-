@@ -1,0 +1,12 @@
+[[recommended-feeds-for-user]]
+=== 사용자 맞춤 피드 조회
+
+==== HTTP Request
+
+include::{snippets}/get-nearby-cluster-center/http-request.adoc[]
+include::{snippets}/get-nearby-cluster-center/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-nearby-cluster-center/http-response.adoc[]
+include::{snippets}/get-nearby-cluster-center/response-fields.adoc[]

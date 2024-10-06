@@ -1,5 +1,5 @@
 [[get-feed-cluster-refresh]]
-=== 피드 군집 조회 API
+=== 피드 군집 새로고침  API
 
 ==== HTTP Request
 
