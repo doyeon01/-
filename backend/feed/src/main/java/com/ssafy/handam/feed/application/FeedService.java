@@ -109,7 +109,7 @@ public class FeedService {
     }
 
     public String saveImage(MultipartFile imageFile) {
-        String UPLOAD_PATH = "http://j11c205a.p.ssafy.io/images/";
+        String UPLOAD_PATH = "/home/ubuntu/VS_photo/";
         String fileName = imageFile.getOriginalFilename();
         Path path = Paths.get(UPLOAD_PATH + fileName);
 
@@ -121,7 +121,7 @@ public class FeedService {
             return "Failed to save image";
         }
 
-        return path.toString();
+        return "https://j11c205a.p.ssafy.io/images/" + fileName;
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
