@@ -101,7 +101,7 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
   //좋아요 API
   export const postLike = async (feedId: number): Promise<void> => {
     try {
-      await axios.post(`${BaseUrl}/like/${feedId}`, {}, {
+      await axios.post(`${BaseUrl}/like/${feedId}?userId=${userId}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -118,7 +118,7 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
   //좋아요 취소 api
   export const postUnlike = async (feedId: number): Promise<void> => {
     try {
-      await axios.post(`${BaseUrl}/unlike/${feedId}`, {}, {
+      await axios.post(`${BaseUrl}/unlike/${feedId}?userId=${userId}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
