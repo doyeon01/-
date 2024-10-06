@@ -3,6 +3,7 @@ package com.ssafy.handam.photocard.docs;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.ssafy.handam.photocard.application.PhotoCardService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,8 @@ public abstract class RestDocsSupport {
 
     protected MockMvc mockMvc;
 
-//    @MockBean
-//    protected AccompanyBoardArticleService accompanyBoardArticleService;
-//
-//    @MockBean
-//    protected AccompanyBoardCommentService accompanyBoardCommentService;
+    @MockBean
+    protected PhotoCardService photoCardArticleService;
 
     @BeforeEach
     void setUp(WebApplicationContext webApplicationContext, RestDocumentationContextProvider restDocumentation) {
