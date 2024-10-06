@@ -438,11 +438,9 @@ useEffect(() => {
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden`} onClick={() => toggleLike(feed.id)}>
-                      {/* <div>{feed.title}</div> */}
-                      <div className={`w-full h-full bg-black ${feed.isLiked ? 'bg-opacity-80':'bg-opacity-0'} z-10`}/>
-                      <img src={feed.imageUrl} className="w-full h-full object-cover"/>
-                      {/* <div>{keyword}</div> */}
+                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative`} onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-80' : 'bg-opacity-0'} z-10`} />
+                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
                     </div>
                   )) : 'No feeds available'}
                 {/* {numbers.map((number) => (
