@@ -157,7 +157,7 @@ useEffect(() => {
   
       // 모든 상태 업데이트가 완료된 후에 API 호출
       await Promise.all(updates);
-  
+      console.log(userData);
       const data = await RegisterUser(userData);
       console.log('등록 성공:', data);
   
