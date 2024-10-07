@@ -1174,7 +1174,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 443
+Content-Length: 438
 
 {
   "success" : true,
@@ -1183,12 +1183,12 @@ Content-Length: 443
       "id" : 1,
       "userId" : 1,
       "totalPlanId" : 1,
-      "profileImageUrl" : "http://example.com/profile.jpg",
-      "nickName" : "김민주",
       "title" : "testTitle",
       "description" : "testDescription",
       "createdDate" : "2024-10-02",
-      "commentCount" : 5
+      "commentCount" : 5,
+      "address" : "서울",
+      "planImageUrl" : "https://example.com/planImageUrl"
     } ],
     "currentPage" : 0,
     "hasNextPage" : false
@@ -1253,16 +1253,6 @@ Content-Length: 443
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].profileImageUrl</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].nickName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
-</tr>
-<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 제목</p></td>
@@ -1276,6 +1266,16 @@ Content-Length: 443
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].createdDate</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">일정 지역</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].planImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">일정 썸네일 이미지 경로</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].commentCount</code></p></td>

@@ -1,12 +1,17 @@
 package com.ssafy.handam.accompanyboard.application;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailByUserDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
+import com.ssafy.handam.accompanyboard.application.dto.PlanPreviewDto;
 import com.ssafy.handam.accompanyboard.application.dto.UserDetailDto;
 import com.ssafy.handam.accompanyboard.domain.entity.Article;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardArticleDomainService;
 import com.ssafy.handam.accompanyboard.domain.service.AccompanyBoardCommentDomainService;
+import com.ssafy.handam.accompanyboard.infrastructure.client.PlanApiClient;
 import com.ssafy.handam.accompanyboard.infrastructure.client.UserApiClient;
+import com.ssafy.handam.accompanyboard.infrastructure.client.dto.PlanInfoDto;
+import com.ssafy.handam.accompanyboard.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticleDetailResponse;
 import com.ssafy.handam.accompanyboard.presentation.response.article.AccompanyBoardArticlesByTitleResponse;
@@ -28,8 +33,10 @@ public class AccompanyBoardArticleService {
     private final AccompanyBoardArticleDomainService accompanyBoardArticleDomainService;
     private final AccompanyBoardCommentDomainService accompanyBoardCommentDomainService;
     private final UserApiClient userApiClient;
+    private final PlanApiClient planApiClient;
 
     public AccompanyBoardArticleDetailResponse createArticle(AccompanyBoardArticleCreationRequest request) {
+
         Article article = accompanyBoardArticleDomainService.createArticle(request);
         UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
         return AccompanyBoardArticleDetailResponse.of(AccompanyBoardArticleDetailDto.from(article, INIT_COMMENT_COUNT, userDetailDto));
@@ -43,6 +50,7 @@ public class AccompanyBoardArticleService {
     }
 
     public AccompanyBoardArticleDetailResponse getArticleDetails(Long articleId) {
+
         Article article = accompanyBoardArticleDomainService.getArticleDetails(articleId);
         int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(articleId);
         UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
@@ -52,7 +60,7 @@ public class AccompanyBoardArticleService {
     public AccompanyBoardArticlesByUserResponse getArticlesByUser(Long userId, Pageable pageable) {
 
         Page<Article> page = accompanyBoardArticleDomainService.getArticlesByUser(userId, pageable);
-        List<AccompanyBoardArticleDetailDto> articles = getAccompanyBoardArticleDetailDtoList(page.getContent());
+        List<AccompanyBoardArticleDetailByUserDto> articles = getAccompanyBoardArticleDetailByUserDtoList(page.getContent());
         return AccompanyBoardArticlesByUserResponse.of(articles, page.getNumber(), page.hasNext());
     }
 
@@ -73,17 +81,25 @@ public class AccompanyBoardArticleService {
                 .toList();
     }
 
-    private List<AccompanyBoardArticleDetailDto> getAccompanyBoardArticleDetailDtoList(List<Article> articles) {
+    private List<AccompanyBoardArticleDetailByUserDto> getAccompanyBoardArticleDetailByUserDtoList(List<Article> articles) {
+
         return articles.stream()
                 .map(article -> {
                     int commentCount = accompanyBoardCommentDomainService.getCommentCountByAccompanyBoardArticleId(article.getId());
-                    UserDetailDto userDetailDto = getUserDetailDto(article.getUserId());
-                    return AccompanyBoardArticleDetailDto.from(article, commentCount, userDetailDto);
+                    PlanPreviewDto planPreviewDto = getPlanPreviewDto(article.getTotalPlanId());
+                    return AccompanyBoardArticleDetailByUserDto.from(article, commentCount, planPreviewDto);
                 })
                 .toList();
     }
 
     private UserDetailDto getUserDetailDto(Long userId) {
+
         return UserDetailDto.from(userApiClient.getUserById(userId));
+    }
+
+    private PlanPreviewDto getPlanPreviewDto(Long totalPlanId) {
+
+        PlanInfoDto response = planApiClient.getTotalPlan(totalPlanId).getResponse();
+        return PlanPreviewDto.from(response);
     }
 }
