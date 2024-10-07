@@ -6,6 +6,8 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserServiceClient;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -26,10 +28,13 @@ public class LikeService {
 
     public void sendLikeEvent(Long feedId, Long userId, String eventType) {
         Map<String, Object> message = new HashMap<>();
+        LocalDateTime currentTime = LocalDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss");
+        String formattedTimestamp = currentTime.format(formatter);
         message.put("feed_id", feedId);
         message.put("user_id", userId);
         message.put("travel_type", eventType);
-        message.put("timestamp", Instant.now().toString());
+        message.put("timestamp", formattedTimestamp);
 
         try {
             String messageAsString = objectMapper.writeValueAsString(message);

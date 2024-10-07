@@ -1,6 +1,7 @@
 spring:
   application:
     name: SCG
+
   jwt:
     secret: ${SPRING_JWT_SECRET}
   cloud:
@@ -51,6 +52,12 @@ spring:
           uri: http://j11c205a.p.ssafy.io:8082
           predicates:
             - Path=/api/v1/plans/**
+          filters:
+            - name: RequestRateLimiter
+              args:
+                redis-rate-limiter:
+                  replenishRate: 30
+                  burstCapacity: 20
 
         - id: chat
           uri: http://j11c205.p.ssafy.io:8083
@@ -75,6 +82,11 @@ spring:
             - Path=/photocards/docs/**
           filters:
             - RewritePath=/photocards/docs/(?<remaining>.*),/docs/${remaining}
+  data:
+    redis:
+      host: http://j11c205a.p.ssafy.io
+      port: 6379
+
 logging:
   level:
     org.springframework.security: DEBUG

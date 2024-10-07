@@ -121,7 +121,7 @@ public class FeedController {
 
     @PostMapping("/liked/{feedId}")
     public void test(@PathVariable Long feedId, @RequestParam Long userId) {
-        likeService.sendLikeEvent(feedId, userId, "NAUP");
+        likeService.sendLikeEvent(feedId, userId, "CRKP");
     }
 
     @PostMapping("/hadoopTest")
