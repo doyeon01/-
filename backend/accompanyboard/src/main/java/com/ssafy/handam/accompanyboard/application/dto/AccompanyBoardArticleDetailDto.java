@@ -9,7 +9,7 @@ import lombok.Getter;
 public record AccompanyBoardArticleDetailDto(
         Long id,
         Long userId,
-        Long scheduleId,
+        Long totalPlanId,
         String profileImageUrl,
         String nickName,
         String title,
@@ -25,7 +25,7 @@ public record AccompanyBoardArticleDetailDto(
         return new AccompanyBoardArticleDetailDto(
                 article.getId(),
                 article.getUserId(),
-                article.getScheduleId(),
+                article.getTotalPlanId(),
                 userDetailDto.profileImageUrl(),
                 userDetailDto.nickName(),
                 article.getTitle(),

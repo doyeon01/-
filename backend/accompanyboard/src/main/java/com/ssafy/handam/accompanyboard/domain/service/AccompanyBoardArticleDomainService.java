@@ -21,7 +21,7 @@ public class AccompanyBoardArticleDomainService {
     public Article createArticle(AccompanyBoardArticleCreationRequest request) {
         return accompanyBoardArticleRepository.save(Article.builder()
                 .userId(request.userId())
-                .scheduleId(request.scheduleId())
+                .totalPlanId(request.totalPlanId())
                 .title(request.title())
                 .description(request.description())
                 .build());

@@ -19,20 +19,20 @@ public class Article extends BaseEntity{
     private Long id;
 
     private Long userId;
-    private Long scheduleId;
+    private Long totalPlanId;
     private String title;
     private String description;
 
     @Builder
     public Article(
            Long userId,
-           Long scheduleId,
+           Long totalPlanId,
            String title,
            String description)
 
     {
         this.userId = userId;
-        this.scheduleId = scheduleId;
+        this.totalPlanId = totalPlanId;
         this.title = title;
         this.description = description;
     }
