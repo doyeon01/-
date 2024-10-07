@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { UserDataType } from '../../../model/User';
 import { getUserSearch } from '../../../services/api/UserService';
+import { UserIconMini } from '../../../assets/icons/svg';
 
 interface CardSetSearchUserProps {
   keyword: string;
@@ -32,11 +33,15 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword}) => {
             // onClick={() => onItemClick(user)} 
           >
             <div className="flex items-center space-x-4">
-              <img
-                src={user.profileImageUrl}
-                alt={user.nickname}
-                className="w-12 h-12 rounded-full object-cover"
-              />
+              {user.profileImageUrl ? (
+                <img
+                  src={user.profileImageUrl}
+                  alt={user.nickname}
+                  className="w-12 h-12 rounded-full object-cover"
+                />
+              ) : (
+                <UserIconMini />
+              )}
               <div>
                 <p className="font-semibold">{user.nickname}</p>
                 <p className="text-sm text-gray-500">{user.residence}</p>
