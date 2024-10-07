@@ -18,3 +18,7 @@ spring:
   web:
     resources:
       static-locations: classpath:/static/, classpath:/public/, classpath:/docs/
+
+gpu:
+  service:
+    url: http://70.12.130.121:8001/api/v1/gpu

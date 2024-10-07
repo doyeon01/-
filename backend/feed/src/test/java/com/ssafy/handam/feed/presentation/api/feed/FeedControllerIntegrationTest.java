@@ -3,12 +3,12 @@ package com.ssafy.handam.feed.presentation.api.feed;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.when;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.multipart;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.feed.IntegrationTestSupport;
 import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.domain.entity.Feed;
@@ -26,18 +26,16 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest
 @AutoConfigureMockMvc
 @Transactional
 @ActiveProfiles("test")
-class FeedControllerIntegrationTest {
+class FeedControllerIntegrationTest extends IntegrationTestSupport {
 
     @Autowired
     private MockMvc mockMvc;
@@ -80,13 +78,13 @@ class FeedControllerIntegrationTest {
         savedFeedId = savedFeed.getId();
 
         UserDto mockUserDto = createUserDto();
-        when(userApiClient.getUserById(anyLong(),any())).thenReturn(mockUserDto);
+        when(userApiClient.getUserById(anyLong(), any())).thenReturn(mockUserDto);
     }
 
     @AfterEach
     void tearDown() {
-        likeJpaRepository.deleteAll();
         feedJpaRepository.deleteAll();
+        likeJpaRepository.deleteAll();
     }
 
 
@@ -142,7 +140,8 @@ class FeedControllerIntegrationTest {
     void getLikedFeedListTest() throws Exception {
         Feed feed = feedRepository.findById(savedFeedId)
                 .orElseThrow(() -> new IllegalArgumentException("Feed not found"));
-        System.out.println(savedFeedId);
+        System.out.println("savedFeedId :" + savedFeedId);
+        System.out.println("feed.id :" + feed.getId());
         feedService.likeFeed(savedFeedId, 1L);
         likeRepository.save(Like.builder().userId(1L).feed(feed).build());
         mockMvc.perform(get("/api/v1/feeds/liked?userId=1")
@@ -158,7 +157,9 @@ class FeedControllerIntegrationTest {
                 .andExpect(jsonPath("$.response.feeds[0].longitude").value(127.123123))
                 .andExpect(jsonPath("$.response.feeds[0].latitude").value(32.1323))
                 .andExpect(jsonPath("$.response.feeds[0].placeType").value("CAFE"))
-                .andExpect(jsonPath("$.response.feeds[0].likeCount").value(1));
+                .andExpect(jsonPath("$.response.feeds[0].likeCount").value(1))
+                .andExpect(jsonPath("$.response.currentPage").value(0))
+                .andExpect(jsonPath("$.response.hasNextPage").value(false));
     }
 
     @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 사용자가 생성한 FeedList 조회")
@@ -209,7 +210,7 @@ class FeedControllerIntegrationTest {
 //                requestJson.getBytes()
 //        );
 
-        // Multipart 요청을 구성하고 기대하는 응답 값을 테스트
+    // Multipart 요청을 구성하고 기대하는 응답 값을 테스트
 //        mockMvc.perform(multipart("/api/v1/feeds/create")
 //                        .file(imageFile) // 'image' 파트로 이미지 파일 전송
 //                        .file(jsonPart)  // 'data' 파트로 FeedCreationRequest JSON 전송
@@ -229,7 +230,7 @@ class FeedControllerIntegrationTest {
 //                .andExpect(jsonPath("$.response.likeCount").value(0));
 //    }
 
-    private UserDto createUserDto(){
+    private UserDto createUserDto() {
         return UserDto.builder().
                 id(1L).
                 email("testUser").

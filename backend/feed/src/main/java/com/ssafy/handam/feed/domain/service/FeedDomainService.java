@@ -71,17 +71,17 @@ public class FeedDomainService {
         return likeRepository.findByFeedId(feedId);
     }
 
-    public Page<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
+    public List<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
         Page<Like> likes = likeRepository.findByUserId(userId, pageable);
         if (likes == null || likes.isEmpty()) {
-            return Page.empty();
+            return List.of();
         }
 
         List<Long> feedIds = likes.stream()
                 .map(like -> like.getFeed().getId())
                 .toList();
 
-        return feedRepository.findByIdIn(feedIds, pageable);
+        return feedRepository.findByIdIn(feedIds);
     }
 
 
@@ -96,7 +96,7 @@ public class FeedDomainService {
     public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath, UserDto userDto) {
         return feedRepository.save(Feed.builder()
                 .placeName(request.placeName())
-                .scheduleId(request.scheduleId())
+                .totalPlanId(request.totalPlanId())
                 .title(request.title())
                 .content(request.content())
                 .imageUrl(savedImagePath)
@@ -174,5 +174,13 @@ public class FeedDomainService {
 
         // 가져온 결과 중 요청된 개수만큼 반환
         return feeds.stream().limit(count).collect(Collectors.toList());
+    }
+
+    public Page<Like> getLikesBy(Long userId, Pageable pageable) {
+        return likeRepository.findByUserId(userId, pageable);
+    }
+
+    public List<Feed> getFeedByIds(List<Long> feedIds) {
+        return feedRepository.findByIdIn(feedIds);
     }
 }

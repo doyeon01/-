@@ -56,7 +56,7 @@ class AccompanyBoardArticleDomainServiceTest {
         assertEquals(request.title(), foundArticle.getTitle());  // 제목이 일치하는지 확인
         assertEquals(request.description(), foundArticle.getDescription());  // 내용이 일치하는지 확인
         assertEquals(request.userId(), foundArticle.getUserId());  // 사용자 ID가 일치하는지 확인
-        assertEquals(request.scheduleId(), foundArticle.getScheduleId());  // 일정 ID가 일치하는지 확인
+        assertEquals(request.totalPlanId(), foundArticle.getTotalPlanId());  // 일정 ID가 일치하는지 확인
     }
 
     @Test
@@ -73,11 +73,11 @@ class AccompanyBoardArticleDomainServiceTest {
 
         assertEquals(2, result.size());
         assertEquals(1L, result.get(0).getUserId());
-        assertEquals(1L, result.get(0).getScheduleId());
+        assertEquals(1L, result.get(0).getTotalPlanId());
         assertEquals("testTitle1", result.get(0).getTitle());
         assertEquals("testDescription1", result.get(0).getDescription());
         assertEquals(2L, result.get(1).getUserId());
-        assertEquals(2L, result.get(1).getScheduleId());
+        assertEquals(2L, result.get(1).getTotalPlanId());
         assertEquals("testTitle2", result.get(1).getTitle());
         assertEquals("testDescription2", result.get(1).getDescription());
     }

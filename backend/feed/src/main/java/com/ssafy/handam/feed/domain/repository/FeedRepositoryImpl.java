@@ -50,8 +50,8 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable) {
-        return feedJpaRepository.findByIdIn(feedIds, pageable);
+    public List<Feed> findByIdIn(List<Long> feedIds) {
+        return feedJpaRepository.findByIdIn(feedIds);
     }
 
     @Override

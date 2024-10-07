@@ -22,7 +22,7 @@ public class Feed extends BaseEntity {
     private Long id;
 
     private String placeName;
-    private Long scheduleId;
+    private Long totalPlanId;
     private Long userId;
     private String title;
     private String content;
@@ -41,7 +41,7 @@ public class Feed extends BaseEntity {
     @Builder
     private Feed(
             String placeName,
-            Long scheduleId,
+            Long totalPlanId,
             String title,
             String content,
             String imageUrl,
@@ -53,7 +53,7 @@ public class Feed extends BaseEntity {
             Long userId
     ) {
         this.placeName = placeName;
-        this.scheduleId = scheduleId;
+        this.totalPlanId = totalPlanId;
         this.title = title;
         this.content = content;
         this.imageUrl = imageUrl;

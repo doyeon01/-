@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public record FeedDetailDto(
         Long id,
-        Long scheduleId,
+        Long totalPlanId,
         String placeName,
         Long userId,
         String title,
@@ -28,7 +28,7 @@ public record FeedDetailDto(
                 "N/A";
         return new FeedDetailDto(
                 feed.getId(),
-                feed.getScheduleId(),
+                feed.getTotalPlanId(),
                 feed.getPlaceName(),
                 feed.getUserId(),
                 feed.getTitle(),

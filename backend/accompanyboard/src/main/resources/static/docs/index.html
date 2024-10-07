@@ -508,12 +508,12 @@ body.book #toc,body.book #preamble,body.book h1.sect0,body.book .sect1>h2{page-b
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">POST /api/v1/accompanyboards/articles/create HTTP/1.1
 Content-Type: application/json
 Accept: application/json
-Content-Length: 105
+Content-Length: 106
 Host: localhost:8080
 
 {
   "userId" : 1,
-  "scheduleId" : 1,
+  "totalPlanId" : 1,
   "title" : "testTitle",
   "description" : "testDescription"
 }</code></pre>
@@ -526,16 +526,20 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 191
+Content-Length: 342
 
 {
   "success" : true,
   "response" : {
     "id" : 1,
     "userId" : 1,
-    "scheduleId" : 1,
+    "totalPlanId" : 1,
+    "profileImageUrl" : "http://example.com/profile.jpg",
+    "nickName" : "김민주",
     "title" : "testTitle",
-    "description" : "testDescription"
+    "description" : "testDescription",
+    "createdDate" : "2024-10-02",
+    "commentCount" : 0
   },
   "error" : null
 }</code></pre>
@@ -563,7 +567,7 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock">사용자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
 </tr>
@@ -612,9 +616,19 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.title</code></p></td>
@@ -625,6 +639,16 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.commentCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -642,7 +666,7 @@ Content-Length: 191
 <h4 id="_http_request_2"><a class="link" href="#_http_request_2">HTTP Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles?page=0&amp;size=10 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -653,7 +677,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 190
+Content-Length: 374
 
 {
   "success" : true,
@@ -661,9 +685,14 @@ Content-Length: 190
     "articles" : [ {
       "id" : 1,
       "userId" : 1,
-      "scheduleId" : 1,
-      "title" : "testTitle"
-    } ]
+      "totalPlanId" : 1,
+      "profileImageUrl" : "http://example.com/profile.jpg",
+      "nickName" : "김민주",
+      "title" : "testTitle",
+      "createdDate" : "2024-10-02"
+    } ],
+    "currentPage" : 0,
+    "hasNextPage" : false
   },
   "error" : null
 }</code></pre>
@@ -701,14 +730,39 @@ Content-Length: 190
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.currentPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.hasNextPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -737,16 +791,20 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 191
+Content-Length: 342
 
 {
   "success" : true,
   "response" : {
     "id" : 1,
     "userId" : 1,
-    "scheduleId" : 1,
+    "totalPlanId" : 1,
+    "profileImageUrl" : "http://example.com/profile.jpg",
+    "nickName" : "김민주",
     "title" : "testTitle",
-    "description" : "testDescription"
+    "description" : "testDescription",
+    "createdDate" : "2024-10-02",
+    "commentCount" : 5
   },
   "error" : null
 }</code></pre>
@@ -803,9 +861,19 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.title</code></p></td>
@@ -816,6 +884,16 @@ Content-Length: 191
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.commentCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -853,7 +931,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 168
+Content-Length: 258
 
 {
   "success" : true,
@@ -861,6 +939,8 @@ Content-Length: 168
     "id" : 1,
     "userId" : 1,
     "accompanyBoardArticleId" : 1,
+    "nickName" : "김민주",
+    "profileImageUrl" : "http://example.com/profile.jpg",
     "content" : "testContent"
   },
   "error" : null
@@ -938,9 +1018,19 @@ Content-Length: 168
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 ID</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 ID</p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 내용</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -969,7 +1059,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 207
+Content-Length: 301
 
 {
   "success" : true,
@@ -978,6 +1068,8 @@ Content-Length: 207
       "id" : 1,
       "userId" : 1,
       "accompanyBoardArticleId" : 1,
+      "profileImageUrl" : "김민주",
+      "nickName" : "http://example.com/profile.jpg",
       "content" : "testContent"
     } ]
   },
@@ -1041,6 +1133,16 @@ Content-Length: 207
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 ID</p></td>
 </tr>
 <tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.comments[].profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.comments[].nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
+</tr>
+<tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.comments[].content</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">댓글 내용</p></td>
@@ -1061,7 +1163,7 @@ Content-Length: 207
 <h4 id="_http_request_6"><a class="link" href="#_http_request_6">HTTP Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles/user/1 HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles/user/1?page=0&amp;size=10 HTTP/1.1
 Host: localhost:8080</code></pre>
 </div>
 </div>
@@ -1072,7 +1174,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 232
+Content-Length: 438
 
 {
   "success" : true,
@@ -1080,10 +1182,16 @@ Content-Length: 232
     "articles" : [ {
       "id" : 1,
       "userId" : 1,
-      "scheduleId" : 1,
+      "totalPlanId" : 1,
       "title" : "testTitle",
-      "description" : "testDescription"
-    } ]
+      "description" : "testDescription",
+      "createdDate" : "2024-10-02",
+      "commentCount" : 5,
+      "address" : "서울",
+      "planImageUrl" : "https://example.com/planImageUrl"
+    } ],
+    "currentPage" : 0,
+    "hasNextPage" : false
   },
   "error" : null
 }</code></pre>
@@ -1140,7 +1248,7 @@ Content-Length: 232
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
 </tr>
@@ -1153,6 +1261,36 @@ Content-Length: 232
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].description</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 내용</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].address</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">일정 지역</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].planImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">일정 썸네일 이미지 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].commentCount</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">댓글 수</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.currentPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.hasNextPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -1170,7 +1308,7 @@ Content-Length: 232
 <h4 id="_http_request_7"><a class="link" href="#_http_request_7">HTTP Request</a></h4>
 <div class="listingblock">
 <div class="content">
-<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles/search?title=coffee HTTP/1.1
+<pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">GET /api/v1/accompanyboards/articles/search?title=Title&amp;page=0&amp;size=10 HTTP/1.1
 Content-Type: application/json
 Accept: application/json
 Host: localhost:8080</code></pre>
@@ -1183,7 +1321,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="highlightjs highlight nowrap"><code class="language-http hljs" data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 190
+Content-Length: 374
 
 {
   "success" : true,
@@ -1191,9 +1329,14 @@ Content-Length: 190
     "articles" : [ {
       "id" : 1,
       "userId" : 1,
-      "scheduleId" : 1,
-      "title" : "testTitle"
-    } ]
+      "totalPlanId" : 1,
+      "profileImageUrl" : "http://example.com/profile.jpg",
+      "nickName" : "김민주",
+      "title" : "testTitle",
+      "createdDate" : "2024-10-02"
+    } ],
+    "currentPage" : 0,
+    "hasNextPage" : false
   },
   "error" : null
 }</code></pre>
@@ -1214,6 +1357,14 @@ Content-Length: 190
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">검색 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>page</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">페이지 번호 (0부터 시작)</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>size</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">게시글 개수</p></td>
 </tr>
 </tbody>
 </table>
@@ -1249,14 +1400,39 @@ Content-Length: 190
 <td class="tableblock halign-left valign-top"><p class="tableblock">작성자 ID</p></td>
 </tr>
 <tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].scheduleId</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].totalPlanId</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">일정 ID</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].profileImageUrl</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 프로필 사진 경로</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].nickName</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성자 이름</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].title</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">동행 게시글 제목</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.articles[].createdDate</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">작성 날짜</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.currentPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">현재 페이지</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>response.hasNextPage</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">다음 페이지 존재 여부</p></td>
 </tr>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>error</code></p></td>
@@ -1274,7 +1450,7 @@ Content-Length: 190
 <div id="footer">
 <div id="footer-text">
 Version 0.0.1-SNAPSHOT<br>
-Last updated 2024-10-02 10:41:49 +0900
+Last updated 2024-10-02 10:50:13 +0900
 </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.18.3/highlight.min.js"></script>

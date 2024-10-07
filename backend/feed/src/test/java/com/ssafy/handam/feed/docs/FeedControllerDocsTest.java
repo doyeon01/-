@@ -50,8 +50,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.RequestParam;
 
 class FeedControllerDocsTest extends RestDocsSupport {
 
@@ -91,7 +89,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -166,7 +164,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -257,7 +255,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 32.1323,
                 "CAFE",
                 0,
-                false
+                false,
+                LocalDateTime.now().toString()
         );
 
         given(feedService.getFeedDetails(any(Long.class), any())).willReturn(feedDetailResponse);
@@ -301,6 +300,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("장소 타입"),
                                 fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
                                         .description("좋아요 여부"),
+                                fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
+                                        .description("피드 생성일자"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -310,7 +311,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void createFeedTest() throws Exception {
         FeedCreationRequest request = FeedCreationRequest.builder()
-                .scheduleId(1L)
+                .totalPlanId(1L)
                 .userId(1L)
                 .title("Test Title")
                 .content("Test Content")
@@ -453,7 +454,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -526,7 +527,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -712,7 +713,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("경도"),
                                 fieldWithPath("response[].feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response[].feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response[].feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response[].feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -790,7 +791,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("경도"),
                                 fieldWithPath("response[].feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response[].feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response[].feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response[].feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),
@@ -865,7 +866,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("success").description("성공 여부"),
                                 fieldWithPath("response.feeds[].id").type(JsonFieldType.NUMBER)
                                         .description("피드 ID"),
-                                fieldWithPath("response.feeds[].scheduleId").type(JsonFieldType.NUMBER)
+                                fieldWithPath("response.feeds[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
                                 fieldWithPath("response.feeds[].placeName").type(JsonFieldType.STRING)
                                         .description("장소 이름"),

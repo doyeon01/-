@@ -19,9 +19,10 @@ public class AccompanyBoardArticleDomainService {
     private final AccompanyBoardArticleRepository accompanyBoardArticleRepository;
 
     public Article createArticle(AccompanyBoardArticleCreationRequest request) {
+
         return accompanyBoardArticleRepository.save(Article.builder()
                 .userId(request.userId())
-                .scheduleId(request.scheduleId())
+                .totalPlanId(request.totalPlanId())
                 .title(request.title())
                 .description(request.description())
                 .build());
@@ -32,14 +33,18 @@ public class AccompanyBoardArticleDomainService {
     }
 
     public Article getArticleDetails(Long articleId) {
+
         return accompanyBoardArticleRepository.findById(articleId).orElseThrow(() -> new IllegalArgumentException("Article not found"));
     }
 
     public Page<Article> getArticlesByUser(Long userId, Pageable pageable) {
+
         return accompanyBoardArticleRepository.findByUserId(userId, pageable);
     }
 
     public Page<Article> getArticlesByTitle(String title, Pageable pageable) {
-        return accompanyBoardArticleRepository.findByTitleContains(title, pageable); }
+
+        return accompanyBoardArticleRepository.findByTitleContains(title, pageable);
+    }
 
 }
