@@ -349,7 +349,6 @@ public class FeedService {
                 pageSize
         );
     }
-
     private List<Long> convertStringIdsToLong(List<String> stringIds) {
         return stringIds.stream()
                 .map(Long::parseLong)
