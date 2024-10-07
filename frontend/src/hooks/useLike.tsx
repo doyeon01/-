@@ -3,7 +3,7 @@ import { postLike, postUnlike } from '../services/api/FeedService';
 
 const useLike = (initialLike: boolean, feedId: number | null) => {
   const [isLike, setIsLike] = useState(initialLike);
-  const [likeCount, setLikeCount] = useState(0); // likeCount 상태 추가
+  const [likeCount, setLikeCount] = useState(0); 
 
   const toggleLike = async () => {
     setIsLike(prev => !prev); 
