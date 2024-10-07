@@ -1,14 +1,6 @@
 package com.ssafy.handam.feed.application;
 
-import co.elastic.clients.elasticsearch.ElasticsearchClient;
-import co.elastic.clients.elasticsearch.core.GetRequest;
-import co.elastic.clients.elasticsearch.core.GetResponse;
-import co.elastic.clients.elasticsearch.core.SearchRequest;
-import co.elastic.clients.elasticsearch.core.SearchResponse;
-import co.elastic.clients.elasticsearch.core.search.Hit;
-import co.elastic.clients.json.jackson.JacksonJsonpMapper;
-import co.elastic.clients.transport.ElasticsearchTransport;
-import co.elastic.clients.transport.rest_client.RestClientTransport;
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
@@ -39,24 +31,16 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.User;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
-import org.apache.http.HttpHost;
-import org.elasticsearch.client.RequestOptions;
-import org.elasticsearch.client.RestClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
-import org.springframework.data.elasticsearch.core.SearchHit;
-import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -125,7 +109,7 @@ public class FeedService {
     public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath, String accessToken) {
         UserDto userDto = userApiClient.getUserById(request.userId(), accessToken);
         Feed feed = feedDomainService.createFeed(request, savedImagePath, userDto);
-        return FeedResponse.from(feed,userDto);
+        return FeedResponse.from(feed, userDto);
     }
 
     public String saveImage(MultipartFile imageFile) {
@@ -185,14 +169,20 @@ public class FeedService {
         List<Object> cachedData = redisTemplate.opsForList().range(redisKey, 0, -1);
         List<ClusterResponse> clusteredFeeds = new ArrayList<>();
 
-        if (cacheHit(cachedData)) {
+        if (cacheMiss(cachedData)) {
             for (Object obj : cachedData) {
                 ClusterResponse cluster = objectMapper.convertValue(obj, ClusterResponse.class);
                 clusteredFeeds.add(cluster);
             }
         } else {
             clusteredFeeds = performClustering(userId, token);
-            redisTemplate.opsForList().rightPushAll(redisKey, clusteredFeeds);
+            for (ClusterResponse cluster : clusteredFeeds) {
+                try {
+                    redisTemplate.opsForList().rightPush(redisKey, objectMapper.writeValueAsString(cluster));
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+            }
             redisTemplate.expire(redisKey, Duration.ofHours(1));
         }
 
@@ -203,7 +193,13 @@ public class FeedService {
         String redisKey = "userCluster:" + userId;
         redisTemplate.delete(redisKey);
         List<ClusterResponse> refreshedFeeds = performClustering(userId, token);
-        redisTemplate.opsForList().rightPushAll(redisKey, refreshedFeeds);
+        for (ClusterResponse cluster : refreshedFeeds) {
+            try {
+                redisTemplate.opsForList().rightPush(redisKey, objectMapper.writeValueAsString(cluster));
+            } catch (JsonProcessingException e) {
+                e.printStackTrace();
+            }
+        }
         redisTemplate.expire(redisKey, Duration.ofHours(1));
         return refreshedFeeds;
     }
@@ -235,7 +231,7 @@ public class FeedService {
         );
     }
 
-    private boolean cacheHit(List<Object> cachedData) {
+    private boolean cacheMiss(List<Object> cachedData) {
         return cachedData == null || cachedData.isEmpty();
     }
 
@@ -332,7 +328,6 @@ public class FeedService {
     }
 
 
-
     public RecommendedFeedsForUserResponse getRecommendedFeeds(Long userId, int page, int pageSize) {
         // Redis에서 피드 ID들을 가져와서 feedDomainService로 넘기는 부분
         List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, pageSize);
@@ -356,6 +351,7 @@ public class FeedService {
                 pageSize
         );
     }
+
     private List<Long> convertStringIdsToLong(List<String> stringIds) {
         return stringIds.stream()
                 .map(Long::parseLong)
