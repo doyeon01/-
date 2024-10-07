@@ -2,7 +2,6 @@ package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
-
 import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
@@ -51,13 +50,14 @@ public record FeedPreviewDto(
                 formattedCreatedDate
         );
     }
+
     public static FeedPreviewDto fromDocument(FeedDocument feedDocument, boolean isLiked) {
         String formattedCreatedDate = (feedDocument.getCreatedDate() != null) ?
                 feedDocument.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
                 "N/A";
         return new FeedPreviewDto(
                 feedDocument.getId(),
-                feedDocument.getScheduleId(),
+                feedDocument.getTotalPlanId(),
                 feedDocument.getPlaceName(),
                 feedDocument.getTitle(),
                 feedDocument.getContent(),
