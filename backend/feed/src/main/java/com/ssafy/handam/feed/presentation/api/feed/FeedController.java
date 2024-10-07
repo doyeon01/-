@@ -27,6 +27,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -178,6 +179,17 @@ public class FeedController {
                     )
             );
         }
+    }
+
+    @GetMapping("/recommended")
+    public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeeds(
+            @RequestParam Long userId, //쿠키에서 가져오는걸로 변경예정
+            @RequestParam int page,
+            @RequestParam int pageSize) {
+
+        RecommendedFeedsForUserResponse response = feedService.getRecommendedFeeds(userId, page, pageSize);
+
+        return success(response);
     }
 }
 

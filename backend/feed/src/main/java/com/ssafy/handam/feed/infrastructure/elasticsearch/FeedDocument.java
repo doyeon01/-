@@ -2,6 +2,8 @@ package com.ssafy.handam.feed.infrastructure.elasticsearch;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
 import java.time.LocalDate;
+
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +12,6 @@ import org.springframework.data.elasticsearch.annotations.Document;
 import org.springframework.data.elasticsearch.annotations.Field;
 import org.springframework.data.elasticsearch.annotations.FieldType;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
-
 @Data
 @Builder
 @AllArgsConstructor
@@ -65,7 +66,14 @@ public class FeedDocument {
     @Field(type = FieldType.Object)
     private GeoPoint location;
 
-    public static FeedDocument from(Feed feed) {
+    // 추가 필드: 사용자 정보
+    @Field(type = FieldType.Text)
+    private String profileImageUrl;
+
+    @Field(type = FieldType.Text)
+    private String userNickname;
+
+    public static FeedDocument from(Feed feed, UserDto userDto) {
         return FeedDocument.builder()
                 .id(feed.getId())
                 .placeName(feed.getPlaceName())
@@ -83,6 +91,9 @@ public class FeedDocument {
                 .location(new GeoPoint(feed.getLatitude(), feed.getLongitude()))
                 .placeType(feed.getPlaceType().name())
                 .createdDate(feed.getCreatedDate().toLocalDate())
+                .profileImageUrl(userDto.profileImage())
+                .userNickname(userDto.nickname())
                 .build();
     }
 }
+

@@ -1,6 +1,7 @@
 package com.ssafy.handam.feed.domain.repository;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +14,8 @@ public interface FeedRepository {
 
     Feed save(Feed feed);
 
+    Feed save(Feed feed, UserDto userDto);
+
     Page<Feed> findByUserId(Long userId, Pageable pageable);
 
     Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable);
@@ -20,4 +23,6 @@ public interface FeedRepository {
     Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
 
     Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable);
+
+    Iterable<FeedDocument> findAllById(List<Long> feedIds);
 }

@@ -1,5 +1,14 @@
 package com.ssafy.handam.feed.application;
 
+import co.elastic.clients.elasticsearch.ElasticsearchClient;
+import co.elastic.clients.elasticsearch.core.GetRequest;
+import co.elastic.clients.elasticsearch.core.GetResponse;
+import co.elastic.clients.elasticsearch.core.SearchRequest;
+import co.elastic.clients.elasticsearch.core.SearchResponse;
+import co.elastic.clients.elasticsearch.core.search.Hit;
+import co.elastic.clients.json.jackson.JacksonJsonpMapper;
+import co.elastic.clients.transport.ElasticsearchTransport;
+import co.elastic.clients.transport.rest_client.RestClientTransport;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
@@ -29,15 +38,24 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.UUID;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
+import org.apache.catalina.User;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
+import org.apache.http.HttpHost;
+import org.elasticsearch.client.RequestOptions;
+import org.elasticsearch.client.RestClient;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.SearchHit;
+import org.springframework.data.elasticsearch.core.SearchHits;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -104,8 +122,9 @@ public class FeedService {
     }
 
     public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath, String accessToken) {
-        Feed feed = feedDomainService.createFeed(request, savedImagePath);
-        return FeedResponse.from(feed, userApiClient.getUserById(feed.getUserId(), accessToken));
+        UserDto userDto = userApiClient.getUserById(request.userId(), accessToken);
+        Feed feed = feedDomainService.createFeed(request, savedImagePath, userDto);
+        return FeedResponse.from(feed,userDto);
     }
 
     public String saveImage(MultipartFile imageFile) {
@@ -305,4 +324,45 @@ public class FeedService {
         );
     }
 
+
+
+    public RecommendedFeedsForUserResponse getRecommendedFeeds(Long userId, int page, int pageSize) {
+        // Redis에서 피드 ID들을 가져와서 feedDomainService로 넘기는 부분
+        List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, pageSize);
+        List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, pageSize);
+        List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, pageSize);
+        List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, pageSize);
+
+        // Feed IDs를 Long으로 변환
+        List<Long> recommendedFeedIdsLong = convertStringIdsToLong(recommendedFeedIds);
+        List<Long> topLikedFeedIdsLong = convertStringIdsToLong(topLikedFeedIds);
+        List<Long> trendingFeedIdsLong = convertStringIdsToLong(trendingFeedIds);
+        List<Long> randomFeedIdsLong = convertStringIdsToLong(randomFeedIds);
+
+        // feedDomainService로 feedId들을 넘겨서 추천 피드를 가져옴
+        return feedDomainService.getRecommendedFeeds(
+                recommendedFeedIdsLong,
+                topLikedFeedIdsLong,
+                trendingFeedIdsLong,
+                randomFeedIdsLong,
+                page,
+                pageSize
+        );
+    }
+
+    private List<Long> convertStringIdsToLong(List<String> stringIds) {
+        return stringIds.stream()
+                .map(Long::parseLong)
+                .collect(Collectors.toList());
+    }
+
+    // Redis에서 피드 ID를 가져오는 메서드
+    private List<String> getFeedIdsFromRedis(String redisKey, int page, int pageSize) {
+        long start = (long) page * pageSize;
+        long end = start + pageSize - 1;
+        return redisTemplate.opsForList().range(redisKey, start, end)
+                .stream()
+                .map(Object::toString) // Object를 String으로 변환
+                .collect(Collectors.toList());
+    }
 }
