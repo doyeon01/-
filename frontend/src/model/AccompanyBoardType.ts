@@ -23,9 +23,9 @@ export interface ArticleType {
   userId: number;
   totalPlanId: number;
   title: string;
-  profileImage: string; 
-  nickname: string;
-  accompanyDate: string;
+  profileImageUrl: string; 
+  nickName: string;
+  createdDate:string;
 }
 
 export interface ArticleApiResponseType {

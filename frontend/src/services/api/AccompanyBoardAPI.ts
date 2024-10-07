@@ -38,7 +38,7 @@ export const createArticles = async (data: CreateArticleType): Promise<CreateArt
 // 게시글 목록 요청
 export const fetchArticles = async (page:number) => {
   try {
-    const response = await axios.get<ArticleApiResponseType>(`${BaseUrl}/articles?page=${page}`, {
+    const response = await axios.get<ArticleApiResponseType>(`${BaseUrl}/articles?page=${page}&size=20`, {
       withCredentials: true,  
     });
     return response.data;
