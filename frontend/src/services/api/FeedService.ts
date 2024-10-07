@@ -1,11 +1,11 @@
 import axios from 'axios';
 import { FeedCommentsAPiResponseType, FeedDetailAPiResponseType } from '../../model/FeedType';
-import { UserId } from '../../Recoil/atoms/Auth';
-import { useRecoilValue } from 'recoil';
+// import { UserId } from '../../Recoil/atoms/Auth';
+// import { useRecoilValue } from 'recoil';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
-const userId = useRecoilValue(UserId);
-
+// const userId = useRecoilValue(UserId);
+const userId = 2896
 
 // 피드 생성 API
 export const FeedCreate = async (data: FormData) => {
