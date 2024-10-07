@@ -23,12 +23,12 @@ export const FeedCreate = async (data: FormData) => {
 export const FeedList = (userId: number, page: number, size = 6) => {
   return axios.get(`${BaseUrl}/users/created`, {
     params: {
-      userId: 2892,
+      userId: userId,
       page: page,
       size: size,
       sort: "createdDate,desc"
     },
-    // withCredentials: true, 
+    withCredentials: true, 
   });
 };
 
@@ -62,35 +62,35 @@ export const postFeedRecommend = (page = 1, size = 10) => {
 
 //맞춤피드 상세조회 API
 export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => {
-  return axios.get(`${BaseUrl}/16471`, {
+  return axios.get(`${BaseUrl}/${id}`, {
     headers: {
       'Content-Type': 'application/json',
     },   
-    // withCredentials: true, 
+    withCredentials: true, 
   });
 };
 
 //피드 댓글 API
   export const getFeedComment = (id: number):Promise<FeedCommentsAPiResponseType> => {
-    return axios.get(`${BaseUrl}/16471/comments`, {
+    return axios.get(`${BaseUrl}/${id}/comments`, {
       headers: {
         'Content-Type': 'application/json',
       },
-      // withCredentials: true, 
+      withCredentials: true, 
     });
   };
 
   //댓글 등록 API
   export const postComment = async (feedId: number, content: string) => {
     try {
-      const response = await axios.post(`${BaseUrl}/16471/comments`, {
+      const response = await axios.post(`${BaseUrl}/${feedId}/comments`, {
         userId,
         content,
       }, {
         headers: {
           'Content-Type': 'application/json',
         },
-        // withCredentials: true, 
+        withCredentials: true, 
       });
   
       return response.data;
