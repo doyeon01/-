@@ -274,6 +274,13 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     py={1}
                   />
                   <ButtonLikeCategory
+                    label="# 카페"
+                    initialClicked={selectedCategory === 'CAFE'}
+                    onClick={() => handle.CategoryClick('CAFE')}
+                    px={2}
+                    py={1}
+                  />
+                  <ButtonLikeCategory
                     label="# 기타"
                     initialClicked={selectedCategory === 'ETC'}
                     onClick={() => handle.CategoryClick('ETC')}
