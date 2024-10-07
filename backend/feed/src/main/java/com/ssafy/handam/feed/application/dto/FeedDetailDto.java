@@ -28,7 +28,7 @@ public record FeedDetailDto(
                 "N/A";
         return new FeedDetailDto(
                 feed.getId(),
-                feed.getScheduleId(),
+                feed.getTotalPlanId(),
                 feed.getPlaceName(),
                 feed.getUserId(),
                 feed.getTitle(),

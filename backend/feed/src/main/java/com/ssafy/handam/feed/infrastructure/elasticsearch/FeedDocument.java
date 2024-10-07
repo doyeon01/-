@@ -69,7 +69,7 @@ public class FeedDocument {
         return FeedDocument.builder()
                 .id(feed.getId())
                 .placeName(feed.getPlaceName())
-                .scheduleId(feed.getScheduleId())
+                .scheduleId(feed.getTotalPlanId())
                 .userId(feed.getUserId())
                 .title(feed.getTitle())
                 .content(feed.getContent())

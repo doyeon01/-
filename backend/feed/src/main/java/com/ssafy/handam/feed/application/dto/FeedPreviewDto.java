@@ -30,7 +30,7 @@ public record FeedPreviewDto(
                 "N/A";
         return new FeedPreviewDto(
                 feed.getId(),
-                feed.getScheduleId(),
+                feed.getTotalPlanId(),
                 feed.getPlaceName(),
                 feed.getTitle(),
                 feed.getContent(),
