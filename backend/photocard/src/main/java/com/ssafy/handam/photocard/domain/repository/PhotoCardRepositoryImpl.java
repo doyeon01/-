@@ -18,7 +18,7 @@ public class PhotoCardRepositoryImpl implements PhotoCardRepository {
     public PhotoCard save(PhotoCard photocard) { return photoCardJpaRepository.save(photocard); }
 
     @Override
-    public PhotoCard findByFeedId(Long feedId) { return photoCardJpaRepository.findByFeedId(feedId); }
+    public PhotoCard findByTotalPlanId(Long totalPlanId) { return photoCardJpaRepository.findByTotalPlanId(totalPlanId); }
 
     @Override
     public Page<PhotoCard> findByUserId(Long userId, Pageable pageable) { return photoCardJpaRepository.findByUserId(userId, pageable); }

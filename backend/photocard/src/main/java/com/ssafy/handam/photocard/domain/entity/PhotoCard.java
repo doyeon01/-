@@ -18,13 +18,15 @@ public class PhotoCard extends BaseEntity{
     private Long id;
 
     private Long userId;
-    private Long feedId;
+    private Long totalPlanId;
     private String photoCardUrl;
+    private String caption;
 
-    public PhotoCard(Long userId, Long feedId, String photoCardUrl) {
+    public PhotoCard(Long userId, Long totalPlanId, String photoCardUrl, String caption) {
 
         this.userId = userId;
-        this.feedId = feedId;
+        this.totalPlanId = totalPlanId;
         this.photoCardUrl = photoCardUrl;
+        this.caption = caption;
     }
 }

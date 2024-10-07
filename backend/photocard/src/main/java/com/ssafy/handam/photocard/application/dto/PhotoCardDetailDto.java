@@ -9,6 +9,7 @@ public record PhotoCardDetailDto(
         Long userId,
         Long feedId,
         String photoCardUrl,
+        String caption,
         String createdDate) {
 
     public static PhotoCardDetailDto of(PhotoCard photoCard) {
@@ -19,8 +20,9 @@ public record PhotoCardDetailDto(
         return new PhotoCardDetailDto(
                 photoCard.getId(),
                 photoCard.getUserId(),
-                photoCard.getFeedId(),
+                photoCard.getTotalPlanId(),
                 photoCard.getPhotoCardUrl(),
+                photoCard.getCaption(),
                 formattedCreatedDate
         );
     }

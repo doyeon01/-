@@ -2,6 +2,7 @@ package com.ssafy.handam.photocard.infrastructure.client;
 
 import com.ssafy.handam.photocard.infrastructure.client.dto.PhotoCardUrlDto;
 import com.ssafy.handam.photocard.presentation.request.PhotoCardCreationRequest;
+import com.ssafy.handam.photocard.presentation.request.PhotoCardCreationToGpuRequest;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,11 +26,11 @@ public class GpuApiClient {
     @Value("${gpu.service.url}")
     private String gpuServiceUrl;
 
-    public PhotoCardUrlDto getPhotoCardUrl(PhotoCardCreationRequest request) {
+    public PhotoCardUrlDto getPhotoCardUrl(PhotoCardCreationToGpuRequest request) {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
 
-        HttpEntity<PhotoCardCreationRequest> requestEntity = new HttpEntity<>(request, headers);
+        HttpEntity<PhotoCardCreationToGpuRequest> requestEntity = new HttpEntity<>(request, headers);
 
         try {
             ResponseEntity<PhotoCardUrlDto> response = restTemplate.exchange(

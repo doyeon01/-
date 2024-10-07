@@ -3,19 +3,22 @@ package com.ssafy.handam.photocard.presentation.request;
 public record PhotoCardSaveRequest(
 
         Long userId,
-        Long feedId,
-        String photoCardUrl) {
+        Long totalPlanId,
+        String photoCardUrl,
+        String caption) {
 
     public static PhotoCardSaveRequest of(
 
             Long userId,
-            Long feedId,
-            String photoCardUrl
+            Long totalPlanId,
+            String photoCardUrl,
+            String caption
     ) {
 
         return new PhotoCardSaveRequest(
                 userId,
-                feedId,
-                photoCardUrl);
+                totalPlanId,
+                photoCardUrl,
+                caption);
     }
 }
