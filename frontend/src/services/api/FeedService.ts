@@ -61,7 +61,7 @@ export const postFeedRecommend = (page = 1, size = 10) => {
 
 
 //맞춤피드 상세조회 API
-export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => {
+export const getFeedDetail = (id: number) => {
   return axios.get(`${BaseUrl}/${id}`, {
     headers: {
       'Content-Type': 'application/json',
@@ -71,7 +71,8 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
 };
 
 //피드 댓글 API
-  export const getFeedComment = (id: number):Promise<FeedCommentsAPiResponseType> => {
+  export const getFeedComment = (id: number) => {
+    
     return axios.get(`${BaseUrl}/${id}/comments`, {
       headers: {
         'Content-Type': 'application/json',
@@ -101,9 +102,9 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
   };
 
   //좋아요 API
-  export const postLike = async (feedId: number): Promise<void> => {
+  export const postLike = async (feedId: number)=> {
     try {
-      await axios.post(`${BaseUrl}/like/${feedId}?userId=${userId}`, {}, {
+      const response = await axios.post(`${BaseUrl}/like/${feedId}?userId=${userId}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -111,6 +112,7 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
         withCredentials: true, 
       });
       console.log(`피드 ${feedId}에 좋아요가 등록되었습니다.`);
+      return response.data
     } catch (error) {
       console.error('좋아요 등록 실패:', error);
       throw error;
@@ -118,9 +120,9 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
   };
 
   //좋아요 취소 api
-  export const postUnlike = async (feedId: number): Promise<void> => {
+  export const postUnlike = async (feedId: number) => {
     try {
-      await axios.post(`${BaseUrl}/unlike/${feedId}?userId=${userId}`, {}, {
+      const response = await axios.post(`${BaseUrl}/unlike/${feedId}?userId=${userId}`, {}, {
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
@@ -128,6 +130,7 @@ export const getFeedDetail = (id: number):Promise<FeedDetailAPiResponseType> => 
         withCredentials: true, 
       });
       console.log(`피드 ${feedId}에 좋아요가 취소되었습니다.`);
+      return response.data
     } catch (error) {
       console.error('좋아요 취소 실패:', error);
       throw error;

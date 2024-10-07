@@ -4,8 +4,9 @@ import ModalCompanionDetail from '../organisms/Modal/ModalCompanionDetail';
 import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
 import KakaoMap from '../organisms/KaKaoMap';
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
-import { fetchArticles, getArticleSearch } from '../../services/api/AccompanyBoardAPI';
+import { fetchArticles, getAccompanyBoardSearch } from '../../services/api/AccompanyBoardAPI';
 import { AccompanyBoardResponseType, ArticleType } from '../../model/AccompanyBoardType';
+import { UserIconMini2 } from '../../assets/icons/svg';
 
 export const CompanionPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -29,15 +30,13 @@ export const CompanionPage: React.FC = () => {
 
  
   const handleSearch = async () => {
-    const data:AccompanyBoardResponseType = await getArticleSearch(searchTerm); 
+    const data:AccompanyBoardResponseType = await getAccompanyBoardSearch(searchTerm);    
     console.log(data);
-    
+     
     if (data.success) {
       setArticles(data.response.articles); 
     } else {
       console.log(data.error);
-      console.log('error');
-      
     }
   };
 
@@ -109,12 +108,16 @@ export const CompanionPage: React.FC = () => {
               <div className="flex-grow">
                 <div className="font-semibold text-sm">{article.title}</div>
                 <div className="flex flex-row">
-                  <img
-                    src={article.profileImageUrl}
-                    alt={article.title}
-                    className="w-8 h-8 rounded-full object-cover mr-1"
-                  />
-                  <div className={`text-xs mt-2`}>{article.nickName}</div>
+                  {article.profileImageUrl ? (
+                    <img
+                      src={article.profileImageUrl}
+                      alt={article.title}
+                      className="w-8 h-8 rounded-full object-cover mr-1"
+                    />
+                  ) : (
+                    <UserIconMini2/>
+                  )}
+                  <div className="text-xs mt-2">{article.nickName}</div>
                 </div>
               </div>
             </div>

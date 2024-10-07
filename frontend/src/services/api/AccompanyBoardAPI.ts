@@ -108,11 +108,9 @@ export const articleList = (userId: number, page: number, size = 6) => {
 };
 
 
-export const getArticleSearch = async (title: string): Promise<AccompanyBoardResponseType> => { 
-  console.log(title);
-  
+export const getAccompanyBoardSearch = async (title: string): Promise<AccompanyBoardResponseType> => {   
   try {
-    const response = await axios.get(`${BaseUrl}/articles/search?title=${title}&page=0&size=10`, {
+    const response = await axios.get(`${BaseUrl}/articles/search?`, {
       params: {
         title:title,
         page: 0,
@@ -120,10 +118,12 @@ export const getArticleSearch = async (title: string): Promise<AccompanyBoardRes
       },
       withCredentials: true,  
     });
-    console.log(response);
-    
     return response.data;
-  } catch (error) {
-    throw new Error('API 요청 중 오류가 발생했습니다.');
+  } catch (error: any) {
+    return {
+      success: false,
+      response: {articles: [],currentPage: 0,hasNextPage: false},
+      error: error.message,
+    };
   }
 };

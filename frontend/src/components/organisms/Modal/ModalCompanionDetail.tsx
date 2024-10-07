@@ -5,6 +5,8 @@ import { UserId } from '../../../Recoil/atoms/Auth';
 import { useRecoilValue } from 'recoil';
 import { PlanDetailApi } from '../../../services/api/PlanService';
 import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
+import { UserIconMini3 } from '../../../assets/icons/svg';
+
 interface ModalCompanionDetailProps {
   selectedId: number;
 }
@@ -31,6 +33,8 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   useEffect(() => {
     const loadComment = async () => {
       const data = await fetchArticleComment(selectedId);
+      console.log(data);
+      
       if (data.success) {
         setComment(data.response.comments);
       } else {
@@ -111,11 +115,15 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
             <div>
               <div className='font-bold text-sm'>{articleDetail.title}</div>
               <div className='flex flex-row'>
-                <img 
-                  src={articleDetail.profileImageUrl} 
-                  alt={articleDetail.title} 
-                  className='w-6 h-6 rounded-full object-cover mr-1' 
-                />
+                {articleDetail.profileImageUrl ? (
+                  <img 
+                    src={articleDetail.profileImageUrl} 
+                    alt={articleDetail.title} 
+                    className='w-6 h-6 rounded-full object-cover mr-1' 
+                  />
+                ) : (
+                  <UserIconMini3/>
+                )}
                 <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
               </div>
             </div>
@@ -157,19 +165,28 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
         </div>
 
         {comment && (
-          <div className='border-t border-gray-300 py-2'>
-            <div className='font-bold text-lg mb-2'>댓글</div>
-            {comment.map((cmt, index) => (
-              <div key={index} className='flex items-start mb-4'>
-                <img src={cmt.profileImageUrl} alt='user' className='w-8 h-8 rounded-full object-cover mr-2' />
-                <div>
-                  <div className='font-bold text-sm'>{cmt.nickName}</div>
-                  <div className='text-gray-600 text-sm'>{cmt.content}</div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
+      <div className='border-t border-gray-300 py-2'>
+        <div className='font-bold text-lg mb-2'>댓글</div>
+        {comment.map((cmt, index) => (
+          <div key={index} className='flex items-start mb-4'>
+            {cmt.profileImageUrl ? (
+              <img 
+                src={cmt.profileImageUrl} 
+                alt='user' 
+                className='w-8 h-8 rounded-full object-cover mr-2' 
+              />
+            ) : (
+              <UserIconMini3 />
+            )}
+        <div>
+          <div className='font-bold text-sm'>{cmt.nickName}</div>
+          <div className='text-gray-600 text-sm'>{cmt.content}</div>
+        </div>
+      </div>
+    ))}
+  </div>
+)}
+
         <div className='h-10'></div>
       </div>
     </>

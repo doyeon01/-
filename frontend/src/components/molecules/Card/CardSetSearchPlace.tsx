@@ -60,7 +60,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
           </div>
         ))
       ) : (
-        <p>검색된 장소가 없습니다.</p>
+        <p className='flex items-center justify-center'>검색된 장소가 없습니다.</p>
       )}
       <div className='mb-20'/>
     </div>
