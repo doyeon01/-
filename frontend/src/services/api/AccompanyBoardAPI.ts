@@ -7,6 +7,7 @@ import {
   CreateCommentResponseType,
   CreateArticleType,
   CreateArticleApiResponseType,
+  AccompanyBoardResponseType,
 } from '../../model/AccompanyBoardType';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/accompanyboards';
@@ -104,4 +105,25 @@ export const articleList = (userId: number, page: number, size = 6) => {
     },
     withCredentials: true,  
   });
+};
+
+
+export const getArticleSearch = async (title: string): Promise<AccompanyBoardResponseType> => { 
+  console.log(title);
+  
+  try {
+    const response = await axios.get(`${BaseUrl}/articles/search?title=${title}&page=0&size=10`, {
+      params: {
+        title:title,
+        page: 0,
+        size: 10,
+      },
+      withCredentials: true,  
+    });
+    console.log(response);
+    
+    return response.data;
+  } catch (error) {
+    throw new Error('API 요청 중 오류가 발생했습니다.');
+  }
 };
