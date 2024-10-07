@@ -8,7 +8,8 @@ export const UserInfo = () => {
   });
 }
 
-export const getUserSearch = async ( keyword:string,date?: string): Promise<UserSearchResponseType> => {
+export const getUserSearch = async ( searchKeyword:string,date?: string): Promise<UserSearchResponseType> => {
+  const keyword = encodeURIComponent(searchKeyword);
   try {
     const response = await axios.get<UserSearchResponseType>(`${BaseUrl}/search`, {
       headers: {
