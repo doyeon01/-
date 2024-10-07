@@ -33,7 +33,7 @@ export const FeedList = (userId: number, page: number, size = 6) => {
 };
 
 // 좋아요한 피드 목록 조회 API
-export const LikeFeedList = (userId: number, page: number, size = 10) => {
+export const LikeFeedList = (userId: number, page: number, size = 100) => {
   return axios.get(`${BaseUrl}/liked`, {
     params: {
       userId: userId, 
