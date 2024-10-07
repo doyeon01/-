@@ -22,3 +22,7 @@ spring:
 user:
   service:
     url: http://j11c205.p.ssafy.io:8081/api/v1
+
+plan:
+  service:
+    url: http://j11c205a.p.ssafy.io:8082/api/v1

@@ -16,6 +16,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailByUserDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDetailDto;
 import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticlePreviewDto;
 import com.ssafy.handam.accompanyboard.presentation.request.article.AccompanyBoardArticleCreationRequest;
@@ -218,21 +219,21 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
     @Test
     @DisplayName("특정 사용자가 작성한 전체 동행 게시글 조회 API")
     void getArticlesByUserTest() throws Exception {
-        AccompanyBoardArticleDetailDto accompanyBoardArticleDetailDto = new AccompanyBoardArticleDetailDto(
+        AccompanyBoardArticleDetailByUserDto accompanyBoardArticleDetailByUserDto = new AccompanyBoardArticleDetailByUserDto(
                 1L,
                 1L,
                 1L,
-                "http://example.com/profile.jpg",
-                "김민주",
                 "testTitle",
                 "testDescription",
                 "2024-10-02",
-                5
+                5,
+                "서울",
+                "https://example.com/planImageUrl"
         );
 
         Long requestUserId = 1L;
 
-        AccompanyBoardArticlesByUserResponse response = AccompanyBoardArticlesByUserResponse.of(List.of(accompanyBoardArticleDetailDto), 0, false);
+        AccompanyBoardArticlesByUserResponse response = AccompanyBoardArticlesByUserResponse.of(List.of(accompanyBoardArticleDetailByUserDto), 0, false);
 
         Pageable pageable = PageRequest.of(0, 10);
 
@@ -258,16 +259,16 @@ public class AccompanyBoardArticleControllerDocsTest extends RestDocsSupport {
                                         .description("작성자 ID"),
                                 fieldWithPath("response.articles[].totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID"),
-                                fieldWithPath("response.articles[].profileImageUrl").type(JsonFieldType.STRING)
-                                        .description("작성자 프로필 사진 경로"),
-                                fieldWithPath("response.articles[].nickName").type(JsonFieldType.STRING)
-                                        .description("작성자 이름"),
                                 fieldWithPath("response.articles[].title").type(JsonFieldType.STRING)
                                         .description("동행 게시글 제목"),
                                 fieldWithPath("response.articles[].description").type(JsonFieldType.STRING)
                                         .description("동행 게시글 내용"),
                                 fieldWithPath("response.articles[].createdDate").type(JsonFieldType.STRING)
                                         .description("작성 날짜"),
+                                fieldWithPath("response.articles[].address").type(JsonFieldType.STRING)
+                                        .description("일정 지역"),
+                                fieldWithPath("response.articles[].planImageUrl").type(JsonFieldType.STRING)
+                                        .description("일정 썸네일 이미지 경로"),
                                 fieldWithPath("response.articles[].commentCount").type(JsonFieldType.NUMBER)
                                         .description("댓글 수"),
                                 fieldWithPath("response.currentPage").type(JsonFieldType.NUMBER)
