@@ -18,7 +18,8 @@ public record FeedDetailResponse(
         Double latitude,
         String placeType,
         int likeCount,
-        boolean isLiked
+        boolean isLiked,
+        String createdDate
 ) {
 
     public static FeedDetailResponse of(
@@ -39,6 +40,7 @@ public record FeedDetailResponse(
                 .placeType(feedDetailDto.placeType())
                 .likeCount(feedDetailDto.likeCount())
                 .isLiked(feedDetailDto.isLiked())
+                .createdDate(feedDetailDto.createdDate())
                 .build();
     }
 }

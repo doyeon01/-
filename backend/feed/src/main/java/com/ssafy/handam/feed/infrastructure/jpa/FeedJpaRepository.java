@@ -13,7 +13,7 @@ public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
 
     Page<Feed> findByUserId(Long userId, Pageable pageable);
 
-    Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
+    List<Feed> findByIdIn(List<Long> feedIds);
 
     Page<Feed> findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingAndPlaceTypeOrderByLikeCountDesc(
             String title, String content, String address1, String address2, PlaceType placeType, Pageable pageable

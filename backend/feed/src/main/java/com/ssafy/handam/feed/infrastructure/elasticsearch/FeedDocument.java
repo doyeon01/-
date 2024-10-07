@@ -25,7 +25,7 @@ public class FeedDocument {
     private String placeName;
 
     @Field(type = FieldType.Long)
-    private Long scheduleId;
+    private Long totalPlanId;
 
     @Field(type = FieldType.Long)
     private Long userId;
@@ -77,7 +77,7 @@ public class FeedDocument {
         return FeedDocument.builder()
                 .id(feed.getId())
                 .placeName(feed.getPlaceName())
-                .scheduleId(feed.getTotalPlanId())
+                .totalPlanId(feed.getTotalPlanId())
                 .userId(feed.getUserId())
                 .title(feed.getTitle())
                 .content(feed.getContent())
