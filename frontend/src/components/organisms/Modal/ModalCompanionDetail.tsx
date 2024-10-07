@@ -18,7 +18,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
 
   useEffect(() => {
     const loadArticles = async () => {
-      const data = await fetchArticleDetail(selectedId);
+      const data = await fetchArticleDetail(selectedId);      
       if (data.success) {
         setArticleDetail(data.response);
       } else {
@@ -46,6 +46,8 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
       PlanDetailApi(articleDetail.totalPlanId)
         .then((res) => {
           const data: PlanDetailResponseType = res.data;
+          console.log(data);
+          
           if (data.success) {
             setplanDetatil(data.response);
           } else {
@@ -89,52 +91,61 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   return (
     <>
       <div className='fixed w-[300px] h-[595px] bg-white p-4 left-[310px] overflow-y-auto rounded-xl shadow-xl top-[85px] border-gray border-2' style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-        {articleDetail && (
-          <>
-            <div className='flex items-center mb-4'>
-              <div className='flex bg-[#B6AFA9] text-white rounded-lg items-center justify-center w-16 h-16 flex-col mr-3'>
-                <div className='font-bold text-[21.75px] leading-none'>
-                  {articleDetail.createdDate.substring(8, 10)}
-                </div>
-                <div className='font-bold text-[17.4px] leading-none'>
-                  {articleDetail.createdDate.substring(6, 7)}월
-                </div>
-              </div>
-              <div>
-                <div className='font-bold text-sm'>{articleDetail.title}</div>
-                <div className='flex flex-row'>
-                  <img src={articleDetail.profileImageUrl} alt={articleDetail.title} className='w-6 h-6 rounded-full object-cover mr-1' />
-                  <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
-                </div>
+      {articleDetail && (
+        <>
+          <div className='flex items-center mb-4'>
+            <div className='flex bg-[#B6AFA9] text-white rounded-lg items-center justify-center w-16 h-16 flex-col mr-3'>
+              {articleDetail.createdDate && typeof articleDetail.createdDate === 'string' ? (
+                <>
+                  <div className='font-bold text-[21.75px] leading-none'>
+                    {articleDetail.createdDate.substring(8, 10)}
+                  </div>
+                  <div className='font-bold text-[12.4px] leading-none'>
+                    {articleDetail.createdDate.substring(5, 7)}월
+                  </div>
+                </>
+              ) : (
+                <div className='font-bold text-[21.75px] leading-none'>날짜 없음</div> 
+              )}
+            </div>
+            <div>
+              <div className='font-bold text-sm'>{articleDetail.title}</div>
+              <div className='flex flex-row'>
+                <img 
+                  src={articleDetail.profileImageUrl} 
+                  alt={articleDetail.title} 
+                  className='w-6 h-6 rounded-full object-cover mr-1' 
+                />
+                <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
               </div>
             </div>
-            <div className='border-b border-gray-300 py-2'>
-              <div className='text-sm h-24'>{articleDetail.description}</div>
-            </div>
-          </>
-        )}
+          </div>
+          <div className='border-b border-gray-300 py-2'>
+            <div className='text-sm h-24'>{articleDetail.description}</div>
+          </div>
+        </>
+      )}
 
         <div className='py-4'>
-          {articleDetail && (
-            <>
-              {planDetatil.map((dayPlan, index) => (
-                <div key={index}>
-                  <div className='mt-[3px] text-center mb-5'>{articleDetail.nickName}님의 일정</div>
-                  {dayPlan.plans.map((plan) => (
-                    <div key={plan.id} className='flex items-center mb-4'>
-                      <div className='flex-grow'>
-                        <div className='text-xs'>관광지 | {plan.placeName}</div>
-                        <div className='text-gray-600 text-sm'>{plan.details}</div>
-                        <div className='text-gray-500 text-xs flex items-center mt-1'>
-                          <span className='mr-1'>📍</span>{plan.address}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
+        {planDetatil.map((dayPlan, index) => (
+          <div key={index}>
+            {dayPlan.plans.map((plan) => (
+              <div key={plan.id} className='flex items-center mb-4 justify-between'>
+                <div className='flex-grow'>
+                  <div className='text-xs'>관광지 | {plan.placeName}</div>
+                  <div className='text-gray-600 text-sm'>{plan.details}</div>
+                  <div className='text-gray-500 text-xs flex items-center mt-1'>
+                    <span className='mr-1'>📍</span>{plan.address}
+                  </div>
                 </div>
-              ))}
-            </>
-          )}
+                <img 
+                  src={plan.imageUrl} 
+                  className='w-14 h-14  object-cover ml-2' 
+                />
+              </div>
+            ))}
+          </div>
+        ))}
         </div>
 
 
