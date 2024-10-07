@@ -13,10 +13,10 @@ export const CompanionPage: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [articles, setArticles] = useState<ArticleType[]>([]);
-  
+  const [page,_] = useState(0)
   useEffect(() => {
     const loadArticles = async () => {      
-        const data = await fetchArticles();
+        const data = await fetchArticles(page);
         if (data.success) {
           setArticles(data.response.articles);
         } else {
