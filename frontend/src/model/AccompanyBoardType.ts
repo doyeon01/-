@@ -56,18 +56,22 @@ export interface ArticleApiResponseType {
   }
 
 //동행게시글 댓글
-  export interface CommentType{
-    id:number;
-    userId:number;
-    accompanyBoardArticleId:number;
-    content:string;
-  }
+export interface CommentType {
+  id: number;
+  userId: number;
+  accompanyBoardArticleId: number;
+  profileImageUrl: string; 
+  nickName: string;      
+  content: string;
+}
 
-  export  interface CommentApiResponseType {
-    success: boolean;
-    response: Comment;
-    error: null | Error; 
-  }
+export interface CommentApiResponseType {
+  success: boolean;
+  response: {
+    comments: CommentType[];
+  };
+  error: null | Error;
+}
 //댓글등록
  export interface CreateCommentRequestType {
     userId: number;

@@ -9,6 +9,7 @@ import {
   CreateArticleApiResponseType,
 } from '../../model/AccompanyBoardType';
 
+
 //동행 게시글 등록
 export const createArticles = async (data: CreateArticleType): Promise<CreateArticleApiResponseType> => {
   try {

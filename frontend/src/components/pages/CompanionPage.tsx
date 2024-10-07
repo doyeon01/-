@@ -4,9 +4,8 @@ import ModalCompanionDetail from '../organisms/Modal/ModalCompanionDetail';
 import ModalCompanionChoiceImg from '../organisms/Modal/ModalCompanionChoiceImg';
 import KakaoMap from '../organisms/KaKaoMap';
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
-// import { fetchArticles } from '../../services/api/AccompanyBoardAPI';
+import { fetchArticles } from '../../services/api/AccompanyBoardAPI';
 import {ArticleType} from '../../model/AccompanyBoardType'
-import Articles from '../../dummydata/companion/accompanyBoardsArticles.json'
 
 
 export const CompanionPage: React.FC = () => {
@@ -14,24 +13,15 @@ export const CompanionPage: React.FC = () => {
   const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
   const [isChoiceModalOpen, setIsChoiceModalOpen] = useState(false);
   const [articles, setArticles] = useState<ArticleType[]>([]);
-  // const [error,setError] = useState('')
   
   useEffect(() => {
-    const loadArticles = async () => {
-      console.log(Articles.response.articles);
-      
-      const data:ArticleType[] = Articles.response.articles
-      setArticles(data)
-    //   try {
-    //     const data = await fetchArticles();
-    //     if (data.success) {
-    //       setArticles(data.response.articles);
-    //     } else {
-    //       setError('API 요청 중 오류가 발생했습니다.');
-    //     }
-    //   } catch (err) {
-    //     setError('API 요청 중 오류가 발생했습니다.');
-    //   }
+    const loadArticles = async () => {      
+        const data = await fetchArticles();
+        if (data.success) {
+          setArticles(data.response.articles);
+        } else {
+          console.log(data.error)
+      } 
     };
     loadArticles();
 
