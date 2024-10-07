@@ -85,11 +85,11 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
           <div className="flex items-center">
             <img
               src={detailFeed.profileImageUrl}
-              alt={`${detailFeed.username}'s profile`}
+              alt={`${detailFeed.nickName}'s profile`}
               className="w-10 h-10 rounded-full object-cover mr-2"
               />
             <div>
-              <h2 className="font-bold">{detailFeed.username}</h2>
+              <h2 className="font-bold">{detailFeed.nickName}</h2>
             </div>
           </div>
           <button className="bg-[#6F7C60] text-white px-4 py-1 rounded-md">팔로우</button>

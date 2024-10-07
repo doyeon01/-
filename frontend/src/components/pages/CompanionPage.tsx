@@ -19,7 +19,7 @@ export const CompanionPage: React.FC = () => {
         const data = await fetchArticles(page);
         if (data.success) {
           setArticles(data.response.articles);
-        } else {
+        } else { 
           console.log(data.error)
       } 
     };

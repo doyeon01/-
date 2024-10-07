@@ -3,6 +3,8 @@ import { fetchArticleDetail, createComment, fetchArticleComment } from '../../..
 import { ArticleDetailType, CommentType } from '../../../model/AccompanyBoardType';
 import { UserId } from '../../../Recoil/atoms/Auth';  
 import { useRecoilValue } from 'recoil';
+import { PlanDetailApi } from '../../../services/api/PlanService';
+import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
 interface ModalCompanionDetailProps {
   selectedId: number;
 }
@@ -11,6 +13,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   const [commentContent, setCommentContent] = useState('');
   const [articleDetail, setArticleDetail] = useState<ArticleDetailType | null>(null);
   const [comment, setComment] = useState<CommentType[] | null>(null);
+  const [planDetatil, setplanDetatil] = useState<DayPlanType[]| []>([]);
   const userId = useRecoilValue(UserId); 
 
   useEffect(() => {
@@ -36,6 +39,27 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     };
     loadComment();
   }, [selectedId]);
+
+ 
+  useEffect(() => {
+    if (articleDetail?.totalPlanId !== undefined) {
+      PlanDetailApi(articleDetail.totalPlanId)
+        .then((res) => {
+          const data: PlanDetailResponseType = res.data;
+          if (data.success) {
+            setplanDetatil(data.response);
+          } else {
+            console.log('response 없음 ㅜㅜ');
+          }
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    } else {
+      console.log('scheduleId가 존재하지 않음');
+    }
+  }, [articleDetail]); 
+  
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
@@ -70,17 +94,17 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
             <div className='flex items-center mb-4'>
               <div className='flex bg-[#B6AFA9] text-white rounded-lg items-center justify-center w-16 h-16 flex-col mr-3'>
                 <div className='font-bold text-[21.75px] leading-none'>
-                  {articleDetail.accompanyDate.substring(8, 10)}
+                  {articleDetail.createdDate.substring(8, 10)}
                 </div>
                 <div className='font-bold text-[17.4px] leading-none'>
-                  {articleDetail.accompanyDate.substring(6, 7)}월
+                  {articleDetail.createdDate.substring(6, 7)}월
                 </div>
               </div>
               <div>
                 <div className='font-bold text-sm'>{articleDetail.title}</div>
                 <div className='flex flex-row'>
-                  <img src={articleDetail.profileImage} alt={articleDetail.title} className='w-6 h-6 rounded-full object-cover mr-1' />
-                  <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickname}</div>
+                  <img src={articleDetail.profileImageUrl} alt={articleDetail.title} className='w-6 h-6 rounded-full object-cover mr-1' />
+                  <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
                 </div>
               </div>
             </div>
@@ -91,17 +115,28 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
         )}
 
         <div className='py-4'>
-          <div className='mt-[3px] text-center mb-5'>고도연님의 일정</div>
-          <div className='flex items-center mb-4'>
-            <div className='flex-grow'>
-              <div className='text-xs'>관광지 | 무등산</div>
-              <div className='text-gray-600 text-sm'>증심사 쪽에서부터 무등산 중머리재까지 쭉! 내려오기</div>
-              <div className='text-gray-500 text-xs flex items-center mt-1'>
-                <span className='mr-1'>📍</span>광주광역시 동구 증심사길 177
-              </div>
-            </div>
-          </div>
+          {articleDetail && (
+            <>
+              {planDetatil.map((dayPlan, index) => (
+                <div key={index}>
+                  <div className='mt-[3px] text-center mb-5'>{articleDetail.nickName}님의 일정</div>
+                  {dayPlan.plans.map((plan) => (
+                    <div key={plan.id} className='flex items-center mb-4'>
+                      <div className='flex-grow'>
+                        <div className='text-xs'>관광지 | {plan.placeName}</div>
+                        <div className='text-gray-600 text-sm'>{plan.details}</div>
+                        <div className='text-gray-500 text-xs flex items-center mt-1'>
+                          <span className='mr-1'>📍</span>{plan.address}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ))}
+            </>
+          )}
         </div>
+
 
         <div className="relative mt-4">
           <textarea placeholder="댓글을 작성하세요." className="w-full border border-gray-300 rounded-lg p-2 mb-6" value={commentContent} onChange={handleCommentChange}></textarea>
