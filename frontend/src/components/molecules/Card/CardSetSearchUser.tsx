@@ -10,13 +10,18 @@ interface CardSetSearchUserProps {
 
 const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
   const [users, setUsers] = useState<UserDataType[] | null>(null);
-  const { isFollowed, toggleFollow, loading } = useFollow(); 
+  const { isFollowed, toggleFollow, loading, setIsFollowed } = useFollow(); 
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getUserSearch(keyword);
         setUsers(response.response);
+        const initialFollowState: { [key: number]: boolean } = {};
+        response.response.forEach((user: UserDataType) => {
+          initialFollowState[user.id] = user.isFollowed;
+        });
+        setIsFollowed(initialFollowState);
       } catch (error) {
         console.error('Error fetching users:', error);
       }
@@ -52,11 +57,15 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
                 동행온도 <span className="font-semibold text-black">36.5</span>
               </p>
               <button
-                onClick={() => toggleFollow(user.id)}
+                onClick={() => toggleFollow(user.id, isFollowed[user.id])}
                 className="px-4 py-1 text-white text-sm rounded-full bg-[#707C60] hover:bg-[#4F5843]"
-                disabled={loading}
+                disabled={loading[user.id]}
               >
-                {loading ? '로딩 중' : isFollowed ? '언팔로우' : '팔로우'}
+                {loading[user.id]
+                  ? '로딩 중'
+                  : isFollowed[user.id]
+                  ? '언팔로우'
+                  : '팔로우'}
               </button>
             </div>
           </div>
