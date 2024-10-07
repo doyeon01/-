@@ -21,7 +21,7 @@ export interface CreateArticleApiResponseType {
 export interface ArticleType {
   id: number;
   userId: number;
-  scheduleId: number;
+  totalPlanId: number;
   title: string;
   profileImage: string; 
   nickname: string;
@@ -38,16 +38,18 @@ export interface ArticleApiResponseType {
 
 
 //동행게시글 상세 타입
-  export interface ArticleDetailType {
-    id: number;     
-    userId: number; 
-    scheduleId: number; 
-    title: string;  
-    description: string;
-    profileImage: string; 
-    nickname: string;
-    accompanyDate:string;
-  }
+export interface ArticleDetailType {
+  id: number;                       // 게시글 ID
+  userId: number;                   // 사용자 ID
+  totalPlanId: number;               // 일정 ID
+  title: string;                    // 제목
+  description: string;              // 설명
+  profileImageUrl: string;          // 프로필 이미지 URL
+  nickName: string;                 // 닉네임
+  createdDate: string;              // 생성 날짜 (JSON의 createdDate와 일치)
+  commentCount: number;              // 댓글 수
+  accompanyDate?: string;           // 동행 날짜 (선택적, 필요시 추가)
+}
 
   export  interface ArticleDetailApiResponseType {
     success: boolean;

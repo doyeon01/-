@@ -45,7 +45,7 @@ error: null | Error;
 export interface FeedDetailType{
     id: number;
     userId: number;
-    username: string;
+    nickName: string;
     profileImageUrl: string;
     feedImageUrl: string;
     title: string;
@@ -61,9 +61,9 @@ export interface FeedDetailType{
 }
 
 export interface FeedDetailAPiResponseType {
-success: boolean;
-response: FeedDetailType;
-error: null | Error; 
+  success: boolean;
+  response: FeedDetailType;
+  error: null | Error; 
 }
 
 // 피드 상세 댓글
