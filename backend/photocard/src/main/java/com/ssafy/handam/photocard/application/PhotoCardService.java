@@ -3,7 +3,10 @@ package com.ssafy.handam.photocard.application;
 import com.ssafy.handam.photocard.application.dto.PhotoCardDetailDto;
 import com.ssafy.handam.photocard.domain.entity.PhotoCard;
 import com.ssafy.handam.photocard.domain.service.PhotoCardDomainService;
+import com.ssafy.handam.photocard.infrastructure.client.GpuApiClient;
+import com.ssafy.handam.photocard.infrastructure.client.dto.PhotoCardUrlDto;
 import com.ssafy.handam.photocard.presentation.request.PhotoCardCreationRequest;
+import com.ssafy.handam.photocard.presentation.request.PhotoCardSaveRequest;
 import com.ssafy.handam.photocard.presentation.response.PhotoCardDetailResponse;
 import com.ssafy.handam.photocard.presentation.response.PhotoCardsResponse;
 import jakarta.transaction.Transactional;
@@ -19,9 +22,19 @@ import org.springframework.stereotype.Service;
 public class PhotoCardService {
 
     private final PhotoCardDomainService photoCardDomainService;
+    private final GpuApiClient gpuApiClient;
 
     public PhotoCardDetailResponse createPhotoCard(PhotoCardCreationRequest request) {
-        PhotoCard photoCard = photoCardDomainService.createPhotoCard(request);
+
+        PhotoCardUrlDto photoCardUrlDto= gpuApiClient.getPhotoCardUrl(request);
+
+        PhotoCard photoCard = photoCardDomainService.createPhotoCard(
+                PhotoCardSaveRequest.of(
+                        request.userId(),
+                        request.feedId(),
+                        photoCardUrlDto.photoCardUrl())
+        );
+
         return PhotoCardDetailResponse.of(PhotoCardDetailDto.of(photoCard));
     }
 
