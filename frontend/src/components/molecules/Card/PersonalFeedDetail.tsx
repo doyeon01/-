@@ -1,43 +1,46 @@
 import { useState, useEffect } from 'react';
 import { FeedCard } from './FeedCard';
 import { FeedType, FeedResponseType } from '../../../model/MyPageType';
-import { useRecoilValue } from 'recoil';  
-import { UserId } from '../../../Recoil/atoms/Auth'; 
-import { FeedList } from '../../../services/api/FeedService';  
-import { useInView } from 'react-intersection-observer'; 
+import { useRecoilValue } from 'recoil';
+import { UserId } from '../../../Recoil/atoms/Auth';
+import { FeedList } from '../../../services/api/FeedService';
+import { useInView } from 'react-intersection-observer';
+import ModalFeedDetail from '../../organisms/Modal/ModalFeedDetail';
 
-export const PersonalFeedDetail: React.FC = () => { // reload prop 추가
-  const [feedInfos, setFeedInfos] = useState<FeedType[]>([]); 
-  const [page, setPage] = useState(0); 
-  const [hasNextPage, setHasNextPage] = useState(true); 
-  const [ref, inView] = useInView(); 
+export const PersonalFeedDetail: React.FC = () => {
+  const [feedInfos, setFeedInfos] = useState<FeedType[]>([]);
+  const [page, setPage] = useState(0);
+  const [hasNextPage, setHasNextPage] = useState(true);
+  const [ref, inView] = useInView();
 
-  const userId = useRecoilValue(UserId);  
+  // 모달을 위한 상태 추가
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
+
+  const userId = useRecoilValue(UserId);
 
   useEffect(() => {
     if (hasNextPage) {
-      loadMoreFeeds();  
+      loadMoreFeeds();
     }
   }, [page, hasNextPage]);
 
-  // 스크롤이 하단에 도달했을 때 페이지를 증가시키는 로직
   useEffect(() => {
     if (inView && hasNextPage) {
-      setPage((prevPage) => prevPage + 1);  // 페이지를 1씩 증가
+      setPage((prevPage) => prevPage + 1);
     }
   }, [inView, hasNextPage]);
 
-  // 피드 데이터를 더 불러오는 함수
   const loadMoreFeeds = () => {
-    FeedList(userId, page)  // API 호출, userId와 페이지 번호를 인자로 전달
+    FeedList(userId, page)
       .then((res) => {
         const data: FeedResponseType = res.data;
         if (data.success) {
           if (data.response.feeds.length > 0) {
-            setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);  // 피드 데이터 추가
-            setHasNextPage(data.response.hasNextPage);  // 다음 페이지 여부 갱신
+            setFeedInfos((prevFeeds) => [...prevFeeds, ...data.response.feeds]);
+            setHasNextPage(data.response.hasNextPage);
           } else {
-            setHasNextPage(false);  // 더 이상 데이터가 없으면 false로 설정
+            setHasNextPage(false);
           }
         }
       })
@@ -46,20 +49,41 @@ export const PersonalFeedDetail: React.FC = () => { // reload prop 추가
       });
   };
 
+  
+  const openModal = (feedId: number) => {
+    setSelectedFeedId(feedId);  
+    setIsModalOpen(true);       
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFeedId(null);    
+  };
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      {feedInfos.map((feed) => (
-        <FeedCard
-          key={feed.id}
-          title={feed.title}
-          content={feed.content}
-          createdDate={feed.createdDate}
-          comment={feed.commentCount}
-          like={feed.likeCount}
-          image={feed.imageUrl}
+    <>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {feedInfos.map((feed) => (
+          <FeedCard
+            key={feed.id}
+            title={feed.title}
+            content={feed.content}
+            createdDate={feed.createdDate}
+            comment={feed.commentCount}
+            like={feed.likeCount}
+            image={feed.imageUrl}
+            onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
+          />
+        ))}
+        <div ref={ref} />
+      </div>
+
+      {isModalOpen && selectedFeedId && (
+        <ModalFeedDetail 
+          selectedId={selectedFeedId}  // 선택된 피드 ID를 모달로 전달
+          closeModal={closeModal} 
         />
-      ))}
-      <div ref={ref} /> 
-    </div>
+      )}
+    </>
   );
 };

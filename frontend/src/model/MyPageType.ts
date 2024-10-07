@@ -134,6 +134,7 @@ export interface CardProps {
   comment: number;
   like?: number;
   image: string;
+  onClick?: () => void; 
 }
 
 
