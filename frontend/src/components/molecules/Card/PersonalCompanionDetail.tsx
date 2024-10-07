@@ -2,9 +2,8 @@ import {useState, useEffect} from 'react';
 import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import { FeedCard } from './FeedCard';
-import ArticleList from '../../../dummydata/companion/accompnyBoardsUserArticleList.json'; // 더미 데이터 다시 추가
 import { articleList } from '../../../services/api/AccompanyBoardAPI';
-import { UserArticle, UserArticleApiResponse } from '../../../model/AccompanyBoardType';
+import { UserArticle } from '../../../model/AccompanyBoardType';
 import { useRecoilValue } from 'recoil';
 import { UserId } from '../../../Recoil/atoms/Auth';
 import { useInView } from 'react-intersection-observer';
@@ -15,15 +14,6 @@ export const PersonalCompanionDetail: React.FC = () => {
   const [page, setPage] = useState(0);
   const [hasNextPage, setHasNextPage] = useState(true); // 다음 페이지 존재 여부
   const [ref, inView] = useInView();
-
-  // 더미 데이터 렌더링
-  useEffect(() => {
-    const typedArticleList = ArticleList as UserArticleApiResponse; // 더미 데이터 타입 캐스팅
-    if (typedArticleList.success) {
-      setUserArticleList(typedArticleList.response.articles);
-      setHasNextPage(typedArticleList.response.hasNextPage);
-    }
-  }, []); 
 
   // 페이지가 변경될 때마다 데이터를 추가로 로드
   useEffect(() => {
@@ -66,7 +56,7 @@ export const PersonalCompanionDetail: React.FC = () => {
                 content={plan.description}
                 createdDate={plan.createdDate}
                 comment={plan.commentCount}
-                image={plan.imageUrl}
+                image={plan.planImageUrl}
               />
             </div>
           ))
