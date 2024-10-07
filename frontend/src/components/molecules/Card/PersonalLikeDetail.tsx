@@ -81,7 +81,8 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
         1: 'TOURIST_ATTRACTION',
         2: 'ACCOMMODATION',
         3: 'RESTAURANT',
-        4: 'ETC',
+        4: 'CAFE',
+        5: 'ETC',
       };
       const placeType = filterMap[selectedButton];
       setFilteredFeeds(allFeeds.filter((feed) => feed.placeType === placeType)); // 선택된 카테고리의 피드만 필터링
@@ -94,7 +95,8 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     { label: '명소', id: 1 },
     { label: '숙박', id: 2 },
     { label: '음식점', id: 3 },
-    { label: '기타', id: 4 },
+    { label: '카페', id: 4 },
+    { label: '기타', id: 5 }
   ];
 
   return (
