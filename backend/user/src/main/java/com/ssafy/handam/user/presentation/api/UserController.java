@@ -8,6 +8,7 @@ import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
+import com.ssafy.handam.user.presentation.response.UserInfoResponseWithFollowInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
@@ -27,10 +28,10 @@ public class UserController {
     private final UserService userService;
 
     @GetMapping("/myInfo")
-    public ApiResult<UserInfoResponse> getCurrentUserInfo(HttpServletRequest request) {
-        UserInfoResponse userInfoResponse = userApplicationService.getCurrentUserInfo(request);
-        log.info("userInfoResponse: {}", userInfoResponse.toString());
-        return success(userInfoResponse);
+    public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
+        UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(request);
+        log.info("userInfoResponse: {}", userInfoResponseWithFollowInfo.toString());
+        return success(userInfoResponseWithFollowInfo);
     }
 
     @PostMapping("/survey")

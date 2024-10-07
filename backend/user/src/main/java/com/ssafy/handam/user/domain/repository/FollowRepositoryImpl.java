@@ -6,6 +6,7 @@ import com.ssafy.handam.user.infrastructure.repository.FollowJpaRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
 import java.util.Optional;
 
 @Repository
@@ -20,5 +21,15 @@ public class FollowRepositoryImpl implements FollowRepository{
     @Override
     public Follow save(Follow follow) {
         return followRepository.save(follow);
+    }
+
+    @Override
+    public List<Follow> findByFollowerId(Long followerId) {
+        return followRepository.findByFollowerId(followerId);
+    }
+
+    @Override
+    public List<Follow> findByFollowingId(Long followingId) {
+        return followRepository.findByFollowingId(followingId);
     }
 }

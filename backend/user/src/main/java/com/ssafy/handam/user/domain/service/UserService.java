@@ -38,6 +38,12 @@ public class UserService {
         return userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalStateException("User not found with email: " + email));
     }
+    public List<Follow> countByFollowing(Long followerId) {
+        return followRepository.findByFollowerId(followerId);
+    }
+    public List<Follow> countByFollower(Long followingId) {
+        return followRepository.findByFollowingId(followingId);
+    }
 
     public void updateUserSurvey(String email, UserSurveyData surveyData) {
 
