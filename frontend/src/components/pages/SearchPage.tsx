@@ -106,10 +106,10 @@ export const SearchPage: React.FC = () => {
                 <div className="absolute bottom-2 left-2 flex items-center space-x-2 text-white opacity-0 group-hover:opacity-100">
                   <img
                     src={recommendedFeed.userProfileImageUrl}
-                    alt={recommendedFeed.username}
+                    alt={recommendedFeed.nickName}
                     className="w-8 h-8 rounded-full object-cover"
                   />
-                  <p className="text-lg font-bold">{recommendedFeed.username}</p>
+                  <p className="text-lg font-bold">{recommendedFeed.nickName}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100">
                   <p className="text-2xl">❤️</p>
