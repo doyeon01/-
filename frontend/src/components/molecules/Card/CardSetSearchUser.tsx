@@ -17,9 +17,10 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
       try {
         const response = await getUserSearch(keyword);
         setUsers(response.response);
+
         const initialFollowState: { [key: number]: boolean } = {};
         response.response.forEach((user: UserDataType) => {
-          initialFollowState[user.id] = user.isFollowed;
+          initialFollowState[user.id] = user.isFollowed; 
         });
         setIsFollowed(initialFollowState);
       } catch (error) {

@@ -17,8 +17,6 @@ export const SearchPage: React.FC = () => {
 
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
-      
-      
       try {
         const response = await postFeedRecommend(1, 10);
         setRecommendedFeeds(response.data.response.feeds);
