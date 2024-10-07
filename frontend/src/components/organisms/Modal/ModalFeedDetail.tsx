@@ -18,11 +18,12 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
     const fetchDetailFeed = async () => {
       try {
         const response = await getFeedDetail(selectedId);        
+        
         setLikeCnt(response.data.response.likeCount);
         setDetailFeed(response.data.response)
         const followResponse = await getYourInfo(response.data.response.id)
         const userId = response.data.response.id; 
-        const isFollowed = followResponse.data.response.isFollowed; 
+        const isFollowed = followResponse.response.isFollowed; 
 
         setIsFollowed(prevState => ({
           ...prevState,
