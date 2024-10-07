@@ -8,6 +8,7 @@ export const RegisterUser = async (userData: RegisterUserType[])=>{
           headers: {
             'Content-Type': 'application/json', // JSON 형식으로 데이터를 보낼 때 필요
           },
+          withCredentials: true
         });
         return response.data;
       } catch (error) {
@@ -17,7 +18,9 @@ export const RegisterUser = async (userData: RegisterUserType[])=>{
 //RegisterUser.ts
 export const getFeed = async(keyword: string, page: number, size: number): Promise<FilterFeedType> => {
   try {
-    const response = await axios.get<FilterFeedType>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`);
+    const response = await axios.get<FilterFeedType>(`https://j11c205.p.ssafy.io/api/v1/feeds/search?keyword=${keyword}&page=${page}&size=${size}`,{
+      withCredentials: true
+    });
     // const reponseFeed = response.data.respons
     return response.data;
   } catch (error) {

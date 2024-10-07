@@ -106,7 +106,7 @@ const handlePageNum = () => {
 useEffect(() => {
   // PageNum이 변경될 때 keyword 설정
   if (PageNum === 7) {
-    setkeyword('커피');
+    setkeyword('CAFE');
   } else if (PageNum === 8) {
     setkeyword('TOURIST_ATTRACTION');
   } else if (PageNum === 9) {
