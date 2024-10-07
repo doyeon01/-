@@ -37,6 +37,7 @@ export const MyPage = () => {
         const data: UserInfoResponseType = res.data;
         if (data.success) {
           const info: UserInfoType = data.response;
+          console.log(info)
           setImage(info.profileImage);
           setNickName(info.name);
           setIntroduce(info.introduction);
@@ -75,9 +76,9 @@ export const MyPage = () => {
               <span className="text-base font-light mr-1">동행온도 </span>
               <span className="font-bold mr-6">{accompanyTemperature.toFixed(1)}</span>
               <span className="text-base font-light mr-1">팔로워 </span>
-              <span className="font-bold mr-6">{followerCount || 200}</span>
+              <span className="font-bold mr-6">{followerCount}</span>
               <span className="text-base font-light mr-1">팔로잉 </span>
-              <span className="font-bold mr-6">{followingCount || 200}</span>
+              <span className="font-bold mr-6">{followingCount}</span>
             </div>
           </div>
         </div>
