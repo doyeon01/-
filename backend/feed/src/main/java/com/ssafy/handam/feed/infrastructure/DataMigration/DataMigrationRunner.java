@@ -2,6 +2,7 @@ package com.ssafy.handam.feed.infrastructure.DataMigration;
 
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -18,4 +19,11 @@ public class DataMigrationRunner implements ApplicationRunner {
         // 데이터 마이그레이션 실행
         dataMigrationService.migrateData();
     }
+
+    // 3분마다 데이터 마이그레이션 실행
+    @Scheduled(fixedRate = 180000)
+    public void scheduleDataMigration() {
+        dataMigrationService.migrateData();
+    }
 }
+

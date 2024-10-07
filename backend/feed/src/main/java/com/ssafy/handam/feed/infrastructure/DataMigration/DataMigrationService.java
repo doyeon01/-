@@ -6,8 +6,10 @@ import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -19,15 +21,22 @@ public class DataMigrationService {
     private final UserApiClient userApiClient;
 
     public void migrateData() {
-        List<Feed> feeds = feedRepository.findAll();
+        int page = 0;
+        int pageSize = 1000;  // 한 번에 100개씩 처리
 
-        feeds.forEach(feed -> {
-            // User 정보를 UserApiClient를 통해 가져옴
-            UserDto userDto = userApiClient.getUserById(feed.getUserId(),"token");
+        Page<Feed> feedPage;
 
-            // FeedDocument에 User 정보 추가하여 저장
-            FeedDocument document = FeedDocument.from(feed, userDto);
-            feedElasticsearchRepository.save(document);
-        });
+        do {
+            Pageable pageable = PageRequest.of(page, pageSize);
+            feedPage = feedRepository.findAll(pageable);
+
+            feedPage.forEach(feed -> {
+                UserDto userDto = userApiClient.getUserById(feed.getUserId(), "token");
+                FeedDocument document = FeedDocument.from(feed, userDto);
+                feedElasticsearchRepository.save(document);
+            });
+
+            page++;
+        } while (feedPage.hasNext());
     }
 }
