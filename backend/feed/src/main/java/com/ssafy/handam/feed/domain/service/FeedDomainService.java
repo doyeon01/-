@@ -166,6 +166,7 @@ public class FeedDomainService {
         // Elasticsearch에서 feedId에 해당하는 FeedDocument 조회
         Iterable<FeedDocument> feedDocuments = feedRepository.findAllById(feedIds);
 
+
         // FeedDocument를 FeedPreviewDto로 변환
         for (FeedDocument feedDocument : feedDocuments) {
             feeds.add(FeedPreviewDto.fromDocument(feedDocument, false));

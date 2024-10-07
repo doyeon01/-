@@ -6,7 +6,6 @@ import org.springframework.data.elasticsearch.core.geo.GeoPoint;
 import org.springframework.data.elasticsearch.repository.ElasticsearchRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
 
 @Repository
 public interface FeedElasticsearchRepository extends ElasticsearchRepository<FeedDocument, Long> {
@@ -16,5 +15,5 @@ public interface FeedElasticsearchRepository extends ElasticsearchRepository<Fee
 
     Page<FeedDocument> findByLocationNear(GeoPoint location, String distance, Pageable pageable);
 
-    Iterable<FeedDocument> findAllById(List<Long> feedIds);
+    Iterable<FeedDocument> findAllById(Iterable<Long> feedIds);
 }
