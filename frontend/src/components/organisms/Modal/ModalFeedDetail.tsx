@@ -63,94 +63,95 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   };
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-      <div className="relative bg-[#F4F4EE] p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto">
-        <button onClick={closeModal} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
-          &times;
-        </button>
-        {detailFeed && (
-          <>
-            <div className='text-3xl font-bold text-center mb-4'>{detailFeed.title}</div>
-            <hr className="border-gray-300 my-4" />
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                {detailFeed.profileImageUrl ? (
-                  <img
-                    src={detailFeed.profileImageUrl}
-                    alt={`${detailFeed.nickName}'s profile`}
-                    className="w-10 h-10 rounded-full object-cover mr-2"
-                  />
-                ) : (
-                  <UserIconMini3 />
-                )}
-                <div>
-                  <h2 className="font-bold">{detailFeed.nickName}</h2>
-                </div>
-              </div>
-              <button
-                className={`bg-[#6F7C60] hover:bg-[#4F5843] text-white px-4 py-1 rounded-md`}
-                onClick={() => toggleFollow(detailFeed.userId, isFollowed[detailFeed.userId])} 
-              >
-                {isFollowed[detailFeed.userId] ? '언팔로우' : '팔로우'}
-              </button>
-            </div>
-            <hr className="border-gray-300 my-4" />
-            <div className="mb-4">
-              <p className="text-sm text-gray-500 text-right">작성일자 : {detailFeed.createdDate}</p>
-              <img
-                src={detailFeed.feedImageUrl}
-                alt="Post"
-                className="w-full rounded-lg object-cover max-h-[300px]"
-              />
-              <p className="mt-5 text-lg mb-2">{detailFeed.content}</p>
-            </div>
-            <hr className="border-gray-300 my-4" />
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center">
-                <button aria-label="Like" onClick={toggleLike}>
-                  {isLike ? '❤️' : '🤍'}
-                </button>
-                <p>{likeCnt}</p>
-                <h3 className="font-bold ml-3">💬 {comments.length}</h3>
-              </div>
-            </div>
-          </>
-        )}
-        {/* 댓글 작성 영역 */}
-        <div className="relative mt-4">
-          <textarea
-            placeholder="댓글을 작성하세요."
-            className="w-full border border-gray-300 rounded-lg p-2 mb-10"
-            value={commentContent}
-            onChange={handleCommentChange}
-          />
-          <button
-            className="absolute bg-[#6F7C60] text-white px-4 py-2 mt-2 rounded-md right-0 bottom-0"
-            onClick={handleCommentSubmit}
-          >
-            댓글 작성
+    <>
+      <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50" onClick={closeModal}/>
+        <div className="fixed bg-[#F4F4EE] top-[50px] right-[380px] z-50 p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+          <button onClick={closeModal} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+            &times;
           </button>
-        </div>
-        {/* 댓글 목록 */}
-        <div>
-          <div className="space-y-4">
-            {comments.map((comment, index) => (
-              <div key={index} className="flex items-start border-b-2 pb-5">
+          {detailFeed && (
+            <>
+              <div className='text-3xl font-bold text-center mb-4'>{detailFeed.title}</div>
+              <hr className="border-gray-300 my-4" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  {detailFeed.profileImageUrl ? (
+                    <img
+                      src={detailFeed.profileImageUrl}
+                      alt={`${detailFeed.nickName}'s profile`}
+                      className="w-10 h-10 rounded-full object-cover mr-2"
+                    />
+                  ) : (
+                    <UserIconMini3 />
+                  )}
+                  <div>
+                    <h2 className="font-bold">{detailFeed.nickName}</h2>
+                  </div>
+                </div>
+                <button
+                  className={`bg-[#6F7C60] hover:bg-[#4F5843] text-white px-4 py-1 rounded-md`}
+                  onClick={() => toggleFollow(detailFeed.userId, isFollowed[detailFeed.userId])} 
+                >
+                  {isFollowed[detailFeed.userId] ? '언팔로우' : '팔로우'}
+                </button>
+              </div>
+              <hr className="border-gray-300 my-4" />
+              <div className="mb-4">
+                <p className="text-sm text-gray-500 text-right">작성일자 : {detailFeed.createdDate}</p>
                 <img
-                  src={comment.profileImageUrl}
-                  alt={`${comment.nickName}'s profile`}
-                  className="w-8 h-8 rounded-full object-cover mr-2"
+                  src={detailFeed.feedImageUrl}
+                  alt="Post"
+                  className="w-full rounded-lg object-cover max-h-[300px]"
                 />
-                <div>
-                  <p className="font-semibold">{comment.nickName}</p>
-                  <p>{comment.content}</p>
+                <p className="mt-5 text-lg mb-2">{detailFeed.content}</p>
+              </div>
+              <hr className="border-gray-300 my-4" />
+              <div className="flex items-center justify-between mb-4">
+                <div className="flex items-center">
+                  <button aria-label="Like" onClick={toggleLike}>
+                    {isLike ? '❤️' : '🤍'}
+                  </button>
+                  <p>{likeCnt}</p>
+                  <h3 className="font-bold ml-3">💬 {comments.length}</h3>
                 </div>
               </div>
-            ))}
+            </>
+          )}
+          {/* 댓글 작성 영역 */}
+          <div className="relative mt-4">
+            <textarea
+              placeholder="댓글을 작성하세요."
+              className="w-full border border-gray-300 rounded-lg p-2 mb-10"
+              value={commentContent}
+              onChange={handleCommentChange}
+            />
+            <button
+              className="absolute bg-[#6F7C60] text-white px-4 py-2 mt-2 rounded-md right-0 bottom-0"
+              onClick={handleCommentSubmit}
+            >
+              댓글 작성
+            </button>
+          </div>
+          {/* 댓글 목록 */}
+          <div>
+            <div className="space-y-4">
+              {comments.map((comment, index) => (
+                <div key={index} className="flex items-start border-b-2 pb-5">
+                  <img
+                    src={comment.profileImageUrl}
+                    alt={`${comment.nickName}'s profile`}
+                    className="w-8 h-8 rounded-full object-cover mr-2"
+                  />
+                  <div>
+                    <p className="font-semibold">{comment.nickName}</p>
+                    <p>{comment.content}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    </div>
+      </>
   );
 };
 

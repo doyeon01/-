@@ -30,11 +30,12 @@ const useFollow = () => {
       if (response.status === 200) {
         setIsFollowed((prev) => ({
           ...prev,
-          [userId]: !currentStatus, 
+          [userId]: !currentStatus,  
         }));
       }
     } catch (err) {
       setError('Error in follow/unfollow action');
+      console.log(err);
     } finally {
       setLoading((prev) => ({ ...prev, [userId]: false }));
     }
