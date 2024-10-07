@@ -58,8 +58,7 @@ spring:
                 redis-rate-limiter:
                   replenishRate: 30
                   burstCapacity: 20
-                key-resolver: '#{@ipKeyResolver}'
-                
+
         - id: chat
           uri: http://j11c205.p.ssafy.io:8083
           predicates:
