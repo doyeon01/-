@@ -24,6 +24,7 @@ import { ButtonNext } from '../atoms/button/ButtonNext'
 
 export const SurveyPage: React.FC = () => {
   const navigate = useNavigate()
+  const [loading, setLoading] = useState(true); // 로딩 상태 추가
 
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
@@ -45,6 +46,7 @@ export const SurveyPage: React.FC = () => {
 
   useEffect(() => {
     const fetchFeedsData = async () => {
+      setLoading(true);
       try {
         const data = await getFeed(keyword, page, size); // 배열 반환
         // console.log('Fetched feeds data:', data); // 전체 데이터 로그
@@ -52,6 +54,9 @@ export const SurveyPage: React.FC = () => {
         setFeeds(data.response.feeds); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
+      }
+      finally {
+        setLoading(false); // 데이터 가져오기 완료 후 로딩 상태 false
       }
     };
     if (keyword) {
@@ -437,14 +442,22 @@ useEffect(() => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
-                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
-                        {feed.isLiked && '✔'}
+              {!loading ? (
+                  feeds && feeds.length > 0 ? (
+                    feeds.map(feed => (
+                      <div key={feed.id} className="w-full max-h-[110px] h-[110px] border overflow-hidden relative" onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-50' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                          {feed.isLiked && '✔'}
                         </div>
                         <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                    </div>
-                  )) : 'No feeds available'}
+                      </div>
+                    ))
+                  ) : (
+                    'No feeds available'
+                  )
+                ) : (
+                  <div>로딩 중입니다...</div> // 로딩 중일 때 표시할 내용
+                )}
                 {/* {numbers.map((number) => (
                    <div key={number} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative`}>
                     <div className={`absolute inset-0 bg-black bg-opacity-50 z-10 flex justify-center items-center text-[20px] text-white`}>
@@ -472,14 +485,22 @@ useEffect(() => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
-                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
-                        {feed.isLiked && '✔'}
+              {!loading ? (
+                  feeds && feeds.length > 0 ? (
+                    feeds.map(feed => (
+                      <div key={feed.id} className="w-full max-h-[110px] h-[110px] border overflow-hidden relative" onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-50' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                          {feed.isLiked && '✔'}
                         </div>
                         <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                    </div>
-                  )) : 'No feeds available'}
+                      </div>
+                    ))
+                  ) : (
+                    'No feeds available'
+                  )
+                ) : (
+                  <div>로딩 중입니다...</div> // 로딩 중일 때 표시할 내용
+                )}
               </span>
             </>
           )}
@@ -500,14 +521,22 @@ useEffect(() => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
-                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
-                        {feed.isLiked && '✔'}
+              {!loading ? (
+                  feeds && feeds.length > 0 ? (
+                    feeds.map(feed => (
+                      <div key={feed.id} className="w-full max-h-[110px] h-[110px] border overflow-hidden relative" onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-50' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                          {feed.isLiked && '✔'}
                         </div>
                         <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                    </div>
-                  )) : 'No feeds available'}
+                      </div>
+                    ))
+                  ) : (
+                    'No feeds available'
+                  )
+                ) : (
+                  <div>로딩 중입니다...</div> // 로딩 중일 때 표시할 내용
+                )}
               </span>
             </>
           )}
@@ -527,14 +556,22 @@ useEffect(() => {
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
-              {feeds && feeds.length > 0 ? feeds.map(feed => (
-                    <div key={feed.id} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative `} onClick={() => toggleLike(feed.id)}>
-                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-70' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
-                        {feed.isLiked && '✔'}
+              {!loading ? (
+                  feeds && feeds.length > 0 ? (
+                    feeds.map(feed => (
+                      <div key={feed.id} className="w-full max-h-[110px] h-[110px] border overflow-hidden relative" onClick={() => toggleLike(feed.id)}>
+                        <div className={`absolute inset-0 bg-black ${feed.isLiked ? 'bg-opacity-50' : 'bg-opacity-0'} z-10 flex justify-center items-center text-[20px] text-white`}>
+                          {feed.isLiked && '✔'}
                         </div>
                         <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                    </div>
-                  )) : 'No feeds available'}
+                      </div>
+                    ))
+                  ) : (
+                    'No feeds available'
+                  )
+                ) : (
+                  <div>로딩 중입니다...</div> // 로딩 중일 때 표시할 내용
+                )}
               </span>
             </>
           )}
