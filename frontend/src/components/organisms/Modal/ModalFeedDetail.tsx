@@ -27,6 +27,13 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
   }, [isLike]);
 
   useEffect(() => {
+    console.log(detailFeed)
+    if (detailFeed) {
+      console.log("Updated detailFeed: ", detailFeed);
+    }
+  }, [detailFeed]);
+
+  useEffect(() => {
     const fetchDetailFeed = async () => {
       try {
         const response = await getFeedComment(selectedId);
