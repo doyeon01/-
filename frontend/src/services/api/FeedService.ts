@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { FeedCommentsAPiResponseType, FeedDetailAPiResponseType } from '../../model/FeedType';
 // import { UserId } from '../../Recoil/atoms/Auth';
 // import { useRecoilValue } from 'recoil';
 
