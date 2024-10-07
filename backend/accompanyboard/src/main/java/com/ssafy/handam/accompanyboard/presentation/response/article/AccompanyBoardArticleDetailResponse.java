@@ -5,7 +5,7 @@ import com.ssafy.handam.accompanyboard.application.dto.AccompanyBoardArticleDeta
 public record AccompanyBoardArticleDetailResponse(
         Long id,
         Long userId,
-        Long scheduleId,
+        Long totalPlanId,
         String profileImageUrl,
         String nickName,
         String title,
@@ -19,7 +19,7 @@ public record AccompanyBoardArticleDetailResponse(
         return new AccompanyBoardArticleDetailResponse(
                 accompanyBoardArticleDetailDto.id(),
                 accompanyBoardArticleDetailDto.userId(),
-                accompanyBoardArticleDetailDto.scheduleId(),
+                accompanyBoardArticleDetailDto.totalPlanId(),
                 accompanyBoardArticleDetailDto.profileImageUrl(),
                 accompanyBoardArticleDetailDto.nickName(),
                 accompanyBoardArticleDetailDto.title(),
