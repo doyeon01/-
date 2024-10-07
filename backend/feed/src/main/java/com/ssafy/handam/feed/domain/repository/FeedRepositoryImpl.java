@@ -30,9 +30,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Feed save(Feed feed, UserDto userDto) {
         Feed savedFeed = feedJpaRepository.save(feed);
-        feedElasticsearchRepository.save(FeedDocument.from(savedFeed,userDto));
+        feedElasticsearchRepository.save(FeedDocument.from(savedFeed, userDto));
         return savedFeed;
     }
+
     @Override
     public Feed save(Feed feed) {
         return feedJpaRepository.save(feed);
@@ -45,7 +46,7 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
-        return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingOrPlaceTypeOrderByLikeCount(
+        return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingOrPlaceTypeOrPlaceNameOrderByLikeCount(
                 keyword, keyword, keyword, keyword, keyword, pageable);
     }
 
@@ -60,7 +61,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public  Iterable<FeedDocument> findAllById(List<Long> feedIds) {
+    public Iterable<FeedDocument> findAllById(List<Long> feedIds) {
         return feedElasticsearchRepository.findAllById(feedIds);
     }
 }
