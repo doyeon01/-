@@ -44,7 +44,7 @@ dependencies {
     // Database Drivers
     runtimeOnly 'com.h2database:h2'                                              // H2 Database (개발/테스트 용)
     runtimeOnly 'com.mysql:mysql-connector-j'                                    // MySQL Driver
-
+    implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     // QueryDSL for Dynamic Query
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'                     // QueryDSL JPA with Jakarta EE
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"

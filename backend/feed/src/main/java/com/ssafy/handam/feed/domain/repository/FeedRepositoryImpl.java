@@ -1,6 +1,7 @@
 package com.ssafy.handam.feed.domain.repository;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
@@ -27,10 +28,14 @@ public class FeedRepositoryImpl implements FeedRepository {
     }
 
     @Override
-    public Feed save(Feed feed) {
+    public Feed save(Feed feed, UserDto userDto) {
         Feed savedFeed = feedJpaRepository.save(feed);
-        feedElasticsearchRepository.save(FeedDocument.from(savedFeed));
+        feedElasticsearchRepository.save(FeedDocument.from(savedFeed,userDto));
         return savedFeed;
+    }
+    @Override
+    public Feed save(Feed feed) {
+        return feedJpaRepository.save(feed);
     }
 
     @Override
@@ -52,5 +57,10 @@ public class FeedRepositoryImpl implements FeedRepository {
     @Override
     public Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable) {
         return feedElasticsearchRepository.findByLocationNear(geoPoint, distance, pageable);
+    }
+
+    @Override
+    public  Iterable<FeedDocument> findAllById(List<Long> feedIds) {
+        return feedElasticsearchRepository.findAllById(feedIds);
     }
 }

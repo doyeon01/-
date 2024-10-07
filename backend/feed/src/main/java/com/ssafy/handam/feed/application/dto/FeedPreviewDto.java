@@ -1,6 +1,8 @@
 package com.ssafy.handam.feed.application.dto;
 
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+
 import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
@@ -45,6 +47,31 @@ public record FeedPreviewDto(
                 feed.getPlaceType().name(),
                 nickName,
                 profileImageUrl,
+                isLiked,
+                formattedCreatedDate
+        );
+    }
+    public static FeedPreviewDto fromDocument(FeedDocument feedDocument, boolean isLiked) {
+        String formattedCreatedDate = (feedDocument.getCreatedDate() != null) ?
+                feedDocument.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")) :
+                "N/A";
+        return new FeedPreviewDto(
+                feedDocument.getId(),
+                feedDocument.getScheduleId(),
+                feedDocument.getPlaceName(),
+                feedDocument.getTitle(),
+                feedDocument.getContent(),
+                feedDocument.getImageUrl(),
+                feedDocument.getUserId(),
+                feedDocument.getLikeCount(),
+                feedDocument.getCommentCount(),
+                feedDocument.getAddress1(),
+                feedDocument.getAddress2(),
+                feedDocument.getLongitude(),
+                feedDocument.getLatitude(),
+                feedDocument.getPlaceType(),
+                feedDocument.getUserNickname(),
+                feedDocument.getProfileImageUrl(),
                 isLiked,
                 formattedCreatedDate
         );

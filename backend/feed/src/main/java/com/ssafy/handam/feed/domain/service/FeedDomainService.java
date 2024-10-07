@@ -1,18 +1,32 @@
 package com.ssafy.handam.feed.domain.service;
 
 
+import co.elastic.clients.elasticsearch.core.GetRequest;
+import co.elastic.clients.elasticsearch.core.GetResponse;
+import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
 import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
+import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import jakarta.transaction.Transactional;
+
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 import lombok.RequiredArgsConstructor;
+import org.elasticsearch.client.RequestOptions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -21,6 +35,8 @@ public class FeedDomainService {
 
     private final FeedRepository feedRepository;
     private final LikeRepository likeRepository;
+    private final RedisTemplate<String, Object> redisTemplate;
+
 
     public Feed findById(Long id) {
         return findBy(id);
@@ -77,7 +93,7 @@ public class FeedDomainService {
         return !likeRepository.findByFeedIdAndUserId(feedId, userId).isEmpty();
     }
 
-    public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath) {
+    public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath, UserDto userDto) {
         return feedRepository.save(Feed.builder()
                 .placeName(request.placeName())
                 .scheduleId(request.scheduleId())
@@ -90,7 +106,7 @@ public class FeedDomainService {
                 .latitude(request.latitude())
                 .placeType(request.placeType())
                 .userId(request.userId())
-                .build());
+                .build(),userDto);
     }
 
     public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
@@ -104,5 +120,58 @@ public class FeedDomainService {
             Pageable pageable) {
         GeoPoint geoPoint = new GeoPoint(latitude, longitude);
         return feedRepository.getNearbyClusterCenter(geoPoint, distance, pageable);
+    }
+
+
+    //이상민 작업
+    public RecommendedFeedsForUserResponse getRecommendedFeeds(
+            List<Long> recommendedFeedIds,
+            List<Long> topLikedFeedIds,
+            List<Long> trendingFeedIds,
+            List<Long> randomFeedIds,
+            int page,
+            int pageSize){
+        // 카테고리별로 가져올 비율
+        double recommendedRatio = 0.6;
+        double topLikedRatio = 0.2;
+        double trendingRatio = 0.1;
+        double randomRatio = 0.1;
+
+        // 카테고리별로 가져올 개수 결정 (총 페이지 기준)
+        int numRecommended = (int) (pageSize * recommendedRatio);
+        int numTopLiked = (int) (pageSize * topLikedRatio);
+        int numTrending = (int) (pageSize * trendingRatio);
+        int numRandom = (int) (pageSize * randomRatio);
+
+        // Elasticsearch에서 피드 데이터를 조회
+        List<FeedPreviewDto> resultFeeds = new ArrayList<>();
+        resultFeeds.addAll(getFeedsFromElasticsearch(recommendedFeedIds, numRecommended));
+        resultFeeds.addAll(getFeedsFromElasticsearch(topLikedFeedIds, numTopLiked));
+        resultFeeds.addAll(getFeedsFromElasticsearch(trendingFeedIds, numTrending));
+        resultFeeds.addAll(getFeedsFromElasticsearch(randomFeedIds, numRandom));
+
+        // 페이지네이션 정보를 포함한 결과 반환
+        boolean hasNextPage = (resultFeeds.size() == pageSize);
+        return RecommendedFeedsForUserResponse.of(resultFeeds, page, hasNextPage);
+    }
+
+
+    private List<FeedPreviewDto> getFeedsFromElasticsearch(List<Long> feedIds, int count) {
+        List<FeedPreviewDto> feeds = new ArrayList<>();
+
+        if (feedIds == null || feedIds.isEmpty()) {
+            return feeds;
+        }
+
+        // Elasticsearch에서 feedId에 해당하는 FeedDocument 조회
+        Iterable<FeedDocument> feedDocuments = feedRepository.findAllById(feedIds);
+
+        // FeedDocument를 FeedPreviewDto로 변환
+        for (FeedDocument feedDocument : feedDocuments) {
+            feeds.add(FeedPreviewDto.fromDocument(feedDocument, false));
+        }
+
+        // 가져온 결과 중 요청된 개수만큼 반환
+        return feeds.stream().limit(count).collect(Collectors.toList());
     }
 }
