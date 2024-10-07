@@ -12,8 +12,8 @@ const useFollow = () => {
 
     try {
       const url = isFollowed
-        ? `/api/unfollow/${userId}`  
-        : `/api/follow/${userId}`;   
+        ? `https://j11c205.p.ssafy.io/api/v1/users/unfollow/${userId}` 
+        : `https://j11c205.p.ssafy.io/api/v1/users/follow/${userId}`; 
 
       const response = await axios.post(
         url,
