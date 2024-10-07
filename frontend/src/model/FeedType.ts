@@ -2,7 +2,7 @@
 
 export interface FeedsType {
     id: number;
-    scheduleId: number;
+    totalPlanId: number;
     placeName: string;
     title: string;
     content: string;
@@ -15,11 +15,12 @@ export interface FeedsType {
     longitude: number;
     latitude: number;
     placeType: string;
-    username: string;
+    nickName: string;
     userProfileImageUrl: string;
     isLiked: boolean;
     createdDate: string;
 }
+
 
 export interface FeedRecommendType {
     response: {
@@ -72,8 +73,8 @@ export interface FeedCommentType {
     userId: number;
     feedId: number;
     content: string;
-    username: string;
-    userProfileImageUrl: string;
+    nickName: string;
+    profileImageUrl: string;
     createdDate: string; 
   }
   

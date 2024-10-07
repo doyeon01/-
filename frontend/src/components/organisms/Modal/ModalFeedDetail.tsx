@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ModalFeedDetailTypeProps,FeedDetailType, FeedCommentType } from '../../../model/FeedType';
 import useLike from '../../../hooks/useLike';
 import { getFeedComment, getFeedDetail, postComment } from '../../../services/api/FeedService';
+import { UserIconMini3 } from '../../../assets/icons/svg';
 
 
 
@@ -9,41 +10,37 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
   const [commentContent, setCommentContent] = useState('');
   const [detailFeed,setDetailFeed] = useState<FeedDetailType|null>(null);
   const [comments,setComments] = useState<FeedCommentType[]|[]>([]);
-  const { isLike, toggleLike } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
+  const { isLike, toggleLike,likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
+  const [likeCnt,setLikeCnt] = useState(0)
 
   useEffect(() => {
     const fetchDetailFeed = async () => {
-      
       try {
         const response = await getFeedDetail(selectedId);
-        setDetailFeed(response.response);
+        setLikeCnt(response.data.response.likeCount)        
+        setDetailFeed(response.data.response);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
-      }
-      console.log(selectedId);
-      
+      }      
     };
     fetchDetailFeed(); 
   }, [isLike]);
 
   useEffect(() => {
-    console.log(detailFeed)
-    if (detailFeed) {
-      console.log("Updated detailFeed: ", detailFeed);
-    }
-  }, [detailFeed]);
+    setLikeCnt(likeCount)
+  }, [likeCount]);
 
   useEffect(() => {
-    const fetchDetailFeed = async () => {
+    const fetchComments = async () => {
       try {
-        const response = await getFeedComment(selectedId);
-        setComments(response.response.comments);
+        const response = await getFeedComment(selectedId);                
+        setComments(response.data.response.comments);
       } catch (error) {
         console.error('Error fetching recommended comments:', error);
       }
     };
 
-    fetchDetailFeed(); 
+    fetchComments(); 
   }, [comments]);
   
 
@@ -52,8 +49,6 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
   };
 
   const handleCommentSubmit = async() => {
-    console.log('댓글 내용:', commentContent);
-
     if (detailFeed !== null){
       await postComment(detailFeed.id,commentContent)
     }
@@ -90,11 +85,14 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
 
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center">
+          {detailFeed.profileImageUrl ? (
             <img
               src={detailFeed.profileImageUrl}
               alt={`${detailFeed.nickName}'s profile`}
               className="w-10 h-10 rounded-full object-cover mr-2"
-              />
+              />) : (
+            <UserIconMini3/>
+            )}
             <div>
               <h2 className="font-bold">{detailFeed.nickName}</h2>
             </div>
@@ -122,8 +120,8 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
             <button aria-label="Like" onClick={toggleLike}>
               {isLike ? '❤️' : '🤍'} 
             </button>
-            <p>{detailFeed.likeCount}</p>
-            <h3 className="font-bold ml-3">💬 {comments.length}</h3>
+            <p>{likeCnt}</p>
+            <h3 className="font-bold ml-3">💬 {comments ? comments.length : 0}</h3>
           </div>
         </div>
       </>
@@ -148,19 +146,19 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({selectedId, closeM
         {/* 댓글 목록 */}
         <div>
           <div className="space-y-4">
-            {comments.map((comment, index) => (
-              <div key={index} className="flex items-start border-b-2 pb-5 ">
-                <img
-                  src={comment.userProfileImageUrl}
-                  alt={`${comment.username}'s profile`} 
-                  className="w-8 h-8 rounded-full object-cover mr-2"
-                  />
-                <div>
-                  <p className="font-semibold">{comment.username}</p>
-                  <p>{comment.content}</p>
-                </div>
+          {comments && comments.map((comment, index) => (
+            <div key={index} className="flex items-start border-b-2 pb-5">
+              <img
+                src={comment.profileImageUrl}
+                alt={`${comment.nickName}'s profile`} 
+                className="w-8 h-8 rounded-full object-cover mr-2"
+              />
+              <div>
+                <p className="font-semibold">{comment.nickName}</p>
+                <p>{comment.content}</p>
               </div>
-            ))}
+            </div>
+          ))}
           </div>
         </div>
       </div>
