@@ -117,3 +117,12 @@ export interface CommentApiResponseType {
     error: Error  | null;
   }
   
+export interface AccompanyBoardResponseType {
+  success: boolean; 
+  response: {
+    articles: ArticleType[];
+    currentPage: number; 
+    hasNextPage: boolean; 
+  };
+  error: null; 
+}
