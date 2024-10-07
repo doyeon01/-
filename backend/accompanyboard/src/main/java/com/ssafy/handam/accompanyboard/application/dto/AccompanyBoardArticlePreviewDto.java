@@ -7,7 +7,7 @@ import java.time.format.DateTimeFormatter;
 public record AccompanyBoardArticlePreviewDto(
         Long id,
         Long userId,
-        Long scheduleId,
+        Long totalPlanId,
         String profileImageUrl,
         String nickName,
         String title,
@@ -21,7 +21,7 @@ public record AccompanyBoardArticlePreviewDto(
         return new AccompanyBoardArticlePreviewDto(
                 article.getId(),
                 article.getUserId(),
-                article.getScheduleId(),
+                article.getTotalPlanId(),
                 userDetailDto.profileImageUrl(),
                 userDetailDto.nickName(),
                 article.getTitle(),
