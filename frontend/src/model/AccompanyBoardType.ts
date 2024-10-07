@@ -98,13 +98,13 @@ export interface CommentApiResponseType {
   export interface UserArticle {
     id: number;
     userId: number;
-    scheduleId: number;
+    totalPlanId: number;
     title: string;
     description: string; 
+    planImageUrl: string;
+    address: string;
     createdDate : string;
     commentCount: number;
-    imageUrl: string;
-    address: string;
   }
   
   export interface UserArticleApiResponse {
