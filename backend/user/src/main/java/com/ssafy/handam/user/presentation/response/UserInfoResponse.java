@@ -9,7 +9,7 @@ public record UserInfoResponse(Long id,
                                String nickname,
                                Gender gender,
                                String age,
-                               String profileImageUrl,
+                               String profileImage,
                                String residence,
                                String introduction,
                                String travelStyl1,
@@ -38,4 +38,5 @@ public record UserInfoResponse(Long id,
                 user.getAccompanyTemperature()
         );
     }
+
 }

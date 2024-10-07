@@ -7,6 +7,7 @@ import com.ssafy.handam.user.infrastructure.jwt.JwtUtil;
 import com.ssafy.handam.user.infrastructure.util.CookieUtil;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
+import com.ssafy.handam.user.presentation.response.UserInfoResponseWithFollowInfo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -21,10 +22,13 @@ public class UserApplicationService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    public UserInfoResponse getCurrentUserInfo(HttpServletRequest request) {
+    public UserInfoResponseWithFollowInfo getCurrentUserInfo(HttpServletRequest request) {
         String accessToken = cookieUtil.getJwtFromCookies(request);
         String email = jwtUtil.extractUserEmail(accessToken);
-        return UserInfoResponse.of(userService.getCurrentUserByEmail(email),true);
+        User user = userService.getCurrentUserByEmail(email);
+        int followerCount = userService.countByFollowing(user.getId()).size();
+        int followingCount = userService.countByFollower(user.getId()).size();
+        return UserInfoResponseWithFollowInfo.of(user,followerCount,followingCount);
     }
 
     public void updateUserSurvey(HttpServletRequest request, UserSurveyServiceRequest surveyRequest) {
