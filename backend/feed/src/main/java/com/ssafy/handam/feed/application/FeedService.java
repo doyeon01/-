@@ -8,6 +8,7 @@ import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceReq
 import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
 import com.ssafy.handam.feed.application.dto.request.feed.RecommendedFeedsForUserServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
+import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
@@ -138,10 +139,16 @@ public class FeedService {
 
     @Transactional(readOnly = true)
     public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable, String accessToken) {
-        List<Feed> likedFeedsByUser = feedDomainService.getLikesBy(userId, pageable);
+        Page<Like> likesBy = feedDomainService.getLikesBy(userId, pageable);
+        List<Long> feedIds = likesBy.getContent().stream()
+                .map(like -> like.getFeed().getId())
+                .toList();
+        List<Feed> likedFeedsByUser = feedDomainService.getFeedByIds(feedIds);
+        boolean hasNextPage = likesBy.hasNext();
+        int currentPage = likesBy.getNumber();
         List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser,
                 userApiClient.getUserById(userId, accessToken));
-        return LikedFeedsByUserResponse.of(likedFeeds, likedFeedsByUser.getNumber(), likedFeedsByUser.hasNext());
+        return LikedFeedsByUserResponse.of(likedFeeds, currentPage, hasNextPage);
     }
 
     @Transactional(readOnly = true)
@@ -215,7 +222,7 @@ public class FeedService {
 
     private List<ClusterResponse> performClustering(Long userId, String token) {
         Pageable allFeedsPageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.unsorted());
-        List<Feed> feeds = feedDomainService.getLikedFeedsByUser(userId, allFeedsPageable).getContent();
+        List<Feed> feeds = feedDomainService.getLikedFeedsByUser(userId, allFeedsPageable);
 
         DBSCANClusterer<DoublePoint> dbscanClusterer = new DBSCANClusterer<>(0.09, 2);
         List<DoublePoint> points = feeds.stream()
@@ -285,7 +292,7 @@ public class FeedService {
     private FeedPreviewDto convertToFeedPreviewDto(FeedDocument feedDocument, UserDto userDto) {
         return new FeedPreviewDto(
                 feedDocument.getId(),
-                feedDocument.getScheduleId(),
+                feedDocument.getTotalPlanId(),
                 feedDocument.getPlaceName(),
                 feedDocument.getTitle(),
                 feedDocument.getContent(),

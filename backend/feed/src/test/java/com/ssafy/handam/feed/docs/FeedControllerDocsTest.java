@@ -255,7 +255,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 32.1323,
                 "CAFE",
                 0,
-                false
+                false,
+                LocalDateTime.now().toString()
         );
 
         given(feedService.getFeedDetails(any(Long.class), any())).willReturn(feedDetailResponse);
@@ -299,6 +300,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
                                         .description("장소 타입"),
                                 fieldWithPath("response.isLiked").type(JsonFieldType.BOOLEAN)
                                         .description("좋아요 여부"),
+                                fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
+                                        .description("피드 생성일자"),
                                 fieldWithPath("error").description("에러 메시지")
                         )
                 ));
@@ -308,7 +311,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void createFeedTest() throws Exception {
         FeedCreationRequest request = FeedCreationRequest.builder()
-                .scheduleId(1L)
+                .totalPlanId(1L)
                 .userId(1L)
                 .title("Test Title")
                 .content("Test Content")

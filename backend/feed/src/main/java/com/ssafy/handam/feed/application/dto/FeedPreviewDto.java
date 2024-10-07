@@ -5,7 +5,7 @@ import java.time.format.DateTimeFormatter;
 
 public record FeedPreviewDto(
         Long id,
-        Long scheduleId,
+        Long totalPlanId,
         String placeName,
         String title,
         String content,

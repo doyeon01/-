@@ -108,4 +108,8 @@ public class FeedDomainService {
     public Page<Like> getLikesBy(Long userId, Pageable pageable) {
         return likeRepository.findByUserId(userId, pageable);
     }
+
+    public List<Feed> getFeedByIds(List<Long> feedIds) {
+        return feedRepository.findByIdIn(feedIds);
+    }
 }
