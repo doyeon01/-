@@ -46,7 +46,7 @@ public class FeedRepositoryImpl implements FeedRepository {
 
     @Override
     public Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable) {
-        return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingOrPlaceTypeOrPlaceNameOrderByLikeCount(
+        return feedElasticsearchRepository.findByTitleContainingOrContentContainingOrAddress1ContainingOrAddress2ContainingOrPlaceTypeOrderByLikeCount(
                 keyword, keyword, keyword, keyword, keyword, pageable);
     }
 
