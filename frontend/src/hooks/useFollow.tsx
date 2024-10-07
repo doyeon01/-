@@ -1,19 +1,19 @@
 import { useState } from 'react';
 import axios from 'axios';
 
-const useFollow = () => {
-  const [loading, setLoading] = useState(false);
+const useFollow = () => {  
+  const [loading, setLoading] = useState<{ [key: number]: boolean }>({});
   const [error, setError] = useState<string | null>(null);
-  const [isFollowed, setIsFollowed] = useState(false);
+  const [isFollowed, setIsFollowed] = useState<{ [key: number]: boolean }>({}); 
 
-  const toggleFollow = async (userId: number) => {
-    setLoading(true);
+  const toggleFollow = async (userId: number, currentStatus: boolean) => {
+    setLoading((prev) => ({ ...prev, [userId]: true }));
     setError(null);
 
     try {
-      const url = isFollowed
-        ? `https://j11c205.p.ssafy.io/api/v1/users/unfollow/${userId}` 
-        : `https://j11c205.p.ssafy.io/api/v1/users/follow/${userId}`; 
+      const url = currentStatus
+        ? `https://j11c205.p.ssafy.io/api/v1/users/unfollow/${userId}`
+        : `https://j11c205.p.ssafy.io/api/v1/users/follow/${userId}`;
 
       const response = await axios.post(
         url,
@@ -23,21 +23,24 @@ const useFollow = () => {
             'Content-Type': 'application/json',
             Accept: 'application/json',
           },
-          withCredentials: true, 
+          withCredentials: true,
         }
       );
 
       if (response.status === 200) {
-        setIsFollowed(!isFollowed);  
+        setIsFollowed((prev) => ({
+          ...prev,
+          [userId]: !currentStatus, 
+        }));
       }
     } catch (err) {
       setError('Error in follow/unfollow action');
     } finally {
-      setLoading(false);
+      setLoading((prev) => ({ ...prev, [userId]: false }));
     }
   };
 
-  return { isFollowed, toggleFollow, loading, error };
+  return { isFollowed, toggleFollow, loading, error, setIsFollowed };
 };
 
 export default useFollow;
