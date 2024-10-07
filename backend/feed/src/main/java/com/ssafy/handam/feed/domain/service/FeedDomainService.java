@@ -7,7 +7,6 @@ import com.ssafy.handam.feed.domain.entity.Like;
 import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
-import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -55,17 +54,17 @@ public class FeedDomainService {
         return likeRepository.findByFeedId(feedId);
     }
 
-    public Page<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
+    public List<Feed> getLikedFeedsByUser(Long userId, Pageable pageable) {
         Page<Like> likes = likeRepository.findByUserId(userId, pageable);
         if (likes == null || likes.isEmpty()) {
-            return Page.empty();
+            return List.of();
         }
 
         List<Long> feedIds = likes.stream()
                 .map(like -> like.getFeed().getId())
                 .toList();
 
-        return feedRepository.findByIdIn(feedIds, pageable);
+        return feedRepository.findByIdIn(feedIds);
     }
 
 
@@ -80,7 +79,7 @@ public class FeedDomainService {
     public Feed createFeed(FeedCreationServiceRequest request, String savedImagePath) {
         return feedRepository.save(Feed.builder()
                 .placeName(request.placeName())
-                .scheduleId(request.scheduleId())
+                .totalPlanId(request.totalPlanId())
                 .title(request.title())
                 .content(request.content())
                 .imageUrl(savedImagePath)
@@ -104,5 +103,9 @@ public class FeedDomainService {
             Pageable pageable) {
         GeoPoint geoPoint = new GeoPoint(latitude, longitude);
         return feedRepository.getNearbyClusterCenter(geoPoint, distance, pageable);
+    }
+
+    public Page<Like> getLikesBy(Long userId, Pageable pageable) {
+        return likeRepository.findByUserId(userId, pageable);
     }
 }

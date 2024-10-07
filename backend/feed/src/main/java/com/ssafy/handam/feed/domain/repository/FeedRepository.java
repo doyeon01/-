@@ -17,7 +17,7 @@ public interface FeedRepository {
 
     Page<FeedDocument> searchFeedsByKeywordSortedByLikeCount(String keyword, Pageable pageable);
 
-    Page<Feed> findByIdIn(List<Long> feedIds, Pageable pageable);
+    List<Feed> findByIdIn(List<Long> feedIds);
 
     Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable);
 }

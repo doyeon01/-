@@ -6,7 +6,7 @@ import lombok.Builder;
 
 @Builder
 public record FeedCreationServiceRequest(
-        Long scheduleId,
+        Long totalPlanId,
         String placeName,
         String title,
         String content,

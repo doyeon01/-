@@ -138,8 +138,8 @@ public class FeedService {
 
     @Transactional(readOnly = true)
     public LikedFeedsByUserResponse getLikedFeedsByUser(Long userId, Pageable pageable, String accessToken) {
-        Page<Feed> likedFeedsByUser = feedDomainService.getLikedFeedsByUser(userId, pageable);
-        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser.getContent(),
+        List<Feed> likedFeedsByUser = feedDomainService.getLikesBy(userId, pageable);
+        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser,
                 userApiClient.getUserById(userId, accessToken));
         return LikedFeedsByUserResponse.of(likedFeeds, likedFeedsByUser.getNumber(), likedFeedsByUser.hasNext());
     }
