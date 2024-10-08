@@ -99,6 +99,18 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
                 마이페이지
               </NavLink>
             </li>
+            <li className="flex items-center">
+              <div className="border-l-2 border-black h-6 pl-8"></div>
+              <NavLink
+                to="https://j11c205.p.ssafy.io/oauth2/authorization/naver" // 리다이렉트 url 바꿀 것
+                className={({ isActive }) =>
+                  isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
+                }
+              >
+                로그아웃
+              </NavLink>
+            </li>
+
           </ul>
         </div>
       </div>

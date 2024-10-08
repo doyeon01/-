@@ -63,7 +63,9 @@ export const PersonalFeedDetail: React.FC = () => {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {feedInfos.map((feed) => (
+        
+      {feedInfos.length > 0 ? (
+        feedInfos.map((feed) => (
           <FeedCard
             key={feed.id}
             title={feed.title}
@@ -74,7 +76,11 @@ export const PersonalFeedDetail: React.FC = () => {
             image={feed.imageUrl}
             onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
           />
-        ))}
+        ))
+      ) : (
+        <p className="text-center col-span-3">게시물이 없습니다.</p>
+      )}
+
         <div ref={ref} />
       </div>
 
