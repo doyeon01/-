@@ -1,6 +1,7 @@
 package com.ssafy.handam.user.infrastructure.security;
 
 import com.ssafy.handam.user.application.service.oauth.CustomOAuth2UserService;
+import com.ssafy.handam.user.infrastructure.oauth.OAuth2LoginFailureHandler;
 import com.ssafy.handam.user.infrastructure.oauth.OAuth2LoginSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -16,6 +17,7 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SecurityConfig {
 
     private final OAuth2LoginSuccessHandler oAuth2LoginSuccessHandler;
+    private final OAuth2LoginFailureHandler oAuth2LoginFailureHandler;
     private final CustomOAuth2UserService customOAuth2UserService;
 
     @Bean
@@ -27,7 +29,9 @@ public class SecurityConfig {
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfoEndpointConfig -> userInfoEndpointConfig
                                 .userService(customOAuth2UserService))
-                        .successHandler(oAuth2LoginSuccessHandler))
+                        .successHandler(oAuth2LoginSuccessHandler)
+                        .failureHandler(oAuth2LoginFailureHandler))
+
                 .authorizeHttpRequests(auth -> auth
                         .anyRequest().permitAll());
 
