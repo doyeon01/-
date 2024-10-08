@@ -192,7 +192,6 @@ public class FeedService {
                 try {
                     ClusterResponse cluster = objectMapper.readValue((String) obj, ClusterResponse.class);
                     clusteredFeeds.add(cluster);
-                    clusteredFeeds.add(cluster);
                 } catch (JsonProcessingException e) {
                     throw new RuntimeException("Failed to parse cached data");
                 }
