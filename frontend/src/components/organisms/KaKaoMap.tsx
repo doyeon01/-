@@ -39,7 +39,7 @@ const KakaoMap: React.FC = () => {
     }, []);
 
     return (
-        <div className="flex items-center justify-center w-screen h-screen z-0 absolute"> 
+        <div className="fixed flex items-center justify-center w-screen h-screen z-0 "> 
             <div id="map" className="w-full h-full" /> 
         </div>
     );

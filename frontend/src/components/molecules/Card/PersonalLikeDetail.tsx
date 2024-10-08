@@ -6,14 +6,19 @@ import { useInView } from 'react-intersection-observer';
 import { LikeFeedList } from '../../../services/api/FeedService'; 
 import { useRecoilValue } from 'recoil';
 import { UserId } from '../../../Recoil/atoms/Auth'; 
+import ModalFeedDetail from '../../organisms/Modal/ModalFeedDetail';
 
 export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButton: boolean }) => {
+  
   const [selectedButton, setSelectedButton] = useState(0); 
   const [filteredFeeds, setFilteredFeeds] = useState<FeedType[]>([]); 
   const [allFeeds, setAllFeeds] = useState<FeedType[]>([]); 
   const [page, setPage] = useState(0); 
   const [hasNextPage, setHasNextPage] = useState(true); 
   const [ref, inView] = useInView(); 
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedFeedId, setSelectedFeedId] = useState<number | null>(null);
+  
   const userId = useRecoilValue(UserId); 
 
   useEffect(() => {
@@ -30,7 +35,6 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
 
 
   const loadMoreFeeds = () => {
-   
     LikeFeedList(userId, page)
       .then((res) => {
         const data: FeedResponseType = res.data;
@@ -51,6 +55,16 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
       });
   };
 
+  const openModal = (feedId: number) => {
+    setSelectedFeedId(feedId);  
+    setIsModalOpen(true);       
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setSelectedFeedId(null);    
+  };
+
   // 좋아요 탭에서 전체 카테고리 선택 시 '전체' 버튼으로 리셋
   useEffect(() => {
     if (resetSelectedButton) {
@@ -67,7 +81,8 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
         1: 'TOURIST_ATTRACTION',
         2: 'ACCOMMODATION',
         3: 'RESTAURANT',
-        4: 'ETC',
+        4: 'CAFE',
+        5: 'ETC',
       };
       const placeType = filterMap[selectedButton];
       setFilteredFeeds(allFeeds.filter((feed) => feed.placeType === placeType)); // 선택된 카테고리의 피드만 필터링
@@ -80,7 +95,8 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     { label: '명소', id: 1 },
     { label: '숙박', id: 2 },
     { label: '음식점', id: 3 },
-    { label: '기타', id: 4 },
+    { label: '카페', id: 4 },
+    { label: '기타', id: 5 }
   ];
 
   return (
@@ -108,12 +124,19 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
             comment={card.commentCount}
             like={card.likeCount}
             image={card.imageUrl}
+            onClick={() => openModal(card.id)}  
           />
         ))}
       </div>
-
-      {/* 무한 스크롤 감지를 위한 요소 */}
       <div ref={ref} className="h-10"></div>
+
+      {/* 모달 컴포넌트 */}
+      {isModalOpen && selectedFeedId && (
+        <ModalFeedDetail 
+          selectedId={selectedFeedId} 
+          closeModal={closeModal} 
+        />
+      )}
     </div>
   );
 };

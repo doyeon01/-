@@ -13,8 +13,8 @@ export interface FeedType {
     longitude: number;
     latitude: number;
     placeType: string;
-    username: string;
-    userProfileImageUrl: string;
+    nickName: string;
+    profileImageUrl: string;
     isLiked: boolean;
     createdDate: string; // ISO 8601 날짜 형식
   }

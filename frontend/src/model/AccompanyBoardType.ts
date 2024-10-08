@@ -21,11 +21,11 @@ export interface CreateArticleApiResponseType {
 export interface ArticleType {
   id: number;
   userId: number;
-  scheduleId: number;
+  totalPlanId: number;
   title: string;
-  profileImage: string; 
-  nickname: string;
-  accompanyDate: string;
+  profileImageUrl: string; 
+  nickName: string;
+  createdDate:string;
 }
 
 export interface ArticleApiResponseType {
@@ -38,16 +38,18 @@ export interface ArticleApiResponseType {
 
 
 //동행게시글 상세 타입
-  export interface ArticleDetailType {
-    id: number;     
-    userId: number; 
-    scheduleId: number; 
-    title: string;  
-    description: string;
-    profileImage: string; 
-    nickname: string;
-    accompanyDate:string;
-  }
+export interface ArticleDetailType {
+  id: number;                       // 게시글 ID
+  userId: number;                   // 사용자 ID
+  totalPlanId: number;               // 일정 ID
+  title: string;                    // 제목
+  description: string;              // 설명
+  profileImageUrl: string;          // 프로필 이미지 URL
+  nickName: string;                 // 닉네임
+  createdDate: string;              // 생성 날짜 (JSON의 createdDate와 일치)
+  commentCount: number;              // 댓글 수
+  accompanyDate?: string;           // 동행 날짜 (선택적, 필요시 추가)
+}
 
   export  interface ArticleDetailApiResponseType {
     success: boolean;
@@ -56,18 +58,22 @@ export interface ArticleApiResponseType {
   }
 
 //동행게시글 댓글
-  export interface CommentType{
-    id:number;
-    userId:number;
-    accompanyBoardArticleId:number;
-    content:string;
-  }
+export interface CommentType {
+  id: number;
+  userId: number;
+  accompanyBoardArticleId: number;
+  profileImageUrl: string; 
+  nickName: string;      
+  content: string;
+}
 
-  export  interface CommentApiResponseType {
-    success: boolean;
-    response: Comment;
-    error: null | Error; 
-  }
+export interface CommentApiResponseType {
+  success: boolean;
+  response: {
+    comments: CommentType[];
+  };
+  error: null | Error;
+}
 //댓글등록
  export interface CreateCommentRequestType {
     userId: number;
@@ -92,13 +98,13 @@ export interface ArticleApiResponseType {
   export interface UserArticle {
     id: number;
     userId: number;
-    scheduleId: number;
+    totalPlanId: number;
     title: string;
     description: string; 
+    planImageUrl: string;
+    address: string;
     createdDate : string;
     commentCount: number;
-    imageUrl: string;
-    address: string;
   }
   
   export interface UserArticleApiResponse {
@@ -111,3 +117,12 @@ export interface ArticleApiResponseType {
     error: Error  | null;
   }
   
+export interface AccompanyBoardResponseType {
+  success: boolean; 
+  response: {
+    articles: ArticleType[];
+    currentPage: number; 
+    hasNextPage: boolean; 
+  };
+  error: null; 
+}
