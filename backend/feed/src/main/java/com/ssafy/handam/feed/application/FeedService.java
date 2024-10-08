@@ -17,6 +17,7 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+import com.ssafy.handam.feed.infrastructure.jwt.JwtUtil;
 import com.ssafy.handam.feed.presentation.response.cluster.ClusterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
@@ -62,6 +63,7 @@ public class FeedService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
     private final Gson gson;
+    private final JwtUtil jwtUtil;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         String createdDate = LocalDateTime.parse("2021-07-01T00:00:00")
@@ -350,7 +352,8 @@ public class FeedService {
     }
 
 
-    public RecommendedFeedsForUserResponse getRecommendedFeeds(Long userId, int page, int pageSize) {
+    public RecommendedFeedsForUserResponse getRecommendedFeeds(String token, int page, int pageSize) {
+        Long userId = jwtUtil.extractUserId(token);
         // Redis에서 피드 ID들을 가져와서 feedDomainService로 넘기는 부분
         List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, pageSize);
         List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, pageSize);
