@@ -35,10 +35,10 @@ import java.time.Duration;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
@@ -121,8 +121,7 @@ public class FeedService {
 
     public String saveImage(MultipartFile imageFile) {
         String UPLOAD_PATH = "/app/photos/";
-        String fileName = UUID.randomUUID().toString() + "_" + imageFile.getOriginalFilename()
-                .replaceAll("[^a-zA-Z0-9\\.\\-]", "_");
+        String fileName = UUID.randomUUID().toString();
         Path path = Paths.get(UPLOAD_PATH + fileName);
 
         try {
@@ -176,7 +175,7 @@ public class FeedService {
         List<Object> cachedData = redisTemplate.opsForList().range(redisKey, 0, -1);
         List<ClusterResponse> clusteredFeeds = new ArrayList<>();
 
-        if (cacheMiss(cachedData)) {
+        if (cacheHit(cachedData)) {
             for (Object obj : cachedData) {
                 ClusterResponse cluster = objectMapper.convertValue(obj, ClusterResponse.class);
                 clusteredFeeds.add(cluster);
@@ -247,7 +246,7 @@ public class FeedService {
                 ));
     }
 
-    private boolean cacheMiss(List<Object> cachedData) {
+    private boolean cacheHit(List<Object> cachedData) {
         return cachedData == null || cachedData.isEmpty();
     }
 
@@ -267,16 +266,19 @@ public class FeedService {
             double[] centroid = calculateCentroid(cluster);
             List<FeedPreviewDto> feedsInCluster = new ArrayList<>();
 
-            List<DoublePoint> points1 = cluster.getPoints();
-            double[] point = points1.get(0).getPoint();
-            double latitude = point[0];
-            double longitude = point[1];
-            Feed feed = searchFeedByLatitudeAndLongitude(latitude, longitude, feeds);
-            if (feed != null) {
-                UserDto userDto = userApiClient.getUserById(feed.getUserId(), token);
-                feedsInCluster.add(FeedPreviewDto.from(feed, userDto.name(), userDto.profileImage(),
-                        isLikedFeed(feed, userId)));
-            }
+            feedsInCluster = cluster.getPoints().stream()
+                    .map(point -> {
+                        double latitude = point.getPoint()[0];
+                        double longitude = point.getPoint()[1];
+                        return searchFeedByLatitudeAndLongitude(latitude, longitude, feeds);
+                    })
+                    .filter(Objects::nonNull)
+                    .map(feed -> {
+                        UserDto userDto = userApiClient.getUserById(feed.getUserId(), token);
+                        return FeedPreviewDto.from(feed, userDto.name(), userDto.profileImage(),
+                                isLikedFeed(feed, userDto.id()));
+                    })
+                    .toList();
             String clusterId = UUID.randomUUID().toString();
             clusteredFeeds.add(ClusterResponse.of(clusterId, centroid[0], centroid[1], feedsInCluster));
         }
@@ -372,7 +374,8 @@ public class FeedService {
         return stringIds.stream()
                 .flatMap(stringId -> {
                     if (stringId.startsWith("[")) {
-                        List<Long> parsedIds = gson.fromJson(stringId, new TypeToken<List<Long>>() {}.getType());
+                        List<Long> parsedIds = gson.fromJson(stringId, new TypeToken<List<Long>>() {
+                        }.getType());
                         return parsedIds.stream();
                     } else {
                         return Stream.of(Long.parseLong(stringId));
