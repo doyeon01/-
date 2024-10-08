@@ -60,11 +60,28 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     setIsModalOpen(true);       
   };
 
-  const closeModal = () => {
+  const closeModal = (updatedData?: { likeCount: number; commentCount: number }) => {
+    if (updatedData && selectedFeedId !== null) {
+      setFilteredFeeds((prevFeeds) =>
+        prevFeeds.map((feed) =>
+          feed.id === selectedFeedId
+            ? { ...feed, likeCount: updatedData.likeCount, commentCount: updatedData.commentCount }
+            : feed
+        )
+      );
+      setAllFeeds((prevFeeds) =>
+        prevFeeds.map((feed) =>
+          feed.id === selectedFeedId
+            ? { ...feed, likeCount: updatedData.likeCount, commentCount: updatedData.commentCount }
+            : feed
+        )
+      );
+    }
     setIsModalOpen(false);
-    setSelectedFeedId(null);    
+    setSelectedFeedId(null);
   };
-
+  
+  
   // 좋아요 탭에서 전체 카테고리 선택 시 '전체' 버튼으로 리셋
   useEffect(() => {
     if (resetSelectedButton) {

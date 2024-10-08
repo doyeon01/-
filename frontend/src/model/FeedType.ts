@@ -40,7 +40,7 @@ error: null | Error;
 //상세피드조회
  export interface ModalFeedDetailTypeProps {
     selectedId:number;
-    closeModal: () => void;
+    closeModal: (updatedData?: { likeCount: number; commentCount: number }) => void; 
   }
 
 export interface FeedDetailType{
