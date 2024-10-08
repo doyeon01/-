@@ -41,3 +41,14 @@ export const getUserSearch = async ( keyword:string,date?: string): Promise<User
     throw new Error(`유저 못찾앗음: ${error}`);
   }
 };
+
+export const getFollowingList = async () => {
+  try {
+    const response = await axios.get(`${BaseUrl}/following-users`,{
+      withCredentials: true
+    })
+    return response.data;
+  } catch (error) {
+    throw new Error(`유저 못찾앗음: ${error}`);
+  }
+};

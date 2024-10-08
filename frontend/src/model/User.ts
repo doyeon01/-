@@ -40,3 +40,28 @@ export interface UserProfileType {
     isFollowed: boolean;
     accompanyTemperature: number;
   }
+
+  export interface UserFollowingType {
+    id: number;
+    email: string | null;
+    name: string;
+    nickname: string | null;
+    gender: 'MALE' | 'FEMALE';
+    age: string;
+    profileImage: string | null;
+    residence: string | null;
+    introduction: string;
+    travelStyl1: string;
+    travelStyl2: string;
+    travelStyl3: string;
+    travelStyl4: string;
+    isFollowed: boolean;
+    accompanyTemperature: number;
+  }
+  
+ export interface UserFollowingResponseType {
+    success: boolean;
+    response: UserFollowingType[];
+    error: Error | null;
+  }
+  
