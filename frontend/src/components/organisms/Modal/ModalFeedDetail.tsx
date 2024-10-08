@@ -7,6 +7,7 @@ import { UserIconMini3 } from '../../../assets/icons/svg';
 import { getYourInfo } from '../../../services/api/UserService';
 import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
 import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
 
 const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, closeModal }) => {
   const [commentContent, setCommentContent] = useState('');
@@ -16,9 +17,8 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
   const [userId] = useRecoilState(UserIdAtom);  
+  const navigate = useNavigate();  
 
-  console.log(detailFeed);
-  
   useEffect(() => {
     const fetchDetailFeed = async () => {
       try {
@@ -64,11 +64,15 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const handleCommentSubmit = async () => {
     if (detailFeed !== null) {
       const response = await postComment(userId,detailFeed.id, commentContent);
-        if (response.success === true){
-          setCommentContent('');
-          fetchComments();
-        }
-          }
+      if (response.success === true){
+        setCommentContent('');
+        fetchComments();
+      }
+    }
+  };
+
+  const handleProfileClick = (userId: number) => {
+    navigate(`/your/${userId}`);
   };
 
   return (
@@ -83,7 +87,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
               <div className='text-3xl font-bold text-center mb-4'>{detailFeed.title}</div>
               <hr className="border-gray-300 my-4" />
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
+                <div className="flex items-center cursor-pointer" onClick={() => handleProfileClick(detailFeed.userId)}> 
                   {detailFeed.profileImageUrl ? (
                     <img
                       src={detailFeed.profileImageUrl}

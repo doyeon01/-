@@ -77,7 +77,7 @@ export function UserIconMini3(): JSX.Element {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="w-[40px] h-[40px] text-[#645E59]"  
+      className="w-[30px] h-[30px] text-[#645E59]"  
     >
       <path
         fillRule="evenodd"
