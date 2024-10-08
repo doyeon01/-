@@ -4,7 +4,6 @@ import axios from 'axios';
 
 const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
 // const userId = useRecoilValue(UserId);
-const userId = 2896
 
 // 피드 생성 API
 export const FeedCreate = async (data: FormData) => {
@@ -45,7 +44,7 @@ export const LikeFeedList = (userId: number, page: number, size = 100) => {
 
 
 // 맞춤 피드 추천 API
-export const postFeedRecommend = (page = 1, size = 10) => {
+export const postFeedRecommend = (userId:number,page = 1, size = 10) => {
   return axios.post(`${BaseUrl}/user/recommended`, {
     userId: userId,
     page: page,
@@ -81,7 +80,7 @@ export const getFeedDetail = (id: number) => {
   };
 
   //댓글 등록 API
-  export const postComment = async (feedId: number, content: string) => {
+  export const postComment = async (userId:number,feedId: number, content: string) => {
     try {
       const response = await axios.post(`${BaseUrl}/${feedId}/comments`, {
         userId,
@@ -101,7 +100,7 @@ export const getFeedDetail = (id: number) => {
   };
 
   //좋아요 API
-  export const postLike = async (feedId: number)=> {
+  export const postLike = async (userId:number,feedId: number)=> {
     try {
       const response = await axios.post(`${BaseUrl}/like/${feedId}?userId=${userId}`, {}, {
         headers: {
@@ -119,7 +118,7 @@ export const getFeedDetail = (id: number) => {
   };
 
   //좋아요 취소 api
-  export const postUnlike = async (feedId: number) => {
+  export const postUnlike = async (userId:number,feedId: number) => {
     try {
       const response = await axios.post(`${BaseUrl}/unlike/${feedId}?userId=${userId}`, {}, {
         headers: {

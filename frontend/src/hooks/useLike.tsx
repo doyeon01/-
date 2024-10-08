@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { postLike, postUnlike } from '../services/api/FeedService'; 
+import { useRecoilState } from 'recoil';
+import { UserId as UserIdAtom } from '../Recoil/atoms/Auth'
 
 const useLike = (initialLike: boolean, feedId: number | null) => {
   console.log(initialLike);
-  
+  const [userId] = useRecoilState(UserIdAtom);  
   const [isLike, setIsLike] = useState(initialLike);
   const [likeCount, setLikeCount] = useState(0); 
 
@@ -15,9 +17,9 @@ const useLike = (initialLike: boolean, feedId: number | null) => {
         let response;
 
         if (isLike) {
-          response = await postUnlike(feedId);
+          response = await postUnlike(userId,feedId);
         } else {
-          response = await postLike(feedId);
+          response = await postLike(userId,feedId);
         }
         if (response && response.success && response.response) {
           setLikeCount(response.response.likeCount);

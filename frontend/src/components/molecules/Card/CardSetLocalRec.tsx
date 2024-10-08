@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { getFeed } from '../../../services/api/RegisterUser';
 import { FeedType } from '../../../model/SearchingFeedType';
 import { postLike, postUnlike } from '../../../services/api/FeedService';
+import { useRecoilState } from 'recoil';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
 
 
 const regionsTop = ['전국', '서울', '광주', '대전', '대구', '인천', '부산', '울산', '제주'];
@@ -13,6 +15,7 @@ const CardSetLocalRec: React.FC<CardSetLocalRecProps> = ({onClick}) => {
   const [selectedRegion, setSelectedRegion] = useState<string >('');
   const [places, setPlaces] = useState<FeedType[] | null>(null);
   const [likeStates, setLikeStates] = useState<{ [key: number]: boolean }>({}); 
+  const [userId] = useRecoilState(UserIdAtom);  
 
   const handleButtonClick = (region: string) => {
     setSelectedRegion(region);
@@ -35,7 +38,7 @@ const CardSetLocalRec: React.FC<CardSetLocalRecProps> = ({onClick}) => {
     const toggleLike = async (id: number) => {
       try {
         const currentLike = likeStates[id]; 
-        const response = currentLike ? await postUnlike(id) : await postLike(id);
+        const response = currentLike ? await postUnlike(userId,id) : await postLike(userId,id);
   
         if (response && response.success) {
           setLikeStates((prev) => ({ ...prev, [id]: !currentLike }));

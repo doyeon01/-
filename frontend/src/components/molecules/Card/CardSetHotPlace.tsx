@@ -4,6 +4,8 @@ import 'react-datepicker/dist/react-datepicker.css';
 import { getFeed } from '../../../services/api/RegisterUser';
 import { FeedType } from '../../../model/SearchingFeedType';
 import { postLike, postUnlike } from '../../../services/api/FeedService';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
+import { useRecoilState } from 'recoil';
 
 interface CardSetHotPlaceProps {
   myAge: string; 
@@ -19,6 +21,7 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
   const [places, setPlaces] = useState<FeedType[]>([]);
   const [category, setCategory] = useState<string>(''); 
   const [likeStates, setLikeStates] = useState<{ [key: number]: boolean }>({}); 
+  const [userId] = useRecoilState(UserIdAtom);  
 
   useEffect(() => {
     const convertAge = (ageRange: string) => {
@@ -72,7 +75,7 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
   const toggleLike = async (id: number) => {
     try {
       const currentLike = likeStates[id]; 
-      const response = currentLike ? await postUnlike(id) : await postLike(id); 
+      const response = currentLike ? await postUnlike(userId, id) : await postLike(userId,id); 
 
       if (response && response.success) {
         setLikeStates((prev) => ({ ...prev, [id]: !currentLike }));

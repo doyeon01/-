@@ -5,6 +5,8 @@ import useFollow from '../../../hooks/useFollow';
 import { getFeedComment, getFeedDetail, postComment } from '../../../services/api/FeedService';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 import { getYourInfo } from '../../../services/api/UserService';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
+import { useRecoilState } from 'recoil';
 
 const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, closeModal }) => {
   const [commentContent, setCommentContent] = useState('');
@@ -13,6 +15,8 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isLike, toggleLike, likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
+  const [userId] = useRecoilState(UserIdAtom);  
+
   console.log(detailFeed);
   
   useEffect(() => {
@@ -59,7 +63,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
 
   const handleCommentSubmit = async () => {
     if (detailFeed !== null) {
-      const response = await postComment(detailFeed.id, commentContent);
+      const response = await postComment(userId,detailFeed.id, commentContent);
         if (response.success === true){
           setCommentContent('');
           fetchComments();
@@ -114,7 +118,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <button aria-label="Like" onClick={toggleLike}>
-                    {isLike ? '❤️' : '🤍'}
+                    {detailFeed.isLiked ? '❤️' : '🤍'}
                   </button>
                   <p>{likeCnt}</p>
                   <h3 className="font-bold ml-3">💬 {comments.length}</h3>
