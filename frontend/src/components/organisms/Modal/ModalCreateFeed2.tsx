@@ -154,7 +154,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
         ) : (
           <div className="h-full overflow-y-auto p-4 relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <button
-              className="absolute top-0 right-0 text-gray-500 hover:text-gray-700"
+              className="absolute top-[-5px] right-0 text-gray-500 hover:text-gray-700"
               onClick={() => onClose()}
             >
               &times;
@@ -168,7 +168,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                 [ {schedule} ]  
               </div>
               <button
-                className="bg-[#707C60] text-white px-4 py-2 rounded-lg pr-4"
+                className="bg-[#645e59] text-white px-4 py-2 rounded-lg pr-4"
                 onClick={handle.validateAndComplete} // 완료 버튼 클릭 시 유효성 검사 후 onComplete 호출
               >
                 완료
@@ -197,7 +197,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                   <PictureIcon />
                 )}
 
-                <label className="text-white bg-[#707C60] hover:bg-[#4F5843] text-md py-2 px-10 rounded-lg font-base transition-colors duration-200 cursor-pointer mt-4">
+                <label className="text-white bg-[#645e59] hover:bg-[#4F5843] text-md py-2 px-10 rounded-lg font-base transition-colors duration-200 cursor-pointer mt-4">
                   사진 올리기
                   <input
                     type="file"
