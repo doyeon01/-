@@ -247,7 +247,7 @@ public class FeedService {
     }
 
     private boolean cacheHit(List<Object> cachedData) {
-        return cachedData == null || cachedData.isEmpty();
+        return cachedData != null || !cachedData.isEmpty();
     }
 
     private List<ClusterResponse> performClustering(Long userId, String token) {
@@ -381,7 +381,7 @@ public class FeedService {
                         return Stream.of(Long.parseLong(stringId));
                     }
                 })
-                .collect(Collectors.toList());
+                .toList();
     }
 
     // Redis에서 피드 ID를 가져오는 메서드
