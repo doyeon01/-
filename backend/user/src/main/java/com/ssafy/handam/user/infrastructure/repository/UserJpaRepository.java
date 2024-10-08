@@ -11,9 +11,8 @@ import java.util.Optional;
 public interface UserJpaRepository extends JpaRepository<User, Long> {
     List<User> findByNameContaining(String keyword);
 
-    @Query("SELECT DISTINCT u FROM User u WHERE u.nickname LIKE CONCAT('%', :keyword, '%') AND u.nickname NOT LIKE CONCAT(:startWord, '%')")
-    List<User> findByNicknameContaining(@Param("keyword") String keyword, @Param("startWord") String startWord);
-
+    @Query("SELECT DISTINCT u FROM User u WHERE u.nickname IS NOT NULL AND u.nickname LIKE CONCAT('%', :keyword, '%')")
+    List<User> findByNicknameContaining(@Param("keyword") String keyword);
     boolean existsByEmail(String email);
 
     Optional<User> findByEmail(String email);

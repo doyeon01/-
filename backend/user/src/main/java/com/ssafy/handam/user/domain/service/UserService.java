@@ -11,6 +11,8 @@ import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -97,8 +99,10 @@ public class UserService {
     public List<UserInfoResponse> searchUsersByKeyword(Long userId,String keyword) {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("내정보를 찾을 수 없습니다."));
-
-        List<User> users = userRepository.findByNicknameContaining(keyword,"e");
+        if (keyword == null || keyword.trim().isEmpty()) {
+            return Collections.emptyList();
+        }
+        List<User> users = userRepository.findByNicknameContaining(keyword);
 
         return users.stream()
                 .map(user -> {
