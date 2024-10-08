@@ -98,8 +98,8 @@ public class UserService {
         User currentUser = userRepository.findById(userId)
                 .orElseThrow(() -> new IllegalArgumentException("내정보를 찾을 수 없습니다."));
 
-        List<User> users = userRepository.findByNameContaining(keyword);
-
+        List<User> users = userRepository.findByNicknameContaining(keyword,"e");
+        
         return users.stream()
                 .map(user -> {
                     Optional<Follow> follow = findFollowStatus(currentUser, user);
@@ -132,6 +132,18 @@ public class UserService {
 
         follow.unfollow();
         followRepository.save(follow);
+    }
+    public List<UserInfoResponse> getFollowingUsers(Long userId) {
+        User follower = userRepository.findById(userId)
+                .orElseThrow(() -> new IllegalArgumentException("내정보를 찾을 수 없습니다."));
+        List<Follow> followingUsers = followRepository.findByFollowerId(follower.getId());
+        return followingUsers.stream()
+                .map(follow -> {
+                    User followedUser = userRepository.findById(follow.getFollowing().getId())
+                            .orElseThrow(() -> new IllegalArgumentException("팔로우한 사용자를 찾을 수 없습니다."));
+                    return UserInfoResponse.of(followedUser, true);
+                })
+                .collect(Collectors.toList());
     }
 
     private boolean doesUserNotExist(String email) {

@@ -2,6 +2,8 @@ package com.ssafy.handam.feed.application;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
@@ -33,6 +35,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
+
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
@@ -55,6 +59,7 @@ public class FeedService {
     private final UserApiClient userApiClient;
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
+    private final Gson gson;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         String createdDate = LocalDateTime.parse("2021-07-01T00:00:00")
@@ -334,7 +339,7 @@ public class FeedService {
         List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, pageSize);
         List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, pageSize);
         List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, pageSize);
-
+        System.out.println(recommendedFeedIds.get(0));
         // Feed IDs를 Long으로 변환
         List<Long> recommendedFeedIdsLong = convertStringIdsToLong(recommendedFeedIds);
         List<Long> topLikedFeedIdsLong = convertStringIdsToLong(topLikedFeedIds);
@@ -354,7 +359,14 @@ public class FeedService {
 
     private List<Long> convertStringIdsToLong(List<String> stringIds) {
         return stringIds.stream()
-                .map(Long::parseLong)
+                .flatMap(stringId -> {
+                    if (stringId.startsWith("[")) {
+                        List<Long> parsedIds = gson.fromJson(stringId, new TypeToken<List<Long>>() {}.getType());
+                        return parsedIds.stream();
+                    } else {
+                        return Stream.of(Long.parseLong(stringId));
+                    }
+                })
                 .collect(Collectors.toList());
     }
 

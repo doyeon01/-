@@ -75,4 +75,9 @@ public class UserController {
         userApplicationService.unfollowUser(token,followTargetId);
         return success(null);
     }
+    @GetMapping("/followingUsers")
+    public ApiResult<List<UserInfoResponse>> getFollowingUsers(@CookieValue(value = "accessToken", required = false) String token) {
+        List<UserInfoResponse> userInfoResponses = userApplicationService.getFollowingUsers(token);
+        return success(userInfoResponses);
+    }
 }
