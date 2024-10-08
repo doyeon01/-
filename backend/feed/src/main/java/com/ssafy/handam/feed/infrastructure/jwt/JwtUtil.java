@@ -13,7 +13,6 @@ import javax.crypto.SecretKey;
 public class JwtUtil {
 
     private final SecretKey secretKey;
-    private final long expirationTime = 36000000;
 
     public JwtUtil(@Value("${spring.jwt.secret}") String secret) {
         this.secretKey = Keys.hmacShaKeyFor(secret.getBytes());
