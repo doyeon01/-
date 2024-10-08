@@ -21,9 +21,9 @@ const MainPage: React.FC = () => {
   const [myAge,setMyAge] = useState('')
   const [myResidence,setMyResidence] = useState('')
   const [myGender,setMyGender] = useState('')
-
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   // userId 가져오기 및 저장 로직
   useEffect(() => {
     const fetchUserInfo = async () => {
@@ -77,9 +77,9 @@ const MainPage: React.FC = () => {
       targetSection.scrollIntoView({ behavior: 'smooth' });
     }
   }, [currentSection]);
+  
   const handleItemClick = (id: number) => {
     setSelectedId(id);
-
     setIsModalOpen(true);
   };
 
@@ -113,7 +113,7 @@ const MainPage: React.FC = () => {
         {/* 4번째 섹션 */}
         <div id="section3" className={`${styles.section} ${currentSection === 3 ? styles.visible : styles.hidden} pt-[50px]`}>
           <div className='text-[25px] text-center mt-28'>여행한담의 빅데이터 정보로 분석한 지역별 핫한 여행지와 맛집을 소개합니다.</div>
-          <CardSetLocalRec />
+          <CardSetLocalRec onClick ={handleItemClick} />
         </div>
 
         {/* 5번째 섹션 */}

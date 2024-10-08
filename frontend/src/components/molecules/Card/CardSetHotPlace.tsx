@@ -55,10 +55,9 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
           const response = await getFeed(keyword, 1, 3);
           console.log(`${keyword}로 요청:`, response.response.feeds);
           setPlaces(response.response.feeds);
-          // 초기 좋아요 상태 설정
           const initialLikes: { [key: number]: boolean } = {};
           response.response.feeds.forEach((place) => {
-            initialLikes[place.id] = place.isLiked; // 각 장소의 초기 좋아요 상태 저장
+            initialLikes[place.id] = place.isLiked; 
           });
           setLikeStates(initialLikes);
         }
@@ -72,11 +71,10 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
 
   const toggleLike = async (id: number) => {
     try {
-      const currentLike = likeStates[id]; // 현재 좋아요 상태 가져오기
-      const response = currentLike ? await postUnlike(id) : await postLike(id); // 좋아요 또는 좋아요 취소 요청
+      const currentLike = likeStates[id]; 
+      const response = currentLike ? await postUnlike(id) : await postLike(id); 
 
       if (response && response.success) {
-        // 요청이 성공하면 상태 업데이트
         setLikeStates((prev) => ({ ...prev, [id]: !currentLike }));
       }
     } catch (error) {
