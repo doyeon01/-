@@ -25,6 +25,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   
   useEffect(() => {
     const fetchData = () => {
+      console.log(userId);
       axios
         .get(`http://localhost:8080/api/v1/chat/user?userId=${userId}`)
         .then((response) => {          
@@ -103,6 +104,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     const fetchFollowingList = async () => {
       const res = await getFollowingList(); 
       const data: UserFollowingResponseType = res.data;
+      console.log(data);
+      
       if (data.success) {
         console.log(data)
         setFollowings(data.response)
