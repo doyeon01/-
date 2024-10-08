@@ -30,3 +30,10 @@ export interface FeedType {
     response: FeedResponseType;
     error: string | null; // 에러가 없을 경우 null
   }
+
+  export interface FeedClusterType {
+    clusterId: string;
+    latitude: number;
+    longitude: number;
+    feeds: FeedType[];
+  }
