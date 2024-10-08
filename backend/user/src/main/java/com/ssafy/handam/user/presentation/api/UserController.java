@@ -32,7 +32,7 @@ public class UserController {
     private String logoutRedirectUrl;
 
     @PostMapping("/logout")
-    public ApiResult<Void> logout(@RequestBody HttpServletRequest request, HttpServletResponse response) throws IOException {
+    public ApiResult<Void> logout(HttpServletResponse response) throws IOException {
         userApplicationService.logout(response);
         response.sendRedirect(logoutRedirectUrl);
         return success(null);
