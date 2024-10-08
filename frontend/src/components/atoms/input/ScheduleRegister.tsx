@@ -33,6 +33,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
       // console.error('No data found in drop event'); // 드롭된 데이터가 없을 때 처리
     }
     setIsDragging(false);
+    setHoveredIndex(null)
   };
 
   const handleDragStart = (index: number) => {

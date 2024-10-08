@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Lens from '../../assets/statics/Lens.png'
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
+import { FeedClusterType } from '../../model/SearchingFeedType';
 
 export interface Props {
     isSearch:Boolean
+    clusters: FeedClusterType[]
 }
 
-const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
+const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
     const [keyword, setKeyword] = useState(''); // 키워드 상태
     const [places, setPlaces] = useState<any[]>([]); // 장소 목록 상태
     const [markers, setMarkers] = useState<any[]>([]); // 마커 상태
