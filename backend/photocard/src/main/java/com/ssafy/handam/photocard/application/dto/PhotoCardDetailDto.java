@@ -7,7 +7,8 @@ public record PhotoCardDetailDto(
 
         Long id,
         Long userId,
-        Long feedId,
+        Long totalPlanId,
+        String planTitle,
         String photoCardUrl,
         String createdDate) {
 
@@ -19,7 +20,8 @@ public record PhotoCardDetailDto(
         return new PhotoCardDetailDto(
                 photoCard.getId(),
                 photoCard.getUserId(),
-                photoCard.getFeedId(),
+                photoCard.getTotalPlanId(),
+                photoCard.getPlanTitle(),
                 photoCard.getPhotoCardUrl(),
                 formattedCreatedDate
         );

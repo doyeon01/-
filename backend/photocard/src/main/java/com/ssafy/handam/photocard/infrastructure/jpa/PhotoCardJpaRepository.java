@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface PhotoCardJpaRepository extends JpaRepository<PhotoCard, Long> {
 
-    PhotoCard findByFeedId(Long feedId);
     Page<PhotoCard> findByUserId(Long userId, Pageable pageable);
+    PhotoCard findByTotalPlanId(Long totalPlanId);
 }
