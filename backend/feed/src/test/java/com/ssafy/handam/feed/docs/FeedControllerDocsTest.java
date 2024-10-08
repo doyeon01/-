@@ -26,6 +26,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ssafy.handam.feed.application.dto.CommentDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
+import com.ssafy.handam.feed.application.dto.request.feed.FeedsByTotalPlanIdServiceRequest;
 import com.ssafy.handam.feed.application.dto.response.comment.CreateCommentServiceResponse;
 import com.ssafy.handam.feed.domain.PlaceType;
 import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
@@ -37,6 +38,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -49,6 +51,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.http.MediaType;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 class FeedControllerDocsTest extends RestDocsSupport {
@@ -680,7 +683,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
         // given
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
         List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
-        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+        ClusterResponse response = new ClusterResponse(UUID.randomUUID().toString(), 37.7749, 122.4194,
+                feedPreviewDtos);
 
         // when
         given(feedService.getClusteredFeeds(any(), any())).willReturn(List.of(response));
@@ -758,7 +762,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
         // given
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
         List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
-        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+        ClusterResponse response = new ClusterResponse(UUID.randomUUID().toString(), 37.7749, 122.4194,
+                feedPreviewDtos);
 
         // when
         given(feedService.refreshClusteredFeeds(any(), any())).willReturn(List.of(response));
@@ -933,5 +938,35 @@ class FeedControllerDocsTest extends RestDocsSupport {
         );
     }
 
+    @Test
+    @DisplayName("일정 ID 기반 피드 이미지 전체 조회 API")
+    void getFeedsImageUrlsByTotalPlanIdTest() throws Exception {
 
+        FeedsByTotalPlanIdServiceRequest feedsByTotalPlanIdServiceRequest = new FeedsByTotalPlanIdServiceRequest(
+                1L
+        );
+        Long requestTotalPlanId = 1L;
+        FeedsImageUrlResponse response = FeedsImageUrlResponse.of(List.of("feed-image-url"));
+
+        given(feedService.getFeedsImageUrlsByTotalPlanId(feedsByTotalPlanIdServiceRequest)).willReturn(response);
+
+        mockMvc.perform(
+                        RestDocumentationRequestBuilders.get("/api/v1/feeds/search/images/{totalPlanId}",
+                                requestTotalPlanId)
+                )
+                .andExpect(status().isOk())
+                .andDo(document("get-feeds-image-urls",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("totalPlanId").description("일정 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feedImageUrls[]").type(JsonFieldType.ARRAY)
+                                        .description("피드 이미지 url"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
+    }
 }

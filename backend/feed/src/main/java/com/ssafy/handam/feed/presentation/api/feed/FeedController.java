@@ -7,10 +7,12 @@ import com.ssafy.handam.feed.application.FeedService;
 import com.ssafy.handam.feed.application.LikeService;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
+import com.ssafy.handam.feed.application.dto.request.feed.FeedsByTotalPlanIdServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
+import com.ssafy.handam.feed.presentation.request.feed.FeedsByTotalPlanIdRequest;
 import com.ssafy.handam.feed.presentation.request.feed.RecommendedFeedsForUserRequest;
 import com.ssafy.handam.feed.presentation.response.cluster.ClusterResponse;
 import com.ssafy.handam.feed.presentation.response.comment.CreateCommentResponse;
@@ -19,6 +21,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -190,6 +193,13 @@ public class FeedController {
         RecommendedFeedsForUserResponse response = feedService.getRecommendedFeeds(userId, page, pageSize);
 
         return success(response);
+    }
+
+    @GetMapping("/search/images/{totalPlanId}")
+    public ApiResult<FeedsImageUrlResponse> getFeedsImageUrlsByTotalPlanId(@PathVariable Long totalPlanId) {
+
+        FeedsByTotalPlanIdServiceRequest request = FeedsByTotalPlanIdRequest.toService(totalPlanId);
+        return success(feedService.getFeedsImageUrlsByTotalPlanId(request));
     }
 }
 

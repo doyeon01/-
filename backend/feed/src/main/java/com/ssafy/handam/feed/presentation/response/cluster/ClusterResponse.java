@@ -2,14 +2,18 @@ package com.ssafy.handam.feed.presentation.response.cluster;
 
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import java.util.List;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
-public record ClusterResponse(
-        String clusterId,
-        double latitude,
-        double longitude,
-        List<FeedPreviewDto> feeds
-) {
-    public static ClusterResponse of(String clusterId, double latitude, double longitude, List<FeedPreviewDto> feeds) {
-        return new ClusterResponse(clusterId, latitude, longitude, feeds);
-    }
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
+public class ClusterResponse {
+    private String clusterId;
+    private double latitude;
+    private double longitude;
+    private List<FeedPreviewDto> feeds;
 }

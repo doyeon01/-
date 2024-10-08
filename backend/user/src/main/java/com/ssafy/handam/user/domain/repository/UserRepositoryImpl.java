@@ -26,8 +26,8 @@ public class UserRepositoryImpl implements UserRepository {
 
 
     @Override
-    public List<User> findByNicknameContaining(String keyword) {
-        return userJpaRepository.findByNicknameContaining(keyword);
+    public List<User> findByNicknameContaining(String keyword, String startWord) {
+        return userJpaRepository.findByNicknameContaining(keyword,startWord);
     }
 
     @Override

@@ -35,6 +35,7 @@ public class UserApplicationService {
     public Long getUserInfoByToken(String token) {
         return jwtUtil.extractUserId(token);
     }
+
     public UserInfoResponseWithFollowInfo getCurrentUserInfo(HttpServletRequest request) {
         String accessToken = cookieUtil.getJwtFromCookies(request);
         String email = jwtUtil.extractUserEmail(accessToken);

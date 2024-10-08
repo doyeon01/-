@@ -2,6 +2,7 @@ package com.ssafy.handam.user.presentation.api;
 
 import static com.ssafy.handam.user.presentation.api.ApiUtils.success;
 
+import com.nimbusds.openid.connect.sdk.LogoutRequest;
 import com.ssafy.handam.user.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.user.application.service.UserApplicationService;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
@@ -33,7 +34,6 @@ public class UserController {
 
     @PostMapping("/logout")
     public ApiResult<Void> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
-
         Cookie logoutCookie = userApplicationService.logout(token);
         response.addCookie(logoutCookie);
         response.sendRedirect(logoutRedirectUrl);
@@ -63,12 +63,6 @@ public class UserController {
     @GetMapping("/{id}")
     public ApiResult<UserInfoResponse> getUserInfo(@PathVariable("id") Long id) {
         UserInfoResponse userInfoResponse = userService.findUserById(id);
-        return success(userInfoResponse);
-    }
-    @GetMapping("/info")
-    public ApiResult<UserInfoResponse> getUserInfoByToken(@CookieValue(value = "accessToken", required = false) String token) {
-        Long userId = userApplicationService.getUserInfoByToken(token);
-        UserInfoResponse userInfoResponse = userService.findUserById(userId);
         return success(userInfoResponse);
     }
 

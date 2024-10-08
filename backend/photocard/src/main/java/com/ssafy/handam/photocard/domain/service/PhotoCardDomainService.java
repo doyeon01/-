@@ -17,11 +17,16 @@ public class PhotoCardDomainService {
     private final PhotoCardRepository photoCardRepository;
 
     public PhotoCard createPhotoCard(PhotoCardSaveRequest request) {
-        return photoCardRepository.save(new PhotoCard(request.userId(), request.feedId(), request.photoCardUrl()));
+        return photoCardRepository.save(new PhotoCard(
+                request.userId(),
+                request.totalPlanId(),
+                request.planTitle(),
+                request.photoCardUrl()
+                ));
     }
 
-    public PhotoCard getPhotoCard(Long feedId) {
-        return photoCardRepository.findByFeedId(feedId);
+    public PhotoCard getPhotoCard(Long totalPlanId) {
+        return photoCardRepository.findByTotalPlanId(totalPlanId);
     }
 
     public Page<PhotoCard> getPhotoCardsByUserId(Long userId, Pageable pageable) {
