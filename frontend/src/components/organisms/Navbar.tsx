@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import logo from './../../assets/statics/logo.png';
 import { NavLink } from 'react-router-dom';
-import axios from 'axios';
 
 export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -23,17 +22,10 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
   }, []);
 
   const isWhiteBackground = location.pathname === '/companion';
-
+  
   const handleLogout = () => {
     setActiveMenu('logout'); 
-    axios.get('https://j11c205.p.ssafy.io/api/v1/users/logout', { withCredentials: true })
-      .then((res) => {
-        console.log('로그아웃 성공:', res.data);
-      })
-      .catch((error) => {
-        console.error('로그아웃 실패:', error);
-      });
-  };
+    window.location.href = 'https://j11c205.p.ssafy.io/api/v1/users/logout'};
 
   return (
     <nav
