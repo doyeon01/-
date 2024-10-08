@@ -359,7 +359,7 @@ public class FeedService {
         List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, pageSize);
         List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, pageSize);
         List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, pageSize);
-        System.out.println(recommendedFeedIds.get(0));
+
         // Feed IDs를 Long으로 변환
         List<Long> recommendedFeedIdsLong = convertStringIdsToLong(recommendedFeedIds);
         List<Long> topLikedFeedIdsLong = convertStringIdsToLong(topLikedFeedIds);
