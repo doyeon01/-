@@ -30,11 +30,11 @@ public class UserController {
     @Value("${app.security.logout-redirect-url}")
     private String logoutRedirectUrl;
 
-    @GetMapping("/logout")
-    public ApiResult logout(HttpServletResponse response) throws IOException {
+    @PostMapping("/logout")
+    public ApiResult<Void> logout(HttpServletResponse response) throws IOException {
         userApplicationService.logout(response);
         response.sendRedirect(logoutRedirectUrl);
-        return success(true);
+        return success(null);
     }
 
     @GetMapping("/myInfo")
