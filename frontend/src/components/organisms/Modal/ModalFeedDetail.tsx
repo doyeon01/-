@@ -9,6 +9,7 @@ import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth';
 import { useRecoilState } from 'recoil';
 import { useNavigate } from 'react-router-dom';
 
+
 const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, closeModal }) => {
   const [commentContent, setCommentContent] = useState('');
   const [detailFeed, setDetailFeed] = useState<FeedDetailType | null>(null);
@@ -75,11 +76,15 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
     navigate(`/your/${userId}`);
   };
 
+  const handleModalClose = () => {
+    closeModal({ likeCount: likeCnt, commentCount: comments.length });
+  };
+  
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50" onClick={closeModal}/>
+      <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50" onClick={handleModalClose}/>
         <div className="fixed bg-[#F4F4EE] top-[50px] right-[380px] z-50 p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-          <button onClick={closeModal} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+          <button onClick={handleModalClose} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
             &times;
           </button>
           {detailFeed && (

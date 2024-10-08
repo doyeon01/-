@@ -49,38 +49,43 @@ export const PersonalFeedDetail: React.FC = () => {
       });
   };
 
-  
   const openModal = (feedId: number) => {
     setSelectedFeedId(feedId);  
     setIsModalOpen(true);       
   };
 
-  const closeModal = () => {
+  const closeModal = (updatedData?: { likeCount: number; commentCount: number }) => {
+    if (updatedData && selectedFeedId !== null) {
+      setFeedInfos((prevFeeds) =>
+        prevFeeds.map((feed) =>
+          feed.id === selectedFeedId
+            ? { ...feed, likeCount: updatedData.likeCount, commentCount: updatedData.commentCount }
+            : feed
+        )
+      );
+    }
     setIsModalOpen(false);
-    setSelectedFeedId(null);    
+    setSelectedFeedId(null);
   };
-
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        
-      {feedInfos.length > 0 ? (
-        feedInfos.map((feed) => (
-          <FeedCard
-            key={feed.id}
-            title={feed.title}
-            content={feed.content}
-            createdDate={feed.createdDate}
-            comment={feed.commentCount}
-            like={feed.likeCount}
-            image={feed.imageUrl}
-            onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
-          />
-        ))
-      ) : (
-        <p className="text-center col-span-3">게시물이 없습니다.</p>
-      )}
-
+        {feedInfos.length > 0 ? (
+          feedInfos.map((feed) => (
+            <FeedCard
+              key={feed.id}
+              title={feed.title}
+              content={feed.content}
+              createdDate={feed.createdDate}
+              comment={feed.commentCount}
+              like={feed.likeCount}
+              image={feed.imageUrl}
+              onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
+            />
+          ))
+        ) : (
+          <p className="text-center col-span-3">게시물이 없습니다.</p>
+        )}
         <div ref={ref} />
       </div>
 
@@ -88,7 +93,6 @@ export const PersonalFeedDetail: React.FC = () => {
         <ModalFeedDetail 
           selectedId={selectedFeedId}  // 선택된 피드 ID를 모달로 전달
           closeModal={closeModal} 
-          
         />
       )}
     </>

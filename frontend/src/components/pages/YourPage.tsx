@@ -124,21 +124,28 @@ export const YourPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {feedInfos.map((feed) => (
-          <FeedCard
-            key={feed.id}
-            title={feed.title}
-            content={feed.content}
-            createdDate={feed.createdDate}
-            comment={feed.commentCount}
-            like={feed.likeCount}
-            image={feed.imageUrl}
-            onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
-          />
-        ))}
-        <div ref={ref} />
-      </div>
+      {feedInfos.length > 0 ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {feedInfos.map((feed) => (
+            <FeedCard
+              key={feed.id}
+              title={feed.title}
+              content={feed.content}
+              createdDate={feed.createdDate}
+              comment={feed.commentCount}
+              like={feed.likeCount}
+              image={feed.imageUrl}
+              onClick={() => openModal(feed.id)} // 클릭 시 해당 피드의 ID를 모달에 넘기기
+            />
+          ))}
+        </div>
+      ) : (
+        <div className="flex flex-col items-center">
+          <hr className="w-full max-w-4xl border-t border-gray-300" />
+          <p className="text-center my-10 ">게시물이 없습니다.</p>
+        </div>
+      )}
+      <div ref={ref} />
 
       {isModalOpen && selectedFeedId && (
         <ModalFeedDetail
