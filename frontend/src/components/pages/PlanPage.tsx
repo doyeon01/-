@@ -9,17 +9,24 @@ import ScheduleRegister from '../atoms/input/ScheduleRegister'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 
-import { getFeedClusterByDistance } from '../../services/api/CreatePlanService'
+import { useRecoilValue } from 'recoil';
+import {UserId} from '../../Recoil/atoms/Auth'
+
+import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh } from '../../services/api/CreatePlanService'
 import { FeedType } from '../../model/SearchingFeedType'
 
 export const PlanPage: React.FC = () => {
+  const userId = useRecoilValue(UserId)
+
   const [Ismodal, setismodal] = useState(false)
   const [IsHide, setIsHide] = useState(true)
   const [selectedDate, setSelectedDate] = useState<Date | null>(null)
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
   const [searchinTab, setSearchingTab] = useState(false)
+
   const [feedClusterByDistanceData,setFeedClusterByDistanceData] = useState<FeedType[]>([])
+  const [feedCluster, setFeedCluster] = useState<FeedType[]>([])
   
   const [_, setDragging] = useState(false);
 
@@ -31,6 +38,22 @@ export const PlanPage: React.FC = () => {
   const handleDragEnd = () => {
       setDragging(false);
   };
+
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try{
+        const data = await getFeedCluster(userId)
+        console.log(data);
+        setFeedCluster(data.response.feeds)
+      } catch(error){
+        console.error('Error fetching data:', error);
+      }
+    }
+    if (userId) {
+      fetchData(); // userID가 있을 때만 데이터 호출
+    }
+  },[userId])
+
 
   let lat = 37.5503
   let lot = 126.9971

@@ -8,7 +8,7 @@ export const getFeedCluster = async (id:number)=>{
         
         return response.data
     }
-    catch(error){
+    catch(error){ 
         throw new Error('API 요청 중 오류가 발생했습니다.')
     }
 }
