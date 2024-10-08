@@ -7,9 +7,9 @@ public record PhotoCardDetailDto(
 
         Long id,
         Long userId,
-        Long feedId,
+        Long totalPlanId,
+        String planTitle,
         String photoCardUrl,
-        String caption,
         String createdDate) {
 
     public static PhotoCardDetailDto of(PhotoCard photoCard) {
@@ -21,8 +21,8 @@ public record PhotoCardDetailDto(
                 photoCard.getId(),
                 photoCard.getUserId(),
                 photoCard.getTotalPlanId(),
+                photoCard.getPlanTitle(),
                 photoCard.getPhotoCardUrl(),
-                photoCard.getCaption(),
                 formattedCreatedDate
         );
     }

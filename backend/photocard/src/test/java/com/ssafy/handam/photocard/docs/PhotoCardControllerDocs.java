@@ -34,14 +34,14 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
     void createPhotoCardTest() throws Exception{
         PhotoCardCreationRequest request = new PhotoCardCreationRequest(
                 1L,
-                1L,
-                "http://example.com/thumbNail.jpg"
+                1L
         );
 
         PhotoCardDetailResponse response = new PhotoCardDetailResponse(
                 1L,
                 1L,
                 1L,
+                "planTitle",
                 "http://example.com/photoCard.jpg",
                 "2024-10-06"
         );
@@ -63,10 +63,8 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                         requestFields(
                                 fieldWithPath("userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("feedId").type(JsonFieldType.NUMBER)
-                                        .description("피드 ID"),
-                                fieldWithPath("thumbnailUrl").type(JsonFieldType.STRING)
-                                        .description("피드 썸네일 URL")
+                                fieldWithPath("totalPlanId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID")
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
@@ -74,8 +72,10 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                                         .description("포토카드 ID"),
                                 fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
-                                        .description("피드 ID"),
+                                fieldWithPath("response.totalPlanId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.planTitle").type(JsonFieldType.STRING)
+                                        .description("일정 제목"),
                                 fieldWithPath("response.photoCardUrl").type(JsonFieldType.STRING)
                                         .description("생성된 포토카드 URL"),
                                 fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
@@ -92,6 +92,7 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                 1L,
                 1L,
                 1L,
+                "planTitle",
                 "http://example.com/photoCard.jpg",
                 "2024-10-06"
         );
@@ -118,8 +119,10 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                                         .description("포토카드 ID"),
                                 fieldWithPath("response.userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("response.feedId").type(JsonFieldType.NUMBER)
-                                        .description("피드 ID"),
+                                fieldWithPath("response.totalPlanId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.planTitle").type(JsonFieldType.STRING)
+                                        .description("일정 제목"),
                                 fieldWithPath("response.photoCardUrl").type(JsonFieldType.STRING)
                                         .description("생성된 포토카드 URL"),
                                 fieldWithPath("response.createdDate").type(JsonFieldType.STRING)
@@ -137,6 +140,7 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                 1L,
                 1L,
                 1L,
+                "planTitle",
                 "http://example.com/photoCard.jpg",
                 "2024-10-06"
         );
@@ -167,8 +171,10 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                                         .description("포토카드 ID"),
                                 fieldWithPath("response.photoCards[].userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
-                                fieldWithPath("response.photoCards[].feedId").type(JsonFieldType.NUMBER)
-                                        .description("피드 ID"),
+                                fieldWithPath("response.photoCards[].totalPlanId").type(JsonFieldType.NUMBER)
+                                        .description("일정 ID"),
+                                fieldWithPath("response.photoCards[].planTitle").type(JsonFieldType.STRING)
+                                        .description("일정 제목"),
                                 fieldWithPath("response.photoCards[].photoCardUrl").type(JsonFieldType.STRING)
                                         .description("생성된 포토카드 URL"),
                                 fieldWithPath("response.photoCards[].createdDate").type(JsonFieldType.STRING)

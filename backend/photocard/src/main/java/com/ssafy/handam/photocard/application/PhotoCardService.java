@@ -5,6 +5,7 @@ import com.ssafy.handam.photocard.domain.entity.PhotoCard;
 import com.ssafy.handam.photocard.domain.service.PhotoCardDomainService;
 import com.ssafy.handam.photocard.infrastructure.client.FeedApiClient;
 import com.ssafy.handam.photocard.infrastructure.client.GpuApiClient;
+import com.ssafy.handam.photocard.infrastructure.client.PlanApiClient;
 import com.ssafy.handam.photocard.infrastructure.client.dto.FeedListDto;
 import com.ssafy.handam.photocard.infrastructure.client.dto.PhotoCardUrlDto;
 import com.ssafy.handam.photocard.presentation.request.PhotoCardCreationRequest;
@@ -27,26 +28,29 @@ public class PhotoCardService {
     private final PhotoCardDomainService photoCardDomainService;
     private final GpuApiClient gpuApiClient;
     private final FeedApiClient feedApiClient;
+    private final PlanApiClient planApiClient;
 
     public PhotoCardDetailResponse createPhotoCard(PhotoCardCreationRequest request) {
 
 
         PhotoCardCreationToGpuRequest gpuRequest = getPhotoCardCreationToGpuRequest(request);
         PhotoCardUrlDto photoCardUrlDto = gpuApiClient.getPhotoCardUrl(gpuRequest);
+        String planTitle = getPlanTitle(request.totalPlanId());
 
         PhotoCard photoCard = photoCardDomainService.createPhotoCard(
-                PhotoCardSaveRequest.of(
+                PhotoCardSaveRequest.from(
                         request.userId(),
                         request.totalPlanId(),
-                        photoCardUrlDto.photoCardUrl(),
-                        photoCardUrlDto.caption())
+                        planTitle,
+                        photoCardUrlDto.photoCardUrl()
+                )
         );
 
         return PhotoCardDetailResponse.of(PhotoCardDetailDto.of(photoCard));
     }
 
-    public PhotoCardDetailResponse getPhotoCard(Long feedId) {
-        PhotoCard photoCard = photoCardDomainService.getPhotoCard(feedId);
+    public PhotoCardDetailResponse getPhotoCard(Long totalPlanId) {
+        PhotoCard photoCard = photoCardDomainService.getPhotoCard(totalPlanId);
         return PhotoCardDetailResponse.of(PhotoCardDetailDto.of(photoCard));
     }
 
@@ -71,5 +75,12 @@ public class PhotoCardService {
                 request.userId(),
                 request.totalPlanId(),
                 feedListDto.feedImageUrls());
+    }
+
+    private String getPlanTitle(Long totalPlanId) {
+
+        return planApiClient.getPlanPreviewByTotalPlanId(totalPlanId)
+                            .getResponse()
+                            .title();
     }
 }

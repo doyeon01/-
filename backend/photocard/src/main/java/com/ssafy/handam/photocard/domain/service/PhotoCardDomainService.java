@@ -17,7 +17,12 @@ public class PhotoCardDomainService {
     private final PhotoCardRepository photoCardRepository;
 
     public PhotoCard createPhotoCard(PhotoCardSaveRequest request) {
-        return photoCardRepository.save(new PhotoCard(request.userId(), request.totalPlanId(), request.photoCardUrl(), request.caption()));
+        return photoCardRepository.save(new PhotoCard(
+                request.userId(),
+                request.totalPlanId(),
+                request.planTitle(),
+                request.photoCardUrl()
+                ));
     }
 
     public PhotoCard getPhotoCard(Long totalPlanId) {

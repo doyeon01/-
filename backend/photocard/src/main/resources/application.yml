@@ -26,3 +26,7 @@ gpu:
 feed:
   service:
     url: http://j11c205a.p.ssafy.io:8080/api/v1
+
+plan:
+  service:
+    url: http://j11c205a.p.ssafy.io:8082/api/v1

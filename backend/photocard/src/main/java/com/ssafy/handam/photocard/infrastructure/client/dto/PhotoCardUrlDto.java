@@ -1,16 +1,11 @@
 package com.ssafy.handam.photocard.infrastructure.client.dto;
 
-public record PhotoCardUrlDto(
-        String photoCardUrl,
-        String caption) {
+public record PhotoCardUrlDto(String photoCardUrl) {
 
     public static PhotoCardUrlDto from(
-            String photoCardUrl,
-            String caption) {
+            String photoCardUrl) {
 
-        return new PhotoCardUrlDto(
-                photoCardUrl,
-                caption);
+        return new PhotoCardUrlDto(photoCardUrl);
     }
 
 }

@@ -4,21 +4,20 @@ public record PhotoCardSaveRequest(
 
         Long userId,
         Long totalPlanId,
-        String photoCardUrl,
-        String caption) {
+        String planTitle,
+        String photoCardUrl) {
 
-    public static PhotoCardSaveRequest of(
+    public static PhotoCardSaveRequest from(
 
             Long userId,
             Long totalPlanId,
-            String photoCardUrl,
-            String caption
-    ) {
+            String planTitle,
+            String photoCardUrl) {
 
         return new PhotoCardSaveRequest(
                 userId,
                 totalPlanId,
-                photoCardUrl,
-                caption);
+                planTitle,
+                photoCardUrl);
     }
 }
