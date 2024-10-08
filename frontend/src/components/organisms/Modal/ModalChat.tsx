@@ -100,6 +100,42 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     }
   };
   
+  const selectFollowingChatRoom = (followingId: number) => {
+    axios
+      .get(`http://localhost:8080/api/v1/chat/following/${followingId}`)
+      .then((response) => {
+        const { chatRoomId, partnerUser } = response.data.response;
+        
+        // 채팅방 선택
+        setPartnerUser(partnerUser);
+        setSelectedRoomId(chatRoomId);
+        setMessages([]);
+  
+        // 이전 메시지 불러오기
+        axios
+          .get(`http://localhost:8080/api/v1/chat/${chatRoomId}`)
+          .then((response) => {
+            setMessages(response.data.response);
+          })
+          .catch((error) => {
+            console.error('Error fetching messages:', error);
+          });
+  
+        // 웹소켓 연결
+        if (stompClient) {
+          stompClient.deactivate(); 
+          stompClient.onDisconnect = () => {
+            connectWebSocket(chatRoomId);
+          };
+        } else {
+          connectWebSocket(chatRoomId);
+        }
+      })
+      .catch((error) => {
+        console.error('Error fetching chat room for following:', error);
+      });
+  };
+  
   useEffect(() => {
     const fetchFollowingList = async () => {
       const data:UserFollowingResponseType = await getFollowingList(); 
@@ -156,7 +192,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   <li
                     key={index}
                     className="flex items-center mb-4 cursor-pointer"
-                  >
+                    onClick={() => selectFollowingChatRoom(following.id)}
+                    >
                     {following.profileImage ? (
                     <img 
                       src={following.profileImage} 
