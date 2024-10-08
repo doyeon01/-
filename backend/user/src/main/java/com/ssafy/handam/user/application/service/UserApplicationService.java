@@ -25,12 +25,12 @@ public class UserApplicationService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
-    public void logout(HttpServletResponse response) {
+    public Cookie logout(String token) {
         Cookie cookie = new Cookie("accessToken", null);
         cookie.setPath("/");
         cookie.setMaxAge(0);
         cookie.setHttpOnly(true);
-        response.addCookie(cookie);
+        return cookie;
     }
     public Long getUserInfoByToken(String token) {
         return jwtUtil.extractUserId(token);
