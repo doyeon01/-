@@ -1,8 +1,14 @@
 import React, { useState, useEffect } from 'react';
+
 import { ModalChatTypeProps, ChatRoomType, userType,MessageType } from '../../../model/ChatType';
 import SockJS from 'sockjs-client';
-import { Client } from '@stomp/stompjs'; // Client를 사용
+import { Client } from '@stomp/stompjs';
 import axios from 'axios';
+import { getFollowingList } from '../../../services/api/UserService';
+import { UserFollowingResponseType, UserFollowingType } from '../../../model/User';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
+import { useRecoilState } from 'recoil';
+import { UserIconMini3 } from '../../../assets/icons/svg';
 
 
 
@@ -13,8 +19,10 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [messages, setMessages] = useState<MessageType[]>([]);
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
-  const [userId] = useState(1); 
-
+  const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
+  const [userId] = useRecoilState(UserIdAtom);  
+  console.log(userId);
+  
   useEffect(() => {
     const fetchData = () => {
       axios
@@ -64,7 +72,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   };
   
   
-  
 
   const selectChatRoom = (roomId: number, user: userType) => {
     setPartnerUser(user);
@@ -92,13 +99,23 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     }
   };
   
+  useEffect(() => {
+    const fetchFollowingList = async () => {
+      const res = await getFollowingList(); 
+      const data: UserFollowingResponseType = res.data;
+      if (data.success) {
+        console.log(data)
+        setFollowings(data.response)
+        }
+    };
+  
+    fetchFollowingList();  
+  }, []);  
 
   const sendMessage = () => {
-    console.log(1);
     console.log('stompClient:', stompClient);
     console.log('newMessage:', newMessage);
     if (stompClient && newMessage.trim() !== '') {
-      console.log(2);
       
       const chatMessage = {
         senderId: userId,
@@ -133,16 +150,24 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </div>
             <div className="w-full">
               <ul>
-                {/* {friends.map((friend, index) => (
+                {followings.map((following, index) => (
                   <li
                     key={index}
-                    onClick={() => setCurrentChat(friend)}
                     className="flex items-center mb-4 cursor-pointer"
                   >
-                    <img src={friend.img} alt={friend.name} className="w-12 h-12 rounded-full mr-2" />
-                    <p className="font-bold">{friend.name}</p>
+                    {following.profileImage ? (
+                    <img 
+                      src={following.profileImage} 
+                      alt={following.name} 
+                      className='w-12 h-12 rounded-full mr-2' 
+                    />
+                    
+                  ) : (
+                    <UserIconMini3/>
+                  )}
+                    <p className="font-bold">{following.name}</p>
                   </li>
-                ))} */}
+                ))}
               </ul>
             </div>
           </div>
