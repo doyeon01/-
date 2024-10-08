@@ -115,7 +115,9 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
 
       {/* 피드 카드 목록 */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredFeeds.map((card, index) => (
+       
+        { filteredFeeds.length > 0 ?
+        filteredFeeds.map((card, index) => (
           <FeedCard
             key={index}
             title={card.title}
@@ -126,7 +128,9 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
             image={card.imageUrl}
             onClick={() => openModal(card.id)}  
           />
-        ))}
+        )) : (
+          <p className="text-center col-span-3">게시물이 없습니다.</p>
+        )}
       </div>
       <div ref={ref} className="h-10"></div>
 
