@@ -1,9 +1,10 @@
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import CardSetSearchUser from '../../components/molecules/Card/CardSetSearchUser';
 import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPlace';
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
 import { postFeedRecommend } from '../../services/api/FeedService';
 import { FeedsType } from '../../model/FeedType';
+
 
 export const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -12,47 +13,59 @@ export const SearchPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
-  const [page, setPage] = useState(1); 
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true); 
-  const [loading, setLoading] = useState(false); 
-
-  const fetchRecommendedFeeds = useCallback(async () => {
-    if (loading || !hasMore) return; 
-    setLoading(true);
-    try {
-      const response = await postFeedRecommend(page, 10);
-      const newFeeds = response.data.response.feeds;
-      setRecommendedFeeds((prevFeeds) => [...prevFeeds, ...newFeeds]);
-      setHasMore(newFeeds.length > 0); 
-    } catch (error) {
-      console.error('Error fetching recommended feeds:', error);
-    }
-    setLoading(false);
-  }, [page, loading, hasMore]);
-
+  const loaderRef = useRef<HTMLDivElement | null>(null); 
+  
   useEffect(() => {
-    fetchRecommendedFeeds(); 
-  }, [page, fetchRecommendedFeeds]);
-
-  useEffect(() => {
-    const handleScroll = () => {
-      if (window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100 && !loading) {
-        setPage((prevPage) => prevPage + 1);
+    const fetchRecommendedFeeds = async () => {
+      try {
+        const response = await postFeedRecommend(1, 10);
+        if (response.data.response.feeds.length === 0) {
+          setHasMore(false);
+        } else {
+          setRecommendedFeeds((prevPlaces) => [...prevPlaces, ...response.data.response.feeds]);
+        }
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
       }
     };
+    fetchRecommendedFeeds();
+  }, [ page]);
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [loading]);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '20px',
+        threshold: 1.0,
+      }
+    );
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMore]);
+
 
   const handleSearch = () => {
     setSearchClicked(true);
-    setPage(1); 
-    setRecommendedFeeds([]);
   };
 
   const handleItemClick = (id: number) => {
     setSelectedId(id);
+
     setIsModalOpen(true);
   };
 
@@ -105,7 +118,7 @@ export const SearchPage: React.FC = () => {
 
       {searchClicked ? (
         searchCategory === 'user' ? (
-          <CardSetSearchUser keyword={searchTerm} />
+          <CardSetSearchUser keyword={searchTerm } />
         ) : (
           <CardSetSearchPlace keyword={searchTerm} onItemClick={handleItemClick} />
         )
@@ -139,10 +152,11 @@ export const SearchPage: React.FC = () => {
       {isModalOpen && selectedId && (
         <ModalFeedDetail
           selectedId={selectedId}
-          closeModal={closeModal}
+          closeModal={closeModal} 
         />
       )}
-      {loading && <p className="text-center mt-4">로딩 중...</p>} 
+      <div ref={loaderRef} className="h-10"></div> 
+
     </div>
   );
 };
