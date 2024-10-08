@@ -10,6 +10,6 @@ import org.springframework.stereotype.Repository;
 public interface PhotoCardRepository {
 
     PhotoCard save(PhotoCard photocard);
-    PhotoCard findByFeedId(Long feedId);
+    PhotoCard findByTotalPlanId(Long totalPlanId);
     Page<PhotoCard> findByUserId(Long userId, Pageable pageable);
 }
