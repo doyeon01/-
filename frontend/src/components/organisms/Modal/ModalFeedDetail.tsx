@@ -18,6 +18,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
     const fetchDetailFeed = async () => {
       try {
         const response = await getFeedDetail(selectedId);        
+        console.log(response);
         
         setLikeCnt(response.data.response.likeCount);
         setDetailFeed(response.data.response)
@@ -34,7 +35,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
       }
     };
     fetchDetailFeed();
-  }, [selectedId]);
+  }, [selectedId,likeCnt]);
 
   useEffect(() => {
     const fetchComments = async () => {
@@ -50,7 +51,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
 
   useEffect(() => {
     setLikeCnt(likeCount)
-  }, [likeCount]);
+  }, [likeCount,isLike]);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);

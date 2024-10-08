@@ -9,7 +9,7 @@ export interface UserInfoType {
   profileImage: string; // 프로필 이미지 경로
   accompanyTemperature: number; // 동행 온도 (숫자형)
   introduction: string | null; // 자기소개 (null 가능)
-  residence: null;
+  residence: string;
   isFollowed: boolean;
   followerCount : number;
   followingCount: number;
