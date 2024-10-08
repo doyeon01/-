@@ -20,4 +20,6 @@ public interface FeedJpaRepository extends JpaRepository<Feed, Long> {
     );
 
     List<Feed> findAll();
+
+    List<Feed> findByTotalPlanId(Long totalPlanId);
 }

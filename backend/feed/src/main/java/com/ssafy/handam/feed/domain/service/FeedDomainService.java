@@ -183,4 +183,6 @@ public class FeedDomainService {
     public List<Feed> getFeedByIds(List<Long> feedIds) {
         return feedRepository.findByIdIn(feedIds);
     }
+
+    public List<Feed> getFeedsByTotalPlanId(Long totalPlanId) { return feedRepository.findByTotalPlanId(totalPlanId); }
 }

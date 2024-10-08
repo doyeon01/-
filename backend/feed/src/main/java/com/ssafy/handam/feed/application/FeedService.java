@@ -6,6 +6,7 @@ import com.ssafy.handam.feed.application.dto.FeedDetailDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
+import com.ssafy.handam.feed.application.dto.request.feed.FeedsByTotalPlanIdServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
 import com.ssafy.handam.feed.application.dto.request.feed.RecommendedFeedsForUserServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
@@ -19,6 +20,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -231,6 +233,15 @@ public class FeedService {
         );
     }
 
+    public FeedsImageUrlResponse getFeedsImageUrlsByTotalPlanId(FeedsByTotalPlanIdServiceRequest request) {
+        return FeedsImageUrlResponse.of(
+                getFeedsImageUrlList(
+                        feedDomainService.getFeedsByTotalPlanId(
+                                request.totalPlanId()
+                        )
+                ));
+    }
+
     private boolean cacheMiss(List<Object> cachedData) {
         return cachedData == null || cachedData.isEmpty();
     }
@@ -366,5 +377,11 @@ public class FeedService {
                 .stream()
                 .map(Object::toString) // Object를 String으로 변환
                 .collect(Collectors.toList());
+    }
+
+    private List<String> getFeedsImageUrlList(List<Feed> feedsBytotalPlanId) {
+        return feedsBytotalPlanId.stream()
+                .map(Feed::getImageUrl)
+                .toList();
     }
 }

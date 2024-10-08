@@ -25,4 +25,6 @@ public interface FeedRepository {
     Page<FeedDocument> getNearbyClusterCenter(GeoPoint geoPoint, String distance, Pageable pageable);
 
     Iterable<FeedDocument> findAllById(List<Long> feedIds);
+
+    List<Feed> findByTotalPlanId(Long totalPlanId);
 }
