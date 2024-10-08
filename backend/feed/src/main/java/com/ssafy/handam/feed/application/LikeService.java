@@ -22,9 +22,7 @@ public class LikeService {
 
     private final KafkaTemplate<String, String> kafkaTemplate;
     private final ObjectMapper objectMapper = new ObjectMapper();
-    private final FeedDomainService feedDomainService;
-    private final UserServiceClient userServiceClient;
-    private final RedisTemplate<String, Object> redisTemplate;
+
 
     public void sendLikeEvent(Long feedId, Long userId, String eventType) {
         Map<String, Object> message = new HashMap<>();

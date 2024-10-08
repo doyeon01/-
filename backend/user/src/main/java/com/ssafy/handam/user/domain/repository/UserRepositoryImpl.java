@@ -3,6 +3,7 @@ package com.ssafy.handam.user.domain.repository;
 import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.infrastructure.repository.UserJpaRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -21,6 +22,12 @@ public class UserRepositoryImpl implements UserRepository {
     @Override
     public User save(User user) {
         return userJpaRepository.save(user);
+    }
+
+
+    @Override
+    public List<User> findByNicknameContaining(String keyword, String startWord) {
+        return userJpaRepository.findByNicknameContaining(keyword,startWord);
     }
 
     @Override

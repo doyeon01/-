@@ -53,5 +53,9 @@ public class UserApplicationService {
         Long userId = jwtUtil.extractUserId(token);
         userService.unfollowUser(userId,followTargetId);
     }
+    public List<UserInfoResponse> getFollowingUsers(String token){
+        Long userId = jwtUtil.extractUserId(token);
+        return userService.getFollowingUsers(userId);
+    }
 
 }
