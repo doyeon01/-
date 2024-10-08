@@ -38,6 +38,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     fetchData();
   }, [userId]);
 
+  //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
     console.log(`Attempting to connect to WebSocket for room ${roomId}`);
     const socket = new SockJS('http://localhost:8080/chat-websocket');
@@ -73,7 +74,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   };
   
   
-
+  //채팅 룸설정
   const selectChatRoom = (roomId: number, user: userType) => {
     setPartnerUser(user);
     setSelectedRoomId(roomId);
@@ -99,7 +100,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       console.log("connectWebSocket");
     }
   };
-
+  
+  //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
     axios
       .get(`http://localhost:8080/api/v1/chat/following/${followingId}`)
@@ -135,7 +137,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         console.error('Error fetching chat room for following:', error);
       });
   };
-  
+  //팔로잉 리스트 가져오기
   useEffect(() => {
     const fetchFollowingList = async () => {
       const data:UserFollowingResponseType = await getFollowingList(); 
