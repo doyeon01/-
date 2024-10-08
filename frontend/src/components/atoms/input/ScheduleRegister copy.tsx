@@ -10,61 +10,31 @@ interface Props {
 const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
   const [schedule, setSchedule] = useState<any[]>([]); // 입력 값 상태로 관리
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null); // 드래그된 항목의 인덱스 저장
-  const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // 드래그 오버된 항목 인덱스
-
-  // Dropping 데이터를 schedule에 추가
-  const handleDropData = (e: React.DragEvent<HTMLDivElement>) => {
-    e.preventDefault();
-    const data = JSON.parse(e.dataTransfer.getData('place'));
-    setSchedule((prevSchedule) => [...prevSchedule, { ...data, notes: '' }]); // 추가할 때 notes 필드를 빈 값으로 포함
-  };
 
   const handleDragStart = (index: number) => {
     setDraggedItemIndex(index); // 드래그 시작 시 인덱스 저장
   };
 
-  const handleDragOver = (e: React.DragEvent<HTMLDivElement>, index: number) => {
-    e.preventDefault();
-    setHoveredIndex(index); // 드래그 오버 중인 인덱스를 저장
+  const handleDragOver = (e: React.DragEvent<HTMLDivElement>) => {
+    e.preventDefault(); // 드래그 오버 시 기본 동작 방지
   };
 
-  const handleDragLeave = () => {
-    setHoveredIndex(null); // 드래그 오버 해제 시 초기화
-  };
-
-  const handleDropOrder = () => {
-    if (draggedItemIndex === null || hoveredIndex === null) return;
-
+  const handleDrop = (index: number) => {
+    if (draggedItemIndex === null) return;
+    
+    // 드래그된 항목을 새로운 위치로 이동
     const updatedSchedule = [...schedule];
     const [draggedItem] = updatedSchedule.splice(draggedItemIndex, 1); // 드래그된 항목 삭제
-    updatedSchedule.splice(hoveredIndex, 0, draggedItem); // 새로운 위치에 삽입
-
-    setSchedule(updatedSchedule); // 최종 배열 업데이트
+    updatedSchedule.splice(index, 0, draggedItem); // 새로운 위치에 삽입
+    
+    setSchedule(updatedSchedule);
     setDraggedItemIndex(null); // 드래그 완료 후 초기화
-    setHoveredIndex(null); // 드래그 오버 상태 초기화
   };
 
   // schedule이 변경될 때마다 localStorage에 저장
   useEffect(() => {
-    if (schedule.length > 0) { // 빈 배열을 저장하지 않음
-      localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(schedule));
-    }
+    localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(schedule));
   }, [schedule, currentDate]);
-
-  // currentDate가 변경될 때 해당 날짜의 저장된 값을 불러오는 useEffect
-  useEffect(() => {
-    const storedSchedule = localStorage.getItem(`schedule_${currentDate}`);
-    if (storedSchedule && storedSchedule !== '[]') {
-      const userResponse = confirm('저장된 데이터를 불러오시겠습니까?');
-      if (userResponse) {
-        setSchedule(JSON.parse(storedSchedule)); // 저장된 값이 있으면 로드
-      } else {
-        setSchedule([]);
-      }
-    } else {
-      setSchedule([]); // 저장된 값이 없으면 빈 배열로 초기화
-    }
-  }, [currentDate]);
 
   // TextArea 변경 시 schedule 상태 업데이트
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
@@ -73,36 +43,17 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
     setSchedule(newSchedule); // 상태 업데이트
   };
 
-  // 드래그 중일 때 미리보기를 제공하는 함수
-  const getTemporarySchedule = () => {
-    if (draggedItemIndex === null || hoveredIndex === null) return schedule;
-
-    const tempSchedule = [...schedule];
-    const [draggedItem] = tempSchedule.splice(draggedItemIndex, 1); // 드래그된 항목 제거
-    tempSchedule.splice(hoveredIndex, 0, draggedItem); // 드래그 오버 중인 위치에 삽입
-
-    return tempSchedule;
-  };
-
   return (
     <div key={index}>
-      <div
-        id='container'
-        className="w-[390px] h-full flex flex-col min-h-[150px] justify-start items-center divide-y"
-        onDrop={handleDropData} // 기존 데이터 추가를 위한 드롭 이벤트
-        onDragOver={(e) => e.preventDefault()} // 드롭을 허용
-      >
-        {getTemporarySchedule().map((item, indexx) => (
+      <div id='container' className="w-[390px] h-full flex flex-col min-h-[150px] justify-start items-center divide-y">
+        {schedule.map((item, indexx) => (
           <div
-            className={`flex justify-between w-full p-3 ${
-              hoveredIndex === indexx ? 'bg-gray-200 border-2 border-blue-500' : ''
-            }`} // 드래그 오버 시 스타일 적용
+            className='flex justify-between w-full p-3'
             key={indexx}
             draggable
-            onDragStart={() => handleDragStart(indexx)} // 드래그 시작
-            onDragOver={(e) => handleDragOver(e, indexx)} // 드래그 오버
-            onDragLeave={handleDragLeave} // 드래그 오버 해제
-            onDrop={handleDropOrder} // 순서 변경 드롭 이벤트
+            onDragStart={() => handleDragStart(indexx)}
+            onDragOver={handleDragOver}
+            onDrop={() => handleDrop(indexx)}
           >
             <div className="flex flex-col justify-start text-[13px] gap-4">
               <span>
@@ -128,8 +79,6 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
                         {category} | {placeName}
                       </>
                     );
-                  } else {
-                    return <>여기에 드롭</>;
                   }
                 })()}
               </span>

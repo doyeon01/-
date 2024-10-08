@@ -8,7 +8,9 @@ import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
-import test1 from '../../assets/statics/Duli.png'
+
+import { getFeedClusterByDistance } from '../../services/api/CreatePlanService'
+import { FeedType } from '../../model/SearchingFeedType'
 
 export const PlanPage: React.FC = () => {
   const [Ismodal, setismodal] = useState(false)
@@ -17,18 +19,38 @@ export const PlanPage: React.FC = () => {
   const [datesList, setDatesList] = useState<Date[]>([]) // 날짜 목록 관리
   const [currentDate, setCurrentDate] = useState(1)
   const [searchinTab, setSearchingTab] = useState(false)
+  const [feedClusterByDistanceData,setFeedClusterByDistanceData] = useState<FeedType[]>([])
+  
+  const [_, setDragging] = useState(false);
 
-  // const [_, setDragging] = useState(false);
-  // const [droppedText, setDroppedText] = useState<any>(null);
+  const handleDragStart = (e: React.DragEvent<HTMLDivElement>, feed:any) => {
+    setDragging(true);
+    e.dataTransfer.setData('place', JSON.stringify(feed));
+  };
 
-  // const handleDragStart = (e: React.DragEvent<HTMLDivElement>, place: any) => {
-  //   setDragging(true);
-  //   e.dataTransfer.setData('place', JSON.stringify(place));
-  // };
+  const handleDragEnd = () => {
+      setDragging(false);
+  };
 
-  // const handleDragEnd = () => {
-  //     setDragging(false);
-  // };
+  let lat = 37.5503
+  let lot = 126.9971
+  let distance = 10
+  let page = 0
+  let size = 20
+  useEffect(()=>{
+    const fetchData = async()=>{
+      try {
+        const data = await getFeedClusterByDistance(lat,lot,distance, page, size); // 배열 반환
+        // console.log('Fetched feeds data:', data); // 전체 데이터 로그
+        // console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
+        setFeedClusterByDistanceData(data.response.feeds); // 상태로 배열을 설정
+      } catch (error) {
+        console.error('Error fetching feeds:', error);
+      }
+    }
+    fetchData();
+  },[])
+
 
   const handleSearchingTab = () => {
     setSearchingTab(searchinTab => !searchinTab)
@@ -110,16 +132,15 @@ export const PlanPage: React.FC = () => {
               <span className="text-[13px]">마지막 업데이트 : X 전</span>
             </div>
           </div>
-
-          <div className="w-[400px] h-full bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin">
+          <div className="relative w-[400px] -top-[15px] h-[calc(100vh-195px)] bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin pb-[20px]">
             <span className="text-[21px] font-semibold mt-[15px]">추천 여행지로 여행 계획하기</span>
             <hr className="w-[60%] border-t-[3px] border-black mt-[10px]" />
             <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={handleIsmodal}>
               나만의 여행 일정 만들기
             </button>
-            <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
-            <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
-            <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
+              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
+              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
+              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
           </div>
         </div>
       ) : (
@@ -128,7 +149,7 @@ export const PlanPage: React.FC = () => {
           <div className="h-full bg-white flex flex-col min-w-[60px] text-[13px]">
             <div className="flex-grow">
               {datesList.map((date, index) => (
-                <PlanDailyTab date={date} index={index} onClick={handleCurrentDate} currentDate={currentDate} />
+                <PlanDailyTab key={index} date={date} index={index} onClick={handleCurrentDate} currentDate={currentDate} />
               ))}
               {datesList.length < 5 && (
                 <div className="h-[60px] flex justify-center items-center">
@@ -171,24 +192,18 @@ export const PlanPage: React.FC = () => {
               ref={scrollContainerRef} 
               className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'
             >
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
-              <div className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5">
-                <img src={test1} className="w-full h-full object-cover"/>
-              </div>
+              {feedClusterByDistanceData && feedClusterByDistanceData.length > 0 ? (
+                    feedClusterByDistanceData.map(feed => (
+                      <div key={feed.id} className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5"
+                        draggable
+                        onDragStart={(e) => handleDragStart(e,feed)}
+                        onDragEnd={handleDragEnd}>
+                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                      </div>
+                    ))
+                  ) : (
+                    'No feeds available'
+                  )}
             </div>
           </div>
         </div>
