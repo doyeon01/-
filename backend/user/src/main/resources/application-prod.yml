@@ -36,7 +36,7 @@ spring:
             user-name-attribute: response
 app:
   security:
-    logout-redirect-url: "http://j11c205.p.ssafy.io/"
+    logout-redirect-url: "http://j11c205.p.ssafy.io"
 
 server:
   port: 8081

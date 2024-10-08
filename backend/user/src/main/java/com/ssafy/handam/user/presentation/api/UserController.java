@@ -32,13 +32,14 @@ public class UserController {
     @Value("${app.security.logout-redirect-url}")
     private String logoutRedirectUrl;
 
-    @PostMapping("/logout-token")
+    @PostMapping("/delete-token")
     public ApiResult<Void> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
         Cookie logoutCookie = userApplicationService.logout(token);
         response.addCookie(logoutCookie);
         response.sendRedirect(logoutRedirectUrl);
         return success(null);
     }
+
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
         UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(request);
@@ -65,7 +66,12 @@ public class UserController {
         UserInfoResponse userInfoResponse = userService.findUserById(id);
         return success(userInfoResponse);
     }
-
+    @GetMapping("/info")
+    public ApiResult<UserInfoResponse> getUserInfoByToken(@CookieValue(value = "accessToken", required = false) String token) {
+        Long userId = userApplicationService.getUserInfoByToken(token);
+        UserInfoResponse userInfoResponse = userService.findUserById(userId);
+        return success(userInfoResponse);
+    }
 
     @GetMapping("/test")
     public void test(){
