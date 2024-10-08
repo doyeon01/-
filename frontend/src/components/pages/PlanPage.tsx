@@ -12,7 +12,7 @@ import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import { useRecoilValue } from 'recoil';
 import {UserId} from '../../Recoil/atoms/Auth'
 
-import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh } from '../../services/api/CreatePlanService'
+import { getFeedClusterByDistance, getFeedCluster } from '../../services/api/CreatePlanService'
 import { FeedType } from '../../model/SearchingFeedType'
 
 export const PlanPage: React.FC = () => {
@@ -27,6 +27,7 @@ export const PlanPage: React.FC = () => {
 
   const [feedClusterByDistanceData,setFeedClusterByDistanceData] = useState<FeedType[]>([])
   const [feedCluster, setFeedCluster] = useState<FeedType[]>([])
+  console.log(feedCluster);
   
   const [_, setDragging] = useState(false);
 
