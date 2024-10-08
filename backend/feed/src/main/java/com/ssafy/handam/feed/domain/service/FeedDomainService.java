@@ -1,5 +1,10 @@
 package com.ssafy.handam.feed.domain.service;
 
+
+import static com.ssafy.handam.feed.domain.entity.QLike.like;
+
+import co.elastic.clients.elasticsearch.core.GetRequest;
+import co.elastic.clients.elasticsearch.core.GetResponse;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.entity.Feed;
@@ -32,20 +37,25 @@ public class FeedDomainService {
         return findBy(id);
     }
 
-    public void likeFeed(Long feedId, Long userId) {
+    public int likeFeed(Long feedId, Long userId) {
         Feed feed = findBy(feedId);
         feed.incrementLikeCount();
         feedRepository.save(feed);
         Like like = Like.builder().feed(feed).userId(userId).build();
         likeRepository.save(like);
+        return feed.getLikeCount();
     }
 
-    public void unlikeFeed(Long feedId, Long userId) {
+    public int unlikeFeed(Long feedId, Long userId) {
         Feed feed = findBy(feedId);
         feed.decrementLikeCount();
         feedRepository.save(feed);
-        Like like = likeRepository.findByFeedIdAndUserId(feedId, userId).get(0);
-        likeRepository.delete(like);
+        List<Like> like = likeRepository.findByFeedIdAndUserId(feedId, userId);
+        if(like.isEmpty()){
+            throw new IllegalArgumentException("Like not found");
+        }
+        likeRepository.delete(like.get(0));
+        return feed.getLikeCount();
     }
 
 
@@ -175,4 +185,8 @@ public class FeedDomainService {
     }
 
     public List<Feed> getFeedsByTotalPlanId(Long totalPlanId) { return feedRepository.findByTotalPlanId(totalPlanId); }
+
+    public FeedDocument getFeedDocumentById(Long feedId) {
+        return feedRepository.findFeedDocumentById(feedId).orElseThrow(() -> new IllegalArgumentException("Feed not found"));
+    }
 }
