@@ -104,8 +104,15 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
               <div className="border-l-2 border-black h-6 pl-8"></div>
               <div className='block py-2 text-gray-900'
               onClick={() => {
+                console.log('로그아웃 누름')
                 axios.post('https://j11c205.p.ssafy.io/api/v1/users/logout',{
                   withCredentials: true,
+                })
+                .then((res)=>{
+                  console.log(res.data)
+                })
+                .catch((error)=>{
+                  console.log(error)
                 })
               }}>
                 로그아웃
