@@ -189,12 +189,10 @@ public class FeedController {
 
     @GetMapping("/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeeds(
-            @RequestParam Long userId, //쿠키에서 가져오는걸로 변경예정
+            @CookieValue(value = "accessToken", required = false) String token,
             @RequestParam int page,
             @RequestParam int pageSize) {
-
-        RecommendedFeedsForUserResponse response = feedService.getRecommendedFeeds(userId, page, pageSize);
-
+        RecommendedFeedsForUserResponse response = feedService.getRecommendedFeeds(token, page, pageSize);
         return success(response);
     }
 

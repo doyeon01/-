@@ -13,18 +13,11 @@ import com.ssafy.handam.feed.domain.repository.FeedRepository;
 import com.ssafy.handam.feed.domain.repository.LikeRepository;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
-import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
-import jakarta.transaction.Transactional;
-
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-
 import lombok.RequiredArgsConstructor;
-import org.elasticsearch.client.RequestOptions;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
