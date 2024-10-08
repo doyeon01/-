@@ -34,7 +34,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
       }
     };
     fetchDetailFeed();
-  }, [selectedId,likeCnt,isLike]);
+  }, [selectedId,likeCnt]);
 
   const fetchComments = async () => {
     try {
