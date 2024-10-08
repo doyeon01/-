@@ -45,7 +45,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
       console.error('Error fetching recommended comments:', error);
     }
   };
-  
+
   useEffect(() => {
     fetchComments();
   }, [selectedId]);
@@ -62,10 +62,9 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
     if (detailFeed !== null) {
       const response = await postComment(detailFeed.id, commentContent);
         console.log(response);
-        if (response.succese ===true){
+        if (response.success === true){
           setCommentContent('');
           fetchComments();
-
         }
           }
   };
