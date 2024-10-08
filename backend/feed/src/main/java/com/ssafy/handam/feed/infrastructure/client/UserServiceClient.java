@@ -18,6 +18,5 @@ public interface UserServiceClient {
     @GetMapping("/api/v1/users/info")
     ApiResult<UserDto> getUserByToken(
             @RequestHeader("Cookie") String cookie
-            
     );
 }
