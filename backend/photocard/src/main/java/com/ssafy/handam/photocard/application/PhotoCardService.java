@@ -32,7 +32,6 @@ public class PhotoCardService {
 
     public PhotoCardDetailResponse createPhotoCard(PhotoCardCreationRequest request) {
 
-
         PhotoCardCreationToGpuRequest gpuRequest = getPhotoCardCreationToGpuRequest(request);
         PhotoCardUrlDto photoCardUrlDto = gpuApiClient.getPhotoCardUrl(gpuRequest);
         String planTitle = getPlanTitle(request.totalPlanId());
@@ -70,7 +69,10 @@ public class PhotoCardService {
 
     private PhotoCardCreationToGpuRequest getPhotoCardCreationToGpuRequest(PhotoCardCreationRequest request) {
 
-        FeedListDto feedListDto = feedApiClient.getFeedsByTotalPlanId(request.totalPlanId()).getResponse();
+        FeedListDto feedListDto = FeedListDto.of(
+                feedApiClient.getFeedsByTotalPlanId(request.totalPlanId())
+                        .getResponse()
+                        .feedImageUrls());
         return PhotoCardCreationToGpuRequest.from(
                 request.userId(),
                 request.totalPlanId(),

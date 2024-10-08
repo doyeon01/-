@@ -22,7 +22,7 @@ public class FeedApiClient {
     public ApiResult<FeedListDto> getFeedsByTotalPlanId(Long totalPlanId) {
 
         ResponseEntity<ApiResult<FeedListDto>> response = restTemplate.exchange(
-                feedSericeUrl + "/feeds/" + totalPlanId,
+                feedSericeUrl + "/feeds/search/images/" + totalPlanId,
                 HttpMethod.GET,
                 null,
                 new ParameterizedTypeReference<ApiResult<FeedListDto>>() {}
