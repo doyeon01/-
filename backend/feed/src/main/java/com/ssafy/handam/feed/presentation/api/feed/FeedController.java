@@ -30,7 +30,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -96,6 +95,7 @@ public class FeedController {
             @CookieValue(value = "accessToken", required = false) String token,
             @PathVariable Long feedId,
             @RequestParam Long userId) {
+        likeService.sendLikeEvent(feedId, userId, token);
         return success(feedService.likeFeed(feedId, userId));
     }
 
