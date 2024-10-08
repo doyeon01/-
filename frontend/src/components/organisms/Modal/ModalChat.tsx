@@ -99,7 +99,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       console.log("connectWebSocket");
     }
   };
-  
+
   const selectFollowingChatRoom = (followingId: number) => {
     axios
       .get(`http://localhost:8080/api/v1/chat/following/${followingId}`)
@@ -171,8 +171,9 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
 
   return (
     <>
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-      <div className="bg-[#F4F4EE] w-full max-w-6xl h-[90vh] rounded-lg shadow-lg overflow-hidden relative">
+    <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50" onClick={onClose}/>
+
+      <div className="fixed top-[30px] left-[200px] z-50 bg-[#F4F4EE] w-full max-w-6xl h-[90vh] rounded-lg shadow-lg overflow-hidden ">
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-50">
           &times;
         </button>
@@ -287,7 +288,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
           </div>
         </div>
       </div>
-    </div>
     </>
   );
 };
