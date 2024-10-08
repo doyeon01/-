@@ -72,11 +72,12 @@ export const CompanionPage: React.FC = () => {
         className="fixed w-[300px] h-[650px] bg-white flex flex-col items-center z-30 border-gray border-r-2 overflow-y-auto"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full mt-4">
           <input
             type="text"
+            spellCheck = "false"
             placeholder="검색어를 입력하세요"
-            className="border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]"
+            className="font-normal text-sm border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)} 
             onKeyDown={handleKeyDown} 
