@@ -6,6 +6,7 @@ import { useRecoilValue } from 'recoil';
 import { PlanDetailApi } from '../../../services/api/PlanService';
 import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
 import { UserIconMini3 } from '../../../assets/icons/svg';
+import { useNavigate } from 'react-router-dom'; 
 
 interface ModalCompanionDetailProps {
   selectedId: number;
@@ -17,7 +18,8 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   const [comment, setComment] = useState<CommentType[] | null>(null);
   const [planDetatil, setplanDetatil] = useState<DayPlanType[]| []>([]);
   const userId = useRecoilValue(UserId); 
-  
+  const navigate = useNavigate(); 
+
   useEffect(() => {
     const loadArticles = async () => {
       const data = await fetchArticleDetail(selectedId);      
@@ -42,7 +44,6 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     loadComment();
   }, [selectedId]);
 
- 
   useEffect(() => {
     if (articleDetail?.totalPlanId !== undefined) {
       PlanDetailApi(articleDetail.totalPlanId)
@@ -62,7 +63,6 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     }
   }, [articleDetail]); 
   
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
   };
@@ -88,6 +88,12 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     }
   };
 
+  const handleProfileClick = () => {
+    if (articleDetail?.userId) {
+      navigate(`/your/${articleDetail.userId}`);
+    }
+  };
+
   return (
     <>
       <div className='fixed w-[300px] h-[595px] bg-white p-4 left-[310px] overflow-y-auto rounded-xl shadow-xl top-[85px] border-gray border-2' style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
@@ -110,7 +116,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
             </div>
             <div>
               <div className='font-bold text-sm'>{articleDetail.title}</div>
-              <div className='flex flex-row'>
+              <div className='flex flex-row cursor-pointer' onClick={handleProfileClick}> 
                 {articleDetail.profileImageUrl ? (
                   <img 
                     src={articleDetail.profileImageUrl} 
@@ -118,9 +124,9 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
                     className='w-6 h-6 rounded-full object-cover mr-1' 
                   />
                 ) : (
-                  <UserIconMini3/>
+                  <UserIconMini3 />
                 )}
-                <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
+                <div className='text-gray-600 text-sm mt-[5px]'>{articleDetail.nickName}</div>
               </div>
             </div>
           </div>
