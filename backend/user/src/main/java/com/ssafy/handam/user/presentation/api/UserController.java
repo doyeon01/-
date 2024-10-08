@@ -8,6 +8,7 @@ import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
 import com.ssafy.handam.user.presentation.response.UserInfoResponseWithFollowInfo;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
@@ -30,13 +31,14 @@ public class UserController {
     @Value("${app.security.logout-redirect-url}")
     private String logoutRedirectUrl;
 
-    @GetMapping("/logout")
-    public ApiResult logout(HttpServletResponse response) throws IOException {
-        userApplicationService.logout(response);
-        response.sendRedirect(logoutRedirectUrl);
-        return success(true);
-    }
+    @PostMapping("/logout")
+    public ApiResult<Void> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
 
+        Cookie logoutCookie = userApplicationService.logout(token);
+        response.addCookie(logoutCookie);
+        response.sendRedirect(logoutRedirectUrl);
+        return success(null);
+    }
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
         UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(request);
