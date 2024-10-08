@@ -11,7 +11,7 @@ import { useRecoilState } from 'recoil';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 
 
-const BaseUrl = 'http://j11c205.p.ssafy.io:8083';
+const BaseUrl = 'https://j11c205.p.ssafy.io:8083';
 
 const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
@@ -22,14 +22,14 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
-  console.log(userId);
   
   useEffect(() => {
     const fetchData = () => {
-      console.log(userId);
       axios
         .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
-        .then((response) => {          
+        .then((response) => {         
+          console.log(`챗아이디${response}`);
+                     
           setChatRooms(response.data.response);
         })
         .catch((error) => {
@@ -83,7 +83,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       axios
       .get(`${BaseUrl}/api/v1/chat/${roomId}`)
       .then((response) => {
-        console.log(response.data);
+        console.log(`채팅 룸설정 ${response.data}`);
         
         setMessages(response.data.response);
       })
@@ -107,6 +107,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     axios
       .get(`${BaseUrl}/api/v1/chat?userId=${userId}partnerId=${followingId}`)
       .then((response) => {
+        console.log(`팔로잉 채팅 연결${response}`);
+        
         selectChatRoom(response.data.responst.chatRoomId,response.data.responst.userIds[1])
       })
       .catch((error) => {
@@ -119,7 +121,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   useEffect(() => {
     const fetchFollowingList = async () => {
       const data:UserFollowingResponseType = await getFollowingList(); 
-      console.log(data);
+      console.log(`팔로잉데이터 : ${data}`);
       
       if (data.success) {
         console.log(data)
