@@ -8,10 +8,13 @@ import com.ssafy.handam.user.infrastructure.util.CookieUtil;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.presentation.response.UserInfoResponseWithFollowInfo;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.util.List;
 
 @Service
@@ -22,6 +25,13 @@ public class UserApplicationService {
     private final JwtUtil jwtUtil;
     private final UserService userService;
 
+    public void logout(HttpServletResponse response) {
+        Cookie cookie = new Cookie("accessToken", null);
+        cookie.setPath("/");
+        cookie.setMaxAge(0);
+        cookie.setHttpOnly(true);
+        response.addCookie(cookie);
+    }
     public Long getUserInfoByToken(String token) {
         return jwtUtil.extractUserId(token);
     }

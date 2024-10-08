@@ -4,19 +4,20 @@ import static com.ssafy.handam.user.presentation.api.ApiUtils.success;
 
 import com.ssafy.handam.user.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.user.application.service.UserApplicationService;
-import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
 import com.ssafy.handam.user.presentation.response.UserInfoResponse;
 import com.ssafy.handam.user.domain.service.UserService;
 import com.ssafy.handam.user.presentation.response.UserInfoResponseWithFollowInfo;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.NotNull;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.io.IOException;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/v1/users")
@@ -26,6 +27,15 @@ public class UserController {
 
     private final UserApplicationService userApplicationService;
     private final UserService userService;
+    @Value("${app.security.logout-redirect-url}")
+    private String logoutRedirectUrl;
+
+    @GetMapping("/logout")
+    public ApiResult logout(HttpServletResponse response) throws IOException {
+        userApplicationService.logout(response);
+        response.sendRedirect(logoutRedirectUrl);
+        return success(true);
+    }
 
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
