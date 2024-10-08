@@ -102,8 +102,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   
   useEffect(() => {
     const fetchFollowingList = async () => {
-      const res = await getFollowingList(); 
-      const data: UserFollowingResponseType = res.data;
+      const data:UserFollowingResponseType = await getFollowingList(); 
       console.log(data);
       
       if (data.success) {
