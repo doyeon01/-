@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import MapMarker from '../../../assets/statics/MapMarker.png';
 import test1 from '../../../assets/statics/Duli.png';
+import DrageAndDrop from '../../../assets/statics/DragAndDropIcon.png'
 
 interface Props {
   currentDate: number;
@@ -11,12 +12,27 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
   const [schedule, setSchedule] = useState<any[]>([]); // 입력 값 상태로 관리
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null); // 드래그된 항목의 인덱스 저장
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // 드래그 오버된 항목 인덱스
+  const [isDragging, setIsDragging] = useState(false); // 드래그 오버 상태 관리
 
   // Dropping 데이터를 schedule에 추가
   const handleDropData = (e: React.DragEvent<HTMLDivElement>) => {
     e.preventDefault();
-    const data = JSON.parse(e.dataTransfer.getData('place'));
-    setSchedule((prevSchedule) => [...prevSchedule, { ...data, notes: '' }]); // 추가할 때 notes 필드를 빈 값으로 포함
+
+    // 드롭된 데이터 가져오기
+    const data = e.dataTransfer.getData('place');
+
+    // JSON 파싱 전에 데이터가 유효한지 확인
+    if (data) {
+      try {
+        const parsedData = JSON.parse(data); // JSON 파싱
+        setSchedule((prevSchedule) => [...prevSchedule, { ...parsedData, notes: '' }]); // 데이터 추가
+      } catch (error) {
+        console.error('JSON parsing error:', error); // JSON 파싱 오류 처리
+      }
+    } else {
+      // console.error('No data found in drop event'); // 드롭된 데이터가 없을 때 처리
+    }
+    setIsDragging(false);
   };
 
   const handleDragStart = (index: number) => {
@@ -30,6 +46,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
 
   const handleDragLeave = () => {
     setHoveredIndex(null); // 드래그 오버 해제 시 초기화
+    setIsDragging(false)
   };
 
   const handleDropOrder = () => {
@@ -60,6 +77,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
         setSchedule(JSON.parse(storedSchedule)); // 저장된 값이 있으면 로드
       } else {
         setSchedule([]);
+        localStorage.removeItem(`schedule_${currentDate}`)
       }
     } else {
       setSchedule([]); // 저장된 값이 없으면 빈 배열로 초기화
@@ -85,18 +103,32 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
   };
 
   return (
-    <div key={index}>
+    <div key={index} className='relative h-full w-full'
+        onDrop={handleDropData} // 기존 데이터 추가를 위한 드롭 이벤트
+        onDragOver={(e) => {e.preventDefault()
+          setIsDragging(true);}} // 드롭을 허용
+        onDragLeave={handleDragLeave}
+        >
+      <div className={`w-full h-full absolute -z-10 justify-center items-center flex flex-col gap-6 ${isDragging ? 'bg-gray-200': ''}`}>
+        {schedule.length === 0 && 
+        <>
+        <img src={DrageAndDrop} alt="" className='size-16'/>
+        일정을 끌어 옮겨주세요
+        </>}
+        
+
+      </div>
       <div
         id='container'
         className="w-[390px] h-full flex flex-col min-h-[150px] justify-start items-center divide-y"
-        onDrop={handleDropData} // 기존 데이터 추가를 위한 드롭 이벤트
-        onDragOver={(e) => e.preventDefault()} // 드롭을 허용
+        // onDrop={handleDropData} // 기존 데이터 추가를 위한 드롭 이벤트
+        // onDragOver={(e) => e.preventDefault()} // 드롭을 허용
       >
         {getTemporarySchedule().map((item, indexx) => (
-          <div
+          <div id='elem'
             className={`flex justify-between w-full p-3 ${
-              hoveredIndex === indexx ? 'bg-gray-200 border-2 border-blue-500' : ''
-            }`} // 드래그 오버 시 스타일 적용
+              hoveredIndex === indexx ? 'box-border bg-gray-200' : 'bg-white'
+            }` } // 드래그 오버 시 스타일 적용
             key={indexx}
             draggable
             onDragStart={() => handleDragStart(indexx)} // 드래그 시작
