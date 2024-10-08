@@ -356,7 +356,7 @@ export function DownLoadIcon(): JSX.Element {
     </svg>
   )
 }
-export function OutIcon({ onClick }: { onClick: () => void }): JSX.Element {
+export function OutIcon(): JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -365,7 +365,6 @@ export function OutIcon({ onClick }: { onClick: () => void }): JSX.Element {
       strokeWidth="1.5"
       stroke="#b6afa9"
       className="size-6 cursor-pointer"
-      onClick={onClick} 
     >
       <path
         strokeLinecap="round"

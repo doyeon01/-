@@ -88,6 +88,7 @@ export const PersonalFeedDetail: React.FC = () => {
         <ModalFeedDetail 
           selectedId={selectedFeedId}  // 선택된 피드 ID를 모달로 전달
           closeModal={closeModal} 
+          
         />
       )}
     </>

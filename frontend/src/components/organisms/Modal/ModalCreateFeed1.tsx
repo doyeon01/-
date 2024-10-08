@@ -33,7 +33,7 @@ const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string)
 
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-center flex-grow pl-14">일정을 선택하세요</h2>
-        <button className="bg-[#707c60] text-white px-4 py-2 rounded-lg ml-auto" onClick={() => onSelectSchedule(0, '새 게시물 등록')}>
+        <button className="bg-[#645e59] text-white px-4 py-2 rounded-lg ml-auto" onClick={() => onSelectSchedule(0, '새 게시물 등록')}>
           건너뛰기
         </button>
       </div>
@@ -57,9 +57,11 @@ const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string)
             </div>
           ))
         ) : (
-          <div className="col-span-3 flex justify-center items-center h-80 mt-14 bg-[#e5e2d9] rounded-lg">
+          <div
+           className="col-span-3 flex justify-center items-center h-80 mt-14 bg-[#e5e2d9] rounded-lg"
+           onClick={() => nav('/plan')}>
             <p className="text-[#b6afa9] text-xl pr-2 ">여행일정이 없습니다</p> 
-            <OutIcon onClick={() => nav('/plan')}/>
+            <OutIcon/>
           </div>
         )}
       </div>

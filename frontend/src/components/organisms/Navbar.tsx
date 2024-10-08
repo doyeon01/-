@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import logo from './../../assets/statics/logo.png';
 import { NavLink } from 'react-router-dom';
+import axios from 'axios';
 
 export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -101,14 +102,14 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
             </li>
             <li className="flex items-center">
               <div className="border-l-2 border-black h-6 pl-8"></div>
-              <NavLink
-                to="https://j11c205.p.ssafy.io/oauth2/authorization/naver" // 리다이렉트 url 바꿀 것
-                className={({ isActive }) =>
-                  isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
-                }
-              >
+              <div className='block py-2 text-gray-900'
+              onClick={() => {
+                axios.post('https://j11c205.p.ssafy.io/api/v1/users/logout',{
+                  withCredentials: true,
+                })
+              }}>
                 로그아웃
-              </NavLink>
+              </div>
             </li>
 
           </ul>
