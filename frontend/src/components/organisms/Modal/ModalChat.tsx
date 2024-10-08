@@ -11,6 +11,7 @@ import { useRecoilState } from 'recoil';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 
 
+const BaseUrl = 'http://j11c205.p.ssafy.io:8083';
 
 const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
@@ -27,7 +28,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     const fetchData = () => {
       console.log(userId);
       axios
-        .get(`http://localhost:8080/api/v1/chat/user?userId=${userId}`)
+        .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
         .then((response) => {          
           setChatRooms(response.data.response);
         })
@@ -41,7 +42,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
     console.log(`Attempting to connect to WebSocket for room ${roomId}`);
-    const socket = new SockJS('http://localhost:8080/chat-websocket');
+    const socket = new SockJS(`${BaseUrl}/chat-websocket`);
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
@@ -80,7 +81,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     setSelectedRoomId(roomId);
     setMessages([]);
       axios
-      .get(`http://localhost:8080/api/v1/chat/${roomId}`)
+      .get(`${BaseUrl}/api/v1/chat/${roomId}`)
       .then((response) => {
         console.log(response.data);
         
@@ -104,7 +105,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
     axios
-      .get(`http://localhost:8080/api/v1/chat?userId=${userId}partnerId=${followingId}`)
+      .get(`${BaseUrl}/api/v1/chat?userId=${userId}partnerId=${followingId}`)
       .then((response) => {
         selectChatRoom(response.data.responst.chatRoomId,response.data.responst.userIds[1])
       })
