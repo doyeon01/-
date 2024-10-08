@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const getFeedCluster = async ()=>{
+export const getFeedCluster = async (id:number)=>{
     try{
         const response = await axios.get(`https://j11c205.p.ssafy.io/api/v1/feeds/like/clustering?userId=${id}`,{
             withCredentials:true,
@@ -13,7 +13,7 @@ export const getFeedCluster = async ()=>{
     }
 }
 
-export const getFeedClusterRefresh = async ()=>{
+export const getFeedClusterRefresh = async (id:number)=>{
     try{
         const response = await axios.get(`https://j11c205.p.ssafy.io/api/v1/feeds/like/clustering/refresh?userId=${id}`,{
             withCredentials:true
