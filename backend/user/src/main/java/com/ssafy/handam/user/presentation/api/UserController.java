@@ -32,7 +32,7 @@ public class UserController {
     @Value("${app.security.logout-redirect-url}")
     private String logoutRedirectUrl;
 
-    @PostMapping("/delete-token")
+    @GetMapping("/logout")
     public ApiResult<Void> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
         Cookie logoutCookie = userApplicationService.logout(token);
         response.addCookie(logoutCookie);
