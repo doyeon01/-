@@ -9,6 +9,8 @@ import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServic
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByTotalPlanIdServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.NearByClusterCenterServiceReuqest;
+import com.ssafy.handam.feed.domain.service.FeedDomainService;
+import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.feed.presentation.request.comment.CreateCommentRequest;
 import com.ssafy.handam.feed.presentation.request.feed.FeedCreationRequest;
@@ -50,6 +52,7 @@ public class FeedController {
     private final FeedService feedService;
     private final LikeService likeService;
     private final CommentService commentService;
+    private final FeedDomainService feedDomainService;
 
     @PostMapping("/user/recommended")
     public ApiResult<RecommendedFeedsForUserResponse> getRecommendedFeedsForUser(
@@ -200,6 +203,11 @@ public class FeedController {
 
         FeedsByTotalPlanIdServiceRequest request = FeedsByTotalPlanIdRequest.toService(totalPlanId);
         return success(feedService.getFeedsImageUrlsByTotalPlanId(request));
+    }
+
+    @GetMapping("/elastic/{feedId}")
+    public ApiResult<FeedDocument> getFeedDetailsFromElastic(@PathVariable Long feedId) {
+        return success(feedDomainService.getFeedDocumentById(feedId));
     }
 }
 

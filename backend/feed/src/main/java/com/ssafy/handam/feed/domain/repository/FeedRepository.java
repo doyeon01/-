@@ -27,4 +27,6 @@ public interface FeedRepository {
     Iterable<FeedDocument> findAllById(List<Long> feedIds);
 
     List<Feed> findByTotalPlanId(Long totalPlanId);
+
+    Optional<FeedDocument> findFeedDocumentById(Long feedId);
 }

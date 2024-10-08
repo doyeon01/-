@@ -17,6 +17,7 @@ import com.ssafy.handam.feed.domain.service.FeedDomainService;
 import com.ssafy.handam.feed.infrastructure.client.UserApiClient;
 import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
+import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.presentation.response.cluster.ClusterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
@@ -47,6 +48,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -62,6 +64,8 @@ public class FeedService {
     private final RedisTemplate<String, Object> redisTemplate;
     private final ObjectMapper objectMapper;
     private final Gson gson;
+    private final ElasticsearchOperations elasticsearchOperations;
+    private final FeedElasticsearchRepository feedElasticsearchRepository;
 
     public RecommendedFeedsForUserResponse getRecommendedFeedsForUser(RecommendedFeedsForUserServiceRequest request) {
         String createdDate = LocalDateTime.parse("2021-07-01T00:00:00")
@@ -96,7 +100,7 @@ public class FeedService {
                                                                        String accessToken) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
         Page<FeedDocument> feedDocuments = feedDomainService.searchFeedsByKeywordSortedByLikeCount(keyword, pageable);
-        UserDto userDto = userApiClient.getUserByToken( accessToken);
+        UserDto userDto = userApiClient.getUserByToken(accessToken);
         List<FeedPreviewDto> feedPreviewDtos = feedDocuments.stream()
                 .map(feedDocument -> {
                     return convertToFeedPreviewDto(feedDocument, userDto.id());
@@ -135,14 +139,21 @@ public class FeedService {
     }
 
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
-        feedDomainService.likeFeed(feedId, userId);
-        int size = feedDomainService.countUpLike(feedId).size();
-        return FeedLikeResponse.of(feedId, true, size);
+        int likeCount = feedDomainService.likeFeed(feedId, userId);
+        updateLikeCountInElasticsearch(feedId, likeCount);
+        return FeedLikeResponse.of(feedId, true, likeCount);
     }
 
     public FeedLikeResponse unlikeFeed(Long feedId, Long userId) {
-        feedDomainService.unlikeFeed(feedId, userId);
-        return FeedLikeResponse.of(feedId, false, feedDomainService.countDownLike(feedId).size());
+        int likeCount = feedDomainService.unlikeFeed(feedId, userId);
+        updateLikeCountInElasticsearch(feedId, likeCount);
+        return FeedLikeResponse.of(feedId, false, likeCount);
+    }
+
+    private void updateLikeCountInElasticsearch(Long feedId, int likeCount) {
+        FeedDocument feedDocument = feedDomainService.getFeedDocumentById(feedId);
+        feedDocument.setLikeCount(likeCount);
+        FeedDocument save = elasticsearchOperations.save(feedDocument);
     }
 
     @Transactional(readOnly = true)
@@ -344,7 +355,7 @@ public class FeedService {
                 feedDocument.getPlaceType(),
                 feedDocument.getUserNickname(),
                 feedDocument.getProfileImageUrl(),
-                feedDomainService.isLikedFeed(feedDocument.getId(),userId),
+                feedDomainService.isLikedFeed(feedDocument.getId(), userId),
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
