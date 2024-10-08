@@ -13,7 +13,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isLike, toggleLike, likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
-
+  
   useEffect(() => {
     const fetchDetailFeed = async () => {
       try {
@@ -37,15 +37,16 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
     fetchDetailFeed();
   }, [selectedId,likeCnt]);
 
+  const fetchComments = async () => {
+    try {
+      const response = await getFeedComment(selectedId);
+      setComments(response.data.response.comments);
+    } catch (error) {
+      console.error('Error fetching recommended comments:', error);
+    }
+  };
+  
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await getFeedComment(selectedId);
-        setComments(response.data.response.comments);
-      } catch (error) {
-        console.error('Error fetching recommended comments:', error);
-      }
-    };
     fetchComments();
   }, [selectedId]);
 
@@ -60,11 +61,13 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const handleCommentSubmit = async () => {
     if (detailFeed !== null) {
       const response = await postComment(detailFeed.id, commentContent);
-      console.log(response.response.comments);
-      
-      setComments(response.response.comments)
-    }
-    setCommentContent('');
+        console.log(response);
+        if (response.succese ===true){
+          setCommentContent('');
+          fetchComments();
+
+        }
+          }
   };
 
   return (
