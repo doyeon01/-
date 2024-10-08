@@ -2,6 +2,8 @@ import { useState } from 'react';
 import { postLike, postUnlike } from '../services/api/FeedService'; 
 
 const useLike = (initialLike: boolean, feedId: number | null) => {
+  console.log(initialLike);
+  
   const [isLike, setIsLike] = useState(initialLike);
   const [likeCount, setLikeCount] = useState(0); 
 

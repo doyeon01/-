@@ -13,6 +13,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isLike, toggleLike, likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
+  console.log(detailFeed);
   
   useEffect(() => {
     const fetchDetailFeed = async () => {
@@ -33,7 +34,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
       }
     };
     fetchDetailFeed();
-  }, [selectedId,likeCnt]);
+  }, [selectedId,likeCnt,isLike]);
 
   const fetchComments = async () => {
     try {
