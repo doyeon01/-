@@ -26,7 +26,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
 
   const handleLogout = () => {
     setActiveMenu('logout'); 
-    axios.get('http://j11c205.p.ssafy.io/api/v1/users/logout', { withCredentials: true })
+    axios.get('https://j11c205.p.ssafy.io/api/v1/users/logout', { withCredentials: true })
       .then((res) => {
         console.log('로그아웃 성공:', res.data);
       })
