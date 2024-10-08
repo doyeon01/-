@@ -155,7 +155,7 @@ public class FeedService {
     private void updateLikeCountInElasticsearch(Long feedId, int likeCount) {
         FeedDocument feedDocument = feedDomainService.getFeedDocumentById(feedId);
         feedDocument.setLikeCount(likeCount);
-        FeedDocument save = elasticsearchOperations.save(feedDocument);
+        elasticsearchOperations.save(feedDocument);
     }
 
     @Transactional(readOnly = true)
