@@ -2,6 +2,7 @@ package com.ssafy.handam.user.presentation.api;
 
 import static com.ssafy.handam.user.presentation.api.ApiUtils.success;
 
+import com.nimbusds.openid.connect.sdk.LogoutRequest;
 import com.ssafy.handam.user.presentation.api.ApiUtils.ApiResult;
 import com.ssafy.handam.user.application.service.UserApplicationService;
 import com.ssafy.handam.user.presentation.request.UserSurveyRequest;
@@ -31,12 +32,11 @@ public class UserController {
     private String logoutRedirectUrl;
 
     @PostMapping("/logout")
-    public ApiResult<Void> logout(HttpServletResponse response) throws IOException {
+    public ApiResult<Void> logout(@RequestBody HttpServletRequest request, HttpServletResponse response) throws IOException {
         userApplicationService.logout(response);
         response.sendRedirect(logoutRedirectUrl);
         return success(null);
     }
-
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
         UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(request);

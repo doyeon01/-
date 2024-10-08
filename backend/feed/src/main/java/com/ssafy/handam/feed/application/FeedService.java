@@ -96,11 +96,10 @@ public class FeedService {
                                                                        String accessToken) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
         Page<FeedDocument> feedDocuments = feedDomainService.searchFeedsByKeywordSortedByLikeCount(keyword, pageable);
-
+        UserDto userDto = userApiClient.getUserByToken( accessToken);
         List<FeedPreviewDto> feedPreviewDtos = feedDocuments.stream()
                 .map(feedDocument -> {
-                    UserDto userDto = userApiClient.getUserById(feedDocument.getUserId(), accessToken);
-                    return convertToFeedPreviewDto(feedDocument, userDto);
+                    return convertToFeedPreviewDto(feedDocument, userDto.id());
                 }).toList();
 
         return SearchedFeedsResponse.of(feedPreviewDtos, feedDocuments.getNumber(), feedDocuments.hasNext());
@@ -228,11 +227,11 @@ public class FeedService {
         String distanceString = distance + "km";
         Page<FeedDocument> nearbyClusterCenter = feedDomainService.getNearbyClusterCenter(latitude, longitude,
                 distanceString, pageable);
-
+        UserDto userDto = userApiClient.getUserByToken(accessToken);
         List<FeedPreviewDto> feedPreviewDtoList = nearbyClusterCenter.stream()
                 .map(feedDocument -> {
-                    UserDto userDto = userApiClient.getUserById(feedDocument.getUserId(), accessToken);
-                    return convertToFeedPreviewDto(feedDocument, userDto);
+
+                    return convertToFeedPreviewDto(feedDocument, userDto.id());
                 }).toList();
 
         return NearbyClusterCenterResponse.of(
@@ -327,7 +326,7 @@ public class FeedService {
         return UserDetailDto.from(userApiClient.getUserById(userId, accessToken));
     }
 
-    private FeedPreviewDto convertToFeedPreviewDto(FeedDocument feedDocument, UserDto userDto) {
+    private FeedPreviewDto convertToFeedPreviewDto(FeedDocument feedDocument, Long userId) {
         return new FeedPreviewDto(
                 feedDocument.getId(),
                 feedDocument.getTotalPlanId(),
@@ -343,9 +342,9 @@ public class FeedService {
                 feedDocument.getLongitude(),
                 feedDocument.getLatitude(),
                 feedDocument.getPlaceType(),
-                userDto.name(),
-                userDto.profileImage(),
-                feedDomainService.isLikedFeed(feedDocument.getId(), userDto.id()),
+                feedDocument.getUserNickname(),
+                feedDocument.getProfileImageUrl(),
+                feedDomainService.isLikedFeed(feedDocument.getId(),userId),
                 feedDocument.getCreatedDate().format(java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd"))
         );
     }
