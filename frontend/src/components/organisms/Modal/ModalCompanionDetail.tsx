@@ -17,7 +17,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   const [comment, setComment] = useState<CommentType[] | null>(null);
   const [planDetatil, setplanDetatil] = useState<DayPlanType[]| []>([]);
   const userId = useRecoilValue(UserId); 
-
+  
   useEffect(() => {
     const loadArticles = async () => {
       const data = await fetchArticleDetail(selectedId);      
@@ -32,9 +32,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
 
   useEffect(() => {
     const loadComment = async () => {
-      const data = await fetchArticleComment(selectedId);
-      console.log(data);
-      
+      const data = await fetchArticleComment(selectedId);      
       if (data.success) {
         setComment(data.response.comments);
       } else {
@@ -49,9 +47,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     if (articleDetail?.totalPlanId !== undefined) {
       PlanDetailApi(articleDetail.totalPlanId)
         .then((res) => {
-          const data: PlanDetailResponseType = res.data;
-          console.log(data);
-          
+          const data: PlanDetailResponseType = res.data;          
           if (data.success) {
             setplanDetatil(data.response);
           } else {

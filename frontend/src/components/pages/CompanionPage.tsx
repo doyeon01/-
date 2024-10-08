@@ -18,7 +18,8 @@ export const CompanionPage: React.FC = () => {
 
   useEffect(() => {
     const loadArticles = async () => {
-      const data = await fetchArticles(page);
+      const data = await fetchArticles(page);   
+         
       if (data.success) {
         setArticles(data.response.articles);
       } else {
@@ -31,7 +32,6 @@ export const CompanionPage: React.FC = () => {
  
   const handleSearch = async () => {
     const data:AccompanyBoardResponseType = await getAccompanyBoardSearch(searchTerm);    
-    console.log(data);
      
     if (data.success) {
       setArticles(data.response.articles); 
@@ -50,6 +50,7 @@ export const CompanionPage: React.FC = () => {
   const handleItemClick = (id: number, index: number) => {
     setSelectedId(id);
     setSelectedIndex(index);
+    
   };
 
   const closeModal = () => {
@@ -90,7 +91,7 @@ export const CompanionPage: React.FC = () => {
               key={article.id || index}
               className={`flex items-center border-b border-gray-300 py-4 w-full cursor-pointer 
                   ${isSelected ? 'bg-[#F0F0F3]' : 'bg-none'}`}
-              onClick={() => handleItemClick(article.totalPlanId, index)}
+              onClick={() => handleItemClick(article.id, index)}
             >
               <div
                 className={`flex ${

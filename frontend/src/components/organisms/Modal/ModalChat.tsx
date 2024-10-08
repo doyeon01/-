@@ -11,8 +11,7 @@ import { useRecoilState } from 'recoil';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 
 
-const BaseUrl = 'https://j11c205.p.ssafy.io:8083';
-
+const BaseUrl = 'https://j11c205.p.ssafy.io';
 const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
@@ -105,7 +104,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
     axios
-      .get(`${BaseUrl}/api/v1/chat?userId=${userId}partnerId=${followingId}`)
+      .get(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
       .then((response) => {
         console.log(`팔로잉 채팅 연결${response}`);
         
