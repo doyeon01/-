@@ -60,6 +60,8 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const handleCommentSubmit = async () => {
     if (detailFeed !== null) {
       const response = await postComment(detailFeed.id, commentContent);
+      console.log(response.response.comments);
+      
       setComments(response.response.comments)
     }
     setCommentContent('');
