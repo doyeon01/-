@@ -53,6 +53,12 @@ public class UserController {
         UserInfoResponse userInfoResponse = userService.findUserById(id);
         return success(userInfoResponse);
     }
+    @GetMapping("/info")
+    public ApiResult<UserInfoResponse> getUserInfoByToken(@CookieValue(value = "accessToken", required = false) String token) {
+        Long userId = userApplicationService.getUserInfoByToken(token);
+        UserInfoResponse userInfoResponse = userService.findUserById(userId);
+        return success(userInfoResponse);
+    }
 
 
     @GetMapping("/test")
