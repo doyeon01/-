@@ -5,6 +5,7 @@ import axios from 'axios';
 
 export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) => {
   const [isScrolled, setIsScrolled] = useState(false);
+  const [activeMenu, setActiveMenu] = useState<string | null>(null); //로그아웃 메뉴 활성화를 위한 상태
 
   const handleScroll = () => {
     if (window.scrollY > 50) {
@@ -23,15 +24,26 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
 
   const isWhiteBackground = location.pathname === '/companion';
 
+  const handleLogout = () => {
+    setActiveMenu('logout'); 
+    axios.get('http://j11c205.p.ssafy.io/api/v1/users/logout', { withCredentials: true })
+      .then((res) => {
+        console.log('로그아웃 성공:', res.data);
+      })
+      .catch((error) => {
+        console.error('로그아웃 실패:', error);
+      });
+  };
+
   return (
     <nav
       id="navbar"
       style={{
         backgroundColor: isWhiteBackground
-          ? '#FFFFFF' 
+          ? '#FFFFFF'
           : isScrolled
           ? '#F4F4EE'
-          : 'transparent', 
+          : 'transparent',
         boxShadow: isScrolled ? '0 4px 6px rgba(0, 0, 0, 0.1)' : 'none',
         transition: 'background-color 0.3s ease-in-out, box-shadow 0.3s ease-in-out',
         fontFamily: 'Arita',
@@ -53,7 +65,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
                   isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
                 }
               >
-                메인 
+                메인
               </NavLink>
             </li>
             <li className="flex items-center">
@@ -64,7 +76,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
                   isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
                 }
               >
-                탐색하기 
+                탐색하기
               </NavLink>
             </li>
             <li className="flex items-center">
@@ -75,7 +87,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
                   isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
                 }
               >
-                여행계획 
+                여행계획
               </NavLink>
             </li>
             <li className="flex items-center">
@@ -86,7 +98,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
                   isActive ? 'block py-2 text-black font-bold' : 'block py-2 text-gray-900'
                 }
               >
-                동행하기 
+                동행하기
               </NavLink>
             </li>
             <li className="flex items-center">
@@ -102,23 +114,13 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
             </li>
             <li className="flex items-center">
               <div className="border-l-2 border-black h-6 pl-8"></div>
-              <div className='block py-2 text-gray-900'
-              onClick={() => {
-                console.log('로그아웃 누름')
-                axios.post('https://j11c205.p.ssafy.io/api/v1/users/logout',{
-                  withCredentials: true,
-                })
-                .then((res)=>{
-                  console.log(res.data)
-                })
-                .catch((error)=>{
-                  console.log(error)
-                })
-              }}>
+              <div
+                className={`block py-2 cursor-pointer ${activeMenu === 'logout' ? 'text-black font-bold' : 'text-gray-900'}`}
+                onClick={handleLogout}
+              >
                 로그아웃
               </div>
             </li>
-
           </ul>
         </div>
       </div>
