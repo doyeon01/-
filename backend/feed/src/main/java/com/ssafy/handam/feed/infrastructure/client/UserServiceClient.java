@@ -15,4 +15,8 @@ public interface UserServiceClient {
             @PathVariable("id") Long userId,
             @RequestHeader("Cookie") String cookie
     );
+    @GetMapping("/api/v1/users/info")
+    ApiResult<UserDto> getUserByToken(
+            @RequestHeader("Cookie") String cookie
+    );
 }
