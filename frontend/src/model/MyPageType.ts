@@ -9,7 +9,10 @@ export interface UserInfoType {
   profileImage: string; // 프로필 이미지 경로
   accompanyTemperature: number; // 동행 온도 (숫자형)
   introduction: string | null; // 자기소개 (null 가능)
-  residence: null
+  residence: null;
+  isFollowed: boolean;
+  followerCount : number;
+  followingCount: number;
   travelStyl1: string | null; // 여행 스타일 1 (null 가능)
   travelStyl2: string | null; // 여행 스타일 2 (null 가능)
   travelStyl3: string | null; // 여행 스타일 3 (null 가능)
@@ -134,6 +137,7 @@ export interface CardProps {
   comment: number;
   like?: number;
   image: string;
+  onClick?: () => void; 
 }
 
 

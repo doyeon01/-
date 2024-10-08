@@ -1,12 +1,9 @@
 import { RealHeartIcon } from '../../../assets/icons/svg'; // 아이콘 경로 확인
 import { CardProps } from '../../../model/MyPageType';
 
-export const FeedCard: React.FC<CardProps> = ({ title, address, content, createdDate, comment, like, image }) => {
+export const FeedCard: React.FC<CardProps> = ({ title, address, content, createdDate, comment, like, image, onClick }) => {
   
-  // 제목이 9글자 이상일 경우 자르고 '...' 추가
   const truncatedTitle = title.length > 9 ? title.substring(0, 9) + "..." : title;
-
-  // 본문 내용이 64글자 이상일 경우 자르고 '...' 추가
   const truncatedContent = content.length > 64 ? content.substring(0, 64) + "..." : content;
 
   // 날짜 형식 변환
@@ -19,7 +16,10 @@ export const FeedCard: React.FC<CardProps> = ({ title, address, content, created
   };
 
   return (
-    <div className="max-w-sm rounded overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl">
+    <div
+     className="max-w-sm rounded overflow-hidden shadow-lg transform transition-transform duration-300 hover:scale-105 hover:shadow-xl"
+     onClick={onClick}
+     >
       <img className="w-full h-48 object-cover" src={image} alt={title} />
       <div className="px-6 py-4">
         <div className="flex justify-between items-center mb-2">

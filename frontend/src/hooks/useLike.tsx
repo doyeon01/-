@@ -3,16 +3,22 @@ import { postLike, postUnlike } from '../services/api/FeedService';
 
 const useLike = (initialLike: boolean, feedId: number | null) => {
   const [isLike, setIsLike] = useState(initialLike);
+  const [likeCount, setLikeCount] = useState(0); 
 
   const toggleLike = async () => {
     setIsLike(prev => !prev); 
 
     try {
       if (feedId !== null) {
+        let response;
+
         if (isLike) {
-          await postUnlike(feedId);
+          response = await postUnlike(feedId);
         } else {
-          await postLike(feedId);
+          response = await postLike(feedId);
+        }
+        if (response && response.success && response.response) {
+          setLikeCount(response.response.likeCount);
         }
       } else {
         console.error('feedId가 null입니다.'); 
@@ -24,6 +30,7 @@ const useLike = (initialLike: boolean, feedId: number | null) => {
 
   return {
     isLike,
+    likeCount, 
     toggleLike,
   };
 };

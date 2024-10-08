@@ -17,8 +17,6 @@ export const SearchPage: React.FC = () => {
 
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
-      
-      
       try {
         const response = await postFeedRecommend(1, 10);
         setRecommendedFeeds(response.data.response.feeds);
@@ -54,6 +52,11 @@ export const SearchPage: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
         />
         <button
           onClick={handleSearch}
@@ -101,10 +104,10 @@ export const SearchPage: React.FC = () => {
                 <div className="absolute bottom-2 left-2 flex items-center space-x-2 text-white opacity-0 group-hover:opacity-100">
                   <img
                     src={recommendedFeed.userProfileImageUrl}
-                    alt={recommendedFeed.username}
+                    alt={recommendedFeed.nickName}
                     className="w-8 h-8 rounded-full object-cover"
                   />
-                  <p className="text-lg font-bold">{recommendedFeed.username}</p>
+                  <p className="text-lg font-bold">{recommendedFeed.nickName}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100">
                   <p className="text-2xl">❤️</p>

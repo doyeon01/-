@@ -14,6 +14,8 @@ export const MyPage = () => {
   const [nickName, setNickName] = useState<string | null>(''); // string | null 허용
   const [introduce, setIntroduce] = useState<string | null>(''); // string | null 허용
   const [accompanyTemperature, setAccompanyTemperature] = useState<number>(0); // 초기값 설정
+  const [followerCount, setFollowerCount] = useState(0)
+  const [followingCount, setFollowingCount] = useState(0)
 
   const handleOpenModal = () => {
     setIsModalOpen(true);
@@ -35,10 +37,13 @@ export const MyPage = () => {
         const data: UserInfoResponseType = res.data;
         if (data.success) {
           const info: UserInfoType = data.response;
+          console.log(info)
           setImage(info.profileImage);
           setNickName(info.name);
           setIntroduce(info.introduction);
           setAccompanyTemperature(info.accompanyTemperature);
+          setFollowingCount(info.followingCount)
+          setFollowerCount(info.followerCount)
         }
       })
       .catch((error) => console.error(error));
@@ -71,9 +76,9 @@ export const MyPage = () => {
               <span className="text-base font-light mr-1">동행온도 </span>
               <span className="font-bold mr-6">{accompanyTemperature.toFixed(1)}</span>
               <span className="text-base font-light mr-1">팔로워 </span>
-              <span className="font-bold mr-6">200</span>
+              <span className="font-bold mr-6">{followerCount}</span>
               <span className="text-base font-light mr-1">팔로잉 </span>
-              <span className="font-bold mr-6">200</span>
+              <span className="font-bold mr-6">{followingCount}</span>
             </div>
           </div>
         </div>
