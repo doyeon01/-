@@ -19,4 +19,4 @@ public interface UserServiceClient {
     ApiResult<UserDto> getUserByToken(
             @RequestHeader("Cookie") String cookie
     );
-}gi
+}

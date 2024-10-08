@@ -64,4 +64,9 @@ public class FeedRepositoryImpl implements FeedRepository {
     public Iterable<FeedDocument> findAllById(List<Long> feedIds) {
         return feedElasticsearchRepository.findAllById(feedIds);
     }
+
+    @Override
+    public List<Feed> findByTotalPlanId(Long totalPlanId) {
+        return feedJpaRepository.findByTotalPlanId(totalPlanId);
+    }
 }

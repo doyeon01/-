@@ -23,16 +23,4 @@ public class UserApiClient {
             throw new RuntimeException("API 응답이 null입니다.");
         }
     }
-    public UserDto getUserByToken(String accessToken) {
-        String cookie = "accessToken=" + accessToken;
-        ApiResult<UserDto> apiResult = userServiceClient.getUserByToken(cookie);
-
-        if (apiResult != null && apiResult.isSuccess()) {
-            return apiResult.getResponse();
-        } else if (apiResult != null && apiResult.getError() != null) {
-            throw new RuntimeException("API 호출 실패: " + apiResult.getError().getMessage());
-        } else {
-            throw new RuntimeException("API 응답이 null입니다.");
-        }
-    }
 }

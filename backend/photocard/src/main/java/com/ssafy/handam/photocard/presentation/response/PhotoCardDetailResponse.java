@@ -6,7 +6,8 @@ public record PhotoCardDetailResponse(
 
         Long id,
         Long userId,
-        Long feedId,
+        Long totalPlanId,
+        String planTitle,
         String photoCardUrl,
         String createdDate) {
 
@@ -15,7 +16,8 @@ public record PhotoCardDetailResponse(
         return new PhotoCardDetailResponse(
                 photoCardDetailDto.id(),
                 photoCardDetailDto.userId(),
-                photoCardDetailDto.feedId(),
+                photoCardDetailDto.totalPlanId(),
+                photoCardDetailDto.planTitle(),
                 photoCardDetailDto.photoCardUrl(),
                 photoCardDetailDto.createdDate()
         );
