@@ -683,7 +683,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
         // given
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
         List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
-        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+        ClusterResponse response = new ClusterResponse(UUID.randomUUID().toString(), 37.7749, 122.4194,
+                feedPreviewDtos);
 
         // when
         given(feedService.getClusteredFeeds(any(), any())).willReturn(List.of(response));
@@ -761,7 +762,8 @@ class FeedControllerDocsTest extends RestDocsSupport {
         // given
         FeedPreviewDto feedPreviewDto = getFeedPreviewDto();
         List<FeedPreviewDto> feedPreviewDtos = List.of(feedPreviewDto);
-        ClusterResponse response = ClusterResponse.of(UUID.randomUUID().toString(), 37.7749, 122.4194, feedPreviewDtos);
+        ClusterResponse response = new ClusterResponse(UUID.randomUUID().toString(), 37.7749, 122.4194,
+                feedPreviewDtos);
 
         // when
         given(feedService.refreshClusteredFeeds(any(), any())).willReturn(List.of(response));
@@ -949,22 +951,22 @@ class FeedControllerDocsTest extends RestDocsSupport {
         given(feedService.getFeedsImageUrlsByTotalPlanId(feedsByTotalPlanIdServiceRequest)).willReturn(response);
 
         mockMvc.perform(
-                RestDocumentationRequestBuilders.get("/api/v1/feeds/search/images/{totalPlanId}",
-                        requestTotalPlanId)
+                        RestDocumentationRequestBuilders.get("/api/v1/feeds/search/images/{totalPlanId}",
+                                requestTotalPlanId)
                 )
-                        .andExpect(status().isOk())
-                        .andDo(document("get-feeds-image-urls",
-                                preprocessRequest(prettyPrint()),
-                                preprocessResponse(prettyPrint()),
-                                pathParameters(
-                                        parameterWithName("totalPlanId").description("일정 ID")
-                                ),
-                                responseFields(
-                                        fieldWithPath("success").description("성공 여부"),
-                                        fieldWithPath("response.feedImageUrls[]").type(JsonFieldType.ARRAY)
-                                                .description("피드 이미지 url"),
-                                        fieldWithPath("error").description("에러 메시지")
-                                )
-                        ));
+                .andExpect(status().isOk())
+                .andDo(document("get-feeds-image-urls",
+                        preprocessRequest(prettyPrint()),
+                        preprocessResponse(prettyPrint()),
+                        pathParameters(
+                                parameterWithName("totalPlanId").description("일정 ID")
+                        ),
+                        responseFields(
+                                fieldWithPath("success").description("성공 여부"),
+                                fieldWithPath("response.feedImageUrls[]").type(JsonFieldType.ARRAY)
+                                        .description("피드 이미지 url"),
+                                fieldWithPath("error").description("에러 메시지")
+                        )
+                ));
     }
 }

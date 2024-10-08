@@ -177,8 +177,13 @@ public class FeedService {
 
         if (cacheHit(cachedData)) {
             for (Object obj : cachedData) {
-                ClusterResponse cluster = objectMapper.convertValue(obj, ClusterResponse.class);
-                clusteredFeeds.add(cluster);
+                try {
+                    ClusterResponse cluster = objectMapper.readValue((String) obj, ClusterResponse.class);
+                    clusteredFeeds.add(cluster);
+                    clusteredFeeds.add(cluster);
+                } catch (JsonProcessingException e) {
+                    throw new RuntimeException("Failed to parse cached data");
+                }
             }
         } else {
             clusteredFeeds = performClustering(userId, token);
@@ -186,7 +191,7 @@ public class FeedService {
                 try {
                     redisTemplate.opsForList().rightPush(redisKey, objectMapper.writeValueAsString(cluster));
                 } catch (JsonProcessingException e) {
-                    e.printStackTrace();
+                    throw new RuntimeException("Failed to parse cached data");
                 }
             }
             redisTemplate.expire(redisKey, Duration.ofHours(1));
@@ -247,7 +252,7 @@ public class FeedService {
     }
 
     private boolean cacheHit(List<Object> cachedData) {
-        return cachedData != null || !cachedData.isEmpty();
+        return cachedData != null && !cachedData.isEmpty();
     }
 
     private List<ClusterResponse> performClustering(Long userId, String token) {
@@ -280,7 +285,7 @@ public class FeedService {
                     })
                     .toList();
             String clusterId = UUID.randomUUID().toString();
-            clusteredFeeds.add(ClusterResponse.of(clusterId, centroid[0], centroid[1], feedsInCluster));
+            clusteredFeeds.add(new ClusterResponse(clusterId, centroid[0], centroid[1], feedsInCluster));
         }
         return clusteredFeeds;
     }
