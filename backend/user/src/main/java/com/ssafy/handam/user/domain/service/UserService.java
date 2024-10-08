@@ -99,7 +99,7 @@ public class UserService {
                 .orElseThrow(() -> new IllegalArgumentException("내정보를 찾을 수 없습니다."));
 
         List<User> users = userRepository.findByNicknameContaining(keyword,"e");
-        
+
         return users.stream()
                 .map(user -> {
                     Optional<Follow> follow = findFollowStatus(currentUser, user);
