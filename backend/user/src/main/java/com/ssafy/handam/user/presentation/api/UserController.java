@@ -33,11 +33,11 @@ public class UserController {
     private String logoutRedirectUrl;
 
     @GetMapping("/logout")
-    public ApiResult<Void> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
+    public ApiResult<HttpServletResponse> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
         Cookie logoutCookie = userApplicationService.logout(token);
         response.addCookie(logoutCookie);
         response.sendRedirect(logoutRedirectUrl);
-        return success(null);
+        return success(response);
     }
 
     @GetMapping("/myInfo")
