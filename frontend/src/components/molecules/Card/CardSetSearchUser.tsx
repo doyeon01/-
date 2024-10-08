@@ -32,7 +32,7 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
   }, [keyword]);
 
   const handleUserClick = (userId: number) => {
-    navigate(`/user/${userId}`);
+    navigate(`/your/${userId}`);
   };
 
   return (
@@ -41,7 +41,7 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
         users.map((user, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2 z-10"
+            className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2 z-10 cursor-pointer"
             onClick={() => handleUserClick(user.id)}
           >
             <div className="flex items-center space-x-4">
