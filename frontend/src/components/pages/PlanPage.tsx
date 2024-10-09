@@ -122,7 +122,7 @@ export const PlanPage: React.FC = () => {
       }
     }
     fetchData();
-  },[])
+  },[latitude,lotitude])
 
 
   const handleSearchingTab = () => {
@@ -135,18 +135,19 @@ export const PlanPage: React.FC = () => {
     setismodal(Ismodal => !Ismodal)
    // feedCluster가 있으면 해당 값을 사용, 없으면 기본값 사용
     if (feedCluster) {
+      
       setLatitude(feedCluster.latitude);
       setLotitude(feedCluster.longitude);
-      console.log(latitude, lotitude);
+
       
     } else {
       // feedCluster가 없을 때의 처리 (기본값으로 설정)
-      console.log('기본값으로 초기화 되었다!!');
       
       setLatitude(37.5503);
       setLotitude(126.9971);
     }
   }
+
 
   // 날짜 선택 후 닫기
   const handleIsHide = (choicedDate: Date) => {
