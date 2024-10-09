@@ -31,6 +31,7 @@ pipeline {
                     ]],
                     extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
                 ])
+                sh 'ls -lR'
             }
         }
 
@@ -69,7 +70,7 @@ pipeline {
                               export CLIENT_SECRET=$CLIENT_SECRET
                                cd backend/user
                                chmod +x ./gradlew
-                               ./gradlew build
+                               ./gradlew clean build --stacktrace --info
                                ls build/libs
                                docker build \
                                --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
