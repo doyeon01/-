@@ -89,20 +89,20 @@ const ModalUserCompanion: React.FC<ModalCompanionDetailProps> = ({ selectedId, c
   const handleModalClose = () => {
     closeModal({ commentCount: comment ? comment.length : 0 });
   };
-  
 
   return (
     <>
-      {/* 모달 배경 및 크기 설정 */}
       <div
-       className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
-       onClick={handleModalClose} >
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        onClick={handleModalClose}
+      >
         <div
           className="relative bg-[#F4F4EE] p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto"
           style={{
             msOverflowStyle: 'none',
             scrollbarWidth: 'none',
           }}
+          onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
         >
           {/* 닫기 버튼 */}
           <button
