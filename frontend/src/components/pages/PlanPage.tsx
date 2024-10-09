@@ -13,13 +13,14 @@ import Swal from 'sweetalert2';
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
 
-import { useRecoilValue } from 'recoil';
-import {UserId} from '../../Recoil/atoms/Auth'
+// import { useRecoilValue } from 'recoil';
+// import {UserId} from '../../Recoil/atoms/Auth'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
-  const userId = useRecoilValue(UserId)
+  // const userId = useRecoilValue(UserId)
+  const userId = 2895
   const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
   const navigate = useNavigate()
 
@@ -37,7 +38,10 @@ export const PlanPage: React.FC = () => {
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null); // 마지막 갱신 시간
   const [timeAgo, setTimeAgo] = useState(''); // "몇 분 전" 텍스트 상태
   const [schedule, setSchedule] = useState<TravelPlan>()
-  
+  const [latitude, setLatitude] = useState(37.5503)
+  const [lotitude, setLotitude] = useState(126.9971)
+
+
   const [_, setDragging] = useState(false);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, feed:any) => {
@@ -105,18 +109,13 @@ export const PlanPage: React.FC = () => {
     }
   }, [userId, lastRefreshTime]);
 
-
-  let lat = 37.5503
-  let lot = 126.9971
   let distance = 10
   let page = 0
   let size = 20
   useEffect(()=>{
     const fetchData = async()=>{
       try {
-        const data = await getFeedClusterByDistance(lat,lot,distance, page, size); // 배열 반환
-        // console.log('Fetched feeds data:', data); // 전체 데이터 로그
-        // console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
+        const data = await getFeedClusterByDistance(latitude,lotitude,distance, page, size); // 배열 반환
         setFeedClusterByDistanceData(data.response.feeds); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
@@ -131,9 +130,18 @@ export const PlanPage: React.FC = () => {
     } 
   
   // 모달 열고 닫기
-  const handleIsmodal = (feeds:FeedType[]) => {
+  const handleIsmodal = (feeds:FeedType[], feedCluster?:FeedClusterType) => {
     setFeeds(feeds)
     setismodal(Ismodal => !Ismodal)
+   // feedCluster가 있으면 해당 값을 사용, 없으면 기본값 사용
+    if (feedCluster) {
+      setLatitude(feedCluster.latitude);
+      setLotitude(feedCluster.longitude);
+    } else {
+      // feedCluster가 없을 때의 처리 (기본값으로 설정)
+      setLatitude(37.5503);
+      setLotitude(126.9971);
+    }
   }
 
   // 날짜 선택 후 닫기
@@ -305,7 +313,7 @@ export const PlanPage: React.FC = () => {
             </button>
             {feedCluster && feedCluster.length > 0 && loading===false ? (
               feedCluster.map((items, index) => (
-                <button onClick={()=>handleIsmodal(items.feeds)}>
+                <button onClick={()=>handleIsmodal(items.feeds, items)}>
                   <CardPlanFav
                   key={index}
                   name={`맞춤 여행 추천 ${index+1}`}
