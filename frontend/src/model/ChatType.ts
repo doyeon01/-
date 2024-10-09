@@ -4,11 +4,9 @@ export interface ModalChatTypeProps {
 
 
   export interface userType {
-    birthday:string;
-    gender:string;
-    id:number;
+    userId:number;
     nickname:string;
-    profileImage:string;
+    profileImageUrl:string;
   }
 
   export interface ChatRoomType {
@@ -16,7 +14,7 @@ export interface ModalChatTypeProps {
     lastMessage:string;
     lastMessageTime:string;
     lastUserName:string;
-    users:userType[];
+    user:userType;
   }
   
   export interface MessageType {

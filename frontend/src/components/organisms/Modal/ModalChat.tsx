@@ -111,7 +111,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         
         const chatRoomId = response.data.response.chatRoomId; 
         if (chatRoomId) {
-          selectChatRoom(chatRoomId, response.data.response.userIds[1]);
+          selectChatRoom(chatRoomId, response.data.response.userIds);
         } else {
           console.error("chatRoomId is undefined");
         }
@@ -202,10 +202,10 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
               {chatRooms.map((chat, index) => (
                 <li
                   key={index}
-                  onClick={() => selectChatRoom(chat.chatRoomId,chat.users[1])}
+                  onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
                   className="flex items-center mb-4 cursor-pointer"
                 >
-                  <img src={chat.users[1].profileImage} alt={chat.users[1].nickname} className="w-10 h-10 rounded-full mr-2" />
+                  <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
                     <p className="font-bold">{chat.lastUserName}</p>
                     <p className="text-sm text-gray-600">{chat.lastMessage}</p>
@@ -219,7 +219,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             {messages&&partnerUser ? (
               <>
                 <div className="flex items-center mb-4">
-                  <img src={partnerUser.profileImage} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
+                  <img src={partnerUser.profileImageUrl} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
                   <div>
                     <p className="font-bold">{partnerUser.nickname}</p>
                   </div>
@@ -239,7 +239,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       ) : (
                         // 상대가 보낸 메시지
                         <div className="flex items-start">
-                          <img src={partnerUser.profileImage} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
+                          <img src={partnerUser.profileImageUrl} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
                           <div className="bg-[#E5E2D9] p-2 rounded-lg">
                             <p>{message.content}</p>
                             <p className="text-xs text-gray-500 text-right">{message.timeStamp}</p>
