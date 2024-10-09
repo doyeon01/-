@@ -177,7 +177,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 className="w-full p-2 rounded-md bg-white border border-gray-300"
               />
             </div>
-            <div className="w-full overflow-y-auto"  style={{ maxHeight: '90vh' }}>
+            <div className="w-full overflow-y-auto"   style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
               <ul>
                 {followings.map((following, index) => (
                   <li
@@ -199,8 +199,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </li>
                 ))}
               </ul>
-              <div className='h-10'></div>
             </div>
+            <div className='h-[50px]'></div>
           </div>
 
           <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
@@ -221,6 +221,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 </li>
               ))}
             </ul>
+            <div className='h-10'></div>
           </div>
 
           <div className="flex-1 p-4 relative z-40 ">
@@ -258,6 +259,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       )}
                     </div>
                   ))}
+                <div className='h-[80px]'></div>
                 </div>
 
                 {/* 대화입력창 */}
