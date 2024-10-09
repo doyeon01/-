@@ -21,7 +21,7 @@ spring:
 
 gpu:
   service:
-    url: http://70.12.130.121:8001/api/v1/gpu
+    url: http://70.12.130.121:8000/api/v1/gpu
 
 feed:
   service:

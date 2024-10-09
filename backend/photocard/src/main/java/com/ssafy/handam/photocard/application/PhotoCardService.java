@@ -27,26 +27,31 @@ public class PhotoCardService {
 
     private final PhotoCardDomainService photoCardDomainService;
     private final GpuApiClient gpuApiClient;
-    private final FeedApiClient feedApiClient;
+//    private final FeedApiClient feedApiClient;
     private final PlanApiClient planApiClient;
 
     public PhotoCardDetailResponse createPhotoCard(PhotoCardCreationRequest request) {
 
+        if(photoCardDomainService.existsPhotoCardByFeedId(request.feedId())){
+            System.out.println("존재");
+            return null;
+        } else {
+            PhotoCardCreationToGpuRequest gpuRequest = getPhotoCardCreationToGpuRequest(request);
+            PhotoCardUrlDto photoCardUrlDto = gpuApiClient.getPhotoCardUrl(gpuRequest);
+            String planTitle = getPlanTitle(request.totalPlanId());
 
-        PhotoCardCreationToGpuRequest gpuRequest = getPhotoCardCreationToGpuRequest(request);
-        PhotoCardUrlDto photoCardUrlDto = gpuApiClient.getPhotoCardUrl(gpuRequest);
-        String planTitle = getPlanTitle(request.totalPlanId());
+            PhotoCard photoCard = photoCardDomainService.createPhotoCard(
+                    PhotoCardSaveRequest.from(
+                            request.userId(),
+                            request.feedId(),
+                            request.totalPlanId(),
+                            planTitle,
+                            photoCardUrlDto.photoCardUrl()
+                    )
+            );
+            return PhotoCardDetailResponse.of(PhotoCardDetailDto.of(photoCard));
+        }
 
-        PhotoCard photoCard = photoCardDomainService.createPhotoCard(
-                PhotoCardSaveRequest.from(
-                        request.userId(),
-                        request.totalPlanId(),
-                        planTitle,
-                        photoCardUrlDto.photoCardUrl()
-                )
-        );
-
-        return PhotoCardDetailResponse.of(PhotoCardDetailDto.of(photoCard));
     }
 
     public PhotoCardDetailResponse getPhotoCard(Long totalPlanId) {
@@ -70,11 +75,12 @@ public class PhotoCardService {
 
     private PhotoCardCreationToGpuRequest getPhotoCardCreationToGpuRequest(PhotoCardCreationRequest request) {
 
-        FeedListDto feedListDto = feedApiClient.getFeedsByTotalPlanId(request.totalPlanId()).getResponse();
+//        FeedListDto feedListDto = feedApiClient.getFeedsByTotalPlanId(request.totalPlanId()).getResponse();
         return PhotoCardCreationToGpuRequest.from(
                 request.userId(),
-                request.totalPlanId(),
-                feedListDto.feedImageUrls());
+                request.feedId(),
+                request.feedImageUrl(),
+                request.totalPlanId());
     }
 
     private String getPlanTitle(Long totalPlanId) {

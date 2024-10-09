@@ -12,4 +12,5 @@ public interface PhotoCardJpaRepository extends JpaRepository<PhotoCard, Long> {
 
     Page<PhotoCard> findByUserId(Long userId, Pageable pageable);
     PhotoCard findByTotalPlanId(Long totalPlanId);
+    boolean existsByFeedId(Long feedId);
 }

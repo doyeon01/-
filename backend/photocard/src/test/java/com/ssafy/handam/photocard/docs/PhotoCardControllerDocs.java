@@ -34,6 +34,8 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
     void createPhotoCardTest() throws Exception{
         PhotoCardCreationRequest request = new PhotoCardCreationRequest(
                 1L,
+                1L,
+                "http://example.com/feed.jpg",
                 1L
         );
 
@@ -63,6 +65,10 @@ public class PhotoCardControllerDocs extends RestDocsSupport{
                         requestFields(
                                 fieldWithPath("userId").type(JsonFieldType.NUMBER)
                                         .description("사용자 ID"),
+                                fieldWithPath("feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("feedImageUrl").type(JsonFieldType.STRING)
+                                        .description("피드 이미지 URL"),
                                 fieldWithPath("totalPlanId").type(JsonFieldType.NUMBER)
                                         .description("일정 ID")
                         ),
