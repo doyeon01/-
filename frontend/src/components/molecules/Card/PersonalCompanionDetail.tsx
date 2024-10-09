@@ -25,11 +25,21 @@ export const PersonalCompanionDetail: React.FC = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
-    setSelectedFeedId(null);
-    setIsModalOpen(false);
-  };
 
+  const closeModal = (updatedData?: { commentCount: number }) => {
+    if (updatedData && selectedFeedId !== null) {
+      setUserArticleList((prevArticles) =>
+        prevArticles.map((article) =>
+          article.id === selectedFeedId
+            ? { ...article, commentCount: updatedData.commentCount }
+            : article
+        )
+      );
+    }
+    setIsModalOpen(false);
+    setSelectedFeedId(null);
+  };
+  
   // 페이지가 변경될 때마다 데이터를 추가로 로드
   useEffect(() => {
     if (hasNextPage) {
