@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import CardPlanFav from '../molecules/Card/CardPlanFav'
 import KaKaoMap_Plan from '../organisms/KaKaoMap_Plan'
 import ModalCalendar from '../organisms/Modal/ModalCalender'
@@ -7,18 +8,20 @@ import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
 import { TravelPlan, DayPlan } from '../../model/RegisterPlanType'
 
+import Swal from 'sweetalert2'; 
+
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
 
-// import { useRecoilValue } from 'recoil';
-// import {UserId} from '../../Recoil/atoms/Auth'
+import { useRecoilValue } from 'recoil';
+import {UserId} from '../../Recoil/atoms/Auth'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
-  // const userId = useRecoilValue(UserId)
-  const userId = 2895
+  const userId = useRecoilValue(UserId)
   const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
+  const navigate = useNavigate()
 
   const [Ismodal, setismodal] = useState(false)
   const [IsHide, setIsHide] = useState(true)
@@ -235,9 +238,24 @@ export const PlanPage: React.FC = () => {
       
       // 상태 업데이트 (필요하다면)
       setSchedule(updatedSchedule);
-  
+
+      Swal.fire({
+        icon: 'success',
+        title: '여행일정 생성 완료!',
+        text: '여행일정이 저장되었습니다.',
+        confirmButtonText: '확인',
+      }).then(() => {
+        navigate('/my', { state: { activeTab: 'tab3' } });
+      });
+
     } catch (error: any) {
       console.error('등록 실패:', error.message);
+      Swal.fire({
+        icon: 'error',
+        title: '여행일정 생성에 실패했습니다.',
+        text: '다시 시도해주세요.',
+        confirmButtonText: '확인',
+      });
     }
   };
   
