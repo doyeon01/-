@@ -211,12 +211,12 @@ export const PlanPage: React.FC = () => {
       const stored = localStorage.getItem(`schedule_${i}`);
       if (stored && stored.length > 0) {
         const parsedStore = JSON.parse(stored)
-        for(let j =0; i< stored.length; i++){
-          if('imageUrl' in parsedStore[i]){
-            parsedStore[i].type = 'feed'
+        for(let j =0; j< parsedStore.length; j++){
+          if('imageUrl' in parsedStore[j]){
+            parsedStore[j].type = 'feed'
           }
           else{
-            parsedStore[i].type = 'place'
+            parsedStore[j].type = 'place'
           }
 
           try {
