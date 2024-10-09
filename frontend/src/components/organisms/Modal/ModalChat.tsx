@@ -277,7 +277,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       </div>
                   ))}
                 </div>
-                <div className='h-[50px]'/>
+                <div className='h-[100px]'/>
               </div>
 
                 {/* 대화입력창 */}
