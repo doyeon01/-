@@ -9,9 +9,8 @@ import { UserFollowingResponseType, UserFollowingType } from '../../../model/Use
 import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
 import { useRecoilState } from 'recoil';
 import { UserIconMini3 } from '../../../assets/icons/svg';
-
-
 const BaseUrl = 'https://j11c205.p.ssafy.io';
+
 const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [stompClient, setStompClient] = useState<Client | null>(null);
   const [chatRooms, setChatRooms] = useState<ChatRoomType[]>([]);
@@ -20,8 +19,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [selectedRoomId, setSelectedRoomId] = useState<number | null>(null);
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
-  // const [userId] = useRecoilState(UserIdAtom);  
-  const userId = 2896
+  const [userId] = useRecoilState(UserIdAtom);  
   
   useEffect(() => {
     const fetchData = () => {
@@ -74,7 +72,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     client.activate();
   };
   
-  
   //채팅 룸설정
   const selectChatRoom = (roomId: number, user: userType) => {
     setPartnerUser(user);
@@ -122,8 +119,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       });
   };
   
-
-
   //팔로잉 리스트 가져오기
   useEffect(() => {
     const fetchFollowingList = async () => {
