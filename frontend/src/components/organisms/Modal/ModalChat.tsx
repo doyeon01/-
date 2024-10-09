@@ -21,7 +21,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
   const scrollRef = useRef<HTMLDivElement | null>(null); 
-  const [selectedChatRoom, setSelectedChatRoom] = useState<number|null>(null); 
 
   const fetchData = () => {
     axios
@@ -70,8 +69,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   
   //채팅 룸설정
   const selectChatRoom = (roomId: number, user: userType) => {
-    setSelectedChatRoom(roomId);
-
     setPartnerUser(user);
     setSelectedRoomId(roomId);
     setMessages([]);
@@ -218,9 +215,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   key={index}
                   onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
                   className="flex items-center mb-4 cursor-pointer ml-2"
-                  style={{
-                    backgroundColor: selectedChatRoom === chat.chatRoomId ? '#E5E2D9' : 'transparent', 
-                  }}
                 >
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
