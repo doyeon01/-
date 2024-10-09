@@ -221,6 +221,8 @@ export const PlanPage: React.FC = () => {
     }
     catch (error: any) {
           console.error('등록 실패:', error.message);
+          console.log('데이터:',schedule);
+          
       }
     
   };
