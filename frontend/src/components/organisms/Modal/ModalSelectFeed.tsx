@@ -92,22 +92,25 @@ export const ModalSelectFeed: React.FC<ModalSelectFeedProps> = ({ totalPlanId, o
         </button>
         <h2 className="text-xl font-bold mb-4 text-center">피드를 선택해주세요</h2>
 
-        {feedList.length > 0 ? (
-          <ul className="space-y-2">
-            {feedList.map((feed) => (
-              <li key={feed.feedId} className="bg-gray-100 p-2 rounded-md">
+        <div className="grid grid-cols-3 gap-4">
+          {feedList.length > 0 ? (
+            feedList.map((feed) => (
+              <div
+                key={feed.feedId}
+                className="relative overflow-hidden rounded-lg shadow-md hover:shadow-lg transition-shadow cursor-pointer"
+              >
                 <img
                   src={feed.feedImageUrl}
                   alt={`Feed ${feed.feedId}`}
-                  className={`w-full h-auto rounded-md cursor-pointer ${isCreating ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  className={`w-full h-40 object-cover rounded-md ${isCreating ? 'opacity-50 cursor-not-allowed' : ''}`}
                   onClick={() => !isCreating && onHandleCreatePhotoCard(feed.feedId, feed.feedImageUrl)}
                 />
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center">해당 계획에 대한 피드가 없습니다.</p>
-        )}
+              </div>
+            ))
+          ) : (
+            <p className="col-span-3 text-center">피드가 없습니다.</p>
+          )}
+        </div>
       </div>
     </div>
   );
