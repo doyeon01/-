@@ -46,9 +46,9 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
             onClick={() => handleUserClick(user.id)}
           >
             <div className="flex items-center space-x-4">
-              {user.profileImageUrl ? (
+              {user.profileImage ? (
                 <img
-                  src={user.profileImageUrl}
+                  src={user.profileImage}
                   alt={user.nickname}
                   className="w-12 h-12 rounded-full object-cover"
                 />
