@@ -38,9 +38,9 @@ export const getFeedClusterByDistance = async (lat:number,lot:number,distance:nu
     }
 }
 
-export const postPlan = async(planData:TravelPlan[])=>{
+export const postPlan = async(planData:TravelPlan)=>{
     try{
-        const response = await axios.post<TravelPlan[]>(`https://j11c205.p.ssafy.io/api/v1/plans/create`,planData, {
+        const response = await axios.post<TravelPlan>(`https://j11c205.p.ssafy.io/api/v1/plans/create`,planData, {
             headers: {
               'Content-Type': 'application/json', // JSON 형식으로 데이터를 보낼 때 필요
             },
