@@ -210,6 +210,7 @@ export const PlanPage: React.FC = () => {
             {feedCluster && feedCluster.length > 0 ? (
               feedCluster.map((items, index) => (
                 <CardPlanFav
+                key={index}
                 name={`맞춤 여행 추천 ${index+1}`}
                 position={items.feeds[0].address1||items.feeds[0].address2}
                 feeds={items.feeds}/>
