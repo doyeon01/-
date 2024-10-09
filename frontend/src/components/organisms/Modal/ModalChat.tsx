@@ -177,7 +177,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 className="w-full p-2 rounded-md bg-white border border-gray-300"
               />
             </div>
-            <div className="w-full overflow-y-auto overflow-y-auto"  style={{ maxHeight: '90vh' }}>
+            <div className="w-full overflow-y-auto"  style={{ maxHeight: '90vh' }}>
               <ul>
                 {followings.map((following, index) => (
                   <li
@@ -203,7 +203,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' }}>
+          <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
@@ -223,7 +223,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </ul>
           </div>
 
-          <div className="flex-1 p-4 relative z-40 overflow-y-auto"  style={{ maxHeight: '90vh' }}>
+          <div className="flex-1 p-4 relative z-40 ">
             {messages&&partnerUser ? (
               <>
                 <div className="flex items-center mb-4">
@@ -233,7 +233,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col space-y-4 mb-4">
+                <div className="flex flex-col space-y-4 mb-4 overflow-y-auto"  style={{ maxHeight: '90vh', msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
                   {messages.map((message, index) => (
                     <div key={index}>
                       {userId === message.senderId ? (
@@ -251,7 +251,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                           <div className="bg-[#E5E2D9] p-2 rounded-lg">
                             <p>{message.content}</p>
                             <p className="text-xs text-gray-500 text-right">
-                              {message.timeStamp ? message.timeStamp.slice(11, 16) : '시간 없음'}
+                              {message.timeStamp}
                             </p>
                           </div>
                         </div>
