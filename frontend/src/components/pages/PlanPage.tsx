@@ -230,6 +230,9 @@ export const PlanPage: React.FC = () => {
     }
   };
   
+  useEffect(()=>{
+    console.log(schedule);
+  },[schedule])
 
 
   return (
