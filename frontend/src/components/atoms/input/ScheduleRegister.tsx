@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect,} from 'react';
 import MapMarker from '../../../assets/statics/MapMarker.png';
 import test1 from '../../../assets/statics/Duli.png';
 import DrageAndDrop from '../../../assets/statics/DragAndDropIcon.png'
@@ -15,7 +15,6 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index, feeds }) => {
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null); // 드래그된 항목의 인덱스 저장
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // 드래그 오버된 항목 인덱스
   const [isDragging, setIsDragging] = useState(false); // 드래그 오버 상태 관리
-  
 
   // Dropping 데이터를 schedule에 추가
   const handleDropData = (e: React.DragEvent<HTMLDivElement>) => {

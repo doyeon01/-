@@ -5,6 +5,7 @@ import ModalCalendar from '../organisms/Modal/ModalCalender'
 import moment from 'moment'
 import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
+import { TravelPlan } from '../../model/RegisterPlanType'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
@@ -33,6 +34,7 @@ export const PlanPage: React.FC = () => {
   const [feeds,setFeeds] = useState<FeedType[]>([])||null
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null); // 마지막 갱신 시간
   const [timeAgo, setTimeAgo] = useState(''); // "몇 분 전" 텍스트 상태
+  const [schedule, setSchedule] = useState<TravelPlan[]>([])
   
   const [_, setDragging] = useState(false);
 
@@ -142,12 +144,15 @@ export const PlanPage: React.FC = () => {
       const nextData = moment(startData).add(1, 'days').toDate()
       const lastData = moment(startData).add(2, 'days').toDate()
       setDatesList([...datesList, startData,nextData,lastData])
-      console.log(localStorage);
-      
     }
     else{
       setDatesList([choicedDate]) // 첫 번째 날짜 설정
     }
+    localStorage.removeItem(`schedule_1`);
+    localStorage.removeItem(`schedule_2`);
+    localStorage.removeItem(`schedule_3`);
+    localStorage.removeItem(`schedule_4`);
+    localStorage.removeItem(`schedule_5`);
   }
 
   // 다음 날짜 추가
@@ -191,6 +196,26 @@ export const PlanPage: React.FC = () => {
       }
     };
   }, []);
+
+  const handlePost = () => {
+    console.log('저장')
+    setSchedule((prevSchedule) => ({
+      ...prevSchedule,         // 기존 상태 복사
+      startDate: datesList[0],  // startDate 값 업데이트 (예시 값)
+      endDate: datesList[datesList.length - 1]
+    }));
+    for(let i=1; i<6;i++){
+      const stored = localStorage.getItem(`schedule_${currentDate}`)
+      if (stored && stored.length >0){
+        setSchedule((prevSchedule) => ({
+          ...prevSchedule,
+          dayPlans: localStorage.getItem(`schedule_${currentDate}`)
+        }))
+      }
+    }
+    console.log(schedule);
+    
+  };
 
   return (
     <div className='relative top-20 overflow-hidden'>
@@ -262,7 +287,9 @@ export const PlanPage: React.FC = () => {
                 </div>
               )}
             </div>
-            <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
+            <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white"
+                onClick={handlePost} // 함수 호출
+            >저장</div>
           </div>
           <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
             {datesList.map((_, index) => (

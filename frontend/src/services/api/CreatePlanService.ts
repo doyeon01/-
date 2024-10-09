@@ -1,4 +1,5 @@
 import axios from "axios";
+import {TravelPlan} from '../../model/RegisterPlanType'
 
 export const getFeedCluster = async (id:number)=>{
     try{
@@ -36,3 +37,18 @@ export const getFeedClusterByDistance = async (lat:number,lot:number,distance:nu
         throw new Error('API 요청 중 오류가 발생했습니다.')
     }
 }
+
+export const postPlan = async(planData:TravelPlan[])=>{
+    try{
+        const response = await axios.post<TravelPlan[]>(`https://j11c205.p.ssafy.io/api/v1/plans/create`,planData, {
+            headers: {
+              'Content-Type': 'application/json', // JSON 형식으로 데이터를 보낼 때 필요
+            },
+            withCredentials: true
+          });
+          console.log('POST',response);
+          return response.data;
+        } catch (error) {
+          throw new Error('API 요청 중 오류가 발생했습니다.');
+        }
+    }
