@@ -13,7 +13,7 @@ import Loading_gif from '../../assets/statics/Loading.gif'
 // import { useRecoilValue } from 'recoil';
 // import {UserId} from '../../Recoil/atoms/Auth'
 
-import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh } from '../../services/api/CreatePlanService'
+import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 
 export const PlanPage: React.FC = () => {
@@ -197,9 +197,9 @@ export const PlanPage: React.FC = () => {
     };
   }, []);
 
-  const handlePost = () => {
-    console.log('저장')
-    setSchedule((prevSchedule) => ({
+  const handlePost = async () => {
+    try{
+      setSchedule((prevSchedule) => ({
       ...prevSchedule,         // 기존 상태 복사
       startDate: datesList[0],  // startDate 값 업데이트 (예시 값)
       endDate: datesList[datesList.length - 1]
@@ -213,9 +213,41 @@ export const PlanPage: React.FC = () => {
         }))
       }
     }
-    console.log(schedule);
+    const data = await postPlan(schedule);
+      console.log('등록 성공:',data);
+      
+    }
+    catch (error: any) {
+          console.error('등록 실패:', error.message);
+      }
     
   };
+
+  // const handleRegister = async () => {
+  //   try {
+  //     // 현재 상태를 바탕으로 새로운 객체를 만들어 업데이트
+  //   const updatedUserData = {
+  //     ...userData,
+  //     travelStyl1: MBTI.charAt(0),
+  //     travelStyl2: MBTI.charAt(1),
+  //     travelStyl3: MBTI.charAt(2),
+  //     travelStyl4: MBTI.charAt(3),
+  //   };
+
+  //   // userData 업데이트
+  //   setUserData(updatedUserData);
+  //   // console.log('updateUserData:',updatedUserData);
+    
+    
+  //   // 업데이트된 객체를 바로 사용하여 API 호출
+  //   const data = await RegisterUser(updatedUserData);
+  //   console.log('등록 성공:', data);
+
+  //   // 페이지 이동
+  //   navigate('/main');
+  //   } catch (error: any) {
+  //     console.error('등록 실패:', error.message);
+  //   }
 
   return (
     <div className='relative top-20 overflow-hidden'>
