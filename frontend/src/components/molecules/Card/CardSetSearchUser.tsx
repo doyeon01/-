@@ -17,6 +17,7 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
     const fetchData = async () => {
       try {
         const response = await getUserSearch(keyword);
+        console.log(response.response);
         setUsers(response.response);
 
         const initialFollowState: { [key: number]: boolean } = {};
