@@ -213,6 +213,8 @@ export const PlanPage: React.FC = () => {
         }))
       }
     }
+    console.log(schedule);
+    
   };
 
   return (
