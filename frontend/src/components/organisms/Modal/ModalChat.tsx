@@ -174,7 +174,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         </button>
 
         <div className="flex h-full">
-          <div className="w-[200px] bg-[#E5E2D9] p-4 border-r border-gray-400">
+          <div className="w-[300px] bg-[#E5E2D9] p-4 border-r border-gray-400">
             <div className="mb-4">
               <input
                 type="text"
@@ -187,7 +187,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 {followings.map((following, index) => (
                   <li
                     key={index}
-                    className="flex items-center mb-4 cursor-pointer  border-b border-gray-300"
+                    className="flex items-center mb-4 cursor-pointer "
                     onClick={() => selectFollowingChatRoom(following.id)}
                     >
                     {following.profileImage ? (
@@ -208,13 +208,13 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
+          <div className="w-[300px] bg-[#F4F4EE] p-4 border-r border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
                   key={index}
                   onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
-                  className="flex items-center mb-4 cursor-pointer  border-b border-gray-300"
+                  className="flex items-center mb-4 cursor-pointer"
                 >
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
@@ -228,10 +228,10 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </ul>
           </div>
 
-          <div className="flex-1 p-4 relative z-40 border-b border-gray-400">
+          <div className="flex-1 p-4 relative z-40 ">
             {messages&&partnerUser ? (
               <>
-                <div className="flex items-center mb-4  border-b border-gray-300">
+                <div className="flex items-center mb-4  ">
                   <img src={partnerUser.profileImageUrl} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
                   <div>
                     <p className="font-bold">{partnerUser.nickname}</p>
@@ -262,13 +262,13 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                               </div>
                           ) : (
                               // 상대가 보낸 메시지
-                              <div className="flex items-start border border-gray-300 mb-1">
+                              <div className="flex items-start">
                                   <img
                                       src={partnerUser.profileImageUrl}
                                       alt="Profile"
                                       className="w-8 h-8 rounded-full mr-2"
                                   />
-                                  <div className="bg-[#E5E2D9] p-2 rounded-lg">
+                                  <div className="bg-[#E5E2D9] p-2 rounded-lg border border-gray-300 mb-1">
                                       <p>{message.content}</p>
                                       <p className="text-xs text-gray-500 text-right">
                                           {message.timeStamp}
