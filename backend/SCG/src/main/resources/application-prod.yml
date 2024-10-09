@@ -63,8 +63,6 @@ spring:
           uri: http://j11c205.p.ssafy.io:8083
           predicates:
             - Path=/chat-websocket/**
-          filters:
-            - SetUpstreamWebSocket
 
         - id: chat-docs
           uri: http://j11c205.p.ssafy.io:8083
