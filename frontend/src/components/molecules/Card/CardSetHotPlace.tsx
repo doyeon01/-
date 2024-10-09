@@ -56,7 +56,6 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
 
         if (keyword) {
           const response = await getFeed(keyword, 1, 3);
-          console.log(`${keyword}로 요청:`, response.response.feeds);
           setPlaces(response.response.feeds);
           const initialLikes: { [key: number]: boolean } = {};
           response.response.feeds.forEach((place) => {

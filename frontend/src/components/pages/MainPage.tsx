@@ -30,7 +30,6 @@ const MainPage: React.FC = () => {
       const res = await UserInfo(); 
       const data: UserInfoResponseType = res.data;
       if (data.success) {
-        console.log(data)
         const info: UserInfoType = data.response;
         if (info.id !== userId) { 
           setUserId(info.id); 
@@ -92,7 +91,6 @@ const MainPage: React.FC = () => {
       {/* 1번째 섹션 */}
       <div id="carousel" className={`${styles.section} ${currentSection === 0 ? styles.visible : styles.hidden}`}>
         <CarouselMain />
-        {/* < Test/> */}
       </div>
       <div className=' mt-20 mx-auto max-w-[1200px] px-4'>
 
