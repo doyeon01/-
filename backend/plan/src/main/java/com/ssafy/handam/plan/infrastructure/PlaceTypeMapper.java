@@ -12,8 +12,9 @@ public class PlaceTypeMapper {
             case "숙박":
                 return PlaceType.ACCOMMODATION;
             case "음식점":
-            case "카페":
                 return PlaceType.RESTAURANT;
+            case "카페":
+                return PlaceType.CAFE;
             default:
                 return PlaceType.ETC;
         }
