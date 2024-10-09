@@ -33,7 +33,8 @@ public class UserController {
     private String logoutRedirectUrl;
 
     @GetMapping("/logout")
-    public ApiResult<HttpServletResponse> logout(@CookieValue(value = "accessToken", required = false) String token, HttpServletResponse response) throws IOException {
+    public ApiResult<HttpServletResponse> logout(@CookieValue(value = "accessToken", required = false) String token,
+                                                 HttpServletResponse response) throws IOException {
         Cookie logoutCookie = userApplicationService.logout(token);
         response.addCookie(logoutCookie);
         response.sendRedirect(logoutRedirectUrl);
@@ -42,7 +43,8 @@ public class UserController {
 
     @GetMapping("/myInfo")
     public ApiResult<UserInfoResponseWithFollowInfo> getCurrentUserInfo(HttpServletRequest request) {
-        UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(request);
+        UserInfoResponseWithFollowInfo userInfoResponseWithFollowInfo = userApplicationService.getCurrentUserInfo(
+                request);
         log.info("userInfoResponse: {}", userInfoResponseWithFollowInfo.toString());
         return success(userInfoResponseWithFollowInfo);
     }
@@ -55,9 +57,10 @@ public class UserController {
 
     @Valid
     @GetMapping("/follow-status/{targetId}")
-    public ApiResult<UserInfoResponse> getUserInfoAndFollowStatus(@CookieValue(value = "accessToken", required = false) String token,
-                                                                  @PathVariable("targetId") Long targetId) {
-        UserInfoResponse userInfoResponse = userApplicationService.findUserWithFollowStatus(token,targetId);
+    public ApiResult<UserInfoResponse> getUserInfoAndFollowStatus(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable("targetId") Long targetId) {
+        UserInfoResponse userInfoResponse = userApplicationService.findUserWithFollowStatus(token, targetId);
         return success(userInfoResponse);
     }
 
@@ -66,35 +69,45 @@ public class UserController {
         UserInfoResponse userInfoResponse = userService.findUserById(id);
         return success(userInfoResponse);
     }
+
     @GetMapping("/info")
-    public ApiResult<UserInfoResponse> getUserInfoByToken(@CookieValue(value = "accessToken", required = false) String token) {
+    public ApiResult<UserInfoResponse> getUserInfoByToken(
+            @CookieValue(value = "accessToken", required = false) String token) {
         Long userId = userApplicationService.getUserInfoByToken(token);
         UserInfoResponse userInfoResponse = userService.findUserById(userId);
         return success(userInfoResponse);
     }
 
     @GetMapping("/test")
-    public void test(){
+    public void test() {
         System.out.println("통과~");
     }
 
     @GetMapping("/search")
-    public ApiResult<List<UserInfoResponse>> searchUsersByKeyword(@CookieValue(value = "accessToken", required = false) String token, @RequestParam("keyword") String keyword) {
-        List<UserInfoResponse> userInfoResponses = userApplicationService.searchUsersByKeyword(token,keyword);
+    public ApiResult<List<UserInfoResponse>> searchUsersByKeyword(
+            @CookieValue(value = "accessToken", required = false) String token,
+            @RequestParam("keyword") String keyword) {
+        List<UserInfoResponse> userInfoResponses = userApplicationService.searchUsersByKeyword(token, keyword);
         return success(userInfoResponses);
     }
+
     @PostMapping("/follow/{followTargetId}")
-    public ApiResult<Void> followUser(@CookieValue(value = "accessToken", required = false) String token, @PathVariable Long followTargetId) {
-        userApplicationService.followUser(token,followTargetId);
+    public ApiResult<Void> followUser(@CookieValue(value = "accessToken", required = false) String token,
+                                      @PathVariable Long followTargetId) {
+        userApplicationService.followUser(token, followTargetId);
         return success(null);
     }
+
     @PostMapping("/unfollow/{followTargetId}")
-    public ApiResult<Void> unfollowUser(@CookieValue(value = "accessToken", required = false) String token, @PathVariable Long followTargetId) {
-        userApplicationService.unfollowUser(token,followTargetId);
+    public ApiResult<Void> unfollowUser(@CookieValue(value = "accessToken", required = false) String token,
+                                        @PathVariable Long followTargetId) {
+        userApplicationService.unfollowUser(token, followTargetId);
         return success(null);
     }
+
     @GetMapping("/following-users")
-    public ApiResult<List<UserInfoResponse>> getFollowingUsers(@CookieValue(value = "accessToken", required = false) String token) {
+    public ApiResult<List<UserInfoResponse>> getFollowingUsers(
+            @CookieValue(value = "accessToken", required = false) String token) {
         List<UserInfoResponse> userInfoResponses = userApplicationService.getFollowingUsers(token);
         return success(userInfoResponses);
     }
