@@ -1,5 +1,6 @@
 package com.ssafy.handam.user.infrastructure.oauth;
 
+import com.ssafy.handam.user.domain.model.entity.User;
 import com.ssafy.handam.user.domain.model.valueobject.OAuthUserInfo;
 import com.ssafy.handam.user.domain.service.UserService;
 import com.ssafy.handam.user.infrastructure.oauth.valueobject.CustomOAuth2User;
@@ -22,8 +23,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
-    @Value("${oauth2.success-redirect-url}")
-    private String successRedirectUrl;
+    @Value("${oauth2.survey-redirect-url}")
+    private String surveyRedirectUrl;
+
+    @Value("${oauth2.main-redirect-url}")
+    private String mainRedirectUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -40,7 +44,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         CookieUtil.addTokenToCookie(response, token);
 
-        response.sendRedirect(successRedirectUrl);
+        User user = userService.getUserById(userId);
+
+        if (user.getTravelStyl1() == null || user.getTravelStyl1().isEmpty()) {
+            response.sendRedirect(surveyRedirectUrl);
+        } else {
+            response.sendRedirect(mainRedirectUrl);
+        }
     }
 
 }
