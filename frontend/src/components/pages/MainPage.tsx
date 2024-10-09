@@ -11,6 +11,7 @@ import CardSetHotPlace from '../molecules/Card/CardSetHotPlace';
 import CardSetFestivalRec from '../molecules/Card/CardSetFestivalRec';
 import styles from './MainPage.module.css';
 import ModalFeedDetail from '../organisms/Modal/ModalFeedDetail';
+import { chatState } from '../../Recoil/atoms/chatState'; 
 
 const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
@@ -23,6 +24,7 @@ const MainPage: React.FC = () => {
   const [myGender,setMyGender] = useState('')
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isChatOpen] = useRecoilState(chatState);
 
   // userId 가져오기 및 저장 로직
   useEffect(() => {
@@ -47,7 +49,8 @@ const MainPage: React.FC = () => {
   const handleScroll = (event: WheelEvent) => {
     event.preventDefault();
 
-    if (isScrolling || isModalOpen) return; // 모달이 열려 있으면 스크롤을 처리하지 않음
+    if (isScrolling || isModalOpen||isChatOpen) return; // 모달이 열려 있으면 스크롤을 처리하지 않음
+    
     setIsScrolling(true);
     if (event.deltaY > 0) {
       setCurrentSection(prev => Math.min(prev + 1, sections.length - 1)); 

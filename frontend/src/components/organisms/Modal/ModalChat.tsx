@@ -173,7 +173,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 className="w-full p-2 rounded-md bg-white border border-gray-300"
               />
             </div>
-            <div className="w-full">
+            <div className="w-full overflow-y-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
               <ul>
                 {followings.map((following, index) => (
                   <li

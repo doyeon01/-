@@ -3,18 +3,16 @@ import buttonChat from '../../../assets/statics/ButtonChat.png';
 import { useDrag } from 'react-use-gesture';
 import { useSpring, animated } from 'react-spring';
 import ModalChat from '../../organisms/Modal/ModalChat';
+import { useRecoilState } from 'recoil';
+import { chatState } from '../../../Recoil/atoms/chatState'; 
 
 const ButtonChat: React.FC = () => {
   const [{ x, y }, setLogoPos] = useSpring(() => ({ x: 0, y: 0 }));
-  const [isChatOpen, setIsChatOpen] = useState(false); 
-  const [prevPos, setPrevPos] = useState({ x: 0, y: 0 }); 
-
-  const openChat = () => {
-    setIsChatOpen(true);    
-  };
+  const [isChatOpen, setIsChatOpen] = useRecoilState(chatState);
+  const [prevPos, setPrevPos] = useState({ x: 0, y: 0 });
 
   const closeChat = () => {
-    setLogoPos(prevPos); 
+    setLogoPos(prevPos);
     setIsChatOpen(false);
   };
 
@@ -23,9 +21,9 @@ const ButtonChat: React.FC = () => {
   });
 
   const handleDoubleClick = () => {
-    setPrevPos({ x: x.get(), y: y.get() }); 
+    setPrevPos({ x: x.get(), y: y.get() });
     setLogoPos({ x: 0, y: 0 });
-    openChat();
+    setIsChatOpen(true);
   };
 
   return (
@@ -39,17 +37,17 @@ const ButtonChat: React.FC = () => {
           x,
           y,
           zIndex: 1000,
-          userSelect: 'none', 
+          userSelect: 'none',
           touchAction: 'none',
-          cursor:'pointer'
+          cursor: 'pointer'
         }}
-        onDoubleClick={handleDoubleClick} 
+        onDoubleClick={handleDoubleClick}
         draggable={false}
       >
         <img className='w-16 h-16' style={{ pointerEvents: 'none' }} src={buttonChat} alt="logo" />
       </animated.div>
       {isChatOpen && (
-      <ModalChat onClose={closeChat} />
+        <ModalChat onClose={closeChat} />
       )}
     </>
   );
