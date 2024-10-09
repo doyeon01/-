@@ -113,18 +113,18 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
 
       <div className="relative">
         <div className="carousel-wrapper overflow-hidden">
-          <div className="flex">
+          <div className="flex items-center justify-center">
             {places.length > 0 ? (
               places.map((place) => (
                 <div
                   key={place.id}
-                  className="relative flex items-center justify-center overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
+                  className="relative overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
                   onClick={() => onClick(place.id)}
                 >
                   <img
                     src={place.imageUrl}
                     alt={place.title}
-                    className=" h-72 object-cover"
+                    className="w-full h-72 object-cover"
                   />
                   <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
                     <h3 className="text-lg font-bold">{place.title}</h3>
