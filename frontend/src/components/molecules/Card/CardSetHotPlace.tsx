@@ -116,29 +116,26 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
           <div className="flex">
             {places.length > 0 ? (
               places.map((place) => (
-                <div className="relative overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100 flex justify-center">
-                <img
-                  src={place.imageUrl}
-                  alt={place.title}
-                  className="h-72 object-cover" 
-                />
-                <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
-                  <h3 className="text-lg font-bold">{place.title}</h3>
-                  <p className="text-sm">{place.placeName}</p>
+                <div
+                  key={place.id}
+                  className="relative overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
+                  onClick={() => onClick(place.id)}
+                >
+                  <img
+                    src={place.imageUrl}
+                    alt={place.title}
+                    className=" h-72 object-cover"
+                  />
+                  <div className="absolute bottom-0 left-0 w-full p-4 bg-gradient-to-t from-black to-transparent text-white">
+                    <h3 className="text-lg font-bold">{place.title}</h3>
+                    <p className="text-sm">{place.placeName}</p>
+                  </div>
+                  <div className="absolute top-2 right-2">
+                    <button aria-label="Like" className="bg-white rounded-full p-2 shadow-md" onClick={(e) => { e.stopPropagation(); toggleLike(place.id); }}>
+                      {likeStates[place.id] ? '❤️' : '🤍'}
+                    </button>
+                  </div>
                 </div>
-                <div className="absolute top-2 right-2">
-                  <button 
-                    aria-label="Like" 
-                    className="bg-white rounded-full p-2 shadow-md" 
-                    onClick={(e) => { 
-                      e.stopPropagation(); 
-                      toggleLike(place.id); 
-                    }}
-                  >
-                    {likeStates[place.id] ? '❤️' : '🤍'}
-                  </button>
-                </div>
-              </div>              
               ))
             ) : (
               <p>장소가 없습니다.</p> 
