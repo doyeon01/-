@@ -221,7 +221,7 @@ export const PlanPage: React.FC = () => {
 
           try {
             const parsedDayPlan: DayPlan = {
-              day:i,
+              day:j,
               plans: parsedStore}
               ;  // JSON을 DayPlan 타입으로 변환
 
