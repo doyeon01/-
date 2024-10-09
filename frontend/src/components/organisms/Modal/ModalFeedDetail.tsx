@@ -17,14 +17,17 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isLike, toggleLike, likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
+  const [isLiked,setIsLiked] = useState(false)
   const [userId] = useRecoilState(UserIdAtom);  
   const navigate = useNavigate();  
 
   useEffect(() => {
     const fetchDetailFeed = async () => {
       try {
-        const response = await getFeedDetail(selectedId);                
+        const response = await getFeedDetail(selectedId);      
+        console.log(response);
         setLikeCnt(response.data.response.likeCount);
+        setIsLiked(response.data.response.isLiked);
         setDetailFeed(response.data.response)
         const followResponse = await getYourInfo(response.data.response.id)
         const userId = response.data.response.id; 
@@ -56,6 +59,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
 
   useEffect(() => {
     setLikeCnt(likeCount)
+    setIsLiked(isLike)
   }, [likeCount,isLike]);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -127,7 +131,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <button aria-label="Like" onClick={toggleLike}>
-                    {detailFeed.isLiked ? '❤️' : '🤍'}
+                    {isLiked ? '❤️' : '🤍'}
                   </button>
                   <p>{likeCnt}</p>
                   <h3 className="font-bold ml-3">💬 {comments.length}</h3>
