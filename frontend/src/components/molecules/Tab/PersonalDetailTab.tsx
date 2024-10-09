@@ -27,17 +27,17 @@ export const PersonalDetailTab: React.FC = () => {
 
   const tabs = [
     { id: 'tab1', label: '피드', icon: <FeedIcon active={fillActive === 'tab1'} />, content: <PersonalFeedDetail key={tabKey} /> }, // key 값 추가
-    { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail resetSelectedButton={fillActive === 'tab2'}/> },
+    { id: 'tab2', label: '좋아요', icon: <LikeIcon active={fillActive === 'tab2'} />, content: <PersonalLikeDetail resetSelectedButton={fillActive === 'tab2'} /> },
     { id: 'tab3', label: '여행일정', icon: <RouteIcon active={fillActive === 'tab3'} />, content: <PersonalPlanDetail /> },
     { id: 'tab4', label: '게시글', icon: <UsersIcon active={fillActive === 'tab4'} />, content: <PersonalCompanionDetail /> },
-    { id: 'tab5', label: '포토카드', icon: <CameraIcon active={fillActive === 'tab5'} />, content: <PersonalPhotoDetail /> },
+    { id: 'tab5', label: '포토카드', icon: <CameraIcon active={fillActive === 'tab5'} />, content: <PersonalPhotoDetail key={tabKey} /> }, // key 값 추가
   ];
 
   useEffect(() => {
     if (location.state?.activeTab) {
       setFillActive(location.state.activeTab);
-      if (location.state.activeTab === 'tab1') {
-        setTabKey(prev => prev + 1); // 피드 탭이 활성화될 때 key 변경
+      if (location.state.activeTab === 'tab1' || location.state.activeTab === 'tab5') {
+        setTabKey(prev => prev + 1); // 피드 또는 포토카드 탭이 활성화될 때 key 변경
       }
     } else {
       setFillActive('tab1');
@@ -51,8 +51,8 @@ export const PersonalDetailTab: React.FC = () => {
     resetSortOrder('최신순'); 
     setFillActive(tabId);
 
-    // 피드 탭 클릭 시 key 변경하여 리렌더링 유도
-    if (tabId === 'tab1') {
+    // 피드 또는 포토카드 탭 클릭 시 key 변경하여 리렌더링 유도
+    if (tabId === 'tab1' || tabId === 'tab5') {
       setTabKey(prev => prev + 1); // key 값을 변경하여 컴포넌트 리렌더링
     }
 
@@ -67,7 +67,7 @@ export const PersonalDetailTab: React.FC = () => {
             key={tab.id}
             onClick={() => handleFillClick(tab.id)}
             active={fillActive === tab.id}
-            className={`pb-4 !text-base flex items-center justify-center gap-2 h-full  ${fillActive === tab.id ? 'border-b-2 border-[#645E59] text-[#645E59]' : 'text-[#645E59]/50 !text-[#645E59]/50'}`}
+            className={`pb-4 !text-base flex items-center justify-center gap-2 h-full ${fillActive === tab.id ? 'border-b-2 border-[#645E59] text-[#645E59]' : 'text-[#645E59]/50 !text-[#645E59]/50'}`}
           >
             {tab.icon && <span className="icon">{tab.icon}</span>}
             <span className="text-center">{tab.label}</span>
