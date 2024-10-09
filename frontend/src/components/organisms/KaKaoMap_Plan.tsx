@@ -16,7 +16,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
     const [map, setMap] = useState<any>(null);
     const infowindow = useRef<any>(null); // 인포윈도우 참조
     const [placesService, setPlacesService] = useState<any>(null); // 장소 검색 서비스 상태
-    const [searchinTab, setSearchingTab] = useState(true)
+    const [searchinTab, setSearchingTab] = useState(false)
 
     const [_, setDragging] = useState(false);
 

@@ -10,17 +10,17 @@ import { TravelPlan, DayPlan } from '../../model/RegisterPlanType'
 
 import Swal from 'sweetalert2'; 
 
-import Mini_Vector from '../../assets/statics/Mini_Vector.png'
+// import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
 
-// import { useRecoilValue } from 'recoil';
-// import {UserId} from '../../Recoil/atoms/Auth'
+import { useRecoilValue } from 'recoil';
+import {UserId} from '../../Recoil/atoms/Auth'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
-  // const userId = useRecoilValue(UserId)
-  const userId = 2895
+  const userId = useRecoilValue(UserId)
+  // const userId = 2895
   const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
   const navigate = useNavigate()
 
@@ -370,31 +370,38 @@ export const PlanPage: React.FC = () => {
           </div>
         </div>
         <div className="relative z-10">
-          <div className={`transition-transform duration-300 ${searchinTab ? 'translate-y-0' : 'translate-y-[350px]'}`}>
-            <div 
+          <div className={`transition-transform duration-300 ${searchinTab ? 'translate-y-0' : 'translate-y-[200px]'}`}>
+            {/* <div 
               id='folding'
-              className='w-[23px] h-[45px] bg-white flex justify-center items-center rounded-r-lg absolute z-50 border cursor-pointer -rotate-90 bottom-[338px] left-1/2'
+              className='w-[23px] h-[45px] bg-white flex justify-center items-center rounded-r-lg absolute z-50 border cursor-pointer -rotate-90 bottom-[188px] left-1/2'
               onClick={handleSearchingTab}
             >
               <img src={Mini_Vector} className={`${searchinTab ? '' : 'transform scale-x-[-1]'}`}/>
+            </div> */}
+            <div 
+              id='folding'
+              className='w-[130px] h-[30px] bg-white flex justify-center items-center rounded-t-lg absolute z-50 border cursor-pointer bottom-[200px] left-1/2'
+              onClick={handleSearchingTab}
+            >
+              주변 추천 장소
             </div>
 
             <div 
               ref={scrollContainerRef} 
-              className='w-full h-[350px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'
+              className='w-full h-[200px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'
             >
               {feedClusterByDistanceData && feedClusterByDistanceData.length > 0 ? (
-                    feedClusterByDistanceData.map(feed => (
-                      <div key={feed.id} className="min-w-[300px] w-[300px] h-[300px] flex justify-center items-center overflow-hidden m-5"
-                        draggable
-                        onDragStart={(e) => handleDragStart(e,feed)}
-                        onDragEnd={handleDragEnd}>
-                        <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                      </div>
-                    ))
-                  ) : (
-                    'No feeds available'
-                  )}
+                feedClusterByDistanceData.map(feed => (
+                  <div key={feed.id} className="min-w-[150px] w-[150px] h-[150px] flex justify-center items-center overflow-hidden m-5"
+                    draggable
+                    onDragStart={(e) => handleDragStart(e,feed)}
+                    onDragEnd={handleDragEnd}>
+                    <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                  </div>
+                ))
+              ) : (
+                'No feeds available'
+              )}
             </div>
           </div>
         </div>
