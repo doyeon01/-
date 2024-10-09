@@ -205,13 +205,18 @@ export const PlanPage: React.FC = () => {
       endDate: moment(datesList[datesList.length - 1]).format('YYYY-MM-DD'),
       dayPlans: []  // 빈 배열로 초기화
     };
-  
+
     // localStorage에서 일정 데이터를 가져와서 dayPlans 필드 업데이트
     for (let i = 1; i < 6; i++) {
       const stored = localStorage.getItem(`schedule_${i}`);
       if (stored && stored.length > 0) {
         try {
-          const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
+          const parsedDayPlan: DayPlan = {
+            day:i,
+            plans: JSON.parse(stored)}
+            ;  // JSON을 DayPlan 타입으로 변환
+
+          
           updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
         } catch (error) {
           console.error(`schedule_${i} 데이터를 파싱하는 중 오류가 발생했습니다:`, error);
