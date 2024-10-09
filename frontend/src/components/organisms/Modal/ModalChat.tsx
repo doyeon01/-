@@ -247,7 +247,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       scrollbarWidth: 'none',
                   }}
               >
-                <div className='mb-[100px]'>
+                <div className='mb-[150px]'>
                   {messages.map((message, index) => (
                     <div key={index}>
                           {userId === message.senderId ? (
@@ -277,7 +277,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       </div>
                   ))}
                 </div>
-                <div className='h-[100px]'/>
+                <div className='h-[150px]'/>
               </div>
 
                 {/* 대화입력창 */}
