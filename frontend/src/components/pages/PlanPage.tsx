@@ -210,18 +210,27 @@ export const PlanPage: React.FC = () => {
     for (let i = 1; i < 6; i++) {
       const stored = localStorage.getItem(`schedule_${i}`);
       if (stored && stored.length > 0) {
-        try {
-          const parsedDayPlan: DayPlan = {
-            day:i,
-            plans: JSON.parse(stored)}
-            ;  // JSON을 DayPlan 타입으로 변환
+        const parsedStore = JSON.parse(stored)
+        for(let j =0; i< stored.length; i++){
+          if('imageUrl' in parsedStore[i]){
+            parsedStore[i].type = 'feed'
+          }
+          else{
+            parsedStore[i].type = 'place'
+          }
 
-          
-          updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
-        } catch (error) {
-          console.error(`schedule_${i} 데이터를 파싱하는 중 오류가 발생했습니다:`, error);
+          try {
+            const parsedDayPlan: DayPlan = {
+              day:i,
+              plans: parsedStore}
+              ;  // JSON을 DayPlan 타입으로 변환
+
+            
+            updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
+          } catch (error) {
+            console.error(`schedule_${i} 데이터를 파싱하는 중 오류가 발생했습니다:`, error);
+          }
         }
-      }
     }
     console.log('최종 업데이트된 데이터:', updatedSchedule);
   
@@ -236,7 +245,7 @@ export const PlanPage: React.FC = () => {
     } catch (error: any) {
       console.error('등록 실패:', error.message);
     }
-  };
+  };}
   
   useEffect(()=>{
     console.log(schedule);
