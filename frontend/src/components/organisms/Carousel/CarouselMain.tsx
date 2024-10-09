@@ -1,7 +1,12 @@
 import React, { useEffect, useState } from 'react';
-import img1 from '../../../assets/statics/mainCarousel1.jpg';
-import img2 from '../../../assets/statics/mainCarousel2.jpg';
-import img3 from '../../../assets/statics/mainCarousel3.jpg';
+import img1 from '../../../assets/statics/경주.jpeg';
+import img2 from '../../../assets/statics/부산.png';
+import img3 from '../../../assets/statics/부천 아트벙커.png';
+import img4 from '../../../assets/statics/서울.jpeg';
+import img5 from '../../../assets/statics/충남태안.png';
+import img6 from '../../../assets/statics/평창 무이 예술관.png';
+import img7 from '../../../assets/statics/홍천.png';
+import {PlayIcon,PauseIcon,ArrowLeftIcon,ArrowRightIcon} from '../../../assets/icons/svg'
 
 interface TravelItem {
     title: string;
@@ -10,11 +15,13 @@ interface TravelItem {
 }
 
 const travelData: TravelItem[] = [
-    { title: '제주도의 푸른밤', imageSrc: img1, backgroundClass: '#8a9873' },
-    { title: '푸른 산책로', imageSrc: img2, backgroundClass: '#8fa6a6' },
-    { title: '신비로운 숲', imageSrc: img3, backgroundClass: '#a3b59d' }, 
-    { title: '은은한 저녁', imageSrc: img1, backgroundClass: '#b8a99b' },
-    { title: '산의 정적', imageSrc: img2, backgroundClass: '#d7c3b1' },
+    { title: '고즈넉한 매력,\n경주의 고궁 탐방', imageSrc: img1, backgroundClass: '#7CB7F7' },
+    { title: '가을감성 풀 충전!\n요즘 뜨는 부산 여행지', imageSrc: img2, backgroundClass: '#FFDBDD' },
+    { title: '특별한 복합 문화공간,\n부천 아트벙커B39', imageSrc: img3, backgroundClass: '#D2C7FF' },
+    { title: '도시 속 특별한 경험,\n서울 도시여행', imageSrc: img4, backgroundClass: '#7F8EAF' },
+    { title: '자연의 신비로 가득한\n충남 태안 가을여행', imageSrc: img5, backgroundClass: '#FFE17D' },
+    { title: '메밀꽃 필 무렵,\n평창 무이예술관', imageSrc: img6, backgroundClass: '#9DCEF0' },
+    { title: '가족과 함께 유유자적\n홍천 나들이', imageSrc: img7, backgroundClass: '#E5FFB8' },
 ];
 
 const CarouselMain: React.FC = () => {
@@ -35,12 +42,22 @@ const CarouselMain: React.FC = () => {
     return (
         <>
             <div className="relative w-full h-[550px]">
-                <div className='absolute inset-0' style={{ backgroundColor: travelData[currentIndex].backgroundClass }}>
+                <div
+                    className="absolute inset-0"
+                    style={{ backgroundColor: travelData[currentIndex].backgroundClass }}
+                >
                     <div className="relative w-full max-w-4xl mx-auto p-8">
                         <div className="flex items-center">
                             <div className="w-1/2 mt-40">
-                                <h1 className="text-3xl font-bold mb-2">{travelData[currentIndex].title}</h1>
-                                <button className="text-sm text-gray-500 underline">자세히 보기</button>
+                                <h1 className="text-4xl font-normal mb-2 mt-16">
+                                    {travelData[currentIndex].title.split('\n').map((line, i) => (
+                                        <span key={i}>
+                                            {line}
+                                            {i < travelData[currentIndex].title.split('\n').length - 1 && <br />}
+                                        </span>
+                                    ))}
+                                </h1>
+                                <button className="text-sm text-gray-500 underline mt-3">자세히 보기</button>
                             </div>
                         </div>
                     </div>
@@ -57,7 +74,7 @@ const CarouselMain: React.FC = () => {
                 currentIndex={currentIndex}
                 setCurrentIndex={setCurrentIndex}
             />
-       </>
+        </>
     );
 };
 
@@ -100,38 +117,38 @@ const MainButton: React.FC<MainButtonProps> = ({ handlePrev, handleNext, current
     };
     const handleClickPrev = () => {
         handlePrev();
-        setSec(1)
-    }
+        setSec(1);
+    };
     const handleClickNext = () => {
         handleNext();
-        setSec(1)
-    }
+        setSec(1);
+    };
 
     return (
         <div className="flex items-center space-x-4 ml-[320px]">
-            <div className="relative w-[200px] h-[2px] bg-gray-300 flex-shrink-0">
+            <div className="relative w-[200px] h-[3px] bg-gray-300 flex-shrink-0">                
                 <div
-                    className="absolute top-0 left-0 h-full bg-black"
+                    className="absolute top-0 left-0 h-full bg-black "
                     style={{ width: `${progressWidth}px`, transition: 'width 1s linear' }}
                 ></div>
             </div>
-            <span>{currentIndex + 1}/{travelData.length}</span>
+            <span className='font-extrabold'>{currentIndex + 1}/{travelData.length}</span>
             <span
                 onClick={handleClickPrev}
                 className="px-4 py-2 font-bold cursor-pointer"
             >
-                ←
+                <ArrowLeftIcon/>
             </span>
             {isPlay ? (
-                <span className='font-bold cursor-pointer' onClick={handlePlayPause}>∥</span>
+                <span className='font-bold cursor-pointer' onClick={handlePlayPause}><PauseIcon/></span>
             ) : (
-                <span className='font-bold cursor-pointer' onClick={handlePlayPause}>▷</span>
+                <span className='font-bold cursor-pointer' onClick={handlePlayPause}><PlayIcon/></span>
             )}
             <span
                 onClick={handleClickNext}
                 className="px-4 py-2 font-bold cursor-pointer"
             >
-                →
+                <ArrowRightIcon/>
             </span>
         </div>
     );
