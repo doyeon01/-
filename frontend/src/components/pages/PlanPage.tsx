@@ -210,8 +210,12 @@ export const PlanPage: React.FC = () => {
     for (let i = 1; i < 6; i++) {
       const stored = localStorage.getItem(`schedule_${i}`);
       if (stored && stored.length > 0) {
-        const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
-        updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
+        try {
+          const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
+          updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
+        } catch (error) {
+          console.error(`schedule_${i} 데이터를 파싱하는 중 오류가 발생했습니다:`, error);
+        }
       }
     }
     console.log('최종 업데이트된 데이터:', updatedSchedule);
