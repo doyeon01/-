@@ -65,6 +65,7 @@ pipeline {
                          ]) {
                               skipRemainingStages = false
                               sh """
+                              chmod -R 755 backend/user/build
                               export SPRING_JWT_SECRET=$SPRING_JWT_SECRET
                               export CLIENT_ID=$CLIENT_ID
                               export CLIENT_SECRET=$CLIENT_SECRET
