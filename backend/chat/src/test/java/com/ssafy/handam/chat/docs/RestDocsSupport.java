@@ -20,7 +20,6 @@ import org.springframework.web.context.WebApplicationContext;
 
 @SpringBootTest
 @ExtendWith(RestDocumentationExtension.class)
-@ActiveProfiles("test")
 public abstract class RestDocsSupport {
 
     @Autowired

@@ -24,7 +24,6 @@ import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatRoom;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
-import java.time.MonthDay;
 import java.util.List;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -42,19 +41,12 @@ class ChatRoomControllerDocsTest extends RestDocsSupport {
         Long userId = 1L;
         String token = "your_jwt_token_here";
 
-        List<UserDto> users = List.of(
-                new UserDto(1L, "email1", "name", "nickname", Gender.FEMALE, "20", "profile1.png", "residence",
-                        "introduction", "travelStyl1", "travelStyl2", "travelStyl3", "travelStyl4", 36.5),
-                new UserDto(2L, "email1", "name", "nickname", Gender.FEMALE, "20", "profile1.png", "residence",
-                        "introduction", "travelStyl1", "travelStyl2", "travelStyl3", "travelStyl4", 36.5)
-        );
-
         ChatRoomsResponse chatRoom1 = ChatRoomsResponse.of(
-                1L, "User1", "안녕하세요!", LocalDateTime.now(), users
+                1L, "User1", "안녕하세요!", LocalDateTime.now(), 2L
         );
 
         ChatRoomsResponse chatRoom2 = ChatRoomsResponse.of(
-                2L, "User2", "안녕!", LocalDateTime.now(), users
+                2L, "User2", "안녕!", LocalDateTime.now(), 1L
         );
 
         List<ChatRoomsResponse> chatRoomsResponses = List.of(chatRoom1, chatRoom2);
@@ -81,12 +73,7 @@ class ChatRoomControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response[].lastUserName").description("마지막 메시지를 보낸 사용자의 이름"),
                                 fieldWithPath("response[].lastMessage").description("마지막 메시지의 내용"),
                                 fieldWithPath("response[].lastMessageTime").description("마지막 메시지의 타임스탬프"),
-                                fieldWithPath("response[].users[]").description("채팅 방의 사용자 목록"),
-                                fieldWithPath("response[].users[].id").description("사용자의 고유 ID"),
-                                fieldWithPath("response[].users[].nickname").description("사용자의 닉네임"),
-                                fieldWithPath("response[].users[].birthday").description("MM-DD 형식의 사용자의 생일"),
-                                fieldWithPath("response[].users[].gender").description("사용자의 성별"),
-                                fieldWithPath("response[].users[].profileImage").description("사용자의 프로필 이미지 URL"),
+                                fieldWithPath("response[].userId").description("사용자의 고유 ID"),
                                 fieldWithPath("error").optional().description("요청 실패 시 오류 정보")
                         )
                 ));
