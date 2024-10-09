@@ -197,35 +197,34 @@ export const PlanPage: React.FC = () => {
   }, []);
 
   const handlePost = async () => {
-    try {
-      // 초기 일정 데이터 업데이트
-      const updatedSchedule: TravelPlan = {
-        ...schedule,
-        title: 'temp',
-        startDate: datesList[0],
-        endDate: datesList[datesList.length - 1],
-        dayPlans: []  // 빈 배열로 초기화
-      };
+    // 초기 일정 데이터 업데이트
+    const updatedSchedule: TravelPlan = {
+      ...schedule,
+      title: 'temp',
+      startDate: datesList[0],
+      endDate: datesList[datesList.length - 1],
+      dayPlans: []  // 빈 배열로 초기화
+    };
   
-      // localStorage에서 일정 데이터를 가져와서 dayPlans 필드 업데이트
-      for (let i = 1; i < 6; i++) {
-        const stored = localStorage.getItem(`schedule_${i}`);
-        if (stored && stored.length > 0) {
-          const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
-          updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
-        }
+    // localStorage에서 일정 데이터를 가져와서 dayPlans 필드 업데이트
+    for (let i = 1; i < 6; i++) {
+      const stored = localStorage.getItem(`schedule_${i}`);
+      if (stored && stored.length > 0) {
+        const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
+        updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
       }
+    }
+    console.log('최종 업데이트된 데이터:', updatedSchedule);
   
-      // 상태를 한 번에 업데이트
-      setSchedule(updatedSchedule);
-  
-      // 상태가 업데이트된 이후에 데이터를 전송
-      console.log('업데이트된 데이터:', updatedSchedule);  // 상태가 반영된 값
+    try {
+      // 데이터를 바로 전송
       const data = await postPlan(updatedSchedule);  // 최신 상태 전송
       console.log('등록 성공:', data);
+      
+      // 상태 업데이트 (필요하다면)
+      setSchedule(updatedSchedule);
   
     } catch (error: any) {
-      console.log('오류 발생 시 데이터:', schedule);
       console.error('등록 실패:', error.message);
     }
   };
