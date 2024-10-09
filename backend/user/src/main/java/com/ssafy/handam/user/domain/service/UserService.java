@@ -22,6 +22,9 @@ public class UserService {
     private final UserRepository userRepository;
     private final FollowRepository followRepository;
 
+    public User getUserById(Long userId){
+        return userRepository.findById(userId).orElse(null);
+    }
     public Long handleUserLogin(OAuthUserInfo oAuthUserInfo) {
         String email = oAuthUserInfo.email();
         Long userId;
