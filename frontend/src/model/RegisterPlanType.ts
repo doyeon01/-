@@ -7,33 +7,33 @@ export interface TravelPlan {
   
 export interface DayPlan {
 day: number;
-plans: Plan[];
+plans: any[];
 }
   
-type Plan = FeedPlan | PlacePlan;
+// type Plan = FeedPlan | PlacePlan;
   
-interface FeedPlan {
-    type: "feed";
-    userId: number;
-    placeName: string;
-    title: string;
-    content: string;
-    imageUrl: string;
-    address1: string;
-    address2: string;
-    longitude: number;
-    latitude: number;
-    placeType: string;
-    details: string;
-  }
+// interface FeedPlan {
+//     type: "feed";
+//     userId: number;
+//     placeName: string;
+//     title: string;
+//     content: string;
+//     imageUrl: string;
+//     address1: string;
+//     address2: string;
+//     longitude: number;
+//     latitude: number;
+//     placeType: string;
+//     details: string;
+//   }
   
-interface PlacePlan {
-    type: "place";
-    placeName: string;
-    roadAddressName: string;
-    addressName: string;
-    placeType: string;
-    x: number;
-    y: number;
-    details: string;
-  }
+// interface PlacePlan {
+//     type: "place";
+//     placeName: string;
+//     roadAddressName: string;
+//     addressName: string;
+//     placeType: string;
+//     x: number;
+//     y: number;
+//     details: string;
+//   }
