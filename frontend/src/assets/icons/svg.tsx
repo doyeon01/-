@@ -381,17 +381,26 @@ export function HotelIcon(): JSX.Element {
   )
 }
 
-
-export function DownLoadIcon(): JSX.Element {
-  return(
-    <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width="2em" 
-    height="2em" 
-    viewBox="0 0 24 24">
-    <path fill="currentColor" d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"/>
+interface DownLoadIconProps {
+  className?: string; // className을 선택적으로 받도록 설정
+}
+export function DownLoadIcon({ className }: DownLoadIconProps): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="3em"
+      height="3em"
+      viewBox="0 0 24 24"
+      className={className} // 전달된 className을 적용
+    >
+      <path
+        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="1"
+      />
     </svg>
-  )
+  );
 }
 export function OutIcon(): JSX.Element {
   return (

@@ -2,7 +2,6 @@ import { useState } from 'react';
 import { ModalLogin } from '../organisms/Modal/ModalLogin';
 import logo from '../../assets/statics/logo.png';
 import travel from '../../assets/statics/travel.png';
-
 export const LandingPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -14,6 +13,7 @@ export const LandingPage = () => {
   const handleCloseModal = () => {
     setIsModalOpen(false);
   };
+
 
   return (
     <>
@@ -30,6 +30,7 @@ export const LandingPage = () => {
             className='cursor-pointer mt-6 px-8 py-4 bg-[#665F59] text-white text-lg font-normal rounded-lg hover:bg-[#4F4945] transition duration-200'>
             여행한담 시작하기
           </button>
+
         </div>
 
         <img src={travel} className="h-full w-full object-cover pl-20 pt-10" alt="travel" />

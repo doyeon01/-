@@ -50,17 +50,25 @@ export const ModalSelectFeed: React.FC<ModalSelectFeedProps> = ({ totalPlanId, o
         totalPlanId,
       };
 
-      await PostPhotoCard(postData);
-
-      Swal.fire({
-        icon: 'success',
-        title: '포토카드 생성 완료!',
-        text: '포토카드가 저장되었습니다.',
-        confirmButtonText: '확인',
-      }).then(() => {
-        navigate('/my', { state: { activeTab: 'tab5' } });
-      });
-
+      const result = await PostPhotoCard(postData);
+      if (result.success) {
+        Swal.fire({
+          icon: 'success',
+          title: '포토카드 생성 완료!',
+          text: '포토카드가 저장되었습니다.',
+          confirmButtonText: '확인',
+        }).then(() => {
+          navigate('/my', { state: { activeTab: 'tab5' } });
+        });
+      } else {
+        const errorMessage = result.error?.message || '알 수 없는 오류가 발생했습니다.';
+        Swal.fire({
+          icon: 'error',
+          title: '포토카드 생성에 실패했습니다.',
+          text: errorMessage,
+          confirmButtonText: '확인',
+        });
+      }
     } catch (error) {
       console.error('포토카드 생성 중 오류 발생:', error);
       Swal.fire({

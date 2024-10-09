@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import PersonalSearch from '../../atoms/input/PersonalSearch';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
-import { PhotoCard } from './PhtotCard';
+import { PhotoCard } from './PhotoCard';
 import { PlanListApi } from '../../../services/api/PlanService'
 import { PlanListType, PlanListResponseType } from '../../../model/MyPageType'; 
 

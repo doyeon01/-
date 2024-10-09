@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { PhotoCard } from './PhtotCard';
+import { PhotoCard } from './PhotoCard';
 import { useSearchAndSort } from '../../../hooks/useSearchAndSort';
 import PersonalSearch from '../../atoms/input/PersonalSearch'; 
 import { GetPhotoCardList } from '../../../services/api/PhotoService';
@@ -68,7 +68,7 @@ export const PersonalPhotoDetail: React.FC = () => {
               title={item.planTitle}
               totalPlanId = {item.totalPlanId}
               testimg={item.photoCardUrl} 
-              showDownLoadButton={true}
+              showDetailButton={true}
             />
           ))
         ) : (
