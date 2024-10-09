@@ -218,19 +218,12 @@ export const PlanPage: React.FC = () => {
           else{
             parsedStore[j].type = 'place'
           }
-
-          try {
-            const parsedDayPlan: DayPlan = {
-              day:j,
-              plans: parsedStore}
-              ;  // JSON을 DayPlan 타입으로 변환
-
-            
-            updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
-          } catch (error) {
-            console.error(`schedule_${i} 데이터를 파싱하는 중 오류가 발생했습니다:`, error);
-          }
         }
+        const parsedDayPlan: DayPlan = {
+          day:i,
+          plans: parsedStore
+        }
+        updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
     }
   }
     console.log('최종 업데이트된 데이터:', updatedSchedule);
