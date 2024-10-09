@@ -53,36 +53,36 @@ pipeline {
 //         }
 
         stage('Build Docker Image') {
-            when {
-                changeset "backend/user/**"
-            }
             steps {
                 script {
-                     withCredentials([
-                          string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
-                          string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
-                          string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
-                         ]) {
-                              skipRemainingStages = false
-                              sh """
-                               export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
-                               export CLIENT_ID=${CLIENT_ID}
-                               export CLIENT_SECRET=${CLIENT_SECRET}
-                               cd backend/user
-                               chmod +x ./gradlew
-                               ./gradlew clean build --stacktrace --info
-                               sudo ls build/libs
-                               sudo docker build \
-                               --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                               --build-arg CLIENT_ID=${CLIENT_ID} \
-                               --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
-                               -t user:latest .
-                               """
-                         }
+                    withCredentials([
+                        string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                        string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
+                        string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
+                    ]) {
+                        skipRemainingStages = false
+                        sh """
+                        set -e
+                        echo "Current directory: $(pwd)"
+                        echo "Workspace contents:"
+                        ls -lR
+                        cd backend/user
+                        echo "Backend user directory contents:"
+                        ls -l
+                        chmod +x ./gradlew
+                        ./gradlew clean build --stacktrace --info
+                        echo "Build libs contents:"
+                        ls -l build/libs
+                        docker build \
+                            --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                            --build-arg CLIENT_ID=${CLIENT_ID} \
+                            --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
+                            -t user:latest .
+                        """
+                    }
                 }
             }
         }
-
         stage('Login to Docker Registry') {
             when {
                 changeset "backend/user/**"
