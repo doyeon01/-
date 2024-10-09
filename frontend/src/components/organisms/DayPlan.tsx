@@ -1,6 +1,5 @@
-import {PlaceIcon, FoodIcon, CafeIcon, HotelIcon } from '../../assets/icons/svg'; // 아이콘 임포트
+import { PlaceIcon, FoodIcon, CafeIcon, HotelIcon, EtcIcon } from '../../assets/icons/svg'; // 아이콘 임포트
 import { PlanDetailType, DayPlanType } from '../../model/MyPageType';
-
 
 const ScheduleItemComponent: React.FC<{ item: PlanDetailType; isLast: boolean }> = ({ item, isLast }) => {
   const renderIcon = () => {
@@ -9,12 +8,31 @@ const ScheduleItemComponent: React.FC<{ item: PlanDetailType; isLast: boolean }>
         return <PlaceIcon />;
       case 'RESTAURANT':
         return <FoodIcon />;
-      case 'ETC':
+      case 'CAFE':
         return <CafeIcon />;
       case 'ACCOMMODATION':
         return <HotelIcon />;
+      case 'ETC':
+        return <EtcIcon />;
       default:
         return null;
+    }
+  };
+
+  const renderLabel = () => {
+    switch (item.placeType) {
+      case 'TOURIST_ATTRACTION':
+        return '명소';
+      case 'RESTAURANT':
+        return '음식점';
+      case 'CAFE':
+        return '카페';
+      case 'ACCOMMODATION':
+        return '숙박';
+      case 'ETC':
+        return '기타';
+      default:
+        return '';
     }
   };
 
@@ -30,10 +48,9 @@ const ScheduleItemComponent: React.FC<{ item: PlanDetailType; isLast: boolean }>
         <img src={item.imageUrl} alt={item.placeName} className="w-24 h-24 object-cover rounded-lg" />
         <div>
           <div className='flex gap-2'>
-            <h3 className="font-bold text-xl">{item.placeType} | {item.placeName}</h3>
+            <h3 className="font-bold text-xl">{renderLabel()} | {item.placeName}</h3>
           </div>
           <p className="text-sm text-gray-600 pt-2">{item.details}</p>
-       
         </div>
       </div>
     </div>
@@ -60,4 +77,4 @@ export const DayPlan: React.FC<{ daySchedule: DayPlanType }> = ({ daySchedule })
       </div>
     </div>
   );
-};
+}; 
