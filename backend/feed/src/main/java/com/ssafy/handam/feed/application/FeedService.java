@@ -115,7 +115,8 @@ public class FeedService {
     public FeedDetailResponse getFeedDetails(Long feedId, String accessToken) {
         Feed feed = feedDomainService.findById(feedId);
         UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId(), accessToken);
-        return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDetailDto.id())),
+        UserDto userDto = userApiClient.getUserByToken(accessToken);
+        return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDto.id())),
                 userDetailDto.nickname(), userDetailDto.profileImageUrl());
     }
 
@@ -165,11 +166,10 @@ public class FeedService {
         List<Long> feedIds = likesBy.getContent().stream()
                 .map(like -> like.getFeed().getId())
                 .toList();
-        List<Feed> likedFeedsByUser = feedDomainService.getFeedByIds(feedIds);
+        List<FeedDocument> likedFeedsByUser = feedDomainService.getFeedDocumentsByIds(feedIds);
         boolean hasNextPage = likesBy.hasNext();
         int currentPage = likesBy.getNumber();
-        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser,
-                userApiClient.getUserById(userId, accessToken));
+        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser, accessToken);
         return LikedFeedsByUserResponse.of(likedFeeds, currentPage, hasNextPage);
     }
 
@@ -331,7 +331,18 @@ public class FeedService {
                 .toList();
     }
 
+    private List<FeedPreviewDto> getFeedPreviewDtoList(List<FeedDocument> feeds, String token) {
+        UserDto userByToken = userApiClient.getUserByToken(token);
+        return feeds.stream()
+                .map(feed -> FeedPreviewDto.fromDocument(feed, isLikedFeed(feed, userByToken.id())))
+                .toList();
+    }
+
     private boolean isLikedFeed(Feed feed, Long userId) {
+        return feedDomainService.isLikedFeed(feed.getId(), userId);
+    }
+
+    private boolean isLikedFeed(FeedDocument feed, Long userId) {
         return feedDomainService.isLikedFeed(feed.getId(), userId);
     }
 
