@@ -135,7 +135,6 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
             <button
               className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg ml-4 transition-opacity duration-300 group-hover:opacity-100"
               onClick={handleOpenSelectFeedModal}
-              // disabled={isCreating}
             >
               포토카드 생성
             </button>
