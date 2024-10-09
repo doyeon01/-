@@ -104,7 +104,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
     axios
-      .get(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
+      .post(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
       .then((response) => {
         console.log(`팔로잉 채팅 연결${response}`);
         
