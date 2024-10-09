@@ -213,6 +213,8 @@ export const PlanPage: React.FC = () => {
         }))
       }
     }
+    console.log('데이터:',schedule);
+    
     const data = await postPlan(schedule);
       console.log('등록 성공:',data);
       
