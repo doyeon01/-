@@ -49,6 +49,8 @@ export const PlanPage: React.FC = () => {
     setLoading(true); // 로딩 시작
     try {
       const data = await getFeedClusterRefresh(userId); // API 호출
+      console.log(data);
+      
       setLastRefreshTime(new Date()); // 마지막 갱신 시간을 현재 시간으로 설정
     } catch (error) {
       console.error('Error refreshing data:', error);
