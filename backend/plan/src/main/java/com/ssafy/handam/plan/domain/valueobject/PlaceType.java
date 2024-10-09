@@ -9,6 +9,7 @@ import lombok.RequiredArgsConstructor;
 public enum PlaceType {
 
     RESTAURANT("식당"),
+    CAFE("카페"),
     ACCOMMODATION("숙박"),
     TOURIST_ATTRACTION("관광지"),
     ETC("기타");
