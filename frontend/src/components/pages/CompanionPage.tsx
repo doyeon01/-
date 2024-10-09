@@ -7,6 +7,7 @@ import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import { fetchArticles, getAccompanyBoardSearch } from '../../services/api/AccompanyBoardAPI';
 import { AccompanyBoardResponseType, ArticleType } from '../../model/AccompanyBoardType';
 import { UserIconMini2 } from '../../assets/icons/svg';
+import { locationArrType } from '../../model/MyPageType';
 
 export const CompanionPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -15,7 +16,8 @@ export const CompanionPage: React.FC = () => {
   const [articles, setArticles] = useState<ArticleType[]>([]);
   const [page, _] = useState(0);
   const [searchTerm, setSearchTerm] = useState(''); 
-
+  const [location, setLocation] = useState<locationArrType[] | []>([]);
+  
   useEffect(() => {
     const loadArticles = async () => {
       const data = await fetchArticles(page);   
@@ -27,7 +29,7 @@ export const CompanionPage: React.FC = () => {
       }
     };
     loadArticles();
-  }, [page]);
+  }, [page,location]);
 
  
   const handleSearch = async () => {
@@ -68,7 +70,7 @@ export const CompanionPage: React.FC = () => {
   return (
     <>
       <div className="h-[80px] w-full relative top-20" />
-      <KakaoMap />
+      <KakaoMap location={location} />
       <div
         className="fixed w-[300px] h-[650px] bg-white flex flex-col items-center z-30 border-gray border-r-2 overflow-y-auto"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
@@ -136,7 +138,7 @@ export const CompanionPage: React.FC = () => {
           <img src={Mini_Vector} />
         </div>
       )}
-      {selectedId !== null && <ModalCompanionDetail selectedId={selectedId} />}
+      {selectedId !== null && <ModalCompanionDetail selectedId={selectedId} setLocation={setLocation}/>}
       {isChoiceModalOpen && <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />}
     </>
   );

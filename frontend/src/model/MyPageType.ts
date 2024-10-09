@@ -82,6 +82,8 @@ export interface PlanDetailType {
   placeName: string;
   imageUrl: string;
   address: string;
+  latitude:number;
+  longitude:number;
   placeType: string;
   details: string;
 }
@@ -141,3 +143,6 @@ export interface CardProps {
 }
 
 
+//위치정보
+
+export type locationArrType = [number, number];

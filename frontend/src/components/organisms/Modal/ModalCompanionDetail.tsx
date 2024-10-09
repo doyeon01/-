@@ -4,15 +4,16 @@ import { ArticleDetailType, CommentType } from '../../../model/AccompanyBoardTyp
 import { UserId } from '../../../Recoil/atoms/Auth';  
 import { useRecoilValue } from 'recoil';
 import { PlanDetailApi } from '../../../services/api/PlanService';
-import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
+import { DayPlanType, locationArrType, PlanDetailResponseType } from '../../../model/MyPageType';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 import { useNavigate } from 'react-router-dom'; 
 
 interface ModalCompanionDetailProps {
   selectedId: number;
+  setLocation:React.Dispatch<React.SetStateAction<[] | locationArrType[]>>
 }
 
-const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId }) => {
+const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId,setLocation }) => {
   const [commentContent, setCommentContent] = useState('');
   const [articleDetail, setArticleDetail] = useState<ArticleDetailType | null>(null);
   const [comment, setComment] = useState<CommentType[] | null>(null);
@@ -48,10 +49,15 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     if (articleDetail?.totalPlanId !== undefined) {
       PlanDetailApi(articleDetail.totalPlanId)
         .then((res) => {
-          const data: PlanDetailResponseType = res.data;          
-          if (data.success) {
+          const data: PlanDetailResponseType = res.data;   
+          console.log(data);
+          if (data.success) { 
             setplanDetatil(data.response);
-          } else {
+            const longitudes: locationArrType[] = data.response.flatMap(dayData =>
+              dayData.plans.map(plan => [plan.latitude, plan.longitude] as locationArrType)
+            );
+            setLocation(longitudes);
+            } else {
             console.log('response 없음 ㅜㅜ');
           }
         })
