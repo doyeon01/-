@@ -17,14 +17,14 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
   jwt:
-    secret: ${SPRING_JWT_SECRET}
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
   security:
     oauth2:
       client:
         registration:
           naver:
-            client-id: ${CLIENT_ID}
-            client-secret: ${CLIENT_SECRET}
+            client-id: ${CLIENT_ID:qNQxjUUrP4J8qo0Qr6Zv}
+            client-secret: ${CLIENT_SECRET:dgeWW3o88l}
             redirect-uri: "http://j11c205.p.ssafy.io:8081/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name,email,nickname,gender,age,birthday,profile_image,birthday,mobile
