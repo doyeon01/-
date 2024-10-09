@@ -57,17 +57,12 @@ public class ChatService {
                 createdDate = null;
             }
 
-            users = List.of(
-                    userApiClient.getUserById(userId, token),
-                    userApiClient.getUserById(partnerId, token)
-            );
-
             return ChatRoomsResponse.of(
                     chatRoom.getChatRoomId(),
                     nickname,
                     content,
                     createdDate,
-                    users
+                    partnerId
             );
         }).toList();
     }
