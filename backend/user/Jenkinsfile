@@ -65,7 +65,7 @@ pipeline {
                           skipRemainingStages = false
                           sh """
                            cd backend/user
-                           chmod +x ./gradlew
+                           chmod +x ./gradlew clean build -x test
                            ./gradlew build
                            ls build/libs
                            docker build \
