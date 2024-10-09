@@ -252,14 +252,14 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                     <div key={index}>
                           {userId === message.senderId ? (
                             // 내가 보낸 메시지
-                              <div className="flex justify-end mr-4">
-                                  <div className="bg-white p-2 rounded-lg border border-gray-300 mb-1">
-                                      <p>{message.content}</p>
-                                      <p className="text-xs text-gray-500 text-right">  
-                                        {message.timeStamp.substring(11, 16)}
-                                      </p>
-                                  </div>
-                              </div>
+                            <div className="flex justify-end mr-4">
+                            <div className="bg-white p-2 rounded-lg border border-gray-300 mb-1">
+                              <p>{message.content}</p>
+                              <p className="text-xs text-gray-500 text-right">
+                                {message.timeStamp ? message.timeStamp.substring(11, 16) : '방금 전'}
+                              </p>
+                            </div>
+                          </div>                          
                           ) : (
                               // 상대가 보낸 메시지
                               <div className="flex items-start ml-4">
