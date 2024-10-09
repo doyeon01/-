@@ -115,7 +115,7 @@ public class FeedService {
         Feed feed = feedDomainService.findById(feedId);
         UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId(), accessToken);
         return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDetailDto.id())),
-                userDetailDto.name(), userDetailDto.profileImageUrl());
+                userDetailDto.nickname(), userDetailDto.profileImageUrl());
     }
 
     public FeedResponse createFeed(FeedCreationServiceRequest request, String savedImagePath, String accessToken) {

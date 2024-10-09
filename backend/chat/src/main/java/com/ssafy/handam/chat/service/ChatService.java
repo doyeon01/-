@@ -1,6 +1,7 @@
 package com.ssafy.handam.chat.service;
 
-import com.ssafy.handam.chat.client.UserServiceClient;
+import com.ssafy.handam.chat.client.UserApiClient;
+import com.ssafy.handam.chat.client.UserDto;
 import com.ssafy.handam.chat.controller.response.ChatResponse;
 import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatMessage;
@@ -11,7 +12,6 @@ import com.ssafy.handam.chat.repository.ChatRoomRepository;
 import jakarta.transaction.Transactional;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -22,7 +22,7 @@ public class ChatService {
 
     private final ChatRoomRepository chatRoomRepository;
     private final ChatMessageRepository chatMessageRepository;
-    private final UserServiceClient userServiceClient;
+    private final UserApiClient userApiClient;
 
     public List<ChatRoomsResponse> getChatRoomsByUserId(Long userId, String token) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByUserIdsContaining(userId);
@@ -33,14 +33,17 @@ public class ChatService {
 
             ChatMessage latestMessage = chatMessageRepository.findFirstByChatRoom_ChatRoomIdOrderByCreatedDateDesc(
                     chatRoom.getChatRoomId());
-
+            UserDto user = userApiClient.getUserById(latestMessage.getSenderId(), token);
+            List<UserDto> users = List.of(
+                    userApiClient.getUserById(userId, token),
+                    userApiClient.getUserById(partnerId, token)
+            );
             return ChatRoomsResponse.of(
                     chatRoom.getChatRoomId(),
-                    userServiceClient.getUserById(latestMessage.getSenderId(), token).getResponse().nickname(),
+                    user.nickname(),
                     latestMessage.getContent(),
                     latestMessage.getCreatedDate(),
-                    List.of(userServiceClient.getUserById(userId, token).getResponse(),
-                            userServiceClient.getUserById(partnerId, token).getResponse())
+                    users
             );
         }).toList();
     }

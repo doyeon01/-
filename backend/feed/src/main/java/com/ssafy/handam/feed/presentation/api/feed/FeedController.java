@@ -89,7 +89,8 @@ public class FeedController {
 
     @GetMapping("/{feedId}")
     public ApiResult<FeedDetailResponse> getFeedDetails(
-            @CookieValue(value = "accessToken", required = false) String token, @PathVariable Long feedId) {
+            @CookieValue(value = "accessToken", required = false) String token,
+            @PathVariable Long feedId) {
         return success(feedService.getFeedDetails(feedId, token));
     }
 
