@@ -137,7 +137,7 @@ export const getFeedDetail = (id: number) => {
 
   export const getPlanFeedList = async (totalPlanId:number) => {
     try {
-      const response = await axios.get(`${BaseUrl}/search/${totalPlanId}`, {
+      const response = await axios.get(`${BaseUrl}/search/images/${totalPlanId}`, {
         withCredentials: true
       });
       return response.data
