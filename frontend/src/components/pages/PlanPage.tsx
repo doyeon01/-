@@ -232,6 +232,7 @@ export const PlanPage: React.FC = () => {
           }
         }
     }
+  }
     console.log('최종 업데이트된 데이터:', updatedSchedule);
   
     try {
@@ -245,7 +246,7 @@ export const PlanPage: React.FC = () => {
     } catch (error: any) {
       console.error('등록 실패:', error.message);
     }
-  };}
+  };
   
   useEffect(()=>{
     console.log(schedule);
