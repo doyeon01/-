@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import { ModalChatTypeProps, ChatRoomType, userType,MessageType } from '../../../model/ChatType';
 import SockJS from 'sockjs-client';
@@ -20,7 +20,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
-  
+  const scrollRef = useRef<HTMLDivElement | null>(null); 
+
   const fetchData = () => {
     axios
       .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
@@ -159,7 +160,11 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       setNewMessage('');
     }
   };
-
+  useEffect(() => {
+    if (scrollRef.current) {
+        scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
+    }
+}, [messages]); 
   return (
     <>
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50" onClick={onClose}/>
@@ -199,6 +204,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </li>
                 ))}
               </ul>
+              <div className='h-10'></div>
             </div>
             <div className='h-[50px]'></div>
           </div>
@@ -234,33 +240,45 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </div>
                 </div>
 
-                <div className="flex flex-col space-y-4 mb-4 overflow-y-auto"  style={{ maxHeight: '90vh', msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
+                <div
+                  ref={scrollRef}
+                  className="flex flex-col space-y-4 mb-4 overflow-y-auto"
+                  style={{
+                      maxHeight: '90vh',
+                      msOverflowStyle: 'none',
+                      scrollbarWidth: 'none',
+                  }}
+              >
                   {messages.map((message, index) => (
-                    <div key={index}>
-                      {userId === message.senderId ? (
-                        // 내가 보낸 메시지
-                        <div className="flex justify-end">
-                          <div className="bg-white p-2 rounded-lg border border-gray-300">
-                            <p>{message.content}</p>
-                            <p className="text-xs text-gray-500 text-right">{message.timeStamp}</p>
-                          </div>
-                        </div>
-                      ) : (
-                        // 상대가 보낸 메시지
-                        <div className="flex items-start">
-                          <img src={partnerUser.profileImageUrl} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
-                          <div className="bg-[#E5E2D9] p-2 rounded-lg">
-                            <p>{message.content}</p>
-                            <p className="text-xs text-gray-500 text-right">
-                              {message.timeStamp}
-                            </p>
-                          </div>
-                        </div>
-                      )}
-                    </div>
+                      <div key={index}>
+                          {userId === message.senderId ? (
+                              // 내가 보낸 메시지
+                              <div className="flex justify-end">
+                                  <div className="bg-white p-2 rounded-lg border border-gray-300">
+                                      <p>{message.content}</p>
+                                      <p className="text-xs text-gray-500 text-right">{message.timeStamp}</p>
+                                  </div>
+                              </div>
+                          ) : (
+                              // 상대가 보낸 메시지
+                              <div className="flex items-start">
+                                  <img
+                                      src={partnerUser.profileImageUrl}
+                                      alt="Profile"
+                                      className="w-8 h-8 rounded-full mr-2"
+                                  />
+                                  <div className="bg-[#E5E2D9] p-2 rounded-lg">
+                                      <p>{message.content}</p>
+                                      <p className="text-xs text-gray-500 text-right">
+                                          {message.timeStamp}
+                                      </p>
+                                  </div>
+                              </div>
+                          )}
+                      </div>
                   ))}
-                <div className='h-[80px]'></div>
-                </div>
+                  <div className='h-[80px]'></div>
+              </div>
 
                 {/* 대화입력창 */}
                 <div className="absolute bottom-0 left-0 w-full bg-[#F4F4EE] p-4 border-t flex items-center space-x-2 z-50">
