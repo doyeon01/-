@@ -134,3 +134,15 @@ export const getFeedDetail = (id: number) => {
       throw error;
     }
   };
+
+  export const getPlanFeedList = async (totalPlanId:number) => {
+    try {
+      const response = await axios.get(`${BaseUrl}/search/${totalPlanId}`, {
+        withCredentials: true
+      });
+      return response.data
+    } catch (error) {
+      console.error('피드불러오기실패', error);
+      throw error;
+    }
+  };
