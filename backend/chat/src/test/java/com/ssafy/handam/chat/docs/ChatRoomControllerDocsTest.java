@@ -20,8 +20,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import com.ssafy.handam.chat.controller.response.ChatResponse;
 import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatRoom;
-import com.ssafy.handam.chat.dto.Gender;
-import com.ssafy.handam.chat.dto.UserDto;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.time.MonthDay;
