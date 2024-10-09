@@ -40,7 +40,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
     console.log(`Attempting to connect to WebSocket for room ${roomId}`);
-    const socket = new SockJS('http://j11c205.p.ssafy.io:8083/chat-websocket');
+    const socket = new SockJS('https://j11c205.p.ssafy.io:8083/chat-websocket');
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
@@ -101,6 +101,15 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   
   //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
+    // chatRooms 배열에서 이미 존재하는지 확인
+    const roomExists = chatRooms.some(chat => chat.user.userId === followingId);
+  
+    if (roomExists) {
+      console.log(`Chat room for following user ${followingId} already exists. No need to create a new one.`);
+      return; // 이미 존재하면 함수 종료
+    }
+  
+    // 요청을 보내기
     axios
       .post(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
       .then((response) => {
@@ -118,6 +127,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         console.error('Error fetching chat room for following:', error);
       });
   };
+  
   
   //팔로잉 리스트 가져오기
   useEffect(() => {
