@@ -271,7 +271,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                                   <div className="bg-[#E5E2D9] p-2 rounded-lg border border-gray-300 mb-1">
                                       <p>{message.content}</p>
                                       <p className="text-xs text-gray-500 text-right">
-                                          {message.timeStamp}
+                                        {message.timeStamp ? message.timeStamp.substring(11, 16) : '방금 전'}
                                       </p>
                                   </div>
                               </div>
