@@ -178,11 +178,10 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
 
         <div className="flex h-full">
           <div className="w-[250px] bg-[#E5E2D9] border-r border-gray-400">
-            <div className="mb-4">
               <input
                 type="text"
                 placeholder="검색"
-                className="w-full p-2 rounded-md bg-white border border-gray-300 m-2"
+                className="w-[230px] p-2 rounded-md bg-white border border-gray-300 m-2"
               />
             </div>
             <div className="w-full overflow-y-auto"   style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
@@ -208,16 +207,15 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 ))}
               </ul>
               <div className='h-[100px]'></div>
-            </div>
           </div>
 
-          <div className="w-[250px] bg-[#F4F4EE]  border-r m-2 border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
+          <div className="w-[250px] bg-[#F4F4EE]  border-r border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
                   key={index}
                   onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
-                  className="flex items-center mb-4 cursor-pointer ml-2"
+                  className="flex items-center mb-4 ursor-pointer"
                   style={{
                     backgroundColor: selectedChatRoom === chat.chatRoomId ? '#E5E2D9' : 'transparent', 
                   }}
