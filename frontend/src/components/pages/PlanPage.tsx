@@ -5,7 +5,7 @@ import ModalCalendar from '../organisms/Modal/ModalCalender'
 import moment from 'moment'
 import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
-import { TravelPlan } from '../../model/RegisterPlanType'
+import { TravelPlan, DayPlan } from '../../model/RegisterPlanType'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
@@ -15,7 +15,6 @@ import Loading_gif from '../../assets/statics/Loading.gif'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
-
 export const PlanPage: React.FC = () => {
   // const userId = useRecoilValue(UserId)
   const userId = 2895
@@ -34,7 +33,7 @@ export const PlanPage: React.FC = () => {
   const [feeds,setFeeds] = useState<FeedType[]>([])||null
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null); // 마지막 갱신 시간
   const [timeAgo, setTimeAgo] = useState(''); // "몇 분 전" 텍스트 상태
-  const [schedule, setSchedule] = useState<TravelPlan[]>([])
+  const [schedule, setSchedule] = useState<TravelPlan>()
   
   const [_, setDragging] = useState(false);
 
@@ -198,59 +197,40 @@ export const PlanPage: React.FC = () => {
   }, []);
 
   const handlePost = async () => {
-    try{
-      setSchedule((prevSchedule) => ({
-      ...prevSchedule,         // 기존 상태 복사
-      startDate: datesList[0],  // startDate 값 업데이트 (예시 값)
-      endDate: datesList[datesList.length - 1]
-    }));
-    for(let i=1; i<6;i++){
-      const stored = localStorage.getItem(`schedule_${currentDate}`)
-      if (stored && stored.length >0){
-        setSchedule((prevSchedule) => ({
-          ...prevSchedule,
-          dayPlans: localStorage.getItem(`schedule_${currentDate}`)
-        }))
+    try {
+      // 초기 일정 데이터 업데이트
+      const updatedSchedule: TravelPlan = {
+        ...schedule,
+        title: 'temp',
+        startDate: datesList[0],
+        endDate: datesList[datesList.length - 1],
+        dayPlans: []  // 빈 배열로 초기화
+      };
+  
+      // localStorage에서 일정 데이터를 가져와서 dayPlans 필드 업데이트
+      for (let i = 1; i < 6; i++) {
+        const stored = localStorage.getItem(`schedule_${i}`);
+        if (stored && stored.length > 0) {
+          const parsedDayPlan: DayPlan = JSON.parse(stored);  // JSON을 DayPlan 타입으로 변환
+          updatedSchedule.dayPlans.push(parsedDayPlan);  // dayPlans 배열에 추가
+        }
       }
+  
+      // 상태를 한 번에 업데이트
+      setSchedule(updatedSchedule);
+  
+      // 상태가 업데이트된 이후에 데이터를 전송
+      console.log('업데이트된 데이터:', updatedSchedule);  // 상태가 반영된 값
+      const data = await postPlan(updatedSchedule);  // 최신 상태 전송
+      console.log('등록 성공:', data);
+  
+    } catch (error: any) {
+      console.log('오류 발생 시 데이터:', schedule);
+      console.error('등록 실패:', error.message);
     }
-    console.log('데이터:',schedule);
-    
-    const data = await postPlan(schedule);
-      console.log('등록 성공:',data);
-      
-    }
-    catch (error: any) {
-        console.log('데이터:',schedule);
-        console.error('등록 실패:', error.message);
-      }
-    console.log('데이터:',schedule);
   };
+  
 
-  // const handleRegister = async () => {
-  //   try {
-  //     // 현재 상태를 바탕으로 새로운 객체를 만들어 업데이트
-  //   const updatedUserData = {
-  //     ...userData,
-  //     travelStyl1: MBTI.charAt(0),
-  //     travelStyl2: MBTI.charAt(1),
-  //     travelStyl3: MBTI.charAt(2),
-  //     travelStyl4: MBTI.charAt(3),
-  //   };
-
-  //   // userData 업데이트
-  //   setUserData(updatedUserData);
-  //   // console.log('updateUserData:',updatedUserData);
-    
-    
-  //   // 업데이트된 객체를 바로 사용하여 API 호출
-  //   const data = await RegisterUser(updatedUserData);
-  //   console.log('등록 성공:', data);
-
-  //   // 페이지 이동
-  //   navigate('/main');
-  //   } catch (error: any) {
-  //     console.error('등록 실패:', error.message);
-  //   }
 
   return (
     <div className='relative top-20 overflow-hidden'>
