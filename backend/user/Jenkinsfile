@@ -65,12 +65,14 @@ pipeline {
                          ]) {
                               skipRemainingStages = false
                               sh """
+                              chmod -R 755 backend/user/build
                               export SPRING_JWT_SECRET=$SPRING_JWT_SECRET
                               export CLIENT_ID=$CLIENT_ID
                               export CLIENT_SECRET=$CLIENT_SECRET
                                cd backend/user
                                chmod +x ./gradlew
                                ./gradlew clean build --stacktrace --info
+                               chmod -R 755 build
                                ls build/libs
                                docker build \
                                --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
