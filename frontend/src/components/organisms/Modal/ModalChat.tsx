@@ -204,7 +204,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </li>
                 ))}
               </ul>
-              <div className='h-10'></div>
+              <div className='h-[100px]'></div>
             </div>
           </div>
 
@@ -218,7 +218,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 >
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
-                    <p className="font-bold">{chat.lastUserName}</p>
+                    <p className="font-bold">{chat.user.nickname}</p>
                     <p className="text-sm text-gray-600 truncate overflow-hidden whitespace-nowrap" title={chat.user.nickname}>
                       {chat.lastMessage}
                     </p>
@@ -226,7 +226,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 </li>
               ))}
             </ul>
-            <div className='h-[800px]'/>
           </div>
 
           <div className="flex-1 p-4 relative z-40 ">
@@ -278,6 +277,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       </div>
                   ))}
                 </div>
+                <div className='h-[50px]'/>
               </div>
 
                 {/* 대화입력창 */}
