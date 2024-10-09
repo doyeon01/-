@@ -177,12 +177,12 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         </button>
 
         <div className="flex h-full">
-          <div className="w-[200px] bg-[#E5E2D9] border-r border-gray-400">
+          <div className="w-[250px] bg-[#E5E2D9] border-r border-gray-400">
             <div className="mb-4">
               <input
                 type="text"
                 placeholder="검색"
-                className="w-full p-2 rounded-md bg-white border border-gray-300"
+                className="w-full p-2 rounded-md bg-white border border-gray-300 m-2"
               />
             </div>
             <div className="w-full overflow-y-auto"   style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
@@ -190,7 +190,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 {followings.map((following, index) => (
                   <li
                     key={index}
-                    className="flex items-center mb-4 cursor-pointer "
+                    className="flex items-center m-2 cursor-pointer "
                     onClick={() => selectFollowingChatRoom(following.id)}
                     >
                     {following.profileImage ? (
@@ -211,15 +211,15 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="w-[200px] bg-[#F4F4EE] border-r border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
+          <div className="w-[250px] bg-[#F4F4EE]  border-r m-2 border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
                   key={index}
                   onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
-                  className="flex items-center mb-4 cursor-pointer"
+                  className="flex items-center mb-4 cursor-pointer ml-2"
                   style={{
-                    backgroundColor: selectedChatRoom === chat.chatRoomId ? '#E5E2D9' : 'transparent', // 선택된 채팅방 색상 변경
+                    backgroundColor: selectedChatRoom === chat.chatRoomId ? '#E5E2D9' : 'transparent', 
                   }}
                 >
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
@@ -234,10 +234,10 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </ul>
           </div>
 
-          <div className="flex-1 p-4 relative z-40 ">
+          <div className="flex-1 relative z-40 border-b border-gray-400">
             {messages&&partnerUser ? (
               <>
-                <div className="flex items-center mb-4  ">
+                <div className="flex items-center m-4  ">
                   <img src={partnerUser.profileImageUrl} alt="Profile" className="w-10 h-10 rounded-full mr-2" />
                   <div>
                     <p className="font-bold">{partnerUser.nickname}</p>
@@ -258,7 +258,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                     <div key={index}>
                           {userId === message.senderId ? (
                             // 내가 보낸 메시지
-                              <div className="flex justify-end">
+                              <div className="flex justify-end mr-4">
                                   <div className="bg-white p-2 rounded-lg border border-gray-300 mb-1">
                                       <p>{message.content}</p>
                                       <p className="text-xs text-gray-500 text-right">  
@@ -268,7 +268,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                               </div>
                           ) : (
                               // 상대가 보낸 메시지
-                              <div className="flex items-start">
+                              <div className="flex items-start ml-4">
                                   <img
                                       src={partnerUser.profileImageUrl}
                                       alt="Profile"
