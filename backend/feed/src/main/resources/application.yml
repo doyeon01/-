@@ -2,7 +2,7 @@ spring:
   application:
     name: feed
   jwt:
-    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+    secret: ${SPRING_JWT_SECRET}
   servlet:
     multipart:
       enabled: true
