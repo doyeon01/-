@@ -17,20 +17,36 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await getFeed(keyword, page, 10);
-        if (response.response.feeds.length === 0) {
-          setHasMore(false);
-        } else {
-          setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]);
-        }
+        const response = await getFeed(keyword, 0, 10);
+        setPlaces(response.response.feeds); 
+        setPage(0);
+        setHasMore(response.response.feeds.length > 0);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
     };
     fetchData();
-  }, [keyword, page]);
-
-
+  }, [keyword]);
+  
+  useEffect(() => {
+    const fetchMoreData = async () => {
+      try {
+        const response = await getFeed(keyword, page, 10);
+        if (response.response.feeds.length === 0) {
+          setHasMore(false);
+        } else {
+          setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); 
+        }
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
+    };
+  
+    if (page > 1) {
+      fetchMoreData();
+    }
+  }, [page]);
+  
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
