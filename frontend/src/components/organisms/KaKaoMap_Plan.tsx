@@ -222,7 +222,8 @@ else{
                         lat: items.latitude,
                         lng: items.longitude
                       }));
-
+                      console.log(positions);
+                      
                     positions.forEach(position => {
                         const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
         

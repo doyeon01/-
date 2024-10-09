@@ -18,6 +18,7 @@ import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
   // const userId = useRecoilValue(UserId)
   const userId = 2895
+  const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
 
   const [Ismodal, setismodal] = useState(false)
   const [IsHide, setIsHide] = useState(true)
@@ -81,20 +82,21 @@ export const PlanPage: React.FC = () => {
     }
   }, [lastRefreshTime]);
 
-  useEffect(()=>{
-    const fetchData = async()=>{
-      try{
-        const data = await getFeedCluster(userId)
-        console.log('getFeedClust:', data.response);
-        setFeedCluster(data.response)
-      } catch(error){
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getFeedCluster(userId);
+        setFeedCluster(data.response);
+        setIsFeedClusterReady(true); // 데이터 세팅 완료 후 플래그 설정
+      } catch (error) {
         console.error('Error fetching data:', error);
       }
-    }
+    };
+  
     if (userId) {
-      fetchData(); // userID가 있을 때만 데이터 호출
+      fetchData();
     }
-  },[userId,lastRefreshTime])
+  }, [userId, lastRefreshTime]);
 
 
   let lat = 37.5503
@@ -191,7 +193,11 @@ export const PlanPage: React.FC = () => {
       {IsHide === true ? (
         <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative h-[calc(100vh-160px)]">
           <div className="w-full h-full bg-sky-200 relative ml-10">
-            <KaKaoMap_Plan isSearch={false} clusters={feedCluster}/>
+          {isFeedClusterReady ? (
+            <KaKaoMap_Plan isSearch={false} clusters={feedCluster} />
+          ) : (
+            <div>Loading...</div> // 데이터를 기다리는 동안 로딩 표시
+          )}
             <div className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
               {loading ? <img src={Loading_gif} alt=""  className='h-[30px] w-[30px] mr-[50px]'/> :
               <>
