@@ -77,7 +77,25 @@ export function UserIconMini3(): JSX.Element {
       xmlns="http://www.w3.org/2000/svg"
       viewBox="0 0 24 24"
       fill="currentColor"
-      className="w-[40px] h-[40px] text-[#645E59]"  
+      className="w-[30px] h-[30px] text-[#645E59]"  
+    >
+      <path
+        fillRule="evenodd"
+        d="M18.685 19.097A9.723 9.723 0 0 0 21.75 12c0-5.385-4.365-9.75-9.75-9.75S2.25 6.615 2.25 12a9.723 9.723 0 0 0 3.065 7.097A9.716 9.716 0 0 0 12 21.75a9.716 9.716 0 0 0 6.685-2.653Zm-12.54-1.285A7.486 7.486 0 0 1 12 15a7.486 7.486 0 0 1 5.855 2.812A8.224 8.224 0 0 1 12 20.25a8.224 8.224 0 0 1-5.855-2.438ZM15.75 9a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0Z"
+        clipRule="evenodd"
+    />
+    </svg>
+
+  );
+}
+
+export function UserIconMini4(): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 24 24"
+      fill="currentColor"
+      className="w-[50px] h-[50px] text-[#645E59]"  
     >
       <path
         fillRule="evenodd"
@@ -231,6 +249,25 @@ export function SearchIcon(): JSX.Element {
   );
 }
 
+export function SearchIcon1(): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      width="2em" 
+      height="2em"
+      viewBox="0 0 512 512"
+      fill="none"
+      stroke="black"  
+      strokeLinecap="round"
+      strokeMiterlimit="10"
+      strokeWidth="40"
+    >
+      <path d="M221.09 64a157.09 157.09 0 1 0 157.09 157.09A157.1 157.1 0 0 0 221.09 64Z"/>
+      <path d="M338.29 338.29L448 448"/>
+    </svg>
+  );
+}
+
 
 export function PictureIcon(): JSX.Element {
   return (
@@ -356,3 +393,66 @@ export function DownLoadIcon(): JSX.Element {
     </svg>
   )
 }
+export function OutIcon(): JSX.Element {
+  return (
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="#b6afa9"
+      className="size-6 cursor-pointer"
+    >
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M15.75 9V5.25A2.25 2.25 0 0 0 13.5 3h-6a2.25 2.25 0 0 0-2.25 2.25v13.5A2.25 2.25 0 0 0 7.5 21h6a2.25 2.25 0 0 0 2.25-2.25V15m3 0 3-3m0 0-3-3m3 3H9"
+      />
+    </svg>
+  );
+}
+
+export function PlayIcon(): JSX.Element {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+      <path fillRule="evenodd" d="M4.5 5.653c0-1.427 1.529-2.33 2.779-1.643l11.54 6.347c1.295.712 1.295 2.573 0 3.286L7.28 19.99c-1.25.687-2.779-.217-2.779-1.643V5.653Z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
+export function PauseIcon(): JSX.Element {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6">
+      <path fillRule="evenodd" d="M6.75 5.25a.75.75 0 0 1 .75-.75H9a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H7.5a.75.75 0 0 1-.75-.75V5.25Zm7.5 0A.75.75 0 0 1 15 4.5h1.5a.75.75 0 0 1 .75.75v13.5a.75.75 0 0 1-.75.75H15a.75.75 0 0 1-.75-.75V5.25Z" clipRule="evenodd" />
+    </svg>
+  );
+}
+
+export function ArrowLeftIcon(): JSX.Element {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="size-6">
+      <path 
+        d="M11.03 3.97a.75.75 0 0 1 0 1.06l-6.22 6.22H21a.75.75 0 0 1 0 1.5H4.81l6.22 6.22a.75.75 0 1 1-1.06 1.06l-7.5-7.5a.75.75 0 0 1 0-1.06l7.5-7.5a.75.75 0 0 1 1.06 0Z" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        clipRule="evenodd" 
+      />
+    </svg>
+  );
+}
+
+export function ArrowRightIcon(): JSX.Element {
+  return (
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" className="size-6">
+      <path 
+        d="M12.97 3.97a.75.75 0 0 1 1.06 0l7.5 7.5a.75.75 0 0 1 0 1.06l-7.5 7.5a.75.75 0 1 1-1.06-1.06l6.22-6.22H3a.75.75 0 0 1 0-1.5h16.19l-6.22-6.22a.75.75 0 0 1 0-1.06Z" 
+        fill="none" 
+        stroke="currentColor" 
+        strokeWidth="2" 
+        clipRule="evenodd" 
+      />
+    </svg>
+  );
+}
+

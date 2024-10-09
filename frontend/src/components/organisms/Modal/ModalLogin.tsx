@@ -27,13 +27,6 @@ export const ModalLogin: React.FC<ModalLoginProps> = ({ onClose }) => {
           </div>
           <div className="p-4 md:p-5 space-y-4">
             <div className="flex flex-col items-center space-y-4 w-full">
-              <button className="w-full max-w-xs bg-[#FFE812] text-yellow-800 border-yellow-300 hover:bg-opacity-70 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center">
-                <span className="inline-flex items-center justify-center">
-                  <img src={kakao} alt="Kakao" className="w-6 h-6 mr-2" />
-                  카카오 계정으로 로그인
-                </span>
-              </button>
-
               <button
                 className="w-full max-w-xs bg-[#1EDE00] text-green-800 border-green-300 hover:bg-opacity-70 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center"
                 onClick={() => {
@@ -46,6 +39,12 @@ export const ModalLogin: React.FC<ModalLoginProps> = ({ onClose }) => {
                 </span>
               </button>
 
+              <button className="w-full max-w-xs bg-[#FFE812] text-yellow-800 border-yellow-300 hover:bg-opacity-70 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center">
+                <span className="inline-flex items-center justify-center">
+                  <img src={kakao} alt="Kakao" className="w-6 h-6 mr-2" />
+                  카카오 계정으로 로그인
+                </span>
+              </button>
               <button className="w-full max-w-xs bg-white text-gray-800 border border-[#B1B3B6] hover:bg-gray-50 font-semibold rounded-lg text-sm py-3 text-center inline-flex items-center justify-center">
                 <span className="inline-flex items-center justify-center">
                   <img src={google} alt="Google" className="w-6 h-6 mr-2" />

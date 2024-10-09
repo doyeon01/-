@@ -1,21 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { fetchArticleDetail, createComment, fetchArticleComment } from '../../../services/api/AccompanyBoardAPI';
 import { ArticleDetailType, CommentType } from '../../../model/AccompanyBoardType';
-import { UserId } from '../../../Recoil/atoms/Auth';  
+import { UserId } from '../../../Recoil/atoms/Auth';
 import { useRecoilValue } from 'recoil';
 import { PlanDetailApi } from '../../../services/api/PlanService';
 import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
 
 interface ModalCompanionDetailProps {
   selectedId: number;
+  closeModal: (updatedData?: { commentCount: number }) => void;
 }
 
-const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId }) => {
+const ModalUserCompanion: React.FC<ModalCompanionDetailProps> = ({ selectedId, closeModal }) => {
   const [commentContent, setCommentContent] = useState('');
   const [articleDetail, setArticleDetail] = useState<ArticleDetailType | null>(null);
   const [comment, setComment] = useState<CommentType[] | null>(null);
-  const [planDetail, setplanDetail] = useState<DayPlanType[]| []>([]);
-  const userId = useRecoilValue(UserId); 
+  const [planDetail, setplanDetail] = useState<DayPlanType[] | []>([]);
+  const userId = useRecoilValue(UserId);
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -58,8 +59,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     } else {
       console.log('scheduleId가 존재하지 않음');
     }
-  }, [articleDetail]); 
-  
+  }, [articleDetail]);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
@@ -72,11 +72,11 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
       accompanyBoardArticleId: selectedId,
       content: commentContent,
     };
-    
+
     const response = await createComment(commentData);
     if (response.success) {
       console.log('댓글 등록 성공:', response.response);
-      setCommentContent(''); 
+      setCommentContent('');
       const updatedComments = await fetchArticleComment(selectedId);
       if (updatedComments.success) {
         setComment(updatedComments.response.comments);
@@ -86,20 +86,27 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     }
   };
 
+  const handleModalClose = () => {
+    closeModal({ commentCount: comment ? comment.length : 0 });
+  };
+
   return (
     <>
-      {/* 모달 배경 및 크기 설정 */}
-      <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+      <div
+        className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50"
+        onClick={handleModalClose}
+      >
         <div
           className="relative bg-[#F4F4EE] p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto"
           style={{
             msOverflowStyle: 'none',
             scrollbarWidth: 'none',
           }}
+          onClick={(e) => e.stopPropagation()} // 클릭 이벤트 전파 방지
         >
           {/* 닫기 버튼 */}
           <button
-            onClick={() => {}}
+            onClick={handleModalClose} 
             aria-label="Close"
             className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
           >
@@ -139,7 +146,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
               </div>
 
               <hr className="border-gray-300 my-4" />
-              
+
               {/* 일정 정보 추가 */}
               {planDetail.length > 0 && (
                 <div className="py-4">
@@ -210,4 +217,4 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
   );
 };
 
-export default ModalCompanionDetail;
+export default ModalUserCompanion;

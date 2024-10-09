@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { UserDataType } from '../../../model/User';
 import { getUserSearch } from '../../../services/api/UserService';
 import { UserIconMini } from '../../../assets/icons/svg';
@@ -10,17 +11,18 @@ interface CardSetSearchUserProps {
 
 const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
   const [users, setUsers] = useState<UserDataType[] | null>(null);
-  const { isFollowed, toggleFollow, loading, setIsFollowed } = useFollow(); 
-
+  const { isFollowed, toggleFollow, loading, setIsFollowed } = useFollow();
+  const navigate = useNavigate(); 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getUserSearch(keyword);
+        console.log(response.response);
         setUsers(response.response);
 
         const initialFollowState: { [key: number]: boolean } = {};
         response.response.forEach((user: UserDataType) => {
-          initialFollowState[user.id] = user.isFollowed; 
+          initialFollowState[user.id] = user.isFollowed;
         });
         setIsFollowed(initialFollowState);
       } catch (error) {
@@ -30,18 +32,23 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
     fetchData();
   }, [keyword]);
 
+  const handleUserClick = (userId: number) => {
+    navigate(`/your/${userId}`);
+  };
+
   return (
     <div className="flex flex-col items-center space-y-4">
       {users && users.length > 0 ? (
         users.map((user, index) => (
           <div
             key={index}
-            className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2"
+            className="flex items-center justify-between p-4 bg-white border rounded-lg shadow-sm w-1/2 z-10 cursor-pointer"
+            onClick={() => handleUserClick(user.id)}
           >
             <div className="flex items-center space-x-4">
-              {user.profileImageUrl ? (
+              {user.profileImage ? (
                 <img
-                  src={user.profileImageUrl}
+                  src={user.profileImage}
                   alt={user.nickname}
                   className="w-12 h-12 rounded-full object-cover"
                 />
@@ -58,8 +65,11 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
                 동행온도 <span className="font-semibold text-black">36.5</span>
               </p>
               <button
-                onClick={() => toggleFollow(user.id, isFollowed[user.id])}
-                className="px-4 py-1 text-white text-sm rounded-full bg-[#707C60] hover:bg-[#4F5843]"
+                onClick={(e) => {
+                  e.stopPropagation();
+                  toggleFollow(user.id, isFollowed[user.id]);
+                }}
+                className="px-4 py-1 text-white text-sm rounded-full bg-[#707C60] hover:bg-[#4F5843] z-20"
                 disabled={loading[user.id]}
               >
                 {loading[user.id]

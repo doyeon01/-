@@ -168,7 +168,7 @@ useEffect(() => {
     console.log('등록 성공:', data);
 
     // 페이지 이동
-    navigate('/main');
+    navigate('/main' );
     } catch (error: any) {
       console.error('등록 실패:', error.message);
     }
@@ -178,9 +178,13 @@ useEffect(() => {
     <>
       <div
         data-label="배경이미지[수정필요]"
-        style={{ backgroundImage: `url(${IMG_BG})` }}
+        style={{ backgroundImage: `url(${IMG_BG})`, backgroundSize: 'cover' }}
         className="w-full h-screen bg-contain bg-no-repeat bg-center relative"
       >
+        {/* 검은색 오버레이 추가 */}
+        <div className="absolute inset-0 bg-black opacity-40 z-0"></div>
+
+        
         <div
           data-label="MBTI레이아웃"
           className="bg-white w-[330px] h-[680px] max-h-full fixed right-[10%] rounded-[10px] top-1/2 transform -translate-y-1/2 overflow-hidden leading-tight"
@@ -202,7 +206,7 @@ useEffect(() => {
                     alt="메인로고"
                     className="z-0 right-[25px] top-[20px] w-[50px] h-[50px] absolute"
                   />
-                  <span className="absolute top-[25%] left-1/2 transform -translate-x-1/2 text-[40px] whitespace-nowrap">
+                  <span className="absolute top-[25%] left-1/2 transform -translate-x-1/2 text-4xl whitespace-nowrap font-normal">
                     여행 성향 진단
                   </span>
                   <button
@@ -218,9 +222,8 @@ useEffect(() => {
                   <div className="right-[8px] top-[5px] absolute">
                     <ButtonNext text="다음" onClick={handlePageNum} />
                   </div>
-                  <span className="block mt-[120px] mb-[20px] text-[18px] whitespace-nowrap text-center">
-                    여행을 떠나기 전에 <br />
-                    간단한 소개를 부탁드려요
+                  <span className="block mt-[120px] mb-[20px] text-2xl whitespace-nowrap text-center">
+                    개인정보를 입력해주세요
                   </span>
                   <div className="gap-4 mb-4 flex flex-col items-center">
                     <input
@@ -228,8 +231,9 @@ useEffect(() => {
                       id="nickname"
                       value={nickname}
                       onChange={(e) => setNickname(e.target.value)} // 닉네임 변경 시 상태 업데이트
-                      className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
-                      placeholder="닉네임"
+                      className="w-[250px] h-[50px] rounded-[10px] text-center text-md focus:outline-none resize-none"
+                      placeholder="닉네임을 입력해주세요"
+                      spellCheck='false'
                       maxLength={10}
                     />
                     {/* <input
@@ -240,7 +244,7 @@ useEffect(() => {
                     /> */}
                     {/* <GenderSelector Gender={Gender} OnGenderChange={handleGender} /> */}
                     <div
-                      className="flex flex-row justify-center items-center w-64 min-h-12 h-full p-6 bg-white rounded-lg text-center text-lg focus:outline-none resize-none border border-gray-300 text-wrap"
+                      className="flex flex-row justify-center items-center w-64 min-h-12 h-full p-6 bg-white rounded-lg text-center text-md focus:outline-none resize-none border border-gray-300 text-wrap"
                       onClick={handleOpenPostcode} // 클릭 시 모달 열기
                     >
                       {address ? address: 
@@ -265,8 +269,9 @@ useEffect(() => {
                       id="introduce"
                       value={introduce}
                       onChange={(e) => setIntroduce(e.target.value)} // 자기소개 변경 시 상태 업데이트
-                      className="w-[250px] min-h-[200px] h-full rounded-[10px] text-center text-[18px] p-6 focus:outline-none resize-none"
-                      placeholder="자기소개"
+                      className="w-[250px] min-h-[200px] h-full rounded-[10px] text-center text-md p-6 focus:outline-none resize-none"
+                      spellCheck='false'
+                      placeholder="자기소개를 입력해주세요"
                     />
                   </div>
                 </>
@@ -279,7 +284,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 좋은 아침이에요!<br />
                 창밖을 바라보니 풍경이 너무 좋네요!<br />
                 밖이 어떤 풍경인가요?
@@ -310,7 +315,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 출근하는 길에<br />
                 문득 예쁜 풍경을 발견한 당신은
               </span>
@@ -340,7 +345,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 새로운 업무가 도착했습니다!<br />
                 어떻게 시작할까요?
               </span>
@@ -370,7 +375,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 오후 세시, 졸음이 쏟아지는 시간입니다.<br />
                 잠을 깨기 위해 무엇을 하면 좋을까요?
               </span>
@@ -400,7 +405,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 야호! 드디어 퇴근입니다.<br />
                 오늘은 왠지 수고한 나를 위해 맛있는<br />
                 저녁식사를 하고 싶어요. 어디서<br />
@@ -435,10 +440,10 @@ useEffect(() => {
               <div className="right-[8px] top-[5px] absolute">
                 <ButtonNext text="다음" onClick={handlePageNum} />
               </div>
-              <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 어떤 음식이 마음에 드시나요?
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+              <span className="text-sm top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
@@ -478,10 +483,10 @@ useEffect(() => {
               <div className="right-[8px] top-[5px] absolute">
                 <ButtonNext text="다음" onClick={handlePageNum} />
               </div>
-              <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 후식으로는 어떤 게 좋을까요?
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
+              <span className="text-sm top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787]">
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
@@ -513,14 +518,14 @@ useEffect(() => {
               <div className="right-[8px] top-[5px] absolute">
                 <ButtonNext text="다음" onClick={handlePageNum} />
               </div>
-              <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 친구에게 연락이 왔어요!<br />
                 어디로 여행을 가는게 좋을까요?
               </span>
-              <span className="text-[15px] top-[65px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
+              <span className="text-sm mt-2 top-[65px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
                 5개 이상 선택해주세요
               </span>
-              <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
+              <span className="top-[90px] mt-2 absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
               {!loading ? (
                   feeds && feeds.length > 0 ? (
                     feeds.map(feed => (
@@ -549,10 +554,10 @@ useEffect(() => {
               <div className="right-[8px] top-[5px] absolute">
                 <ButtonNext text="다음" onClick={handlePageNum} />
               </div>
-              <span className="text-[15px] top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md top-[26px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 숙소는 어디가 좋을까요?
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
+              <span className="text-sm top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-gray-300">
                 5개 이상 선택해주세요
               </span>
               <span className="top-[90px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap text-[#878787] grid grid-cols-3 w-full">
@@ -582,7 +587,7 @@ useEffect(() => {
               <span className="text-[15px] top-[5px] left-[8px] absolute text-[#645E59] font-extrabold">
                 {PageNum}/10
               </span>
-              <span className="text-[15px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
+              <span className="text-md text-white top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
                 내일은 신나는 주말이에요!<br/>
                 어떻게 보내면 좋을까요?
               </span>

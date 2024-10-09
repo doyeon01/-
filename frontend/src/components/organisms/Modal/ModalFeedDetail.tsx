@@ -5,6 +5,10 @@ import useFollow from '../../../hooks/useFollow';
 import { getFeedComment, getFeedDetail, postComment } from '../../../services/api/FeedService';
 import { UserIconMini3 } from '../../../assets/icons/svg';
 import { getYourInfo } from '../../../services/api/UserService';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth'; 
+import { useRecoilState } from 'recoil';
+import { useNavigate } from 'react-router-dom';
+
 
 const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, closeModal }) => {
   const [commentContent, setCommentContent] = useState('');
@@ -13,13 +17,17 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
   const { isLike, toggleLike, likeCount } = useLike(detailFeed?.isLiked ?? false, detailFeed?.id ?? null);
   const { isFollowed, toggleFollow,setIsFollowed } = useFollow();
   const [likeCnt, setLikeCnt] = useState(0);
+  const [isLiked,setIsLiked] = useState(false)
+  const [userId] = useRecoilState(UserIdAtom);  
+  const navigate = useNavigate();  
 
   useEffect(() => {
     const fetchDetailFeed = async () => {
       try {
-        const response = await getFeedDetail(selectedId);        
-        
+        const response = await getFeedDetail(selectedId);      
+        console.log(response);
         setLikeCnt(response.data.response.likeCount);
+        setIsLiked(response.data.response.isLiked);
         setDetailFeed(response.data.response)
         const followResponse = await getYourInfo(response.data.response.id)
         const userId = response.data.response.id; 
@@ -34,23 +42,25 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
       }
     };
     fetchDetailFeed();
-  }, [selectedId]);
+  }, [selectedId,likeCnt]);
+
+  const fetchComments = async () => {
+    try {
+      const response = await getFeedComment(selectedId);
+      setComments(response.data.response.comments);
+    } catch (error) {
+      console.error('Error fetching recommended comments:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchComments = async () => {
-      try {
-        const response = await getFeedComment(selectedId);
-        setComments(response.data.response.comments);
-      } catch (error) {
-        console.error('Error fetching recommended comments:', error);
-      }
-    };
     fetchComments();
   }, [selectedId]);
 
   useEffect(() => {
     setLikeCnt(likeCount)
-  }, [likeCount]);
+    setIsLiked(isLike)
+  }, [likeCount,isLike]);
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
@@ -58,16 +68,27 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
 
   const handleCommentSubmit = async () => {
     if (detailFeed !== null) {
-      await postComment(detailFeed.id, commentContent);
+      const response = await postComment(userId,detailFeed.id, commentContent);
+      if (response.success === true){
+        setCommentContent('');
+        fetchComments();
+      }
     }
-    setCommentContent('');
   };
 
+  const handleProfileClick = (userId: number) => {
+    navigate(`/your/${userId}`);
+  };
+
+  const handleModalClose = () => {
+    closeModal({ likeCount: likeCnt, commentCount: comments.length });
+  };
+  
   return (
     <>
-      <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50" onClick={closeModal}/>
+      <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50" onClick={handleModalClose}/>
         <div className="fixed bg-[#F4F4EE] top-[50px] right-[380px] z-50 p-20 rounded-lg w-[800px] h-[650px] mx-auto shadow-lg overflow-y-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
-          <button onClick={closeModal} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
+          <button onClick={handleModalClose} aria-label="Close" className="absolute top-2 right-2 text-gray-500 hover:text-gray-700">
             &times;
           </button>
           {detailFeed && (
@@ -75,7 +96,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
               <div className='text-3xl font-bold text-center mb-4'>{detailFeed.title}</div>
               <hr className="border-gray-300 my-4" />
               <div className="flex items-center justify-between mb-4">
-                <div className="flex items-center">
+                <div className="flex items-center cursor-pointer" onClick={() => handleProfileClick(detailFeed.userId)}> 
                   {detailFeed.profileImageUrl ? (
                     <img
                       src={detailFeed.profileImageUrl}
@@ -110,7 +131,7 @@ const ModalFeedDetail: React.FC<ModalFeedDetailTypeProps> = ({ selectedId, close
               <div className="flex items-center justify-between mb-4">
                 <div className="flex items-center">
                   <button aria-label="Like" onClick={toggleLike}>
-                    {isLike ? '❤️' : '🤍'}
+                    {isLiked ? '❤️' : '🤍'}
                   </button>
                   <p>{likeCnt}</p>
                   <h3 className="font-bold ml-3">💬 {comments.length}</h3>

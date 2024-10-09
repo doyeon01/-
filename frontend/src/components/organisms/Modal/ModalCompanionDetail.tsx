@@ -4,19 +4,22 @@ import { ArticleDetailType, CommentType } from '../../../model/AccompanyBoardTyp
 import { UserId } from '../../../Recoil/atoms/Auth';  
 import { useRecoilValue } from 'recoil';
 import { PlanDetailApi } from '../../../services/api/PlanService';
-import { DayPlanType, PlanDetailResponseType } from '../../../model/MyPageType';
+import { DayPlanType, locationArrType, PlanDetailResponseType } from '../../../model/MyPageType';
 import { UserIconMini3 } from '../../../assets/icons/svg';
+import { useNavigate } from 'react-router-dom'; 
 
 interface ModalCompanionDetailProps {
   selectedId: number;
+  setLocation:React.Dispatch<React.SetStateAction<[] | locationArrType[]>>
 }
 
-const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId }) => {
+const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId,setLocation }) => {
   const [commentContent, setCommentContent] = useState('');
   const [articleDetail, setArticleDetail] = useState<ArticleDetailType | null>(null);
   const [comment, setComment] = useState<CommentType[] | null>(null);
   const [planDetatil, setplanDetatil] = useState<DayPlanType[]| []>([]);
   const userId = useRecoilValue(UserId); 
+  const navigate = useNavigate(); 
 
   useEffect(() => {
     const loadArticles = async () => {
@@ -32,9 +35,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
 
   useEffect(() => {
     const loadComment = async () => {
-      const data = await fetchArticleComment(selectedId);
-      console.log(data);
-      
+      const data = await fetchArticleComment(selectedId);      
       if (data.success) {
         setComment(data.response.comments);
       } else {
@@ -44,17 +45,19 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     loadComment();
   }, [selectedId]);
 
- 
   useEffect(() => {
     if (articleDetail?.totalPlanId !== undefined) {
       PlanDetailApi(articleDetail.totalPlanId)
         .then((res) => {
-          const data: PlanDetailResponseType = res.data;
+          const data: PlanDetailResponseType = res.data;   
           console.log(data);
-          
-          if (data.success) {
+          if (data.success) { 
             setplanDetatil(data.response);
-          } else {
+            const longitudes: locationArrType[] = data.response.flatMap(dayData =>
+              dayData.plans.map(plan => [plan.latitude, plan.longitude] as locationArrType)
+            );
+            setLocation(longitudes);
+            } else {
             console.log('response 없음 ㅜㅜ');
           }
         })
@@ -66,7 +69,6 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     }
   }, [articleDetail]); 
   
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommentContent(e.target.value);
   };
@@ -92,6 +94,12 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
     }
   };
 
+  const handleProfileClick = () => {
+    if (articleDetail?.userId) {
+      navigate(`/your/${articleDetail.userId}`);
+    }
+  };
+
   return (
     <>
       <div className='fixed w-[300px] h-[595px] bg-white p-4 left-[310px] overflow-y-auto rounded-xl shadow-xl top-[85px] border-gray border-2' style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
@@ -114,7 +122,7 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
             </div>
             <div>
               <div className='font-bold text-sm'>{articleDetail.title}</div>
-              <div className='flex flex-row'>
+              <div className='flex flex-row cursor-pointer' onClick={handleProfileClick}> 
                 {articleDetail.profileImageUrl ? (
                   <img 
                     src={articleDetail.profileImageUrl} 
@@ -122,9 +130,9 @@ const ModalCompanionDetail: React.FC<ModalCompanionDetailProps> = ({ selectedId 
                     className='w-6 h-6 rounded-full object-cover mr-1' 
                   />
                 ) : (
-                  <UserIconMini3/>
+                  <UserIconMini3 />
                 )}
-                <div className='text-gray-600 text-sm mt-[3px]'>{articleDetail.nickName}</div>
+                <div className='text-gray-600 text-sm mt-[5px]'>{articleDetail.nickName}</div>
               </div>
             </div>
           </div>

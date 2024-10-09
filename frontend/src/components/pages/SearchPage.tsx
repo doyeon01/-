@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState,useRef } from 'react';
 import CardSetSearchUser from '../../components/molecules/Card/CardSetSearchUser';
 import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPlace';
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
@@ -13,20 +13,51 @@ export const SearchPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
-
-
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true); 
+  const loaderRef = useRef<HTMLDivElement | null>(null); 
+  
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
       try {
         const response = await postFeedRecommend(1, 10);
-        setRecommendedFeeds(response.data.response.feeds);
+        if (response.data.response.feeds.length === 0) {
+          setHasMore(false);
+        } else {
+          setRecommendedFeeds((prevPlaces) => [...prevPlaces, ...response.data.response.feeds]);
+        }
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
     };
+    fetchRecommendedFeeds();
+  }, [ page]);
 
-    fetchRecommendedFeeds(); 
-  }, []);
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '20px',
+        threshold: 1.0,
+      }
+    );
+    
+    if (loaderRef.current) {
+      observer.observe(loaderRef.current);
+    }
+
+    return () => {
+      if (loaderRef.current) {
+        observer.unobserve(loaderRef.current);
+      }
+    };
+  }, [hasMore]);
+
 
   const handleSearch = () => {
     setSearchClicked(true);
@@ -124,6 +155,8 @@ export const SearchPage: React.FC = () => {
           closeModal={closeModal} 
         />
       )}
+      <div ref={loaderRef} className="h-10"></div> 
+
     </div>
   );
 };

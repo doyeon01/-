@@ -7,6 +7,7 @@ import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import { fetchArticles, getAccompanyBoardSearch } from '../../services/api/AccompanyBoardAPI';
 import { AccompanyBoardResponseType, ArticleType } from '../../model/AccompanyBoardType';
 import { UserIconMini2 } from '../../assets/icons/svg';
+import { locationArrType } from '../../model/MyPageType';
 
 export const CompanionPage: React.FC = () => {
   const [selectedId, setSelectedId] = useState<number | null>(null);
@@ -15,10 +16,12 @@ export const CompanionPage: React.FC = () => {
   const [articles, setArticles] = useState<ArticleType[]>([]);
   const [page, _] = useState(0);
   const [searchTerm, setSearchTerm] = useState(''); 
-
+  const [location, setLocation] = useState<locationArrType[] | []>([]);
+  
   useEffect(() => {
     const loadArticles = async () => {
-      const data = await fetchArticles(page);
+      const data = await fetchArticles(page);   
+         
       if (data.success) {
         setArticles(data.response.articles);
       } else {
@@ -26,12 +29,11 @@ export const CompanionPage: React.FC = () => {
       }
     };
     loadArticles();
-  }, [page]);
+  }, [page,location]);
 
  
   const handleSearch = async () => {
     const data:AccompanyBoardResponseType = await getAccompanyBoardSearch(searchTerm);    
-    console.log(data);
      
     if (data.success) {
       setArticles(data.response.articles); 
@@ -50,6 +52,7 @@ export const CompanionPage: React.FC = () => {
   const handleItemClick = (id: number, index: number) => {
     setSelectedId(id);
     setSelectedIndex(index);
+    
   };
 
   const closeModal = () => {
@@ -67,16 +70,17 @@ export const CompanionPage: React.FC = () => {
   return (
     <>
       <div className="h-[80px] w-full relative top-20" />
-      <KakaoMap />
+      <KakaoMap location={location} />
       <div
         className="fixed w-[300px] h-[650px] bg-white flex flex-col items-center z-30 border-gray border-r-2 overflow-y-auto"
         style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}
       >
-        <div className="flex flex-col items-center w-full">
+        <div className="flex flex-col items-center w-full mt-4">
           <input
             type="text"
+            spellCheck = "false"
             placeholder="검색어를 입력하세요"
-            className="border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]"
+            className="font-normal text-sm border-2 border-[#B8B1AB] rounded-lg p-2 mb-2 w-[260px]"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)} 
             onKeyDown={handleKeyDown} 
@@ -90,7 +94,7 @@ export const CompanionPage: React.FC = () => {
               key={article.id || index}
               className={`flex items-center border-b border-gray-300 py-4 w-full cursor-pointer 
                   ${isSelected ? 'bg-[#F0F0F3]' : 'bg-none'}`}
-              onClick={() => handleItemClick(article.totalPlanId, index)}
+              onClick={() => handleItemClick(article.id, index)}
             >
               <div
                 className={`flex ${
@@ -134,7 +138,7 @@ export const CompanionPage: React.FC = () => {
           <img src={Mini_Vector} />
         </div>
       )}
-      {selectedId !== null && <ModalCompanionDetail selectedId={selectedId} />}
+      {selectedId !== null && <ModalCompanionDetail selectedId={selectedId} setLocation={setLocation}/>}
       {isChoiceModalOpen && <ModalCompanionChoiceImg onClose={handleCloseChoiceModal} />}
     </>
   );
