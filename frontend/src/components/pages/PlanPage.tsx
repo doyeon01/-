@@ -13,14 +13,14 @@ import Swal from 'sweetalert2';
 // import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
 
-// import { useRecoilValue } from 'recoil';
-// import {UserId} from '../../Recoil/atoms/Auth'
+import { useRecoilValue } from 'recoil';
+import {UserId} from '../../Recoil/atoms/Auth'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
-  // const userId = useRecoilValue(UserId)
-  const userId = 2895
+  const userId = useRecoilValue(UserId)
+  // const userId = 2895
   const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
   const navigate = useNavigate()
 
