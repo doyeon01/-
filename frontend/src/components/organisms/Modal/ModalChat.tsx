@@ -226,6 +226,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 </li>
               ))}
             </ul>
+            <div className='h-[800px]'/>
           </div>
 
           <div className="flex-1 p-4 relative z-40 ">
