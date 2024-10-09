@@ -72,6 +72,7 @@ pipeline {
                                cd backend/user
                                chmod +x ./gradlew
                                ./gradlew clean build --stacktrace --info
+                               chmod -R 755 build
                                ls build/libs
                                docker build \
                                --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
