@@ -60,11 +60,28 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
     setIsModalOpen(true);       
   };
 
-  const closeModal = () => {
+  const closeModal = (updatedData?: { likeCount: number; commentCount: number }) => {
+    if (updatedData && selectedFeedId !== null) {
+      setFilteredFeeds((prevFeeds) =>
+        prevFeeds.map((feed) =>
+          feed.id === selectedFeedId
+            ? { ...feed, likeCount: updatedData.likeCount, commentCount: updatedData.commentCount }
+            : feed
+        )
+      );
+      setAllFeeds((prevFeeds) =>
+        prevFeeds.map((feed) =>
+          feed.id === selectedFeedId
+            ? { ...feed, likeCount: updatedData.likeCount, commentCount: updatedData.commentCount }
+            : feed
+        )
+      );
+    }
     setIsModalOpen(false);
-    setSelectedFeedId(null);    
+    setSelectedFeedId(null);
   };
-
+  
+  
   // 좋아요 탭에서 전체 카테고리 선택 시 '전체' 버튼으로 리셋
   useEffect(() => {
     if (resetSelectedButton) {
@@ -115,7 +132,9 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
 
       {/* 피드 카드 목록 */}
       <div className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredFeeds.map((card, index) => (
+       
+        { filteredFeeds.length > 0 ?
+        filteredFeeds.map((card, index) => (
           <FeedCard
             key={index}
             title={card.title}
@@ -126,7 +145,9 @@ export const PersonalLikeDetail = ({ resetSelectedButton }: { resetSelectedButto
             image={card.imageUrl}
             onClick={() => openModal(card.id)}  
           />
-        ))}
+        )) : (
+          <p className="text-center col-span-3">게시물이 없습니다.</p>
+        )}
       </div>
       <div ref={ref} className="h-10"></div>
 
