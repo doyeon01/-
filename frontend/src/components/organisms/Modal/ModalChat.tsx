@@ -20,14 +20,14 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
-  const scrollRef = useRef<HTMLDivElement | null>(null); // ref의 타입을 명시
+  const scrollRef = useRef<HTMLDivElement | null>(null); 
 
   const fetchData = () => {
     axios
       .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
       .then((response) => {         
-        console.log(`챗아이디${response}`);
-                   
+        console.log(`챗아이디${response.data.response}`);
+        console.log(response.data.response);
         setChatRooms(response.data.response);
       })
       .catch((error) => {
@@ -76,8 +76,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     axios
       .get(`${BaseUrl}/api/v1/chat/${roomId}`)
       .then((response) => {
-        console.log(`채팅 룸설정 ${response.data}`);
-  
+        console.log(`채팅 룸설정 ${response.data.response}`);
+        console.log(response.data.response);
         const sortedMessages = response.data.response.sort((a: MessageType, b: MessageType) => {
           return new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime();
         });
@@ -206,7 +206,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
               </ul>
               <div className='h-10'></div>
             </div>
-            <div className='h-[250px]'></div>
           </div>
 
           <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
@@ -227,7 +226,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 </li>
               ))}
             </ul>
-            <div className='h-[250px]'></div>
           </div>
 
           <div className="flex-1 p-4 relative z-40 ">
@@ -249,10 +247,11 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                       scrollbarWidth: 'none',
                   }}
               >
+                <div className='mb-[100px]'>
                   {messages.map((message, index) => (
-                      <div key={index}>
+                    <div key={index}>
                           {userId === message.senderId ? (
-                              // 내가 보낸 메시지
+                            // 내가 보낸 메시지
                               <div className="flex justify-end">
                                   <div className="bg-white p-2 rounded-lg border border-gray-300">
                                       <p>{message.content}</p>
@@ -277,7 +276,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                           )}
                       </div>
                   ))}
-                  <div className='h-[250px]'></div>
+                </div>
               </div>
 
                 {/* 대화입력창 */}
