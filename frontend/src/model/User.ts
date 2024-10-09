@@ -30,7 +30,7 @@ export interface UserProfileType {
     nickname: string ;
     gender: 'MALE' | 'FEMALE';
     age: string;
-    profileImageUrl: string ;
+    profileImage: string ;
     residence: string | null;
     introduction: string;
     travelStyl1: string;
