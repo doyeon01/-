@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ModalPhotoCard } from '../../organisms/Modal/ModalPhotoCard';
-import { DownLoadIcon } from '../../../assets/icons/svg';
+import { DownLoadIcon, SearchIcon1 } from '../../../assets/icons/svg';
 import { PostPhotoCard, GetPhotoCardDetail } from '../../../services/api/PhotoService';
 import { useRecoilValue } from 'recoil';
 import { UserId } from '../../../Recoil/atoms/Auth';
@@ -138,15 +138,15 @@ export const PhotoCard: React.FC<PhotoCardProps> = ({
           <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-50">
             <button
               className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg transition-opacity duration-300 group-hover:opacity-100"
-              onClick={handleDownloadImage}
+              onClick={handleGetPhotoCard}
             >
-              <DownLoadIcon />
+              <SearchIcon1/>
             </button>
             <button
               className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg ml-4 transition-opacity duration-300 group-hover:opacity-100"
-              onClick={handleGetPhotoCard}
+              onClick={handleDownloadImage}
             >
-              상세 보기
+              <DownLoadIcon />
             </button>
           </div>
         )}
