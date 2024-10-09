@@ -168,7 +168,7 @@ useEffect(() => {
     console.log('등록 성공:', data);
 
     // 페이지 이동
-    navigate('/main');
+    navigate('/main' );
     } catch (error: any) {
       console.error('등록 실패:', error.message);
     }
