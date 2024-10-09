@@ -86,3 +86,9 @@ export interface FeedCommentType {
     error: null|Error;
   }
   
+  // 일정에 따른 피드 이미지 정보
+  export interface FeedImageInfo {
+    feedId: number;
+    feedImageUrl: string;
+  }
+  
