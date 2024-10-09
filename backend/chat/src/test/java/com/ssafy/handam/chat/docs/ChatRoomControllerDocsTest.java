@@ -22,6 +22,7 @@ import com.ssafy.handam.chat.client.UserDto;
 import com.ssafy.handam.chat.controller.response.ChatResponse;
 import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatRoom;
+import com.ssafy.handam.chat.dto.ChatUserDto;
 import jakarta.servlet.http.Cookie;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -40,13 +41,13 @@ class ChatRoomControllerDocsTest extends RestDocsSupport {
 
         Long userId = 1L;
         String token = "your_jwt_token_here";
-
+        ChatUserDto user = ChatUserDto.of(1L, "User1", "profile.jpg");
         ChatRoomsResponse chatRoom1 = ChatRoomsResponse.of(
-                1L, "User1", "안녕하세요!", LocalDateTime.now(), 2L
+                1L, "User1", "안녕하세요!", LocalDateTime.now(), user
         );
 
         ChatRoomsResponse chatRoom2 = ChatRoomsResponse.of(
-                2L, "User2", "안녕!", LocalDateTime.now(), 1L
+                2L, "User2", "안녕!", LocalDateTime.now(), user
         );
 
         List<ChatRoomsResponse> chatRoomsResponses = List.of(chatRoom1, chatRoom2);
@@ -73,7 +74,9 @@ class ChatRoomControllerDocsTest extends RestDocsSupport {
                                 fieldWithPath("response[].lastUserName").description("마지막 메시지를 보낸 사용자의 이름"),
                                 fieldWithPath("response[].lastMessage").description("마지막 메시지의 내용"),
                                 fieldWithPath("response[].lastMessageTime").description("마지막 메시지의 타임스탬프"),
-                                fieldWithPath("response[].userId").description("사용자의 고유 ID"),
+                                fieldWithPath("response[].user.userId").description("사용자의 고유 ID"),
+                                fieldWithPath("response[].user.nickname").description("사용자의 닉네임"),
+                                fieldWithPath("response[].user.profileImageUrl").description("사용자의 프로필 이미지"),
                                 fieldWithPath("error").optional().description("요청 실패 시 오류 정보")
                         )
                 ));
