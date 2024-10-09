@@ -40,7 +40,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
     console.log(`Attempting to connect to WebSocket for room ${roomId}`);
-    const socket = new SockJS(`${BaseUrl}/chat-websocket`);
+    const socket = new SockJS('http://j11c205.p.ssafy.io:8083/chat-websocket');
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
