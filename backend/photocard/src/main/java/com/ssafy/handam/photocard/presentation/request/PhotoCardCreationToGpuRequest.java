@@ -4,18 +4,21 @@ import java.util.List;
 
 public record PhotoCardCreationToGpuRequest(
         Long userId,
-        Long totalPlanId,
-        List<String> feedImageUrls) {
+        Long feedId,
+        String feedImageUrl,
+        Long totalPlanId) {
 
     public static PhotoCardCreationToGpuRequest from(
             Long userId,
-            Long totalPlanId,
-            List<String> feedImageUrls) {
+            Long feedId,
+            String feedImageUrl,
+            Long totalPlanId) {
 
         return new PhotoCardCreationToGpuRequest(
                 userId,
-                totalPlanId,
-                feedImageUrls
+                feedId,
+                feedImageUrl,
+                totalPlanId
         );
     }
 }

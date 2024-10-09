@@ -1,5 +1,6 @@
 package com.ssafy.handam.photocard.presentation.api;
 
+import static com.ssafy.handam.photocard.presentation.api.ApiUtils.error;
 import static com.ssafy.handam.photocard.presentation.api.ApiUtils.success;
 import static com.ssafy.handam.photocard.presentation.request.PhotoCardCreationRequest.toServiceRequest;
 
@@ -11,6 +12,7 @@ import com.ssafy.handam.photocard.presentation.response.PhotoCardsResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,7 +29,11 @@ public class PhotoCardController {
 
     @PostMapping("/create")
     public ApiResult<PhotoCardDetailResponse> createPhotoCard(@RequestBody PhotoCardCreationRequest request) {
-        return success(photoCardService.createPhotoCard(toServiceRequest(request)));
+        PhotoCardDetailResponse photoCardDetailResponse = photoCardService.createPhotoCard(request);
+        if(photoCardDetailResponse == null) {
+            return error("해당 피드로 생성한 포토 카드가 존재합니다!", HttpStatus.NOT_ACCEPTABLE);
+        }
+        return success(photoCardDetailResponse);
     }
 
     @GetMapping("/detail/{feedId}")

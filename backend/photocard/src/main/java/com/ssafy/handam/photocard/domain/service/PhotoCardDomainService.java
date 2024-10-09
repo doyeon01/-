@@ -19,6 +19,7 @@ public class PhotoCardDomainService {
     public PhotoCard createPhotoCard(PhotoCardSaveRequest request) {
         return photoCardRepository.save(new PhotoCard(
                 request.userId(),
+                request.feedId(),
                 request.totalPlanId(),
                 request.planTitle(),
                 request.photoCardUrl()
@@ -32,4 +33,6 @@ public class PhotoCardDomainService {
     public Page<PhotoCard> getPhotoCardsByUserId(Long userId, Pageable pageable) {
         return photoCardRepository.findByUserId(userId, pageable);
     }
+
+    public boolean existsPhotoCardByFeedId(Long feedId) { return photoCardRepository.existsByFeedId(feedId); }
 }
