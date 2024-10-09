@@ -111,7 +111,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         
         const chatRoomId = response.data.response.chatRoomId; 
         if (chatRoomId) {
-          selectChatRoom(chatRoomId, response.data.response.userIds);
+          selectChatRoom(chatRoomId, response.data.response.userIds[1]);
         } else {
           console.error("chatRoomId is undefined");
         }
