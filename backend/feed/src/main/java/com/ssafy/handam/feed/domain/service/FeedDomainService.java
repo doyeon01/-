@@ -189,4 +189,11 @@ public class FeedDomainService {
     public FeedDocument getFeedDocumentById(Long feedId) {
         return feedRepository.findFeedDocumentById(feedId).orElseThrow(() -> new IllegalArgumentException("Feed not found"));
     }
+
+    public List<FeedDocument> getFeedDocumentsByIds(List<Long> feedIds) {
+        Iterable<FeedDocument> allById = feedRepository.findAllById(feedIds);
+        List<FeedDocument> feedDocuments = new ArrayList<>();
+        allById.forEach(feedDocuments::add);
+        return feedDocuments;
+    }
 }
