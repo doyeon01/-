@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
+import com.ssafy.handam.feed.application.dto.FeedImageInfoDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
@@ -24,7 +25,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageInfoResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -253,9 +254,9 @@ public class FeedService {
         );
     }
 
-    public FeedsImageUrlResponse getFeedsImageUrlsByTotalPlanId(FeedsByTotalPlanIdServiceRequest request) {
-        return FeedsImageUrlResponse.of(
-                getFeedsImageUrlList(
+    public FeedsImageInfoResponse getFeedsImageUrlsByTotalPlanId(FeedsByTotalPlanIdServiceRequest request) {
+        return FeedsImageInfoResponse.of(
+                getFeedsImageInfoList(
                         feedDomainService.getFeedsByTotalPlanId(
                                 request.totalPlanId()
                         )
@@ -411,9 +412,9 @@ public class FeedService {
                 .collect(Collectors.toList());
     }
 
-    private List<String> getFeedsImageUrlList(List<Feed> feedsBytotalPlanId) {
+    private List<FeedImageInfoDto> getFeedsImageInfoList(List<Feed> feedsBytotalPlanId) {
         return feedsBytotalPlanId.stream()
-                .map(Feed::getImageUrl)
+                .map(feed -> FeedImageInfoDto.of(feed.getId(), feed.getImageUrl()))
                 .toList();
     }
 }
