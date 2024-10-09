@@ -107,23 +107,27 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       .post(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
       .then((response) => {
         console.log(`팔로잉 채팅 연결${response}`);
+        console.log(response.data);
         
-        selectChatRoom(response.data.responst.chatRoomId,response.data.responst.userIds[1])
+        const chatRoomId = response.data.response.chatRoomId; 
+        if (chatRoomId) {
+          selectChatRoom(chatRoomId, response.data.response.userIds[1]);
+        } else {
+          console.error("chatRoomId is undefined");
+        }
       })
       .catch((error) => {
         console.error('Error fetching chat room for following:', error);
       });
   };
+  
 
 
   //팔로잉 리스트 가져오기
   useEffect(() => {
     const fetchFollowingList = async () => {
-      const data:UserFollowingResponseType = await getFollowingList(); 
-      console.log(`팔로잉데이터 : ${data}`);
-      
+      const data:UserFollowingResponseType = await getFollowingList();       
       if (data.success) {
-        console.log(data)
         setFollowings(data.response)
         }
     };
