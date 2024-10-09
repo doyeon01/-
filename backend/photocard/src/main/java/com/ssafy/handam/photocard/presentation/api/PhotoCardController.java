@@ -33,7 +33,7 @@ public class PhotoCardController {
         if(photoCardDetailResponse == null) {
             return error("해당 피드로 생성한 포토 카드가 존재합니다!", HttpStatus.NOT_ACCEPTABLE);
         }
-        return success(photoCardService.createPhotoCard(toServiceRequest(request)));
+        return success(photoCardDetailResponse);
     }
 
     @GetMapping("/detail/{feedId}")
