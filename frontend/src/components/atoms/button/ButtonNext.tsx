@@ -1,18 +1,31 @@
-import React from 'react'
-import Vector from '../../../assets/statics/Vector.png'
+import React from 'react';
 
 export interface Props {
     text: string; 
     onClick?: () => void;
 }
 
-export const ButtonNext:React.FC<Props>=({text, onClick})=>{
-    return(
-        <button className='w-[50px] h-[23px] rounded-[6px] bg-[#707C60] flex justify-center items-center gap-[2px]' onClick={onClick}>
-            <div className='text-[12px] text-white'>
-                {text}
-            </div>
-            <img src={Vector} alt="벡터" className='w-[7px] h-[11px]' />
+export const ButtonNext: React.FC<Props> = ({ text, onClick }) => {
+    return (
+        <button
+            className="w-[50px] h-[23px] rounded-[6px] bg-white flex justify-center items-center gap-[2px]"
+            onClick={onClick}
+        >
+            <div className="text-[12px] text-black">{text}</div>
+            <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="size-3"
+            >
+                <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="m8.25 4.5 7.5 7.5-7.5 7.5"
+                />
+            </svg>
         </button>
-    )
-}
+    );
+};

@@ -1,5 +1,4 @@
 import React, { useState, useRef, useEffect } from 'react'
-import ButtonRefreshIcon from '../atoms/button/ButtonRefreshIcon'
 import CardPlanFav from '../molecules/Card/CardPlanFav'
 import KaKaoMap_Plan from '../organisms/KaKaoMap_Plan'
 import ModalCalendar from '../organisms/Modal/ModalCalender'
@@ -8,15 +7,18 @@ import PlanDailyTab from '../molecules/Tab/PlanDailyTab'
 import ScheduleRegister from '../atoms/input/ScheduleRegister'
 
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
+import Loading_gif from '../../assets/statics/Loading.gif'
 
-import { useRecoilValue } from 'recoil';
-import {UserId} from '../../Recoil/atoms/Auth'
+// import { useRecoilValue } from 'recoil';
+// import {UserId} from '../../Recoil/atoms/Auth'
 
-import { getFeedClusterByDistance, getFeedCluster } from '../../services/api/CreatePlanService'
-import { FeedType } from '../../model/SearchingFeedType'
+import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh } from '../../services/api/CreatePlanService'
+import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 
 export const PlanPage: React.FC = () => {
-  const userId = useRecoilValue(UserId)
+  // const userId = useRecoilValue(UserId)
+  const userId = 2895
+  const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
 
   const [Ismodal, setismodal] = useState(false)
   const [IsHide, setIsHide] = useState(true)
@@ -25,9 +27,12 @@ export const PlanPage: React.FC = () => {
   const [currentDate, setCurrentDate] = useState(1)
   const [searchinTab, setSearchingTab] = useState(false)
 
+  const [loading,setLoading] = useState(false)
   const [feedClusterByDistanceData,setFeedClusterByDistanceData] = useState<FeedType[]>([])
-  const [feedCluster, setFeedCluster] = useState<FeedType[]>([])
-  console.log(feedCluster);
+  const [feedCluster, setFeedCluster] = useState<FeedClusterType[]>([])
+  const [feeds,setFeeds] = useState<FeedType[]>([])||null
+  const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null); // 마지막 갱신 시간
+  const [timeAgo, setTimeAgo] = useState(''); // "몇 분 전" 텍스트 상태
   
   const [_, setDragging] = useState(false);
 
@@ -40,20 +45,61 @@ export const PlanPage: React.FC = () => {
       setDragging(false);
   };
 
-  useEffect(()=>{
-    const fetchData = async()=>{
-      try{
-        const data = await getFeedCluster(userId)
-        console.log(data);
-        setFeedCluster(data.response.feeds)
-      } catch(error){
+  const handleRefresh = async () => {
+    if (!userId) return; // userID가 없으면 실행하지 않음
+
+    setLoading(true); // 로딩 시작
+    setIsFeedClusterReady(false); // 지도 렌더링 일시 중단
+    try {
+      const data = await getFeedClusterRefresh(userId); // API 호출
+      console.log(data);
+      setFeedCluster(data.response); // 새로운 데이터로 클러스터 설정
+      setLastRefreshTime(new Date()); // 마지막 갱신 시간을 현재 시간으로 설정
+    } catch (error) {
+      console.error('Error refreshing data:', error);
+    } finally {
+      setLoading(false); // 로딩 종료
+      setIsFeedClusterReady(true); // 지도 다시 렌더링
+    }
+  };
+
+  // "몇 분 전" 경과 시간 계산
+  useEffect(() => {
+    if (lastRefreshTime) {
+      // 초기 계산: 업데이트 직후 즉시 경과 시간을 계산
+      const now = new Date();
+      const diffInMinutes = Math.floor((now.getTime() - lastRefreshTime.getTime()) / 1000 / 60);
+      setTimeAgo(diffInMinutes === 0 ? '방금 전' : `${diffInMinutes}분 전`);
+  
+      // 이후 매 1분마다 경과 시간을 갱신하는 interval 설정
+      const interval = setInterval(() => {
+        const now = new Date();
+        const diffInMinutes = Math.floor((now.getTime() - lastRefreshTime.getTime()) / 1000 / 60);
+        setTimeAgo(diffInMinutes === 0 ? '방금 전' : `${diffInMinutes}분 전`);
+      }, 60000); // 1분마다 업데이트
+  
+      return () => clearInterval(interval); // 컴포넌트 언마운트 시 인터벌 정리
+    } else {
+      // lastRefreshTime이 없을 경우, 즉시 '방금 전'으로 초기화
+      setTimeAgo('방금 전');
+    }
+  }, [lastRefreshTime]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const data = await getFeedCluster(userId);
+        setFeedCluster(data.response);
+        setIsFeedClusterReady(true); // 데이터 세팅 완료 후 플래그 설정
+      } catch (error) {
         console.error('Error fetching data:', error);
       }
-    }
+    };
+  
     if (userId) {
-      fetchData(); // userID가 있을 때만 데이터 호출
+      fetchData();
     }
-  },[userId])
+  }, [userId, lastRefreshTime]);
 
 
   let lat = 37.5503
@@ -81,7 +127,8 @@ export const PlanPage: React.FC = () => {
     } 
   
   // 모달 열고 닫기
-  const handleIsmodal = () => {
+  const handleIsmodal = (feeds:FeedType[]) => {
+    setFeeds(feeds)
     setismodal(Ismodal => !Ismodal)
   }
 
@@ -90,7 +137,17 @@ export const PlanPage: React.FC = () => {
     setIsHide(IsHide => !IsHide)
     setismodal(Ismodal => !Ismodal)
     setSelectedDate(choicedDate)
-    setDatesList([choicedDate]) // 첫 번째 날짜 설정
+    if(feeds && feeds.length > 0){
+      const startData = choicedDate
+      const nextData = moment(startData).add(1, 'days').toDate()
+      const lastData = moment(startData).add(2, 'days').toDate()
+      setDatesList([...datesList, startData,nextData,lastData])
+      console.log(localStorage);
+      
+    }
+    else{
+      setDatesList([choicedDate]) // 첫 번째 날짜 설정
+    }
   }
 
   // 다음 날짜 추가
@@ -140,7 +197,7 @@ export const PlanPage: React.FC = () => {
       {/* 모달 창 */}
       {Ismodal === true && (
         <>
-          <div className="w-full h-full bg-black opacity-50 fixed z-10" onClick={handleIsmodal} />
+          <div className="w-full h-full bg-black opacity-50 fixed z-10" onClick={()=>handleIsmodal(feeds)} />
           <div className="absolute z-10 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2 ">
             <ModalCalendar onClick={handleIsHide} />
           </div>
@@ -150,21 +207,43 @@ export const PlanPage: React.FC = () => {
       {IsHide === true ? (
         <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative h-[calc(100vh-160px)]">
           <div className="w-full h-full bg-sky-200 relative ml-10">
-            <KaKaoMap_Plan isSearch={false}/>
+          {isFeedClusterReady ? (
+            <KaKaoMap_Plan isSearch={false} clusters={feedCluster} />
+          ) : (
+            <div className="flex justify-center items-center h-full">
+              <img src={Loading_gif} alt="" />
+            </div>
+          )}
             <div className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
-              <ButtonRefreshIcon />
-              <span className="text-[13px]">마지막 업데이트 : X 전</span>
+              {loading ? <img src={Loading_gif} alt=""  className='h-[30px] w-[30px] mr-[50px]'/> :
+              <>
+              <button  className="bg-[#707C60] hover:bg-[#4F5843] font-medium rounded-[10px] flex items-center justify-center flex-row w-[30px] h-[30px] text-center" onClick={handleRefresh}>
+                <p className='text-[22px] text-white'>↺</p>
+              </button>
+              <span className="text-[13px]">마지막 업데이트 : {timeAgo}</span>
+              </>}
+              
             </div>
           </div>
           <div className="relative w-[400px] -top-[15px] h-[calc(100vh-195px)] bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin pb-[20px]">
             <span className="text-[21px] font-semibold mt-[15px]">추천 여행지로 여행 계획하기</span>
             <hr className="w-[60%] border-t-[3px] border-black mt-[10px]" />
-            <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={handleIsmodal}>
+            <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={()=>handleIsmodal(feeds)}>
               나만의 여행 일정 만들기
             </button>
-              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
-              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
-              <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" />
+            {feedCluster && feedCluster.length > 0 && loading===false ? (
+              feedCluster.map((items, index) => (
+                <button onClick={()=>handleIsmodal(items.feeds)}>
+                  <CardPlanFav
+                  key={index}
+                  name={`맞춤 여행 추천 ${index+1}`}
+                  position={items.feeds[0].address1||items.feeds[0].address2}
+                  feeds={items.feeds}/>
+                </button>
+              ))
+            ) : (
+              <img src={Loading_gif} alt=""  className='h-[50px] w-[50px] m-20'/>
+            )}
           </div>
         </div>
       ) : (
@@ -186,12 +265,13 @@ export const PlanPage: React.FC = () => {
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
           </div>
           <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
-          {datesList.map((_, index) => (
-              index +1 === currentDate && (
-                <ScheduleRegister 
+            {datesList.map((_, index) => (
+              index + 1 === currentDate && (
+                <ScheduleRegister
                   key={index}
                   currentDate={currentDate}
                   index={index}
+                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []}  // 첫 번째와 두 번째 인덱스만 feeds 전달
                 />
               )
             ))}
@@ -199,7 +279,7 @@ export const PlanPage: React.FC = () => {
           
 
           <div className="w-full h-full z-0">
-            <KaKaoMap_Plan isSearch={true}/>
+            <KaKaoMap_Plan isSearch={true} clusters={feedCluster}/>
           </div>
         </div>
         <div className="relative z-10">

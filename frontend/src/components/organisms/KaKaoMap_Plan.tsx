@@ -1,12 +1,14 @@
 import React, { useEffect, useState, useRef } from 'react';
 import Lens from '../../assets/statics/Lens.png'
 import Mini_Vector from '../../assets/statics/Mini_Vector.png'
+import { FeedClusterType } from '../../model/SearchingFeedType';
 
 export interface Props {
     isSearch:Boolean
+    clusters: FeedClusterType[]
 }
 
-const KaKaoMap_Plan: React.FC<Props> = ({isSearch}) => {
+const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
     const [keyword, setKeyword] = useState(''); // 키워드 상태
     const [places, setPlaces] = useState<any[]>([]); // 장소 목록 상태
     const [markers, setMarkers] = useState<any[]>([]); // 마커 상태
@@ -216,11 +218,22 @@ else{
                     };
                     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-                    const markerPosition = new window.kakao.maps.LatLng(36.76817, 127.9888);
-                    const marker = new window.kakao.maps.Marker({
-                        position: markerPosition, 
-                    });
-                    marker.setMap(map); 
+                    const positions = clusters.map(items => ({
+                        lat: items.latitude,
+                        lng: items.longitude
+                      }));
+                      console.log(positions);
+                      
+                    positions.forEach(position => {
+                        const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
+        
+                        const marker = new window.kakao.maps.Marker({
+                            position: markerPosition
+                        });
+        
+                        // 지도에 마커를 표시
+                        marker.setMap(map);
+                    })
                 }
             });
         }

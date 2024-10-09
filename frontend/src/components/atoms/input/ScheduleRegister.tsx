@@ -2,17 +2,20 @@ import React, { useState, useEffect } from 'react';
 import MapMarker from '../../../assets/statics/MapMarker.png';
 import test1 from '../../../assets/statics/Duli.png';
 import DrageAndDrop from '../../../assets/statics/DragAndDropIcon.png'
+import { FeedType } from '../../../model/SearchingFeedType';
 
 interface Props {
   currentDate: number;
   index: number;
+  feeds: FeedType[]
 }
 
-const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
+const ScheduleRegister: React.FC<Props> = ({ currentDate, index, feeds }) => {
   const [schedule, setSchedule] = useState<any[]>([]); // 입력 값 상태로 관리
   const [draggedItemIndex, setDraggedItemIndex] = useState<number | null>(null); // 드래그된 항목의 인덱스 저장
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(null); // 드래그 오버된 항목 인덱스
   const [isDragging, setIsDragging] = useState(false); // 드래그 오버 상태 관리
+  
 
   // Dropping 데이터를 schedule에 추가
   const handleDropData = (e: React.DragEvent<HTMLDivElement>) => {
@@ -33,6 +36,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
       // console.error('No data found in drop event'); // 드롭된 데이터가 없을 때 처리
     }
     setIsDragging(false);
+    setHoveredIndex(null)
   };
 
   const handleDragStart = (index: number) => {
@@ -63,26 +67,28 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
 
   // schedule이 변경될 때마다 localStorage에 저장
   useEffect(() => {
+    const storedSchedule = localStorage.getItem(`schedule_${currentDate}`);
+    if (feeds.length >0 && (!storedSchedule || storedSchedule.length === 0)){
+      localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(feeds));
+    }
     if (schedule.length > 0) { // 빈 배열을 저장하지 않음
-      localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(schedule));
+      {
+      localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(schedule));}
     }
   }, [schedule, currentDate]);
 
   // currentDate가 변경될 때 해당 날짜의 저장된 값을 불러오는 useEffect
   useEffect(() => {
     const storedSchedule = localStorage.getItem(`schedule_${currentDate}`);
-    if (storedSchedule && storedSchedule !== '[]') {
-      const userResponse = confirm('저장된 데이터를 불러오시겠습니까?');
-      if (userResponse) {
+
+    if (storedSchedule && storedSchedule !== '[]' && JSON.stringify(feeds) !== storedSchedule) {
         setSchedule(JSON.parse(storedSchedule)); // 저장된 값이 있으면 로드
-      } else {
-        setSchedule([]);
-        localStorage.removeItem(`schedule_${currentDate}`)
-      }
     } else {
-      setSchedule([]); // 저장된 값이 없으면 빈 배열로 초기화
+      if (feeds.length > 0) {
+        setSchedule(feeds); // feeds가 있을 경우에만 설정
+      }
     }
-  }, [currentDate]);
+  }, [currentDate, feeds]);
 
   // TextArea 변경 시 schedule 상태 업데이트
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>, index: number) => {
@@ -101,7 +107,11 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
 
     return tempSchedule;
   };
-
+  const handleElementRemove = (indexToRemove: number) => {
+    const updatedSchedule = schedule.filter((_, index) => index !== indexToRemove);
+    setSchedule(updatedSchedule); // 항목을 제거한 schedule로 업데이트
+    localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(updatedSchedule))
+  };
   return (
     <div key={index} className='relative h-full w-full'
         onDrop={handleDropData} // 기존 데이터 추가를 위한 드롭 이벤트
@@ -160,8 +170,6 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
                         {category} | {placeName}
                       </>
                     );
-                  } else {
-                    return <>여기에 드롭</>;
                   }
                 })()}
               </span>
@@ -171,7 +179,7 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
                 placeholder="내용추가"
                 className="h-[60px] whitespace-pre-wrap w-[200px] overflow-hidden resize-none"
               />
-              <div className="flex justify-start items-center gap-1 text-[#645E59]">
+              <div className="flex justify-start items-center gap-1 text-[#645E59] w-[200px]">
                 <img src={MapMarker} className="scale-75" />
                 {item.road_address_name || item.address1 ? (
                   <>{item.road_address_name || item.address1}</>
@@ -181,6 +189,9 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index }) => {
               </div>
             </div>
             <img src={item.imageUrl ? item.imageUrl : test1} className="w-[110px] h-[110px] rounded-[13px]" />
+            <div className='text-red-500 w-[10px] mr-[10px] cursor-pointer' onClick={()=>handleElementRemove(indexx)}>
+              ✖
+            </div>
           </div>
         ))}
       </div>
