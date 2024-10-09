@@ -137,8 +137,12 @@ export const PlanPage: React.FC = () => {
     if (feedCluster) {
       setLatitude(feedCluster.latitude);
       setLotitude(feedCluster.longitude);
+      console.log(latitude, lotitude);
+      
     } else {
       // feedCluster가 없을 때의 처리 (기본값으로 설정)
+      console.log('기본값으로 초기화 되었다!!');
+      
       setLatitude(37.5503);
       setLotitude(126.9971);
     }
