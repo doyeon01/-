@@ -118,7 +118,7 @@ const CardSetHotPlace: React.FC<CardSetHotPlaceProps> = ({ myAge, myResidence, m
               places.map((place) => (
                 <div
                   key={place.id}
-                  className="relative overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
+                  className="relative flex items-center justify-center overflow-hidden transform scale-90 transition-transform duration-300 hover:scale-100"
                   onClick={() => onClick(place.id)}
                 >
                   <img
