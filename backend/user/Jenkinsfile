@@ -64,16 +64,16 @@ pipeline {
                      ]) {
                           skipRemainingStages = false
                           sh """
-                              cd backend/user
-                              chmod +x ./gradlew
-                              SPRING_JWT_SECRET=${SPRING_JWT_SECRET} CLIENT_ID=${CLIENT_ID} CLIENT_SECRET=${CLIENT_SECRET} ./gradlew build
-                              ls build/libs
-                              docker build \
-                              --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
-                              --build-arg CLIENT_ID=${CLIENT_ID} \
-                              --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
-                              -t user:latest .
-                          """
+                           cd backend/user
+                           chmod +x ./gradlew
+                           ./gradlew build
+                           ls build/libs
+                           docker build \
+                           --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                           --build-arg CLIENT_ID=${CLIENT_ID} \
+                           --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
+                           -t user:latest .
+                           """
                      }
                 }
             }
@@ -185,3 +185,4 @@ pipeline {
         }
     }
 }
+
