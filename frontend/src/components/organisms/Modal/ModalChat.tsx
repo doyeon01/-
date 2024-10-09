@@ -31,7 +31,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
           setChatRooms(response.data.response);
         })
         .catch((error) => {
-          console.error('Error fetching chat rooms:', error);
+          console.error('채팅 방을 가져오는 중 오류가 발생했습니다:', error);
         });
     };
     fetchData();
@@ -39,12 +39,12 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
 
   //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
-    console.log(`Attempting to connect to WebSocket for room ${roomId}`);
+    console.log(`이 채팅방으로 연결 시도 ${roomId}`);
     const socket = new SockJS('https://j11c205.p.ssafy.io:8083/chat-websocket');
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
-        console.log(`Connected to chat room ${roomId}`);
+        console.log(`연결시도하는 채팅방번호 ${roomId}`);
         setStompClient(client); 
         client.subscribe(`/topic/chatroom/${roomId}`, (message) => {
           const receivedMessage = JSON.parse(message.body);
@@ -52,22 +52,14 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         });
       },
       onStompError: (frame) => {
-        console.error('Broker reported error:', frame.headers['message']);
+        console.error('브로커에서 보고된 오류:', frame.headers['message']);
       },
       onDisconnect: () => {
-        console.log(`Disconnected from chat room ${roomId}`);
-        setTimeout(() => {
-          connectWebSocket(roomId);
-        }, 5000);
+        console.log(`채팅방 ${roomId}에서 연결이 끊어졌습니다.`);
       },
       onWebSocketClose: (event) => {
-        console.error('WebSocket connection closed:', event);
-        if (!event.wasClean) {
-          setTimeout(() => {
-            connectWebSocket(roomId);
-          }, 5000);
-        }
-      },
+        console.error('웹소켓 연결이 닫혔습니다:', event);
+      },      
     });
     client.activate();
   };
@@ -85,7 +77,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         setMessages(response.data.response);
       })
       .catch((error) => {
-        console.error('Error fetching messages:', error);
+        console.error('메시지를 가져오는 중 오류 발생:', error);
       });
   
     if (stompClient) {
@@ -95,22 +87,23 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
       };
     } else {
       connectWebSocket(roomId);
-      console.log("connectWebSocket");
+      console.log("웹소켓에 연결 중입니다.");
     }
   };
   
   //팔로잉 채팅 연결
   const selectFollowingChatRoom = (followingId: number) => {
-    // chatRooms 배열에서 이미 존재하는지 확인
     const roomExists = chatRooms.some(chat => chat.user.userId === followingId);
-  
     if (roomExists) {
-      console.log(`Chat room for following user ${followingId} already exists. No need to create a new one.`);
-      return; // 이미 존재하면 함수 종료
+      const existingChatRoom = chatRooms.find(chat => chat.user.userId === followingId);
+      console.log(` ${followingId} : 이미 채팅룸 있음`, existingChatRoom);
+      if (existingChatRoom && existingChatRoom.chatRoomId && existingChatRoom.user) {
+        selectChatRoom(existingChatRoom.chatRoomId, existingChatRoom.user);
+        console.log('이미 있는 채팅룸으로 연결');
+      }      
+      return; 
     }
-  
-    // 요청을 보내기
-    axios
+      axios
       .post(`${BaseUrl}/api/v1/chat?userId=${userId}&partnerId=${followingId}`)
       .then((response) => {
         console.log(`팔로잉 채팅 연결${response}`);
@@ -120,11 +113,11 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         if (chatRoomId) {
           selectChatRoom(chatRoomId, response.data.response.userIds[1]);
         } else {
-          console.error("chatRoomId is undefined");
+          console.error("chatRoomId가 정의되지 않았습니다.");
         }
       })
       .catch((error) => {
-        console.error('Error fetching chat room for following:', error);
+        console.error('팔로잉에 대한 채팅 방을 가져오는 중 오류가 발생했습니다:', error);
       });
   };
   
@@ -142,8 +135,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   }, []);  
 
   const sendMessage = () => {
-    console.log('stompClient:', stompClient);
-    console.log('newMessage:', newMessage);
+    console.log('스톰프 클라이언트:', stompClient);
+    console.log('새로운 메시지:', newMessage);
     if (stompClient && newMessage.trim() !== '') {
       
       const chatMessage = {
@@ -196,7 +189,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   ) : (
                     <UserIconMini3/>
                   )}
-                    <p className="font-bold">{following.name}</p>
+                    <p className="font-bold">{following.nickname}</p>
                   </li>
                 ))}
               </ul>
