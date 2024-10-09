@@ -110,6 +110,9 @@ const ScheduleRegister: React.FC<Props> = ({ currentDate, index, feeds }) => {
     const updatedSchedule = schedule.filter((_, index) => index !== indexToRemove);
     setSchedule(updatedSchedule); // 항목을 제거한 schedule로 업데이트
     localStorage.setItem(`schedule_${currentDate}`, JSON.stringify(updatedSchedule))
+    console.log(localStorage);
+    
+    console.log(updatedSchedule);
   };
   return (
     <div key={index} className='relative h-full w-full'
