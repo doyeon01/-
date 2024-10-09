@@ -20,7 +20,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [partnerUser, setPartnerUser] = useState<userType | null>(null);
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
-  const scrollRef = useRef<HTMLDivElement | null>(null); 
+  const scrollRef = useRef<HTMLDivElement | null>(null); // ref의 타입을 명시
 
   const fetchData = () => {
     axios
@@ -206,7 +206,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
               </ul>
               <div className='h-10'></div>
             </div>
-            <div className='h-[50px]'></div>
+            <div className='h-[250px]'></div>
           </div>
 
           <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
@@ -227,7 +227,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 </li>
               ))}
             </ul>
-            <div className='h-10'></div>
+            <div className='h-[250px]'></div>
           </div>
 
           <div className="flex-1 p-4 relative z-40 ">
@@ -277,7 +277,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                           )}
                       </div>
                   ))}
-                  <div className='h-[80px]'></div>
+                  <div className='h-[250px]'></div>
               </div>
 
                 {/* 대화입력창 */}
