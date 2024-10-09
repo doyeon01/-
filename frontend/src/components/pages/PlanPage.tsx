@@ -30,6 +30,7 @@ export const PlanPage: React.FC = () => {
   const [loading,setLoading] = useState(false)
   const [feedClusterByDistanceData,setFeedClusterByDistanceData] = useState<FeedType[]>([])
   const [feedCluster, setFeedCluster] = useState<FeedClusterType[]>([])
+  const [feeds,setFeeds] = useState<FeedType[]>([])||null
   const [lastRefreshTime, setLastRefreshTime] = useState<Date | null>(null); // 마지막 갱신 시간
   const [timeAgo, setTimeAgo] = useState(''); // "몇 분 전" 텍스트 상태
   
@@ -48,15 +49,17 @@ export const PlanPage: React.FC = () => {
     if (!userId) return; // userID가 없으면 실행하지 않음
 
     setLoading(true); // 로딩 시작
+    setIsFeedClusterReady(false); // 지도 렌더링 일시 중단
     try {
       const data = await getFeedClusterRefresh(userId); // API 호출
       console.log(data);
-      
+      setFeedCluster(data.response); // 새로운 데이터로 클러스터 설정
       setLastRefreshTime(new Date()); // 마지막 갱신 시간을 현재 시간으로 설정
     } catch (error) {
       console.error('Error refreshing data:', error);
     } finally {
       setLoading(false); // 로딩 종료
+      setIsFeedClusterReady(true); // 지도 다시 렌더링
     }
   };
 
@@ -124,7 +127,8 @@ export const PlanPage: React.FC = () => {
     } 
   
   // 모달 열고 닫기
-  const handleIsmodal = () => {
+  const handleIsmodal = (feeds:FeedType[]) => {
+    setFeeds(feeds)
     setismodal(Ismodal => !Ismodal)
   }
 
@@ -133,7 +137,17 @@ export const PlanPage: React.FC = () => {
     setIsHide(IsHide => !IsHide)
     setismodal(Ismodal => !Ismodal)
     setSelectedDate(choicedDate)
-    setDatesList([choicedDate]) // 첫 번째 날짜 설정
+    if(feeds && feeds.length > 0){
+      const startData = choicedDate
+      const nextData = moment(startData).add(1, 'days').toDate()
+      const lastData = moment(startData).add(2, 'days').toDate()
+      setDatesList([...datesList, startData,nextData,lastData])
+      console.log(localStorage);
+      
+    }
+    else{
+      setDatesList([choicedDate]) // 첫 번째 날짜 설정
+    }
   }
 
   // 다음 날짜 추가
@@ -183,7 +197,7 @@ export const PlanPage: React.FC = () => {
       {/* 모달 창 */}
       {Ismodal === true && (
         <>
-          <div className="w-full h-full bg-black opacity-50 fixed z-10" onClick={handleIsmodal} />
+          <div className="w-full h-full bg-black opacity-50 fixed z-10" onClick={()=>handleIsmodal(feeds)} />
           <div className="absolute z-10 top-1/2 transform -translate-y-1/2 left-1/2 -translate-x-1/2 ">
             <ModalCalendar onClick={handleIsHide} />
           </div>
@@ -196,7 +210,9 @@ export const PlanPage: React.FC = () => {
           {isFeedClusterReady ? (
             <KaKaoMap_Plan isSearch={false} clusters={feedCluster} />
           ) : (
-            <div>Loading...</div> // 데이터를 기다리는 동안 로딩 표시
+            <div className="flex justify-center items-center h-full">
+              <img src={Loading_gif} alt="" />
+            </div>
           )}
             <div className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
               {loading ? <img src={Loading_gif} alt=""  className='h-[30px] w-[30px] mr-[50px]'/> :
@@ -212,21 +228,22 @@ export const PlanPage: React.FC = () => {
           <div className="relative w-[400px] -top-[15px] h-[calc(100vh-195px)] bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin pb-[20px]">
             <span className="text-[21px] font-semibold mt-[15px]">추천 여행지로 여행 계획하기</span>
             <hr className="w-[60%] border-t-[3px] border-black mt-[10px]" />
-            <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={handleIsmodal}>
+            <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={()=>handleIsmodal(feeds)}>
               나만의 여행 일정 만들기
             </button>
-            {feedCluster && feedCluster.length > 0 ? (
+            {feedCluster && feedCluster.length > 0 && loading===false ? (
               feedCluster.map((items, index) => (
-                <CardPlanFav
-                key={index}
-                name={`맞춤 여행 추천 ${index+1}`}
-                position={items.feeds[0].address1||items.feeds[0].address2}
-                feeds={items.feeds}/>
+                <button onClick={()=>handleIsmodal(items.feeds)}>
+                  <CardPlanFav
+                  key={index}
+                  name={`맞춤 여행 추천 ${index+1}`}
+                  position={items.feeds[0].address1||items.feeds[0].address2}
+                  feeds={items.feeds}/>
+                </button>
               ))
             ) : (
               <img src={Loading_gif} alt=""  className='h-[50px] w-[50px] m-20'/>
             )}
-              {/* <CardPlanFav name="맞춤 여행 추천 1" position="맞춤 여행 위치" feeds={feedCluster}/> */}
           </div>
         </div>
       ) : (
@@ -248,12 +265,13 @@ export const PlanPage: React.FC = () => {
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white">저장</div>
           </div>
           <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
-          {datesList.map((_, index) => (
-              index +1 === currentDate && (
-                <ScheduleRegister 
+            {datesList.map((_, index) => (
+              index + 1 === currentDate && (
+                <ScheduleRegister
                   key={index}
                   currentDate={currentDate}
                   index={index}
+                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []}  // 첫 번째와 두 번째 인덱스만 feeds 전달
                 />
               )
             ))}
