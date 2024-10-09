@@ -24,9 +24,7 @@ const CardSetLocalRec: React.FC<CardSetLocalRecProps> = ({onClick}) => {
     useEffect(() => {
       const fetchData = async () => {
         try {
-          const response = await getFeed(selectedRegion, 1, 5);
-          console.log(response.response.feeds);
-          
+          const response = await getFeed(selectedRegion, 1, 5);          
           setPlaces(response.response.feeds);
         } catch (error) {
           console.error('Error fetching recommended feeds:', error);
