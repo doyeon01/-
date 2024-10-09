@@ -21,6 +21,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
   const scrollRef = useRef<HTMLDivElement | null>(null); 
+  const [selectedChatRoom, setSelectedChatRoom] = useState<number|null>(null); 
 
   const fetchData = () => {
     axios
@@ -69,6 +70,8 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   
   //채팅 룸설정
   const selectChatRoom = (roomId: number, user: userType) => {
+    setSelectedChatRoom(roomId);
+
     setPartnerUser(user);
     setSelectedRoomId(roomId);
     setMessages([]);
@@ -174,7 +177,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
         </button>
 
         <div className="flex h-full">
-          <div className="w-[300px] bg-[#E5E2D9] p-4 border-r border-gray-400">
+          <div className="w-[200px] bg-[#E5E2D9] border-r border-gray-400">
             <div className="mb-4">
               <input
                 type="text"
@@ -208,13 +211,16 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
             </div>
           </div>
 
-          <div className="w-[300px] bg-[#F4F4EE] p-4 border-r border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
+          <div className="w-[200px] bg-[#F4F4EE] border-r border-gray-400 overflow-y-auto"  style={{ maxHeight: '90vh' , msOverflowStyle: 'none', scrollbarWidth: 'none'  }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
                   key={index}
                   onClick={() => selectChatRoom(chat.chatRoomId,chat.user)}
                   className="flex items-center mb-4 cursor-pointer"
+                  style={{
+                    backgroundColor: selectedChatRoom === chat.chatRoomId ? '#E5E2D9' : 'transparent', // 선택된 채팅방 색상 변경
+                  }}
                 >
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
