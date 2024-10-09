@@ -17,6 +17,8 @@ import static org.springframework.restdocs.request.RequestDocumentation.pathPara
 import static org.springframework.restdocs.request.RequestDocumentation.queryParameters;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.ssafy.handam.chat.client.Gender;
+import com.ssafy.handam.chat.client.UserDto;
 import com.ssafy.handam.chat.controller.response.ChatResponse;
 import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatRoom;
@@ -41,8 +43,10 @@ class ChatRoomControllerDocsTest extends RestDocsSupport {
         String token = "your_jwt_token_here";
 
         List<UserDto> users = List.of(
-                new UserDto(1L, "User1", MonthDay.of(1, 1), Gender.MALE, "profile1.png"),
-                new UserDto(2L, "User2", MonthDay.of(2, 2), Gender.FEMALE, "profile2.png")
+                new UserDto(1L, "email1", "name", "nickname", Gender.FEMALE, "20", "profile1.png", "residence",
+                        "introduction", "travelStyl1", "travelStyl2", "travelStyl3", "travelStyl4", 36.5),
+                new UserDto(2L, "email1", "name", "nickname", Gender.FEMALE, "20", "profile1.png", "residence",
+                        "introduction", "travelStyl1", "travelStyl2", "travelStyl3", "travelStyl4", 36.5)
         );
 
         ChatRoomsResponse chatRoom1 = ChatRoomsResponse.of(

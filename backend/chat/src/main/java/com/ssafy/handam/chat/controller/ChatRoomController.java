@@ -54,6 +54,7 @@ public class ChatRoomController {
     public ApiResult<ChatRoomResponse> createChatRoom(
             @RequestParam("userId") Long userId,
             @RequestParam("partnerId") Long partnerId) {
+
         return success(ChatRoomResponse.of(chatService.createChatRoom(userId, partnerId)));
     }
 }

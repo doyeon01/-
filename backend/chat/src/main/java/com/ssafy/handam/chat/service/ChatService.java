@@ -10,7 +10,10 @@ import com.ssafy.handam.chat.dto.ChatMessageDto;
 import com.ssafy.handam.chat.repository.ChatMessageRepository;
 import com.ssafy.handam.chat.repository.ChatRoomRepository;
 import jakarta.transaction.Transactional;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -26,23 +29,44 @@ public class ChatService {
 
     public List<ChatRoomsResponse> getChatRoomsByUserId(Long userId, String token) {
         List<ChatRoom> chatRooms = chatRoomRepository.findByUserIdsContaining(userId);
+
         return chatRooms.stream().map(chatRoom -> {
-            List<Long> userIds = chatRoom.getUserIds();
+            List<Long> userIds = new ArrayList<>(chatRoom.getUserIds());
             userIds.remove(userId);
             Long partnerId = userIds.get(0);
 
-            ChatMessage latestMessage = chatMessageRepository.findFirstByChatRoom_ChatRoomIdOrderByCreatedDateDesc(
+            Optional<ChatMessage> latestMessageOpt = chatMessageRepository.findFirstByChatRoom_ChatRoomIdOrderByCreatedDateDesc(
                     chatRoom.getChatRoomId());
-            UserDto user = userApiClient.getUserById(latestMessage.getSenderId(), token);
-            List<UserDto> users = List.of(
+
+            String nickname;
+            String content;
+            LocalDateTime createdDate;
+            List<UserDto> users;
+
+            if (latestMessageOpt.isPresent()) {
+                ChatMessage latestMessage = latestMessageOpt.get();
+
+                UserDto senderUser = userApiClient.getUserById(latestMessage.getSenderId(), token);
+                nickname = senderUser.nickname();
+                content = latestMessage.getContent();
+                createdDate = latestMessage.getCreatedDate();
+            } else {
+                UserDto partnerUser = userApiClient.getUserById(partnerId, token);
+                nickname = partnerUser.nickname();
+                content = "";
+                createdDate = null;
+            }
+
+            users = List.of(
                     userApiClient.getUserById(userId, token),
                     userApiClient.getUserById(partnerId, token)
             );
+
             return ChatRoomsResponse.of(
                     chatRoom.getChatRoomId(),
-                    user.nickname(),
-                    latestMessage.getContent(),
-                    latestMessage.getCreatedDate(),
+                    nickname,
+                    content,
+                    createdDate,
                     users
             );
         }).toList();
