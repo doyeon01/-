@@ -11,7 +11,9 @@ public record PlanResponse(
         String imageUrl,
         String address,
         PlaceType placeType,
-        String details
+        String details,
+        Double longitude,
+        Double latitude
 ) {
     public static PlanResponse of(Plan plan,String address) {
 
@@ -22,7 +24,9 @@ public record PlanResponse(
                 plan.getImageUrl(),
                 address,
                 plan.getPlaceType(),
-                plan.getDetails()
+                plan.getDetails(),
+                plan.getLongitude(),
+                plan.getLatitude()
         );
     }
 }
