@@ -21,26 +21,28 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   const [followings,setFollowings] = useState<UserFollowingType[]|[]>([])
   const [userId] = useRecoilState(UserIdAtom);  
   
+  const fetchData = () => {
+    axios
+      .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
+      .then((response) => {         
+        console.log(`챗아이디${response}`);
+                   
+        setChatRooms(response.data.response);
+      })
+      .catch((error) => {
+        console.error('채팅 방을 가져오는 중 오류가 발생했습니다:', error);
+      });
+  };
+
   useEffect(() => {
-    const fetchData = () => {
-      axios
-        .get(`${BaseUrl}/api/v1/chat/user?userId=${userId}`)
-        .then((response) => {         
-          console.log(`챗아이디${response}`);
-                     
-          setChatRooms(response.data.response);
-        })
-        .catch((error) => {
-          console.error('채팅 방을 가져오는 중 오류가 발생했습니다:', error);
-        });
-    };
     fetchData();
   }, [userId]);
 
   //웹소켓 언결
   const connectWebSocket = (roomId: number) => {
     console.log(`이 채팅방으로 연결 시도 ${roomId}`);
-    const socket = new SockJS('https://j11c205.p.ssafy.io:8083/chat-websocket');
+    fetchData()
+    const socket = new SockJS('https://j11c205.p.ssafy.io/chat-websocket');
     const client = new Client({
       webSocketFactory: () => socket,
       onConnect: () => {
