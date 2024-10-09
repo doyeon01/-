@@ -20,7 +20,7 @@ interface Props {
             )
           )):'No Feed'}
         </div>
-        <div className='flex flex-col items-start justify-start w-[110px]'>
+        <div className='flex flex-col items-start justify-start w-[110px] text-left'>
           <span className='text-[14px]'>
             {name}
           </span>

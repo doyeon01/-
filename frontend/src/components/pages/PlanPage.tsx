@@ -13,14 +13,14 @@ import Swal from 'sweetalert2';
 // import Mini_Vector from '../../assets/statics/Mini_Vector.png'
 import Loading_gif from '../../assets/statics/Loading.gif'
 
-import { useRecoilValue } from 'recoil';
-import {UserId} from '../../Recoil/atoms/Auth'
+// import { useRecoilValue } from 'recoil';
+// import {UserId} from '../../Recoil/atoms/Auth'
 
 import { getFeedClusterByDistance, getFeedCluster, getFeedClusterRefresh, postPlan } from '../../services/api/CreatePlanService'
 import { FeedType,FeedClusterType } from '../../model/SearchingFeedType'
 export const PlanPage: React.FC = () => {
-  const userId = useRecoilValue(UserId)
-  // const userId = 2895
+  // const userId = useRecoilValue(UserId)
+  const userId = 2895
   const [isFeedClusterReady, setIsFeedClusterReady] = useState(false);
   const navigate = useNavigate()
 
@@ -40,6 +40,7 @@ export const PlanPage: React.FC = () => {
   const [schedule, setSchedule] = useState<TravelPlan>()
   const [latitude, setLatitude] = useState(37.5503)
   const [lotitude, setLotitude] = useState(126.9971)
+  const [title,setTitle] = useState('')
 
 
   const [_, setDragging] = useState(false);
@@ -133,6 +134,7 @@ export const PlanPage: React.FC = () => {
   const handleIsmodal = (feeds:FeedType[], feedCluster?:FeedClusterType) => {
     setFeeds(feeds)
     setismodal(Ismodal => !Ismodal)
+    setTitle(getNameBeforeSecondSpace(feeds[0].address1 || feeds[0].address2))
    // feedCluster가 있으면 해당 값을 사용, 없으면 기본값 사용
     if (feedCluster) {
       
@@ -212,11 +214,27 @@ export const PlanPage: React.FC = () => {
     };
   }, []);
 
+  const inputPlanName = async()=>{
+    const { value: getName } = await Swal.fire({
+      input: 'text',
+      title: '이번 여행의 이름이 뭔가요?',
+      inputPlaceholder: title,
+    })
+    if(getName){
+      setTitle(getName)
+      handlePost()
+    }
+    if(getName === ''){
+      setTitle(title)
+      handlePost()
+    }
+  }
+
   const handlePost = async () => {
     // 초기 일정 데이터 업데이트
     const updatedSchedule: TravelPlan = {
       ...schedule,
-      title: 'temp',
+      title: title,
       startDate: moment(datesList[0]).format('YYYY-MM-DD'),
       endDate: moment(datesList[datesList.length - 1]).format('YYYY-MM-DD'),
       dayPlans: []  // 빈 배열로 초기화
@@ -271,11 +289,16 @@ export const PlanPage: React.FC = () => {
       });
     }
   };
-  
-  useEffect(()=>{
-    console.log(schedule);
-  },[schedule])
 
+  const getNameBeforeSecondSpace = (address: string) => {
+    const parts = address.split(' '); // 공백을 기준으로 문자열을 분리
+    if (parts.length >= 2) {
+      // 첫 번째와 두 번째 부분을 합쳐서 반환
+      return parts[1] + ' 여행';
+    }
+    // 두 번째 공백이 없으면 전체 문자열을 반환
+    return address;
+  };
 
   return (
     <div className='relative top-20 overflow-hidden'>
@@ -321,7 +344,7 @@ export const PlanPage: React.FC = () => {
                 <button onClick={()=>handleIsmodal(items.feeds, items)}>
                   <CardPlanFav
                   key={index}
-                  name={`맞춤 여행 추천 ${index+1}`}
+                  name={getNameBeforeSecondSpace(items.feeds[0].address1 || items.feeds[0].address2)}
                   position={items.feeds[0].address1||items.feeds[0].address2}
                   feeds={items.feeds}/>
                 </button>
@@ -348,7 +371,7 @@ export const PlanPage: React.FC = () => {
               )}
             </div>
             <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white"
-                onClick={handlePost} // 함수 호출
+                onClick={inputPlanName} // 함수 호출
             >저장</div>
           </div>
           <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
