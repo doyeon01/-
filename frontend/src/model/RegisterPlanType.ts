@@ -1,7 +1,7 @@
 export interface TravelPlan {
     title: string;
-    startDate: Date;
-    endDate: Date;
+    startDate: string;
+    endDate: string;
     dayPlans: DayPlan[];
   }
   

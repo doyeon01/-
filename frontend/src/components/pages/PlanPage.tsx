@@ -201,8 +201,8 @@ export const PlanPage: React.FC = () => {
     const updatedSchedule: TravelPlan = {
       ...schedule,
       title: 'temp',
-      startDate: datesList[0],
-      endDate: datesList[datesList.length - 1],
+      startDate: moment(datesList[0]).format('YYYY-MM-DD'),
+      endDate: moment(datesList[datesList.length - 1]).format('YYYY-MM-DD'),
       dayPlans: []  // 빈 배열로 초기화
     };
   
