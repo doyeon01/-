@@ -21,7 +21,7 @@ export interface ModalChatTypeProps {
     senderId: number;
     chatRoomId:number;
     content: string;
-    timeStamp:null|string;
+    timeStamp:string;
   }
 
   export interface ClientOptionsType {

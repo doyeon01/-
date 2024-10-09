@@ -71,19 +71,24 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
     setPartnerUser(user);
     setSelectedRoomId(roomId);
     setMessages([]);
-      axios
+  
+    axios
       .get(`${BaseUrl}/api/v1/chat/${roomId}`)
       .then((response) => {
         console.log(`채팅 룸설정 ${response.data}`);
-        
-        setMessages(response.data.response);
+  
+        const sortedMessages = response.data.response.sort((a: MessageType, b: MessageType) => {
+          return new Date(a.timeStamp).getTime() - new Date(b.timeStamp).getTime();
+        });
+  
+        setMessages(sortedMessages);
       })
       .catch((error) => {
         console.error('메시지를 가져오는 중 오류 발생:', error);
       });
   
     if (stompClient) {
-      stompClient.deactivate(); 
+      stompClient.deactivate();
       stompClient.onDisconnect = () => {
         connectWebSocket(roomId);
       };
@@ -158,7 +163,6 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
   return (
     <>
     <div className="fixed inset-0 z-40 flex items-center justify-center bg-black bg-opacity-50" onClick={onClose}/>
-
       <div className="fixed top-[30px] left-[200px] z-50 bg-[#F4F4EE] w-full max-w-6xl h-[90vh] rounded-lg shadow-lg overflow-hidden ">
         <button onClick={onClose} className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-50">
           &times;
@@ -173,7 +177,7 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                 className="w-full p-2 rounded-md bg-white border border-gray-300"
               />
             </div>
-            <div className="w-full overflow-y-auto" style={{ msOverflowStyle: 'none', scrollbarWidth: 'none' }}>
+            <div className="w-full overflow-y-auto overflow-y-auto"  style={{ maxHeight: '90vh' }}>
               <ul>
                 {followings.map((following, index) => (
                   <li
@@ -195,10 +199,11 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   </li>
                 ))}
               </ul>
+              <div className='h-10'></div>
             </div>
           </div>
 
-          <div className="w-1/4 bg-[#F4F4EE] p-4 border-l">
+          <div className="w-1/4 bg-[#F4F4EE] p-4 border-l overflow-y-auto"  style={{ maxHeight: '90vh' }}>
             <ul>
               {chatRooms.map((chat, index) => (
                 <li
@@ -209,14 +214,16 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                   <img src={chat.user.profileImageUrl} alt={chat.user.nickname} className="w-10 h-10 rounded-full mr-2" />
                   <div>
                     <p className="font-bold">{chat.lastUserName}</p>
-                    <p className="text-sm text-gray-600">{chat.lastMessage}</p>
+                    <p className="text-sm text-gray-600 truncate overflow-hidden whitespace-nowrap" title={chat.user.nickname}>
+                      {chat.lastMessage}
+                    </p>
                   </div>
                 </li>
               ))}
             </ul>
           </div>
 
-          <div className="flex-1 p-4 relative z-40">
+          <div className="flex-1 p-4 relative z-40 overflow-y-auto"  style={{ maxHeight: '90vh' }}>
             {messages&&partnerUser ? (
               <>
                 <div className="flex items-center mb-4">
@@ -243,14 +250,15 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                           <img src={partnerUser.profileImageUrl} alt="Profile" className="w-8 h-8 rounded-full mr-2" />
                           <div className="bg-[#E5E2D9] p-2 rounded-lg">
                             <p>{message.content}</p>
-                            <p className="text-xs text-gray-500 text-right">{message.timeStamp}</p>
+                            <p className="text-xs text-gray-500 text-right">
+                              {message.timeStamp ? message.timeStamp.slice(11, 16) : '시간 없음'}
+                            </p>
                           </div>
                         </div>
                       )}
                     </div>
                   ))}
                 </div>
-
 
                 {/* 대화입력창 */}
                 <div className="absolute bottom-0 left-0 w-full bg-[#F4F4EE] p-4 border-t flex items-center space-x-2 z-50">
@@ -260,6 +268,12 @@ const ModalChat: React.FC<ModalChatTypeProps> = ({ onClose }) => {
                     onChange={(e) => setNewMessage(e.target.value)}
                     placeholder="메시지를 입력해주세요."
                     className="flex-1 p-2 rounded-md border border-gray-300"
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') {
+                        e.preventDefault();
+                        sendMessage();
+                      }
+                    }}
                   />
                   <button onClick={sendMessage} className="bg-[#707C60] text-white px-4 py-2 rounded-md">
                     전송
