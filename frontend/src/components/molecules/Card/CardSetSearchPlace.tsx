@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FeedType } from '../../../model/SearchingFeedType';
 import { getFeed } from '../../../services/api/RegisterUser';
 import { UserIconMini } from '../../../assets/icons/svg';
