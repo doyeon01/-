@@ -129,6 +129,8 @@ public class FeedDomainService {
     public RecommendedFeedsForUserResponse getRecommendedFeeds(List<Long> uniqueFeedIds, int currentPage) {
         // Elasticsearch에서 피드 데이터를 조회
         List<FeedPreviewDto> resultFeeds = getFeedsFromElasticsearch(uniqueFeedIds);
+        System.out.println(uniqueFeedIds);
+        System.out.println(resultFeeds.size());
 
         // 페이지네이션 정보를 포함한 결과 반환
         boolean hasNextPage = (resultFeeds.size() == uniqueFeedIds.size());
