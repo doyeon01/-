@@ -110,8 +110,8 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
       ) : (
         <p className='flex items-center justify-center'>검색된 장소가 없습니다.</p>
       )}
-      <div ref={loaderRef} className="h-10"></div> 
-    </div>
+  <div ref={loaderRef} className="h-10 bg-gray-500"></div>
+</div>
   );
 };
 

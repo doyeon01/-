@@ -5,9 +5,11 @@ import useLike from '../../../hooks/useLike';
 
 interface CardSetMainRecProps {
   page: number;
+  onClick: (id: number) => void;
+
 }
 
-const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
+const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page,onClick }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
   const [hoveredItem, setHoveredItem] = useState<FeedsType | null>(null);
   const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
@@ -48,7 +50,8 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
               setHoveredIndex(index);
               setHoveredItem(item); 
             }}
-          >
+            onClick={() => onClick(item.id)}
+            >
             <img
               src={item.imageUrl}
               alt={item.title}
