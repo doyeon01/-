@@ -6,9 +6,10 @@ import { FeedClusterType } from '../../model/SearchingFeedType';
 export interface Props {
     isSearch:Boolean
     clusters: FeedClusterType[]
+    index?: number
 }
 
-const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
+const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
     const [keyword, setKeyword] = useState(''); // 키워드 상태
     const [places, setPlaces] = useState<any[]>([]); // 장소 목록 상태
     const [markers, setMarkers] = useState<any[]>([]); // 마커 상태
@@ -19,6 +20,40 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
     const [searchinTab, setSearchingTab] = useState(false)
 
     const [_, setDragging] = useState(false);
+
+    const [storedData, setStoredData] = useState(null); // 로컬 스토리지 데이터를 상태로 저장
+
+    useEffect(() => {
+        console.log('check');
+        
+        const handleStorageChange = () => {
+            const stored = localStorage.getItem(`schedule_${index}`);
+            if (stored && stored.length > 0) {
+                setStoredData(JSON.parse(stored)); // 로컬 스토리지 데이터를 상태로 업데이트
+            }
+        };
+    
+        // 원래 localStorage.setItem을 저장
+        const originalSetItem = localStorage.setItem;
+    
+        // localStorage.setItem을 오버라이드하여 같은 탭에서의 변경을 감지
+        localStorage.setItem = function (key: string, value: string) {
+            originalSetItem.call(this, key, value); // 인자를 명시적으로 전달
+            if (key === `schedule_${index}`) {
+                handleStorageChange();  // 직접 스토리지 변경을 감지
+            }
+        };
+    
+        // storage 이벤트 리스너 등록 (다른 탭에서의 변경 감지)
+        window.addEventListener('storage', handleStorageChange);
+    
+        // 컴포넌트 언마운트 시 이벤트 리스너 해제 및 원래 setItem 복원
+        return () => {
+            window.removeEventListener('storage', handleStorageChange);
+            localStorage.setItem = originalSetItem; // 원래의 setItem으로 복원
+        };
+    }, [index]);
+    
 
     const script = document.createElement('script');
     script.type = 'text/javascript'
@@ -39,6 +74,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
         setDragging(false);
     };
 
+
     if (isSearch == true){
     useEffect(() => {
         script.onload = () => {
@@ -47,15 +83,36 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
                 window.kakao.maps.load(() => {
                     if (mapRef.current) {
                         const mapOption = {
-                            center: new window.kakao.maps.LatLng(37.566826, 126.9786567), // 중심 좌표
+                            center: new window.kakao.maps.LatLng(clusters[0].latitude, clusters[0].longitude), // 중심 좌표
+                            // center: new window.kakao.maps.LatLng(37.6, 127), // 중심 좌표
                             level: 3 // 확대 레벨
                         }; 
                         const createdMap = new window.kakao.maps.Map(mapRef.current, mapOption);
                         setMap(createdMap); // 지도 객체 저장
-
+                
+                        if(index){
+                            const stored = localStorage.getItem(`schedule_${index}`)
+                            console.log('스토어:',stored);
+                            
+                            if (stored && stored.length > 0) {
+                                const parsedStore = JSON.parse(stored)
+                                console.log('체체크');
+                                
+                                parsedStore.forEach((items: any) => {
+                                    console.log('체크',items.y||items.latitude, items.x||items.longitude);
+                                    
+                                    const markerPosition = new window.kakao.maps.LatLng(items.y||items.latitude, items.x||items.longitude);
+                    
+                                    const marker = new window.kakao.maps.Marker({
+                                        position: markerPosition
+                                    });
+                                    
+                                    // 지도에 마커를 표시
+                                    marker.setMap(createdMap);})
+                            }
+                        }
                         // 인포윈도우 생성
                         infowindow.current = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-
                         // Places 서비스 객체 생성
                         const ps = new window.kakao.maps.services.Places();
                         
@@ -76,7 +133,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters}) => {
         return () => {
             document.body.removeChild(script); // 스크립트 제거
         };
-    }, []);
+    }, [storedData,index]);
 
     // 장소 검색 함수
     const searchPlaces = () => {
