@@ -222,15 +222,15 @@ export const PlanPage: React.FC = () => {
     })
     if(getName){
       setTitle(getName)
-      handlePost()
+      handlePost(getName)
     }
     if(getName === ''){
       setTitle(title)
-      handlePost()
+      handlePost(title)
     }
   }
 
-  const handlePost = async () => {
+  const handlePost = async (title:string) => {
     // 초기 일정 데이터 업데이트
     const updatedSchedule: TravelPlan = {
       ...schedule,
