@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Swal from 'sweetalert2';  
 import { PictureIcon, LocationIcon, BackIcon } from '../../../assets/icons/svg';
 import ButtonLikeCategory from '../../atoms/button/ButtonLikeCategory';
@@ -25,6 +25,11 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
   const userId = useRecoilValue(UserId);
 
   const apikey = import.meta.env.VITE_KAKAO_SPOT_API_KEY; 
+
+  useEffect(()=>{
+    console.log(TotalPlanId)
+
+  },[TotalPlanId])
 
   const handle = {
     ImageChange: (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -70,6 +75,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
       });
     },
     completeScheduleSelection: (id: number, title: string) => {
+      console.log('아이디 들어오니?', id)
       setTotalPlanId(id);
       setSchedule(title); // 선택된 일정 ID를 상태로 설정
       setIsScheduleSelected(true); // 일정 선택 완료 상태로 변경
