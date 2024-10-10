@@ -17,6 +17,9 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
     const fetchRecommendedFeeds = async () => {
       try {
         const response = await postFeedRecommend(page, 5);
+        console.log('메인페이지 리스폰:');
+        console.log(response.data);
+        
         setRecommendedFeeds(response.data.response.feeds);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);

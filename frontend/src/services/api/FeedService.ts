@@ -43,7 +43,7 @@ export const LikeFeedList = (userId: number, page: number, size = 100) => {
 };
 
 // 맞춤 피드 추천 API
-export const postFeedRecommend = (page = 1, size = 10) => {
+export const postFeedRecommend = (page = 0, size = 10) => {
   return axios.post(`${BaseUrl}/recommended?page=${page}&pageSize=${size}`, {
     headers: {
       'Content-Type': 'application/json',
