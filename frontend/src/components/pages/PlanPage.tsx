@@ -299,23 +299,23 @@ export const PlanPage: React.FC = () => {
     return address;
   };
 
-  const blockAccess = ()=>{
-    Swal.fire({
-      icon:'error',
-      title:'여행일정을 생성할 수 없습니다.',
-      text:'다른 사람의 피드를 확인하고 좋아요를 눌러보세요!',
-      confirmButtonText: '확인'
-    }).then(()=>{
-      navigate('/search');
-    })
-  }
+  // const blockAccess = ()=>{
+  //   Swal.fire({
+  //     icon:'error',
+  //     title:'여행일정을 생성할 수 없습니다.',
+  //     text:'다른 사람의 피드를 확인하고 좋아요를 눌러보세요!',
+  //     confirmButtonText: '확인'
+  //   }).then(()=>{
+  //     navigate('/search');
+  //   })
+  // }
 
-  useEffect(() => {
-    const targetDiv = document.getElementById('NotRender');
-    if (targetDiv) {
-      blockAccess()
-    }
-  }, []); // 빈 배열은 컴포넌트가 처음 렌더링될 때만 실행됨
+  // useEffect(() => {
+  //   const targetDiv = document.getElementById('NotRender');
+  //   if (targetDiv) {
+  //     blockAccess()
+  //   }
+  // }, []); // 빈 배열은 컴포넌트가 처음 렌더링될 때만 실행됨
 
   return (
     <div className='relative top-20 overflow-hidden'>
@@ -462,7 +462,7 @@ export const PlanPage: React.FC = () => {
         </>
       )
     ) : (
-      <div id='NotRender'></div>
+      <div id='NotRender'>NOT RENDERED</div>
     )}
     </div>
   )
