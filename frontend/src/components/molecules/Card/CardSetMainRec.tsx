@@ -22,7 +22,7 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
         console.log('메인페이지 리스폰:');
         console.log(response.data);
         
-        setRecommendedFeeds(response.data.response.feeds);
+        setRecommendedFeeds(response.data.response.feeds.slice(0, 5));
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
@@ -68,13 +68,6 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
           </div>
         );
       })}
-      
-      {hoveredItem && (
-        <div className="mt-4 p-4 bg-gray-100 rounded-lg shadow-lg">
-          <h3 className="text-lg font-bold">호버된 아이템: {hoveredItem.title}</h3>
-          <p>위치: {hoveredItem.placeName}</p>
-        </div>
-      )}
     </div>
   );
 };
