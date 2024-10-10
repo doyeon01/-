@@ -1,12 +1,16 @@
 import React, { useEffect } from 'react';
+import { locationArrType } from '../../model/MyPageType';
 
 declare global {
     interface Window {
         kakao: any;
     }
 }
+interface KakaoMapProps {
+    location: locationArrType[]; 
+}
 
-const KakaoMap: React.FC = () => {
+const KakaoMap: React.FC<KakaoMapProps> = ({ location }) => {
     useEffect(() => {
         const script = document.createElement('script');
         script.src = `https://dapi.kakao.com/v2/maps/sdk.js?appkey=${import.meta.env.VITE_KAKAO_MAP_API_KEY}&libraries=services&autoload=false`; 
@@ -19,16 +23,18 @@ const KakaoMap: React.FC = () => {
                 const mapContainer = document.getElementById('map');
                 if (mapContainer) {
                     const mapOption = {
-                        center: new window.kakao.maps.LatLng(35.2042362, 126.8072045),
+                        center: new window.kakao.maps.LatLng(37.551169, 126.985023),
                         level: 3
                     };
                     const map = new window.kakao.maps.Map(mapContainer, mapOption);
 
-                    const markerPosition = new window.kakao.maps.LatLng(35.2042362, 126.8072045);
-                    const marker = new window.kakao.maps.Marker({
-                        position: markerPosition, 
+                    location.forEach((coords) => {
+                        const markerPosition = new window.kakao.maps.LatLng(coords[0], coords[1]);
+                        const marker = new window.kakao.maps.Marker({
+                            position: markerPosition,
+                        });
+                        marker.setMap(map);
                     });
-                    marker.setMap(map); 
                 }
             });
         };
@@ -36,10 +42,10 @@ const KakaoMap: React.FC = () => {
         return () => {
             document.body.removeChild(script);
         };
-    }, []);
+    }, [location]); 
 
     return (
-        <div className="flex items-center justify-center w-screen h-screen z-0 absolute"> 
+        <div className="fixed flex items-center justify-center w-screen h-screen z-0 "> 
             <div id="map" className="w-full h-full" /> 
         </div>
     );

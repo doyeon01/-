@@ -1,54 +1,90 @@
-import React, { useState } from 'react';
-import testImg1 from '../../assets/statics/test1.jpg';
-import testImg2 from '../../assets/statics/test2.jpg';
-import testImg3 from '../../assets/statics/test3.png';
-import testImg4 from '../../assets/statics/test4.jpg';
-import testImg5 from '../../assets/statics/test5.jpg';
+import React, { useEffect, useState, useRef } from 'react';
 import CardSetSearchUser from '../../components/molecules/Card/CardSetSearchUser';
 import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPlace';
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
-
-interface TestArr {
-  title: string;
-  address: string;
-  testimg: string;
-  user: string;
-}
-
-
-const testArr: TestArr[] = [
-  { title: '에스파크', address: '경기도 이천시', testimg: testImg1, user: '고도연짱짱123' },
-  { title: '망상해변', address: '강원도 동해시', testimg: testImg2, user: '여행러123' },
-  { title: '기백산 용추계곡', address: '경상남도 밀양시', testimg: testImg3, user: '힐링맨' },
-  { title: '연천미라클', address: '경기도 연천군', testimg: testImg4, user: '경기러버' },
-  { title: '뮤직컴플렉스', address: '서울특별시', testimg: testImg5, user: '서울러버' },
-];
+import { postFeedRecommend } from '../../services/api/FeedService';
+import { FeedsType } from '../../model/FeedType';
+import { UserIconMini } from '../../assets/icons/svg';
 
 export const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [searchClicked, setSearchClicked] = useState(false);
   const [searchCategory, setSearchCategory] = useState<'user' | 'place'>('user');
-  const [selectedItem, setSelectedItem] = useState<TestArr | null>(null);
+  const [selectedId, setSelectedId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
+  const [page, setPage] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+  console.log(recommendedFeeds);
+  
+  // 추천 피드 불러오기
+  useEffect(() => {
+    const fetchRecommendedFeeds = async () => {
+      try {
+        const response = await postFeedRecommend(page, 10);
+        console.log('서치페이지 리스폰:', response.data);
+        
+        if (!response.data.response.hasNextPage) {
+          setHasMore(false);
+        } else {
+          setRecommendedFeeds((prevPlaces) => [...prevPlaces, ...response.data.response.feeds]);
+        }
+      } catch (error) {
+        console.error('Error fetching recommended feeds:', error);
+      }
+    };
+    fetchRecommendedFeeds();
+  }, [page]);
 
-  const filteredArr = testArr.filter((item) =>
-    (searchCategory === 'user'
-      ? item.user.toLowerCase().includes(searchTerm.toLowerCase())
-      : item.title.toLowerCase().includes(searchTerm.toLowerCase()))
-  );
+  // 무한 스크롤 옵저버
+  useEffect(() => {
+    if (!loaderRef.current) return;
 
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting && hasMore) {
+          setPage((prevPage) => prevPage + 1);
+        }
+      },
+      {
+        root: null,
+        rootMargin: '0px',
+        threshold: 0.5,
+      }
+    );
+
+    observer.observe(loaderRef.current);
+
+    return () => {
+      if (loaderRef.current) {
+        observer.disconnect();
+      }
+    };
+  }, [hasMore]);
+
+  // 검색 핸들러
   const handleSearch = () => {
-    setSearchClicked(true);
+    const trimmedSearchTerm = searchTerm.trim();
+    if (trimmedSearchTerm) {
+      setSearchClicked(true);
+      setSearchTerm(trimmedSearchTerm);
+      setRecommendedFeeds([]); 
+      setPage(0);
+      setHasMore(true);
+    }
   };
 
-  const handleItemClick = (item: TestArr) => {
-    setSelectedItem(item);
+  // 아이템 클릭 핸들러
+  const handleItemClick = (id: number) => {
+    setSelectedId(id);
     setIsModalOpen(true);
   };
 
+  // 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
-    setSelectedItem(null);
+    setSelectedId(null);
   };
 
   return (
@@ -60,6 +96,11 @@ export const SearchPage: React.FC = () => {
           value={searchTerm}
           onChange={(e) => setSearchTerm(e.target.value)}
           className="w-1/2 p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-400"
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleSearch();
+            }
+          }}
         />
         <button
           onClick={handleSearch}
@@ -90,30 +131,34 @@ export const SearchPage: React.FC = () => {
 
       {searchClicked ? (
         searchCategory === 'user' ? (
-          <CardSetSearchUser users={filteredArr} onItemClick={handleItemClick} />
+          <CardSetSearchUser keyword={searchTerm} />
         ) : (
-          <CardSetSearchPlace places={filteredArr} onItemClick={handleItemClick} />
+          <CardSetSearchPlace keyword={searchTerm} onItemClick={handleItemClick} loaderRef={loaderRef} />
         )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-          {testArr.map((item, index) => (
-            <div key={index} className="relative group" onClick={() => handleItemClick(item)}>
+          {recommendedFeeds.map((recommendedFeed) => (
+            <div key={recommendedFeed.id} className="relative group" onClick={() => handleItemClick(recommendedFeed.id)}>
               <img
-                src={item.testimg}
-                alt={item.title}
+                src={recommendedFeed.imageUrl}
+                alt={recommendedFeed.title}
                 className="w-full h-full object-cover"
               />
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300">
                 <div className="absolute bottom-2 left-2 flex items-center space-x-2 text-white opacity-0 group-hover:opacity-100">
+                {recommendedFeed.userProfileImageUrl ? (
                   <img
-                    src={item.testimg}
-                    alt={item.user}
+                    src={recommendedFeed.userProfileImageUrl}
+                    alt={recommendedFeed.nickName}
                     className="w-8 h-8 rounded-full object-cover"
-                  />
-                  <p className="text-lg font-bold">{item.user}</p>
+                  />)
+                  : (
+                  <UserIconMini />
+                )}
+                  <p className="text-lg font-bold">{recommendedFeed.nickName}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100">
-                  <p className="text-2xl">❤️</p>
+                  <p className="text-2xl">{recommendedFeed.title}</p>
                 </div>
               </div>
             </div>
@@ -121,22 +166,11 @@ export const SearchPage: React.FC = () => {
         </div>
       )}
 
-      {isModalOpen && selectedItem && (
-        <ModalFeedDetail
-          username={selectedItem.user}
-          profileImg={selectedItem.testimg}
-          postTitle={`${selectedItem.title}`}
-          postDate="2024-09-16"
-          postContent={`${selectedItem.title}에 대한 포스트입니다.`}
-          postImage={selectedItem.testimg}
-          likesCount={123}
-          comments={[
-            { username: 'commenter1', content: '좋아요!' },
-            { username: 'commenter2', content: '멋지네요!' },
-          ]}
-          closeModal={closeModal} 
-        />
+      {isModalOpen && selectedId && (
+        <ModalFeedDetail selectedId={selectedId} closeModal={closeModal} />
       )}
+
+      <div ref={loaderRef} className="h-10"></div>
     </div>
   );
 };

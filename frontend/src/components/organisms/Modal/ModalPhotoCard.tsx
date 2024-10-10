@@ -1,55 +1,77 @@
-import { useNavigate } from 'react-router-dom';
-import testImg1 from './../../../assets/statics/test1.jpg';
+import { useRef } from 'react';
+import QR from '../../../assets/statics/QR.png';
+import { DownLoadIcon } from '../../../assets/icons/svg';
+import domtoimage from 'dom-to-image';
+import { saveAs } from 'file-saver';
 
-interface ModalPhotoCardProps {
-  onClose: () => void; // 부모 컴포넌트에서 전달된 함수
+interface ModalPostCardProps {
+  photoCardUrl?: string;
+  onClose: () => void;
 }
 
-interface TestArr {
-  title: string;
-  image: string;
-}
+export const ModalPhotoCard: React.FC<ModalPostCardProps> = ({ photoCardUrl, onClose }) => {
+  const cardRef = useRef<HTMLDivElement>(null); 
 
-const testArr: TestArr = {
-  title: "퇴사 기념 혼자 부산 여행",
-  image: testImg1, 
-};
+  const onDownloadBtn = () => {
+    const card = cardRef.current;
 
-export const ModalPhotoCard: React.FC<ModalPhotoCardProps> = ({ onClose }) => {
-  const nav = useNavigate();
+    if (card) { // card가 존재할 때만 실행
+      const filter = (node: Node) => {
+        return (node as HTMLElement).tagName !== 'SPAN';
+      };
+
+      domtoimage
+        .toBlob(card, { filter: filter })
+        .then((blob) => {
+          if (blob) {
+            saveAs(blob, 'photocard.png');
+          }
+        })
+        .catch((error) => {
+          console.error('이미지 저장 중 오류가 발생했습니다.', error);
+        });
+    }
+  };
+
+  const hrCount = 7;
 
   return (
     <div 
       className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
-      onClick={onClose} // 오버레이 클릭 시 모달 닫기
-    >
-      {/* 모달 내용: 여기서 클릭해도 onClose가 실행되지 않도록 e.stopPropagation */} 
+      onClick={onClose}>
       <div 
-        className="bg-white pb-20 shadow-lg relative max-w-md w-full h-auto z-50"  
-        onClick={(e) => e.stopPropagation()} // 이벤트 버블링을 막아 모달 내 클릭 시 오버레이 이벤트가 발생하지 않도록
+        className="bg-white rounded-lg shadow-lg w-[800px] h-[500px] flex overflow-hidden"
+        ref={cardRef}
       >
-        <button
-          className="absolute top-2 right-2 text-gray-500 hover:text-gray-700 z-50"  
-          onClick={onClose}
-        >
-          &times;
-        </button>
+        {/* 왼쪽 사진 영역 */}
+        <div className="w-1/2 h-full">
+          <img src={photoCardUrl} alt="Postcard" className="w-full h-full object-cover" />
+        </div>
 
-        <div className="relative group flex flex-col justify-center items-center pt-7">
-          <div className="relative w-95 h-64 mb-4">
-            <img src={testArr.image} alt={testArr.title} className="w-full h-full object-cover" />
-            
-            <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 group-hover:bg-opacity-50 transition-opacity duration-300 z-40">
-              <button 
-                className="text-black opacity-0 bg-opacity-80 hover:bg-opacity-100 py-2 px-3 bg-white rounded-lg transition-opacity duration-300 group-hover:opacity-100 cursor-pointer"
-                onClick={() => { 
-                  nav('/my', { state: { activeTab: 'tab5' } });
-                  onClose(); 
-                }}
-              >
-                저장하기
-              </button>
+        {/* 오른쪽 엽서 형식 영역 */}
+        <div className="w-1/2 h-full p-6 relative">
+          {/* 엽서 스타일 텍스트 */}
+          <div className="flex flex-col h-full justify-between">
+            <div className="text-center text-gray-500 text-xl tracking-widest">
+              PhotoCard
             </div>
+
+            {/* 우측 입력 영역 */}
+            <div className="flex flex-col space-y-4">
+              {Array.from({ length: hrCount }).map((_, index) => (
+                <hr key={index} className="border-gray-300 pb-6" />
+              ))}
+            </div>
+
+            {/* 우표 모양의 작은 사각형 (장식) */}
+            <div className="absolute right-5">
+              <img src={QR} alt="QRCODE" className="w-12 h-12" />
+            </div>
+            
+            {/* 다운로드 버튼 */}
+            <span onClick={onDownloadBtn}>
+              <DownLoadIcon className="absolute top-5" />
+            </span>
           </div>
         </div>
       </div>

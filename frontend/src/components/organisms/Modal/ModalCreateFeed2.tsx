@@ -6,18 +6,23 @@ import DaumPostcode from 'react-daum-postcode';
 import ModalCreateFeed1 from './ModalCreateFeed1';
 import axios from 'axios'; 
 import { FeedCreate } from '../../../services/api/FeedService';
+import { useRecoilValue } from 'recoil';
+import { UserId } from '../../../Recoil/atoms/Auth';
 
 export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () => void }> = ({ onClose, onComplete }) => {
   const [selectedImage, setSelectedImage] = useState<File | null>(null); // 이미지
   const [title, setTitle] = useState<string>(''); // 제목
+  const [placeName, setPlaceName] = useState<string>('');// 장소
   const [content, setContent] = useState<string>('');  // 내용
-  const [selectedCategory, setSelectedCategory] = useState<string>('전체'); // 카테고리
+  const [selectedCategory, setSelectedCategory] = useState<string>(''); // 카테고리
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
+  const [TotalPlanId, setTotalPlanId] = useState<number>(0);
   const [isScheduleSelected, setIsScheduleSelected] = useState(false); // 일정 선택 상태
   const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
   const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
+  const userId = useRecoilValue(UserId);
 
   const apikey = import.meta.env.VITE_KAKAO_SPOT_API_KEY; 
 
@@ -33,6 +38,9 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
     TitleChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setTitle(e.target.value);
     },
+    PlaceNameChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+      setPlaceName(e.target.value);
+    },    
     ContentChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => {
       setContent(e.target.value);
     },
@@ -61,43 +69,73 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
         console.error(error); 
       });
     },
-    completeScheduleSelection: (title: string) => {
+    completeScheduleSelection: (id: number, title: string) => {
+      setTotalPlanId(id);
       setSchedule(title); // 선택된 일정 ID를 상태로 설정
       setIsScheduleSelected(true); // 일정 선택 완료 상태로 변경
     },
     goBackToSchedule: () => {
       setIsScheduleSelected(false); // 게시글 작성 모달에서 일정 선택 모달로 돌아감
     },
-    // 완료 버튼 클릭 시 유효성 검사
     validateAndComplete: () => {
-      if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude) {
+      if (!title || !content || !selectedImage || !calendarlocation || !latitude || !longitude || !placeName) {
         Swal.fire({
           icon: 'warning',
           title: '내용을 입력하세요',
-          text: '이미지, 제목, 내용, 위치를 모두 작성해 주세요.',
+          text: '이미지, 제목, 장소, 내용, 위치를 모두 작성해 주세요.',
           confirmButtonText: '확인'
         });
         return;
       }
 
-      const formData = new FormData();
-      formData.append('title', title);
-      formData.append('content', content);
-      formData.append('file', selectedImage);
-      formData.append('address1', calendarlocation);
-      formData.append('address2', calendarlocation); 
-      formData.append('longitude', String(longitude));
-      formData.append('latitude', String(latitude));
-      formData.append('placeType', selectedCategory);
-      formData.append('userId', String(1));
+      const data = new FormData();
 
-      FeedCreate(formData)
+      const jsonData = {
+          TotalPlanId,
+          placeName,
+          title,
+          content,
+          address1: calendarlocation,    
+          address2: calendarlocation, 
+          longitude,
+          latitude,
+          placeType: selectedCategory,
+          userId
+      };
+
+      const jsonBlob = new Blob([JSON.stringify(jsonData)], { type: 'application/json' });
+
+      
+      data.append('data', jsonBlob);
+      data.append('image', selectedImage);
+
+      Swal.fire({
+        title: '피드 생성 중입니다...',
+        allowOutsideClick: false,
+        didOpen: () => {
+          Swal.showLoading();
+        }
+      });
+
+      FeedCreate(data)
         .then(() => {
           console.log('피드 생성 완료');
-          onComplete();
+          Swal.fire({
+            icon: 'success',
+            title: '피드 생성이 완료되었습니다!',
+            confirmButtonText: '확인',
+          }).then(() => {
+            onComplete();
+          });
         })
         .catch((error) => {
           console.error(error);
+          Swal.fire({
+            icon: 'error',
+            title: '피드 생성에 실패했습니다.',
+            text: '다시 시도해주세요.',
+            confirmButtonText: '확인'
+          });
         });
     },
   };
@@ -116,7 +154,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
         ) : (
           <div className="h-full overflow-y-auto p-4 relative" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
             <button
-              className="absolute top-0 right-0 text-gray-500 hover:text-gray-700"
+              className="absolute top-[-5px] right-0 text-gray-500 hover:text-gray-700"
               onClick={() => onClose()}
             >
               &times;
@@ -130,7 +168,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                 [ {schedule} ]  
               </div>
               <button
-                className="bg-[#707C60] text-white px-4 py-2 rounded-lg pr-4"
+                className="bg-[#645e59] text-white px-4 py-2 rounded-lg pr-4"
                 onClick={handle.validateAndComplete} // 완료 버튼 클릭 시 유효성 검사 후 onComplete 호출
               >
                 완료
@@ -159,7 +197,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                   <PictureIcon />
                 )}
 
-                <label className="text-white bg-[#707C60] hover:bg-[#4F5843] text-md py-2 px-10 rounded-lg font-base transition-colors duration-200 cursor-pointer mt-4">
+                <label className="text-white bg-[#645e59] hover:bg-[#4F5843] text-md py-2 px-10 rounded-lg font-base transition-colors duration-200 cursor-pointer mt-4">
                   사진 올리기
                   <input
                     type="file"
@@ -189,8 +227,24 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                   </div>
                 </div>
 
+                <div className="mb-4">
+                  <div className="flex flex-col items-start">
+                    <textarea
+                      className="w-full p-2 border rounded-lg resize-none focus:outline-none"
+                      spellCheck="false"
+                      placeholder="장소를 입력하세요."
+                      rows={1}
+                      value={placeName}
+                      onChange={handle.PlaceNameChange}
+                    />
+                    <div className="mt-4 w-full">
+                      <hr className="border-gray-300" />
+                    </div>
+                  </div>
+                </div>
+
                 <textarea
-                  className="w-full h-[260px] p-4 border rounded-lg resize-none focus:outline-none"
+                  className="w-full h-[200px] p-4 border rounded-lg resize-none focus:outline-none"
                   placeholder="내용을 입력하세요."
                   spellCheck="false"
                   value={content}
@@ -199,37 +253,37 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
 
                 <div className="flex justify-center space-x-2 my-4">
                   <ButtonLikeCategory
-                    label="# 전체"
-                    initialClicked={selectedCategory === '전체'}
-                    onClick={() => handle.CategoryClick('전체')}
-                    px={2}
-                    py={1}
-                  />
-                  <ButtonLikeCategory
                     label="# 명소"
-                    initialClicked={selectedCategory === '명소'}
-                    onClick={() => handle.CategoryClick('명소')}
+                    initialClicked={selectedCategory === 'TOURIST_ATTRACTION'}
+                    onClick={() => handle.CategoryClick('TOURIST_ATTRACTION')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
                     label="# 숙박"
-                    initialClicked={selectedCategory === '숙박'}
-                    onClick={() => handle.CategoryClick('숙박')}
+                    initialClicked={selectedCategory === 'ACCOMMODATION'}
+                    onClick={() => handle.CategoryClick('ACCOMMODATION')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
                     label="# 음식점"
-                    initialClicked={selectedCategory === '음식점'}
-                    onClick={() => handle.CategoryClick('음식점')}
+                    initialClicked={selectedCategory === 'RESTAURANT'}
+                    onClick={() => handle.CategoryClick('RESTAURANT')}
                     px={2}
                     py={1}
                   />
                   <ButtonLikeCategory
                     label="# 카페"
-                    initialClicked={selectedCategory === '카페'}
-                    onClick={() => handle.CategoryClick('카페')}
+                    initialClicked={selectedCategory === 'CAFE'}
+                    onClick={() => handle.CategoryClick('CAFE')}
+                    px={2}
+                    py={1}
+                  />
+                  <ButtonLikeCategory
+                    label="# 기타"
+                    initialClicked={selectedCategory === 'ETC'}
+                    onClick={() => handle.CategoryClick('ETC')}
                     px={2}
                     py={1}
                   />
@@ -248,6 +302,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     <div className="bg-white rounded-lg shadow-lg p-6 relative w-[600px]">
                       <button
                         className="absolute top-2 right-2 text-gray-500 hover:text-gray-700"
+                        onClick={() => setOpenPostcode(false)} // 여기에 onClick 추가
                       >
                         &times;
                       </button>
@@ -258,6 +313,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
                     </div>
                   </div>
                 )}
+
               </div>
             </div>
           </div>
