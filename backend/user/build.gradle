@@ -27,15 +27,15 @@ ext {
     set('springCloudVersion', "2023.0.3")
 }
 
-asciidoctor {
-    inputs.dir snippetsDir
-    attributes 'snippets': snippetsDir
-    attributes 'encoding': 'UTF-8'
-    sources {
-        include 'index.adoc'
-    }
-    outputDir = file('build/docs/asciidoc')
-}
+//asciidoctor {
+//    inputs.dir snippetsDir
+//    attributes 'snippets': snippetsDir
+//    attributes 'encoding': 'UTF-8'
+//    sources {
+//        include 'index.adoc'
+//    }
+//    outputDir = file('build/docs/asciidoc')
+//}
 
 dependencies {
     implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
@@ -60,21 +60,21 @@ dependencyManagement {
         mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
     }
 }
-tasks.named('test') {
-    outputs.dir snippetsDir
-    useJUnitPlatform()
-}
-
-tasks.named('asciidoctor') {
-    inputs.dir snippetsDir
-    dependsOn tasks.named('test')
-}
-
-tasks.register("copyDocs", Copy) {
-    from('build/docs/asciidoc')
-    into('src/main/resources/static/docs')
-}
-
-tasks.named('asciidoctor').configure {
-    finalizedBy(tasks.named('copyDocs'))
-}
+//tasks.named('test') {
+//    outputs.dir snippetsDir
+//    useJUnitPlatform()
+//}
+//
+//tasks.named('asciidoctor') {
+//    inputs.dir snippetsDir
+//    dependsOn tasks.named('test')
+//}
+//
+//tasks.register("copyDocs", Copy) {
+//    from('build/docs/asciidoc')
+//    into('src/main/resources/static/docs')
+//}
+//
+//tasks.named('asciidoctor').configure {
+//    finalizedBy(tasks.named('copyDocs'))
+//}
