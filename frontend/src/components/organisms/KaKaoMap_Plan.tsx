@@ -21,7 +21,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
 
     const [_, setDragging] = useState(false);
 
-    const [storedData, setStoredData] = useState(null); // 로컬 스토리지 데이터를 상태로 저장
+    // const [storedData, setStoredData] = useState(null); // 로컬 스토리지 데이터를 상태로 저장
     
 
     const script = document.createElement('script');
@@ -45,36 +45,36 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
 
 
     if (isSearch == true){
-        useEffect(() => {
-            console.log('check');
+        // useEffect(() => {
+        //     console.log('check');
             
-            const handleStorageChange = () => {
-                const stored = localStorage.getItem(`schedule_${index}`);
-                if (stored && stored.length > 0) {
-                    setStoredData(JSON.parse(stored)); // 로컬 스토리지 데이터를 상태로 업데이트
-                }
-            };
+        //     const handleStorageChange = () => {
+        //         const stored = localStorage.getItem(`schedule_${index}`);
+        //         if (stored && stored.length > 0) {
+        //             setStoredData(JSON.parse(stored)); // 로컬 스토리지 데이터를 상태로 업데이트
+        //         }
+        //     };
         
-            // 원래 localStorage.setItem을 저장
-            const originalSetItem = localStorage.setItem;
+        //     // 원래 localStorage.setItem을 저장
+        //     const originalSetItem = localStorage.setItem;
         
-            // localStorage.setItem을 오버라이드하여 같은 탭에서의 변경을 감지
-            localStorage.setItem = function (key: string, value: string) {
-                originalSetItem.call(this, key, value); // 인자를 명시적으로 전달
-                if (key === `schedule_${index}`) {
-                    handleStorageChange();  // 직접 스토리지 변경을 감지
-                }
-            };
+        //     // localStorage.setItem을 오버라이드하여 같은 탭에서의 변경을 감지
+        //     localStorage.setItem = function (key: string, value: string) {
+        //         originalSetItem.call(this, key, value); // 인자를 명시적으로 전달
+        //         if (key === `schedule_${index}`) {
+        //             handleStorageChange();  // 직접 스토리지 변경을 감지
+        //         }
+        //     };
         
-            // storage 이벤트 리스너 등록 (다른 탭에서의 변경 감지)
-            window.addEventListener('storage', handleStorageChange);
+        //     // storage 이벤트 리스너 등록 (다른 탭에서의 변경 감지)
+        //     window.addEventListener('storage', handleStorageChange);
         
-            // 컴포넌트 언마운트 시 이벤트 리스너 해제 및 원래 setItem 복원
-            return () => {
-                window.removeEventListener('storage', handleStorageChange);
-                localStorage.setItem = originalSetItem; // 원래의 setItem으로 복원
-            };
-        }, [index]);
+        //     // 컴포넌트 언마운트 시 이벤트 리스너 해제 및 원래 setItem 복원
+        //     return () => {
+        //         window.removeEventListener('storage', handleStorageChange);
+        //         localStorage.setItem = originalSetItem; // 원래의 setItem으로 복원
+        //     };
+        // }, [index]);
     
     useEffect(() => {
         script.onload = () => {
@@ -158,7 +158,8 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
                 setMarkers(newMarkers);
             }
         }
-    }, [storedData, index, map]); // map도 의존성 배열에 포함해야 제대로 작동)
+    }, [, index, map]); // map도 의존성 배열에 포함해야 제대로 작동)
+    //storedData
 
     // 장소 검색 함수
     const searchPlaces = () => {
