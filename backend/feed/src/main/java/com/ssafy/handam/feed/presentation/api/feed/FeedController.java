@@ -28,6 +28,7 @@ import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.SearchedFeedsResponse;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -77,7 +78,7 @@ public class FeedController {
     )
     public ApiResult<FeedResponse> createFeed(
             @CookieValue(value = "accessToken", required = false) String token,
-            @RequestPart("data") FeedCreationRequest request,
+            @Valid @RequestPart("data") FeedCreationRequest request,
             @RequestPart("image") MultipartFile imageFile) {
 
         String savedImagePath = feedService.saveImage(imageFile);
