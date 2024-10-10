@@ -299,6 +299,24 @@ export const PlanPage: React.FC = () => {
     return address;
   };
 
+  const blockAccess = ()=>{
+    Swal.fire({
+      icon:'error',
+      title:'여행일정을 생성할 수 없습니다.',
+      text:'다른 사람의 피드를 확인하고 좋아요를 눌러보세요!',
+      confirmButtonText: '확인'
+    }).then(()=>{
+      navigate('/search');
+    })
+  }
+
+  useEffect(() => {
+    const targetDiv = document.getElementById('NotRender');
+    if (targetDiv) {
+      blockAccess()
+    }
+  }, []); // 빈 배열은 컴포넌트가 처음 렌더링될 때만 실행됨
+
   return (
     <div className='relative top-20 overflow-hidden'>
       {/* 모달 창 */}
@@ -310,125 +328,142 @@ export const PlanPage: React.FC = () => {
           </div>
         </>
       )}
-
-      {IsHide === true ? (
+      
+      {feedCluster && feedCluster.length > 0 ? (
+      IsHide === true ? (
         <div className="flex flex-row items-center justify-center gap-[22px] top-[35px] relative h-[calc(100vh-160px)]">
+          {/* 콘텐츠 렌더링 */}
           <div className="w-full h-full bg-sky-200 relative ml-10">
-          {isFeedClusterReady ? (
-            <KaKaoMap_Plan isSearch={false} clusters={feedCluster} />
-          ) : (
-            <div className="flex justify-center items-center h-full">
-              <img src={Loading_gif} alt="" />
-            </div>
-          )}
+            {isFeedClusterReady ? (
+              <KaKaoMap_Plan isSearch={false} clusters={feedCluster} />
+            ) : (
+              <div className="flex justify-center items-center h-full">
+                <img src={Loading_gif} alt="" />
+              </div>
+            )}
+            {/* 업데이트 영역 */}
             <div className="absolute right-0 -top-[35px] flex flex-row items-center gap-2">
-              {loading ? <img src={Loading_gif} alt=""  className='h-[30px] w-[30px] mr-[50px]'/> :
-              <>
-              <button  className="bg-[#707C60] hover:bg-[#4F5843] font-medium rounded-[10px] flex items-center justify-center flex-row w-[30px] h-[30px] text-center" onClick={handleRefresh}>
-                <p className='text-[22px] text-white'>↺</p>
-              </button>
-              <span className="text-[13px]">마지막 업데이트 : {timeAgo}</span>
-              </>}
-              
+              {loading ? (
+                <img src={Loading_gif} alt="Loading" className="h-[30px] w-[30px] mr-[50px]" />
+              ) : (
+                <>
+                  <button
+                    className="bg-[#707C60] hover:bg-[#4F5843] font-medium rounded-[10px] flex items-center justify-center flex-row w-[30px] h-[30px] text-center"
+                    onClick={handleRefresh}
+                  >
+                    <p className="text-[22px] text-white">↺</p>
+                  </button>
+                  <span className="text-[13px]">마지막 업데이트 : {timeAgo}</span>
+                </>
+              )}
             </div>
           </div>
+
+          {/* 추천 여행지 */}
           <div className="relative w-[400px] -top-[15px] h-[calc(100vh-195px)] bg-white mr-[50px] rounded-[10px] flex-col flex items-center overflow-y-auto scrollbar-thin pb-[20px]">
             <span className="text-[21px] font-semibold mt-[15px]">추천 여행지로 여행 계획하기</span>
             <hr className="w-[60%] border-t-[3px] border-black mt-[10px]" />
-            <button className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0" onClick={()=>handleIsmodal(feeds)}>
+            <button
+              className="w-[260px] h-[70px] bg-[#6F7C60] text-white rounded-[10px] mt-[35px] flex-shrink-0"
+              onClick={() => handleIsmodal(feeds)}
+            >
               나만의 여행 일정 만들기
             </button>
-            {feedCluster && feedCluster.length > 0 && loading===false ? (
+            {feedCluster && feedCluster.length > 0 && loading === false ? (
               feedCluster.map((items, index) => (
-                <button onClick={()=>handleIsmodal(items.feeds, items)}>
+                <button onClick={() => handleIsmodal(items.feeds, items)}>
                   <CardPlanFav
-                  key={index}
-                  name={getNameBeforeSecondSpace(items.feeds[0].address1 || items.feeds[0].address2)}
-                  position={items.feeds[0].address1||items.feeds[0].address2}
-                  feeds={items.feeds}/>
+                    key={index}
+                    name={getNameBeforeSecondSpace(items.feeds[0].address1 || items.feeds[0].address2)}
+                    position={items.feeds[0].address1 || items.feeds[0].address2}
+                    feeds={items.feeds}
+                  />
                 </button>
               ))
             ) : (
-              <img src={Loading_gif} alt=""  className='h-[50px] w-[50px] m-20'/>
+              <img src={Loading_gif} alt="Loading" className="h-[50px] w-[50px] m-20" />
             )}
           </div>
         </div>
       ) : (
         <>
-        <div className="flex flex-row justify-center items-center relative divide-x h-[calc(100vh-80px)] overflow-hidden">
-          <div className="h-full bg-white flex flex-col min-w-[60px] text-[13px]">
-            <div className="flex-grow">
-              {datesList.map((date, index) => (
-                <PlanDailyTab key={index} date={date} index={index} onClick={handleCurrentDate} currentDate={currentDate} />
-              ))}
-              {datesList.length < 5 && (
-                <div className="h-[60px] flex justify-center items-center">
-                  <button className="rounded-full bg-[#665F59] text-white w-[40px] h-[40px] text-[25px] flex justify-center items-center text-center" onClick={addNextDay}>
-                    +
-                  </button>
-                </div>
-              )}
+          {/* 다른 레이아웃 */}
+          <div className="flex flex-row justify-center items-center relative divide-x h-[calc(100vh-80px)] overflow-hidden">
+            <div className="h-full bg-white flex flex-col min-w-[60px] text-[13px]">
+              <div className="flex-grow">
+                {datesList.map((date, index) => (
+                  <PlanDailyTab key={index} date={date} index={index} onClick={handleCurrentDate} currentDate={currentDate} />
+                ))}
+                {datesList.length < 5 && (
+                  <div className="h-[60px] flex justify-center items-center">
+                    <button
+                      className="rounded-full bg-[#665F59] text-white w-[40px] h-[40px] text-[25px] flex justify-center items-center text-center"
+                      onClick={addNextDay}
+                    >
+                      +
+                    </button>
+                  </div>
+                )}
+              </div>
+              <div
+                className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white"
+                onClick={inputPlanName}
+              >
+                저장
+              </div>
             </div>
-            <div className="h-[60px] w-full flex justify-center items-center flex-col cursor-pointer bg-[#665F59] text-white"
-                onClick={inputPlanName} // 함수 호출
-            >저장</div>
-          </div>
-          <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
-            {datesList.map((_, index) => (
-              index + 1 === currentDate && (
+            <div className="h-full bg-white overflow-y-auto scrollbar-thin min-w-[390px] divide-y overflow-hidden z-10">
+              {datesList.map((_, index) => index + 1 === currentDate && (
                 <ScheduleRegister
                   key={index}
                   currentDate={currentDate}
                   index={index}
-                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []} 
+                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []}
                 />
-              )
-            ))}
-          </div>
-          
-
-          <div className="w-full h-full z-0">
-            <KaKaoMap_Plan isSearch={true} clusters={feedCluster} index={currentDate}/>
-          </div>
-        </div>
-        <div className="relative z-10">
-          <div className={`transition-transform duration-300 ${searchinTab ? 'translate-y-0' : 'translate-y-[200px]'}`}>
-            {/* <div 
-              id='folding'
-              className='w-[23px] h-[45px] bg-white flex justify-center items-center rounded-r-lg absolute z-50 border cursor-pointer -rotate-90 bottom-[188px] left-1/2'
-              onClick={handleSearchingTab}
-            >
-              <img src={Mini_Vector} className={`${searchinTab ? '' : 'transform scale-x-[-1]'}`}/>
-            </div> */}
-            <div 
-              id='folding'
-              className='w-[130px] h-[30px] bg-white flex justify-center items-center rounded-t-lg absolute z-50 border cursor-pointer bottom-[200px] left-1/2'
-              onClick={handleSearchingTab}
-            >
-              주변 추천 장소
+              ))}
             </div>
-
-            <div 
-              ref={scrollContainerRef} 
-              className='w-full h-[200px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden'
-            >
-              {feedClusterByDistanceData && feedClusterByDistanceData.length > 0 ? (
-                feedClusterByDistanceData.map(feed => (
-                  <div key={feed.id} className="min-w-[150px] w-[150px] h-[150px] flex justify-center items-center overflow-hidden m-5"
-                    draggable
-                    onDragStart={(e) => handleDragStart(e,feed)}
-                    onDragEnd={handleDragEnd}>
-                    <img src={feed.imageUrl} className="w-full h-full object-cover" />
-                  </div>
-                ))
-              ) : (
-                'No feeds available'
-              )}
+            <div className="w-full h-full z-0">
+              <KaKaoMap_Plan isSearch={true} clusters={feedCluster} index={currentDate} />
             </div>
           </div>
-        </div>
+
+          {/* 주변 추천 장소 */}
+          <div className="relative z-10">
+            <div className={`transition-transform duration-300 ${searchinTab ? 'translate-y-0' : 'translate-y-[200px]'}`}>
+              <div
+                id="folding"
+                className="w-[130px] h-[30px] bg-white flex justify-center items-center rounded-t-lg absolute z-50 border cursor-pointer bottom-[200px] left-1/2"
+                onClick={handleSearchingTab}
+              >
+                주변 추천 장소
+              </div>
+              <div
+                ref={scrollContainerRef}
+                className="w-full h-[200px] bg-[#E5E2D9] absolute bottom-0 z-40 bg-opacity-80 flex justify-start items-center overflow-x-auto overflow-y-hidden"
+              >
+                {feedClusterByDistanceData && feedClusterByDistanceData.length > 0 ? (
+                  feedClusterByDistanceData.map((feed) => (
+                    <div
+                      key={feed.id}
+                      className="min-w-[150px] w-[150px] h-[150px] flex justify-center items-center overflow-hidden m-5"
+                      draggable
+                      onDragStart={(e) => handleDragStart(e, feed)}
+                      onDragEnd={handleDragEnd}
+                    >
+                      <img src={feed.imageUrl} className="w-full h-full object-cover" />
+                    </div>
+                  ))
+                ) : (
+                  'No feeds available'
+                )}
+              </div>
+            </div>
+          </div>
         </>
-      )}
+      )
+    ) : (
+      <div id='NotRender'></div>
+    )}
     </div>
   )
 }

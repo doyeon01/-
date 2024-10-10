@@ -49,7 +49,7 @@ const ModalCalendar: React.FC<Props> = ({onClick}) => {
           next2Label={null}
           prev2Label={null}
           minDetail="month"
-          activeStartDate={startDate === null ? undefined : startDate}
+          activeStartDate={startDate || undefined}
           onActiveStartDateChange={({ activeStartDate }) =>
             setStartDate(activeStartDate)
           }
