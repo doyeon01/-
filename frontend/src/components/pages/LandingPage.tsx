@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { ModalLogin } from '../organisms/Modal/ModalLogin';
 import logo from '../../assets/statics/logo.png';
 import travel from '../../assets/statics/travel.png';
+
 export const LandingPage = () => {
 
   const [isModalOpen, setIsModalOpen] = useState(false);

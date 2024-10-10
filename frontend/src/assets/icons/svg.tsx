@@ -385,22 +385,29 @@ export function EtcIcon(): JSX.Element {
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="#645E59"
       width="2.5em"
       height="2.5em"
-      viewBox="0 0 16 16"
     >
-      <g fill="#645E59">
-        <path d="M5 8a1 1 0 1 1-2 0a1 1 0 0 1 2 0m4 0a1 1 0 1 1-2 0a1 1 0 0 1 2 0m3 1a1 1 0 1 0 0-2a1 1 0 0 0 0 2" />
-        <path d="m2.165 15.803l.02-.004c1.83-.363 2.948-.842 3.468-1.105A9 9 0 0 0 8 15c4.418 0 8-3.134 8-7s-3.582-7-8-7s-8 3.134-8 7c0 1.76.743 3.37 1.97 4.6a10.4 10.4 0 0 1-.524 2.318l-.003.011a11 11 0 0 1-.244.637c-.079.186.074.394.273.362a22 22 0 0 0 .693-.125m.8-3.108a1 1 0 0 0-.287-.801C1.618 10.83 1 9.468 1 8c0-3.192 3.004-6 7-6s7 2.808 7 6s-3.004 6-7 6a8 8 0 0 1-2.088-.272a1 1 0 0 0-.711.074c-.387.196-1.24.57-2.634.893a11 11 0 0 0 .398-2" />
-      </g>
+      <path
+        fill="#645E59"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="M6.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM12.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0ZM18.75 12a.75.75 0 1 1-1.5 0 .75.75 0 0 1 1.5 0Z"
+      />
     </svg>
   );
 }
 
 
+
 interface DownLoadIconProps {
   className?: string; // className을 선택적으로 받도록 설정
 }
+
 export function DownLoadIcon({ className }: DownLoadIconProps): JSX.Element {
   return (
     <svg
@@ -408,17 +415,21 @@ export function DownLoadIcon({ className }: DownLoadIconProps): JSX.Element {
       width="3em"
       height="3em"
       viewBox="0 0 24 24"
+      strokeWidth="1.5"
+      stroke="currentColor"
       className={className} // 전달된 className을 적용
+      fill="none"
     >
       <path
-        d="m12 16l-5-5l1.4-1.45l2.6 2.6V4h2v8.15l2.6-2.6L17 11zm-6 4q-.825 0-1.412-.587T4 18v-3h2v3h12v-3h2v3q0 .825-.587 1.413T18 20z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth="1"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        d="m9 12.75 3 3m0 0 3-3m-3 3v-7.5M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
       />
     </svg>
   );
 }
+
+
 export function OutIcon(): JSX.Element {
   return (
     <svg

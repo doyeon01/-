@@ -6,6 +6,8 @@ import Swal from 'sweetalert2';
 import { useRecoilValue } from 'recoil';
 import { UserId } from '../../../Recoil/atoms/Auth';
 import { useNavigate } from 'react-router-dom';
+import { OutIcon } from '../../../assets/icons/svg';
+
 
 interface ModalSelectFeedProps {
   totalPlanId: number;
@@ -116,7 +118,12 @@ export const ModalSelectFeed: React.FC<ModalSelectFeedProps> = ({ totalPlanId, o
               </div>
             ))
           ) : (
-            <p className="col-span-3 text-center">피드가 없습니다.</p>
+            <div
+            className="col-span-3 flex justify-center items-center h-80 mt-14 bg-[#e5e2d9] rounded-lg"
+            onClick={onClose}>
+             <p className="text-[#b6afa9] text-xl pr-2 ">게시물이 존재하지 않습니다.</p> 
+             <OutIcon/>
+           </div>          
           )}
         </div>
       </div>

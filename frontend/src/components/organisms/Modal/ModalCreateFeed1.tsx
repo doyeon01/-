@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { PlanListApi } from '../../../services/api/PlanService'
 import { PlanListType, PlanListResponseType } from '../../../model/MyPageType'; 
 import { OutIcon } from '../../../assets/icons/svg';
-export { OutIcon } from '../../../assets/icons/svg'
    
 
 const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string) => void, onClose: () => void }> = ({ onSelectSchedule, onClose }) => {
@@ -33,9 +32,6 @@ const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string)
 
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-xl font-semibold text-center flex-grow pl-14">일정을 선택하세요</h2>
-        <button className="bg-[#645e59] text-white px-4 py-2 rounded-lg ml-auto" onClick={() => onSelectSchedule(0, '새 게시물 등록')}>
-          건너뛰기
-        </button>
       </div>
       
       <div className="grid grid-cols-3 gap-4">
