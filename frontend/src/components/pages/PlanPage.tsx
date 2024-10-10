@@ -42,7 +42,6 @@ export const PlanPage: React.FC = () => {
   const [lotitude, setLotitude] = useState(126.9971)
   const [title,setTitle] = useState('')
 
-
   const [_, setDragging] = useState(false);
 
   const handleDragStart = (e: React.DragEvent<HTMLDivElement>, feed:any) => {
@@ -381,7 +380,7 @@ export const PlanPage: React.FC = () => {
                   key={index}
                   currentDate={currentDate}
                   index={index}
-                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []}  // 첫 번째와 두 번째 인덱스만 feeds 전달
+                  feeds={feeds && index < 3 ? feeds.slice(index * 6, (index + 1) * 6) : []} 
                 />
               )
             ))}
@@ -389,7 +388,7 @@ export const PlanPage: React.FC = () => {
           
 
           <div className="w-full h-full z-0">
-            <KaKaoMap_Plan isSearch={true} clusters={feedCluster}/>
+            <KaKaoMap_Plan isSearch={true} clusters={feedCluster} index={currentDate}/>
           </div>
         </div>
         <div className="relative z-10">
