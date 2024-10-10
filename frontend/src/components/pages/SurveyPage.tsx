@@ -19,8 +19,8 @@ import IMG_STEP07 from '../../assets/statics/survey_step07.png'
 import IMG_STEP08 from '../../assets/statics/survey_step08.png'
 import VID_start from '../../assets/statics/survey_strart.mp4'
 
-// import { GenderSelector } from '../atoms/input/GenderSelectorSurvey'
 import { ButtonNext } from '../atoms/button/ButtonNext'
+import MBTIRenderer from '../molecules/Tab/MBTIRenderer';
 
 export const SurveyPage: React.FC = () => {
   const navigate = useNavigate()
@@ -28,7 +28,6 @@ export const SurveyPage: React.FC = () => {
 
   const [PageNum, setPageNum] = useState(0)
   const [IsHide,setIsHide] = useState(true)
-  // const [Gender,setGender] = useState('')
   const [MBTI,setMBTI] = useState('')
   const [Fading,setFading] = useState(false)
 
@@ -49,8 +48,6 @@ export const SurveyPage: React.FC = () => {
       setLoading(true);
       try {
         const data = await getFeed(keyword, page, size); // 배열 반환
-        // console.log('Fetched feeds data:', data); // 전체 데이터 로그
-        // console.log('Fetched feeds data response:', data.response); // 전체 데이터 로그
         setFeeds(data.response.feeds); // 상태로 배열을 설정
       } catch (error) {
         console.error('Error fetching feeds:', error);
@@ -119,25 +116,15 @@ useEffect(() => {
     setIsHide(IsHide=>!IsHide)
   }
 
-  // const handleGender = (e:React.ChangeEvent<HTMLInputElement>) => {
-  //   const value = e.target.value;
-  //   setGender(value);
-  //   console.log('Current Gender : ', value);
-  // };
-
   const handleMBTI = (e:React.MouseEvent<HTMLButtonElement>)=> {
     const value = MBTI + e.currentTarget.value
     setMBTI(value)
-    // setPageNum(PageNum=>PageNum+1)
     setFading(true)
     setTimeout(()=>{
       setFading(false)
       setPageNum(PageNum=>PageNum+1)
     },500)
-    // console.log('Current MBTI : ', value)
   }
-  
-  // const numbers = Array.from({ length: 15 }, (_, index) => index + 1)
 
   const toggleLike = (id:number) => {
     setFeeds(prevFeeds =>
@@ -160,7 +147,6 @@ useEffect(() => {
 
     // userData 업데이트
     setUserData(updatedUserData);
-    // console.log('updateUserData:',updatedUserData);
     
     
     // 업데이트된 객체를 바로 사용하여 API 호출
@@ -236,13 +222,6 @@ useEffect(() => {
                       spellCheck='false'
                       maxLength={10}
                     />
-                    {/* <input
-                      type="text"
-                      id="birth"
-                      className="w-[250px] h-[50px] rounded-[10px] text-center text-[18px] focus:outline-none resize-none"
-                      placeholder="생년월일"
-                    /> */}
-                    {/* <GenderSelector Gender={Gender} OnGenderChange={handleGender} /> */}
                     <div
                       className="flex flex-row justify-center items-center w-64 min-h-12 h-full p-6 bg-white rounded-lg text-center text-md focus:outline-none resize-none border border-gray-300 text-wrap"
                       onClick={handleOpenPostcode} // 클릭 시 모달 열기
@@ -463,14 +442,6 @@ useEffect(() => {
                 ) : (
                   <div>로딩 중입니다...</div> // 로딩 중일 때 표시할 내용
                 )}
-                {/* {numbers.map((number) => (
-                   <div key={number} className={`w-full max-h-[110px] h-[110px] border  overflow-hidden relative`}>
-                    <div className={`absolute inset-0 bg-black bg-opacity-50 z-10 flex justify-center items-center text-[20px] text-white`}>
-                      ✔
-                    </div>
-                   <div className='bg-green-300'></div>
-               </div>
-                ))} */}
               </span>
             </>
           )}
@@ -616,22 +587,32 @@ useEffect(() => {
           {PageNum === 11 && (
             // 설문 결과 페이지
             <>
-              <img
-                src={IMG_Logo}
-                alt="메인로고"
-                className="z-0 right-[25px] top-[20px] w-[50px] h-[50px] absolute"
-              />
-              <div className="text-[18px] top-[50px] absolute text-center left-1/2 transform -translate-x-1/2 whitespace-nowrap">
-                {MBTI}
-              </div>
-              <button
-                className="absolute w-[200px] h-[50px] bg-[#B8B1AB] top-[150px] left-1/2 transform -translate-x-1/2 rounded-[25px] flex justify-center items-center text-[24px] text-white"
-                onClick={handleRegister}
-              >
-                여행가기
-              </button>
-              <div className="text-[15px] top-[300px] absolute text-center left-1/2 transform -translate-x-1/2">
-                텍스트 들어갈 곳 + 이미지 들어갈 곳
+              <div className='flex flex-col justify-between items-center gap-3 overflow-auto h-full pt-[20px]'>
+                <div className="flex justify-between flex-row w-full px-6">
+                <button
+                    className="w-[50px] h-[50px] bg-[#B8B1AB] rounded-[25px] flex justify-center items-center text-[12px] text-white"
+                    onClick={handleRegister}
+                  >
+                    여행가기
+                  </button>
+                  <img
+                    src={IMG_Logo}
+                    alt="메인로고"
+                    className="w-[50px] h-[50px]"
+                  />
+                </div>
+                <div className ="text-center text-[#597B28] text-[25px] font-bold">
+                  나의 여행 성향은
+                </div>
+                <div className="text-[18px] top-[50px]">
+                  <MBTIRenderer mbti={MBTI}/>
+                </div>
+                <button
+                  className="w-[200px] h-[50px] min-h-[50px] bg-[#B8B1AB] bottom-0 rounded-[25px] flex justify-center items-center text-[24px] text-white "
+                  onClick={handleRegister}
+                >
+                  여행가기
+                </button>
               </div>
             </>
           )}

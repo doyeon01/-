@@ -95,8 +95,6 @@ export const PlanPage: React.FC = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      console.log('체킹');
-      
       try {
         const data = await getFeedCluster(userId);
         setFeedCluster(data.response);
