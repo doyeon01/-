@@ -383,7 +383,8 @@ public class FeedService {
                 trendingFeedIdsLong,
                 randomFeedIdsLong,
                 page,
-                pageSize
+                pageSize,
+                userId
         );
     }
 

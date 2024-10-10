@@ -15,7 +15,9 @@ import com.ssafy.handam.feed.infrastructure.client.dto.UserDto;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -130,7 +132,9 @@ public class FeedDomainService {
             List<Long> trendingFeedIds,
             List<Long> randomFeedIds,
             int page,
-            int pageSize){
+            int pageSize,
+            Long userId) {
+
         // 카테고리별로 가져올 비율
         double recommendedRatio = 0.6;
         double topLikedRatio = 0.2;
@@ -143,37 +147,93 @@ public class FeedDomainService {
         int numTrending = (int) (pageSize * trendingRatio);
         int numRandom = (int) (pageSize * randomRatio);
 
-        // Elasticsearch에서 피드 데이터를 조회
+
+        int offset = (page - 1) * pageSize;
+
         List<FeedPreviewDto> resultFeeds = new ArrayList<>();
-        resultFeeds.addAll(getFeedsFromElasticsearch(recommendedFeedIds, numRecommended));
-        resultFeeds.addAll(getFeedsFromElasticsearch(topLikedFeedIds, numTopLiked));
-        resultFeeds.addAll(getFeedsFromElasticsearch(trendingFeedIds, numTrending));
-        resultFeeds.addAll(getFeedsFromElasticsearch(randomFeedIds, numRandom));
+        Set<Long> selectedFeedIds = new HashSet<>(); // 중복 체크를 위한 Set
+
+        // 추천 피드에 대해 페이지 네이션 적용 후 중복 제거하여 resultFeeds에 추가
+        List<FeedPreviewDto> recommendedFeeds = getPaginatedFeedsFromElasticsearch(recommendedFeedIds, numRecommended, offset,userId);
+        addUniqueFeeds(resultFeeds, recommendedFeeds, selectedFeedIds);
+
+        // TopLiked 피드에 대해 페이지 네이션 적용 후 중복 제거하여 resultFeeds에 추가
+        List<FeedPreviewDto> topLikedFeeds = getPaginatedFeedsWithUnique(resultFeeds, topLikedFeedIds, numTopLiked, offset, selectedFeedIds,userId);
+        addUniqueFeeds(resultFeeds, topLikedFeeds, selectedFeedIds);
+
+        // 트렌딩 피드에 대해 페이지 네이션 적용 후 중복 제거하여 resultFeeds에 추가
+        List<FeedPreviewDto> trendingFeeds = getPaginatedFeedsWithUnique(resultFeeds, trendingFeedIds, numTrending, offset, selectedFeedIds,userId);
+        addUniqueFeeds(resultFeeds, trendingFeeds, selectedFeedIds);
+
+        // 랜덤 피드에 대해 페이지 네이션 적용 후 중복 제거하여 resultFeeds에 추가
+        List<FeedPreviewDto> randomFeeds = getPaginatedFeedsWithUnique(resultFeeds, randomFeedIds, numRandom, offset, selectedFeedIds,userId);
+        addUniqueFeeds(resultFeeds, randomFeeds, selectedFeedIds);
+
+        int remaining = pageSize - resultFeeds.size();
+        if (remaining > 0) {
+            // 랜덤 피드에서 부족한 수만큼 추가로 가져옴
+            List<FeedPreviewDto> additionalFeeds = getPaginatedFeedsFromElasticsearch(randomFeedIds, remaining, offset + resultFeeds.size(), userId);
+            resultFeeds.addAll(additionalFeeds);
+        }
 
         // 페이지네이션 정보를 포함한 결과 반환
-        boolean hasNextPage = (resultFeeds.size() == pageSize);
+        boolean hasNextPage = resultFeeds.size() == pageSize;
+
         return RecommendedFeedsForUserResponse.of(resultFeeds, page, hasNextPage);
     }
 
+    // 중복되지 않는 피드를 추가하는 메서드
+    private void addUniqueFeeds(List<FeedPreviewDto> resultFeeds, List<FeedPreviewDto> newFeeds, Set<Long> selectedFeedIds) {
+        for (FeedPreviewDto feed : newFeeds) {
+            if (!selectedFeedIds.contains(feed.id())) { // 중복 검사
+                resultFeeds.add(feed);
+                selectedFeedIds.add(feed.id()); // 추가된 피드의 ID 추적
+            }
+        }
+    }
 
-    private List<FeedPreviewDto> getFeedsFromElasticsearch(List<Long> feedIds, int count) {
+    // 중복된 피드가 있을 경우 다음 offset으로 추가 조회하는 메서드
+    private List<FeedPreviewDto> getPaginatedFeedsWithUnique(List<FeedPreviewDto> resultFeeds, List<Long> feedIds, int count, int offset, Set<Long> selectedFeedIds,Long userId) {
+        List<FeedPreviewDto> feeds = new ArrayList<>();
+
+        while (feeds.size() < count && offset < feedIds.size()) {
+            List<FeedPreviewDto> paginatedFeeds = getPaginatedFeedsFromElasticsearch(feedIds, count - feeds.size(), offset,userId);
+
+            for (FeedPreviewDto feed : paginatedFeeds) {
+                if (!selectedFeedIds.contains(feed.id())) { // 중복 검사
+                    feeds.add(feed);
+                    selectedFeedIds.add(feed.id()); // 중복 방지
+                }
+            }
+
+            offset += paginatedFeeds.size(); // 다음 offset 적용
+        }
+
+        return feeds;
+    }
+
+    private List<FeedPreviewDto> getPaginatedFeedsFromElasticsearch(List<Long> feedIds, int count, int offset,Long userId) {
         List<FeedPreviewDto> feeds = new ArrayList<>();
 
         if (feedIds == null || feedIds.isEmpty()) {
             return feeds;
         }
 
-        // Elasticsearch에서 feedId에 해당하는 FeedDocument 조회
-        Iterable<FeedDocument> feedDocuments = feedRepository.findAllById(feedIds);
+        // 페이지네이션을 위해 feedIds를 슬라이스
+        int toIndex = Math.min(offset + count, feedIds.size());
+        if (offset < feedIds.size()) {
+            List<Long> paginatedFeedIds = feedIds.subList(offset, toIndex);
 
+            // Elasticsearch에서 feedId에 해당하는 FeedDocument 조회
+            Iterable<FeedDocument> feedDocuments = feedRepository.findAllById(paginatedFeedIds);
 
-        // FeedDocument를 FeedPreviewDto로 변환
-        for (FeedDocument feedDocument : feedDocuments) {
-            feeds.add(FeedPreviewDto.fromDocument(feedDocument, false));
+            // FeedDocument를 FeedPreviewDto로 변환
+            for (FeedDocument feedDocument : feedDocuments) {
+                feeds.add(FeedPreviewDto.fromDocument(feedDocument, isLikedFeed(feedDocument.getId(),userId)));
+            }
         }
 
-        // 가져온 결과 중 요청된 개수만큼 반환
-        return feeds.stream().limit(count).collect(Collectors.toList());
+        return feeds;
     }
 
     public Page<Like> getLikesBy(Long userId, Pageable pageable) {
