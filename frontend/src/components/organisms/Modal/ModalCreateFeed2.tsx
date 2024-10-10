@@ -116,7 +116,8 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
           Swal.showLoading();
         }
       });
-
+      console.log(jsonData); 
+      console.log(data);
       FeedCreate(data)
         .then(() => {
           console.log('피드 생성 완료');

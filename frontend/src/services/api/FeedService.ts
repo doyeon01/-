@@ -11,7 +11,7 @@ export const FeedCreate = async (data: FormData) => {
     headers: {
       'Content-Type': 'multipart/form-data',
     },
-    withCredentials: true, 
+    // withCredentials: true, 
   });
 
   console.log('피드 생성 완료:', response.data);  
