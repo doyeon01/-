@@ -1,6 +1,6 @@
 oauth2:
-  success-redirect-url: "http://j11c205.p.ssafy.io/main"
-#  main-redirect-url: "http://j11c205.p.ssafy.io/main"
+  survey-redirect-url: "http://j11c205.p.ssafy.io/survey"
+  main-redirect-url: "http://j11c205.p.ssafy.io/main"
 
 spring:
   application:
