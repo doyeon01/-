@@ -44,9 +44,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
         CookieUtil.addTokenToCookie(response, token);
 
-        User user = userService.getUserById(userId);
+//        User user = userService.getUserById(userId);
         response.sendRedirect(surveyRedirectUrl);
-        System.out.println(user.getTravelStyl1()+user.getName());
+//        System.out.println(user.getTravelStyl1()+user.getName());
 //        if (user.getTravelStyl1() == null || user.getTravelStyl1().isEmpty()) {
 //            response.sendRedirect(surveyRedirectUrl);
 //        } else {
