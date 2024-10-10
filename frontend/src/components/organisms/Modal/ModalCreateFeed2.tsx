@@ -18,7 +18,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
   const [openPostcode, setOpenPostcode] = useState(false); // 주소 선택 모달 상태
   const [calendarlocation, setCalendarLocation] = useState(''); // 주소 상태
   const [schedule, setSchedule] = useState<string>(''); // 선택된 일정 제목 상태
-  const [TotalPlanId, setTotalPlanId] = useState<number>(0);
+  const [totalPlanId, setTotalPlanId] = useState<number>(0);
   const [isScheduleSelected, setIsScheduleSelected] = useState(false); // 일정 선택 상태
   const [latitude, setLatitude] = useState<number | null>(null); // 위도 상태
   const [longitude, setLongitude] = useState<number | null>(null); // 경도 상태
@@ -91,7 +91,7 @@ export const ModalCreateFeed2: React.FC<{ onClose: () => void, onComplete: () =>
       const data = new FormData();
 
       const jsonData = {
-          TotalPlanId,
+          totalPlanId,
           placeName,
           title,
           content,

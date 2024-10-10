@@ -9,6 +9,8 @@ const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string)
   const [planList, setPlanList] = useState<PlanListType[]>([])
   const nav = useNavigate()
 
+
+
   useEffect(() => {
     PlanListApi()
       .then((res) => {
