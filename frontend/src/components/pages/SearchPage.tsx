@@ -15,7 +15,8 @@ export const SearchPage: React.FC = () => {
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const loaderRef = useRef<HTMLDivElement | null>(null);
-
+  console.log(recommendedFeeds);
+  
   // 추천 피드 불러오기
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
