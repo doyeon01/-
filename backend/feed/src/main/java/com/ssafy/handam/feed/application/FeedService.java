@@ -35,10 +35,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -364,11 +361,24 @@ public class FeedService {
 
     public RecommendedFeedsForUserResponse getRecommendedFeeds(String token, int page, int pageSize) {
         Long userId = jwtUtil.extractUserId(token);
-        // Redis에서 피드 ID들을 가져와서 feedDomainService로 넘기는 부분
-        List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, pageSize);
-        List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, pageSize);
-        List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, pageSize);
-        List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, pageSize);
+
+        // 카테고리별로 가져올 비율
+        double recommendedRatio = 0.6;
+        double topLikedRatio = 0.2;
+        double trendingRatio = 0.1;
+        double randomRatio = 0.1;
+
+        // 카테고리별로 가져올 개수 결정 (총 페이지 기준)
+        int numRecommended = (int) (pageSize * recommendedRatio);
+        int numTopLiked = (int) (pageSize * topLikedRatio);
+        int numTrending = (int) (pageSize * trendingRatio);
+        int numRandom = (int) (pageSize * randomRatio);
+
+        // Redis에서 피드 ID들을 가져옴
+        List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, numRecommended);
+        List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, numTopLiked);
+        List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, numTrending);
+        List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, numRandom);
 
         // Feed IDs를 Long으로 변환
         List<Long> recommendedFeedIdsLong = convertStringIdsToLong(recommendedFeedIds);
@@ -376,18 +386,53 @@ public class FeedService {
         List<Long> trendingFeedIdsLong = convertStringIdsToLong(trendingFeedIds);
         List<Long> randomFeedIdsLong = convertStringIdsToLong(randomFeedIds);
 
+        // 중복을 제거한 피드를 관리하기 위해 Set 사용
+        Set<Long> allFeedIds = new HashSet<>();
+        List<Long> uniqueFeedIds = new ArrayList<>();
+
+        // 중복되지 않는 피드들을 추가
+        addUniqueFeeds(allFeedIds, uniqueFeedIds, recommendedFeedIdsLong);
+        addUniqueFeeds(allFeedIds, uniqueFeedIds, topLikedFeedIdsLong);
+        addUniqueFeeds(allFeedIds, uniqueFeedIds, trendingFeedIdsLong);
+
+        // 부족한 피드 수 계산
+        int feedsToFill = pageSize - uniqueFeedIds.size();
+
+        // 중복되지 않게 랜덤 피드에서 추가로 가져오기
+        for (Long randomFeedId : randomFeedIdsLong) {
+            if (allFeedIds.add(randomFeedId)) {
+                uniqueFeedIds.add(randomFeedId);
+                feedsToFill--;
+            }
+            if (feedsToFill <= 0) {
+                break;
+            }
+        }
+
         // feedDomainService로 feedId들을 넘겨서 추천 피드를 가져옴
-        return feedDomainService.getRecommendedFeeds(
-                recommendedFeedIdsLong,
-                topLikedFeedIdsLong,
-                trendingFeedIdsLong,
-                randomFeedIdsLong,
-                page,
-                pageSize,
-                userId
-        );
+        return feedDomainService.getRecommendedFeeds(uniqueFeedIds,page);
     }
 
+    // 중복되지 않는 피드들을 추가하는 헬퍼 메서드
+    private void addUniqueFeeds(Set<Long> allFeedIds, List<Long> uniqueFeedIds, List<Long> feedIds) {
+        for (Long feedId : feedIds) {
+            if (allFeedIds.add(feedId)) {
+                uniqueFeedIds.add(feedId);
+            }
+        }
+    }
+
+    // Redis에서 피드 ID를 가져오는 메서드
+    private List<String> getFeedIdsFromRedis(String redisKey, int page, int count) {
+        long start = (long) page * count;
+        long end = start + count - 1;
+        return redisTemplate.opsForList().range(redisKey, start, end)
+                .stream()
+                .map(Object::toString) // Object를 String으로 변환
+                .collect(Collectors.toList());
+    }
+
+    // String ID를 Long으로 변환하는 메서드
     private List<Long> convertStringIdsToLong(List<String> stringIds) {
         return stringIds.stream()
                 .flatMap(stringId -> {
@@ -401,17 +446,6 @@ public class FeedService {
                 })
                 .toList();
     }
-
-    // Redis에서 피드 ID를 가져오는 메서드
-    private List<String> getFeedIdsFromRedis(String redisKey, int page, int pageSize) {
-        long start = (long) page * pageSize;
-        long end = start + pageSize - 1;
-        return redisTemplate.opsForList().range(redisKey, start, end)
-                .stream()
-                .map(Object::toString) // Object를 String으로 변환
-                .collect(Collectors.toList());
-    }
-
     private List<String> getFeedsImageUrlList(List<Feed> feedsBytotalPlanId) {
         return feedsBytotalPlanId.stream()
                 .map(Feed::getImageUrl)
