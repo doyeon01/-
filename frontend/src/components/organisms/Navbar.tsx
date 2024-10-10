@@ -26,7 +26,7 @@ export const Navbar: React.FC<React.HTMLAttributes<HTMLDivElement>> = (props) =>
   const handleLogout = () => {
     setActiveMenu('logout'); 
     window.location.href = 'https://j11c205.p.ssafy.io/api/v1/users/logout'
-    console.log('로그아웃 완료')
+    console.log('로그아웃 완료.')
   };
 
   return (
