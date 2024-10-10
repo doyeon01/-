@@ -177,7 +177,8 @@ public class FeedDomainService {
         }
 
         // 페이지네이션 정보를 포함한 결과 반환
-        boolean hasNextPage = resultFeeds.size() == pageSize;
+        //boolean hasNextPage = resultFeeds.size() == pageSize;
+        boolean hasNextPage = true;
 
         return RecommendedFeedsForUserResponse.of(resultFeeds, page, hasNextPage);
     }
