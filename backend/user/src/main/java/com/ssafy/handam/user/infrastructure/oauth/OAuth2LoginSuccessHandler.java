@@ -23,11 +23,11 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
-    @Value("${oauth2.survey-redirect-url}")
+    @Value("${oauth2.success-redirect-url}")
     private String surveyRedirectUrl;
 
-    @Value("${oauth2.main-redirect-url}")
-    private String mainRedirectUrl;
+//    @Value("${oauth2.main-redirect-url}")
+//    private String mainRedirectUrl;
 
     @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response, Authentication authentication) throws IOException, ServletException {
@@ -45,12 +45,13 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         CookieUtil.addTokenToCookie(response, token);
 
         User user = userService.getUserById(userId);
+        response.sendRedirect(surveyRedirectUrl);
         System.out.println(user.getTravelStyl1()+user.getName());
-        if (user.getTravelStyl1() == null || user.getTravelStyl1().isEmpty()) {
-            response.sendRedirect(surveyRedirectUrl);
-        } else {
-            response.sendRedirect(mainRedirectUrl);
-        }
+//        if (user.getTravelStyl1() == null || user.getTravelStyl1().isEmpty()) {
+//            response.sendRedirect(surveyRedirectUrl);
+//        } else {
+//            response.sendRedirect(mainRedirectUrl);
+//        }
     }
 
 }
