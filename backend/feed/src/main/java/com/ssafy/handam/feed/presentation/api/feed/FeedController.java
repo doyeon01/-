@@ -78,7 +78,7 @@ public class FeedController {
     )
     public ApiResult<FeedResponse> createFeed(
             @CookieValue(value = "accessToken", required = false) String token,
-            @Valid @RequestPart("data") FeedCreationRequest request,
+            @RequestPart("data") FeedCreationRequest request,
             @RequestPart("image") MultipartFile imageFile) {
 
         String savedImagePath = feedService.saveImage(imageFile);

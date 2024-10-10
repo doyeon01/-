@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record FeedCreationRequest(
-        @NotNull Long totalPlanId,
+        Long totalPlanId,
         String placeName,
         String title,
         String content,
