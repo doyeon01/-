@@ -14,15 +14,15 @@ public class DataMigrationRunner implements ApplicationRunner {
         this.dataMigrationService = dataMigrationService;
     }
 
-    @Override
+//    @Override
     public void run(ApplicationArguments args) {
-        dataMigrationService.migrateData();
+//        dataMigrationService.migrateData();
     }
 
     // 3분마다 데이터 마이그레이션 실행
-    @Scheduled(fixedRate = 180000)
-    public void scheduleDataMigration() {
-        dataMigrationService.migrateData();
-    }
+//    @Scheduled(fixedRate = 180000)
+//    public void scheduleDataMigration() {
+//        dataMigrationService.migrateData();
+//    }
 }
 
