@@ -423,7 +423,7 @@ public class FeedService {
         int topLikePage = page; // 초기 페이지 설정
 
         // 중복되지 않게 랜덤 피드에서 추가로 가져오기
-        System.out.println(recommendedFeedIdsLong.toString());
+
         while (feedsToFill > 0) {
             List<String> additionalTopLikeFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", topLikePage, feedsToFill);
             List<Long> additionalTopLikeFeedIdsLong = convertStringIdsToLong(additionalTopLikeFeedIds);
