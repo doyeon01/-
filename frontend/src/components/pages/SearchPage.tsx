@@ -158,7 +158,7 @@ export const SearchPage: React.FC = () => {
           closeModal={closeModal} 
         />
       )}
-      <div ref={loaderRef} className="h-10"></div> 
-    </div>
+  <div ref={loaderRef} className="h-10 bg-gray-300"></div>
+</div>
   );
 };

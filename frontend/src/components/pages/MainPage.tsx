@@ -101,8 +101,8 @@ const MainPage: React.FC = () => {
         <div id="section1" className={`${styles.section} ${currentSection === 1 ? styles.visible : styles.hidden} relative mt-28 pt-[180px]`}>
           <div className="text-[25px] ml-2">나만의 맞춤여행지</div>
           <span className="text-[#878787] ml-2">당신의 취향 성향 분석완료! 마음에 쏙 들 여행지를 추천해 드릴께요.</span>
-          <ButtonRefresh text="다른 장소 추천" onClick={() => {setPage(prevPage => prevPage + 1);}}/>
-          <CardSetMainRec page={page}/>
+          <ButtonRefresh text="다른 장소 추천" onClick={() => {setPage(prevPage => prevPage + 1)}}/>
+          <CardSetMainRec page={page}  onClick ={handleItemClick}/>
         </div>
 
         {/* 3번째 섹션 */}
