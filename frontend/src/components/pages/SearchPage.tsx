@@ -1,10 +1,9 @@
-import React, { useEffect, useState,useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import CardSetSearchUser from '../../components/molecules/Card/CardSetSearchUser';
 import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPlace';
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
 import { postFeedRecommend } from '../../services/api/FeedService';
 import { FeedsType } from '../../model/FeedType';
-
 
 export const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -14,17 +13,17 @@ export const SearchPage: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true); 
-  const loaderRef = useRef<HTMLDivElement | null>(null); 
-  
+  const [hasMore, setHasMore] = useState(true);
+  const loaderRef = useRef<HTMLDivElement | null>(null);
+
+  // 추천 피드 불러오기
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
       try {
-        const response = await postFeedRecommend(0, 10);
-        console.log('서치페이지 리스폰:');
-        console.log(response.data);
+        const response = await postFeedRecommend(page, 10);
+        console.log('서치페이지 리스폰:', response.data);
         
-        if (response.data.response.hasNextPage) {
+        if (!response.data.response.hasNextPage) {
           setHasMore(false);
         } else {
           setRecommendedFeeds((prevPlaces) => [...prevPlaces, ...response.data.response.feeds]);
@@ -36,7 +35,10 @@ export const SearchPage: React.FC = () => {
     fetchRecommendedFeeds();
   }, [page]);
 
+  // 무한 스크롤 옵저버
   useEffect(() => {
+    if (!loaderRef.current) return;
+
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore) {
@@ -45,33 +47,39 @@ export const SearchPage: React.FC = () => {
       },
       {
         root: null,
-        rootMargin: '20px',
+        rootMargin: '0px', // 스크롤 성능 최적화를 위해 0px로 변경
         threshold: 1.0,
       }
     );
-    
-    if (loaderRef.current) {
-      observer.observe(loaderRef.current);
-    }
+
+    observer.observe(loaderRef.current);
 
     return () => {
       if (loaderRef.current) {
-        observer.unobserve(loaderRef.current);
+        observer.disconnect();
       }
     };
   }, [hasMore]);
 
-
+  // 검색 핸들러
   const handleSearch = () => {
-    setSearchClicked(true);
+    const trimmedSearchTerm = searchTerm.trim(); // 공백 제거된 검색어 처리
+    if (trimmedSearchTerm) {
+      setSearchClicked(true);
+      setSearchTerm(trimmedSearchTerm);
+      setRecommendedFeeds([]); // 검색할 때 상태 초기화
+      setPage(0);
+      setHasMore(true);
+    }
   };
 
+  // 아이템 클릭 핸들러
   const handleItemClick = (id: number) => {
     setSelectedId(id);
-
     setIsModalOpen(true);
   };
 
+  // 모달 닫기
   const closeModal = () => {
     setIsModalOpen(false);
     setSelectedId(null);
@@ -121,14 +129,14 @@ export const SearchPage: React.FC = () => {
 
       {searchClicked ? (
         searchCategory === 'user' ? (
-          <CardSetSearchUser keyword={searchTerm } />
+          <CardSetSearchUser keyword={searchTerm} />
         ) : (
-          <CardSetSearchPlace keyword={searchTerm} onItemClick={handleItemClick} />
+          <CardSetSearchPlace keyword={searchTerm} onItemClick={handleItemClick} loaderRef={loaderRef} />
         )
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-          {recommendedFeeds.map((recommendedFeed, index) => (
-            <div key={index} className="relative group" onClick={() => handleItemClick(recommendedFeed.id)}>
+          {recommendedFeeds.map((recommendedFeed) => (
+            <div key={recommendedFeed.id} className="relative group" onClick={() => handleItemClick(recommendedFeed.id)}>
               <img
                 src={recommendedFeed.imageUrl}
                 alt={recommendedFeed.title}
@@ -153,12 +161,10 @@ export const SearchPage: React.FC = () => {
       )}
 
       {isModalOpen && selectedId && (
-        <ModalFeedDetail
-          selectedId={selectedId}
-          closeModal={closeModal} 
-        />
+        <ModalFeedDetail selectedId={selectedId} closeModal={closeModal} />
       )}
-  <div ref={loaderRef} className="h-10 bg-gray-300"></div>
-</div>
+
+      <div ref={loaderRef} className="h-10"></div>
+    </div>
   );
 };

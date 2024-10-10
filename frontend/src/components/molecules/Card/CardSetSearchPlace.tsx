@@ -6,53 +6,54 @@ import { UserIconMini } from '../../../assets/icons/svg';
 interface CardSetSearchPlaceProps {
   keyword: string;
   onItemClick: (id: number) => void;
+  loaderRef: React.RefObject<HTMLDivElement>; // loaderRef를 props로 받습니다.
 }
 
-const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItemClick }) => {
+const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItemClick, loaderRef }) => {
   const [places, setPlaces] = useState<FeedType[]>([]);
   const [page, setPage] = useState(0);
-  const [hasMore, setHasMore] = useState(true); 
-  const loaderRef = useRef<HTMLDivElement | null>(null); 
+  const [hasMore, setHasMore] = useState(true);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
         const response = await getFeed(keyword, 0, 10);
-        setPlaces(response.response.feeds); 
+        setPlaces(response.response.feeds);
         setPage(0);
-        setHasMore(response.response.hasNextPage);
+        setHasMore(response.response.hasNextPage); // hasNextPage에 따른 설정
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
     };
     fetchData();
   }, [keyword]);
-  
+
   useEffect(() => {
     const fetchMoreData = async () => {
       try {
         const response = await getFeed(keyword, page, 10);
         console.log('서치페이지 장소:');
         console.log(response);
-        
-        if (response.response.hasNextPage) {
-          setHasMore(false);
-        } else {
-          setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); 
+
+        if (!response.response.hasNextPage) {
+          setHasMore(false); // 더 이상 불러올 페이지가 없을 때
         }
+        setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); // 이전 데이터에 새로운 데이터 추가
       } catch (error) {
-        console.error('Error fetching recommended feeds:', error);
+        console.error('Error fetching more feeds:', error);
       }
     };
 
-    fetchMoreData();
+    if (page > 0) {
+      fetchMoreData();
+    }
   }, [page]);
-  
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore) {
-          console.log(hasMore);
+          console.log('Loader visible, loading more data...');
           setPage((prevPage) => prevPage + 1);
         }
       },
@@ -62,7 +63,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         threshold: 1.0,
       }
     );
-    
+
     if (loaderRef.current) {
       observer.observe(loaderRef.current);
     }
@@ -72,7 +73,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         observer.unobserve(loaderRef.current);
       }
     };
-  }, [hasMore]);
+  }, [hasMore, loaderRef]);
 
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
@@ -110,8 +111,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
       ) : (
         <p className='flex items-center justify-center'>검색된 장소가 없습니다.</p>
       )}
-  <div ref={loaderRef} className="h-10 bg-gray-500"></div>
-</div>
+    </div>
   );
 };
 
