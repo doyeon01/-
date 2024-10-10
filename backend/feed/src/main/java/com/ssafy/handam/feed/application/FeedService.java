@@ -415,17 +415,32 @@ public class FeedService {
         addUniqueFeeds(allFeedIds, uniqueFeedIds, recommendedFeedIdsLong);
         addUniqueFeeds(allFeedIds, uniqueFeedIds, topLikedFeedIdsLong);
         addUniqueFeeds(allFeedIds, uniqueFeedIds, trendingFeedIdsLong);
+        addUniqueFeeds(allFeedIds, uniqueFeedIds, randomFeedIdsLong);
 
         // 부족한 피드 수 계산
         int feedsToFill = pageSize - uniqueFeedIds.size();
 
+        int topLikePage = page; // 초기 페이지 설정
+
         // 중복되지 않게 랜덤 피드에서 추가로 가져오기
-        for (Long randomFeedId : randomFeedIdsLong) {
-            if (allFeedIds.add(randomFeedId)) {
-                uniqueFeedIds.add(randomFeedId);
-                feedsToFill--;
+        System.out.println(recommendedFeedIdsLong.toString());
+        while (feedsToFill > 0) {
+            List<String> additionalTopLikeFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", topLikePage, feedsToFill);
+            List<Long> additionalTopLikeFeedIdsLong = convertStringIdsToLong(additionalTopLikeFeedIds);
+
+            // 중복되지 않는 피드를 추가
+            for (Long randomFeedId : additionalTopLikeFeedIdsLong) {
+                if (allFeedIds.add(randomFeedId)) {  // 중복 검사 후 추가
+                    uniqueFeedIds.add(randomFeedId);
+                    feedsToFill--;
+                }
+                if (feedsToFill <= 0) {  // 필요한 수를 다 채우면 종료
+                    break;
+                }
             }
-            if (feedsToFill <= 0) {
+
+            topLikePage++;
+            if (additionalTopLikeFeedIdsLong.isEmpty()) {
                 break;
             }
         }
