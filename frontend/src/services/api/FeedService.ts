@@ -42,14 +42,9 @@ export const LikeFeedList = (userId: number, page: number, size = 100) => {
   });
 };
 
-
 // 맞춤 피드 추천 API
-export const postFeedRecommend = (userId:number,page = 1, size = 10) => {
-  return axios.post(`${BaseUrl}/user/recommended`, {
-    userId: userId,
-    page: page,
-    size: size,
-  }, {
+export const postFeedRecommend = (page = 1, size = 10) => {
+  return axios.post(`${BaseUrl}/recommended?page=${page}&pageSize=${size}`, {
     headers: {
       'Content-Type': 'application/json',
     },

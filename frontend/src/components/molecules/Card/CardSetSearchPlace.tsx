@@ -26,7 +26,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
       }
     };
     fetchData();
-  }, [keyword]);
+  }, []);
   
   useEffect(() => {
     const fetchMoreData = async () => {
