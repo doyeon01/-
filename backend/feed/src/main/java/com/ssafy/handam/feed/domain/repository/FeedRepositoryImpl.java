@@ -6,12 +6,14 @@ import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedDocument;
 import com.ssafy.handam.feed.infrastructure.elasticsearch.FeedElasticsearchRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
+import jakarta.persistence.LockModeType;
 import java.util.List;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.geo.GeoPoint;
+import org.springframework.data.jpa.repository.Lock;
 import org.springframework.stereotype.Repository;
 
 @Repository
@@ -23,6 +25,7 @@ public class FeedRepositoryImpl implements FeedRepository {
     private final FeedElasticsearchRepository feedElasticsearchRepository;
 
     @Override
+//    @Lock(LockModeType.PESSIMISTIC_WRITE)
     public Optional<Feed> findById(Long id) {
         return feedJpaRepository.findById(id);
     }

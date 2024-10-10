@@ -46,12 +46,16 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,6 +146,11 @@ public class FeedService {
         return "https://j11c205a.p.ssafy.io/images/" + fileName;
     }
 
+    @Retryable(
+        maxAttempts = 30,
+        backoff = @Backoff(delay = 1000)
+    )
+//    @Transactional
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
         int likeCount = feedDomainService.likeFeed(feedId, userId);
         updateLikeCountInElasticsearch(feedId, likeCount);
@@ -150,7 +159,7 @@ public class FeedService {
 
     public FeedLikeResponse unlikeFeed(Long feedId, Long userId) {
         int likeCount = feedDomainService.unlikeFeed(feedId, userId);
-        updateLikeCountInElasticsearch(feedId, likeCount);
+//        updateLikeCountInElasticsearch(feedId, likeCount);
         return FeedLikeResponse.of(feedId, false, likeCount);
     }
 
