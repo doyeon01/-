@@ -5,7 +5,7 @@ import { FeedClusterType } from '../../model/SearchingFeedType';
 
 export interface Props {
     isSearch:Boolean
-    clusters: FeedClusterType[]
+    clusters?: FeedClusterType[]
     index?: number
 }
 
@@ -82,23 +82,26 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
             if (window.kakao && window.kakao.maps) {
                 window.kakao.maps.load(() => {
                     if (mapRef.current) {
-                        const mapOption = {
-                            center: new window.kakao.maps.LatLng(clusters[0].latitude, clusters[0].longitude), // 중심 좌표
-                            // center: new window.kakao.maps.LatLng(37.6, 127), // 중심 좌표
-                            level: 3 // 확대 레벨
-                        }; 
-                        const createdMap = new window.kakao.maps.Map(mapRef.current, mapOption);
-                        setMap(createdMap); // 지도 객체 저장
-                
-                        
-                        // 인포윈도우 생성
-                        infowindow.current = new window.kakao.maps.InfoWindow({ zIndex: 1 });
-                        // Places 서비스 객체 생성
-                        const ps = new window.kakao.maps.services.Places();
-                        
-                        setPlacesService(ps);
-                    } else {
-                        console.error('mapRef.current가 존재하지 않습니다.');
+                        if (clusters && clusters.length>0){
+                            const mapOption = {
+                                center: new window.kakao.maps.LatLng(clusters[0].latitude, clusters[0].longitude), // 중심 좌표
+                                // center: new window.kakao.maps.LatLng(37.6, 127), // 중심 좌표
+                                level: 3 // 확대 레벨
+                            }; 
+                            
+                            const createdMap = new window.kakao.maps.Map(mapRef.current, mapOption);
+                            setMap(createdMap); // 지도 객체 저장
+                    
+                            
+                            // 인포윈도우 생성
+                            infowindow.current = new window.kakao.maps.InfoWindow({ zIndex: 1 });
+                            // Places 서비스 객체 생성
+                            const ps = new window.kakao.maps.services.Places();
+                            
+                            setPlacesService(ps);
+                        } else {
+                            console.error('mapRef.current가 존재하지 않습니다.');
+                        }
                     }
                 });
             } else {
@@ -300,23 +303,24 @@ else{
                         level: 13
                     };
                     const map = new window.kakao.maps.Map(mapContainer, mapOption);
-
-                    const positions = clusters.map(items => ({
-                        lat: items.latitude,
-                        lng: items.longitude
-                      }));
-                      console.log(positions);
-                      
-                    positions.forEach(position => {
-                        const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
-        
-                        const marker = new window.kakao.maps.Marker({
-                            position: markerPosition
-                        });
-        
-                        // 지도에 마커를 표시
-                        marker.setMap(map);
-                    })
+                    if(clusters && clusters.length>0){
+                        const positions = clusters.map(items => ({
+                            lat: items.latitude,
+                            lng: items.longitude
+                        }));
+                        console.log(positions);
+                        
+                        positions.forEach(position => {
+                            const markerPosition = new window.kakao.maps.LatLng(position.lat, position.lng);
+            
+                            const marker = new window.kakao.maps.Marker({
+                                position: markerPosition
+                            });
+            
+                            // 지도에 마커를 표시
+                            marker.setMap(map);
+                        })
+                    }
                 }
             });
         }
