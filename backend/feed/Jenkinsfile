@@ -105,6 +105,7 @@ pipeline {
                         docker system prune -f --volumes
                         docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
                         docker run -it -d --name feed -p $USER_PORT:$USER_PORT \
+                        -v /home/ubuntu/VS_photo:/app/photos \  # 볼륨 마운트 추가
                         -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
                         $DOCKER_REPO_USR/$DOCKER_REPO_PSW:feed-latest
                         EOF
