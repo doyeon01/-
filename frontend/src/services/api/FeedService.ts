@@ -7,8 +7,6 @@ const BaseUrl = 'https://j11c205.p.ssafy.io/api/v1/feeds';
 
 // 피드 생성 API
 export const FeedCreate = async (data: FormData) => {
-  console.log(data)
-
   const response = await axios.post(`${BaseUrl}/create`, data, {
     headers: {
       'Content-Type': 'multipart/form-data',
