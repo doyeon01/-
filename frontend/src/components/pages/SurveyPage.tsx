@@ -587,7 +587,7 @@ useEffect(() => {
           {PageNum === 11 && (
             // 설문 결과 페이지
             <>
-              <div className='flex flex-col justify-between items-center gap-3 overflow-auto h-full pt-[20px]'>
+              <div className='flex flex-col justify-between items-center gap-3 overflow-auto h-full pt-[20px] pb-[20px]'>
                 <div className="flex justify-between flex-row w-full px-6">
                 <button
                     className="w-[50px] h-[50px] bg-[#B8B1AB] rounded-[25px] flex justify-center items-center text-[12px] text-white"
@@ -608,7 +608,7 @@ useEffect(() => {
                   <MBTIRenderer mbti={MBTI}/>
                 </div>
                 <button
-                  className="w-[200px] h-[50px] min-h-[50px] bg-[#B8B1AB] bottom-0 rounded-[25px] flex justify-center items-center text-[24px] text-white "
+                  className="w-[200px] h-[50px] min-h-[50px] bg-[#B8B1AB] bottom-0 rounded-[25px] flex justify-center items-center text-[24px] text-white"
                   onClick={handleRegister}
                 >
                   여행가기
