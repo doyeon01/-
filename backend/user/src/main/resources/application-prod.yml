@@ -25,7 +25,7 @@ spring:
           naver:
             client-id: ${CLIENT_ID}
             client-secret: ${CLIENT_SECRET}
-            redirect-uri: "http://j11c205.p.ssafy.io:8081/login/oauth2/code/naver"
+            redirect-uri: "http://localhost:8081/login/oauth2/code/naver"
             authorization-grant-type: authorization_code
             scope: name,email,nickname,gender,age,birthday,profile_image,birthday,mobile
             client-name: Naver
