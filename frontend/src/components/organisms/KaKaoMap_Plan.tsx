@@ -90,27 +90,7 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
                         const createdMap = new window.kakao.maps.Map(mapRef.current, mapOption);
                         setMap(createdMap); // 지도 객체 저장
                 
-                        if(index){
-                            const stored = localStorage.getItem(`schedule_${index}`)
-                            console.log('스토어:',stored);
-                            
-                            if (stored && stored.length > 0) {
-                                const parsedStore = JSON.parse(stored)
-                                console.log('체체크');
-                                
-                                parsedStore.forEach((items: any) => {
-                                    console.log('체크',items.y||items.latitude, items.x||items.longitude);
-                                    
-                                    const markerPosition = new window.kakao.maps.LatLng(items.y||items.latitude, items.x||items.longitude);
-                    
-                                    const marker = new window.kakao.maps.Marker({
-                                        position: markerPosition
-                                    });
-                                    
-                                    // 지도에 마커를 표시
-                                    marker.setMap(createdMap);})
-                            }
-                        }
+                        
                         // 인포윈도우 생성
                         infowindow.current = new window.kakao.maps.InfoWindow({ zIndex: 1 });
                         // Places 서비스 객체 생성
@@ -133,7 +113,52 @@ const KaKaoMap_Plan: React.FC<Props> = ({isSearch, clusters, index}) => {
         return () => {
             document.body.removeChild(script); // 스크립트 제거
         };
-    }, [storedData,index]);
+    }, []);
+
+    useEffect(() => {
+        if (!map || !infowindow.current) return;
+
+        // 기존 마커 초기화 (지도에서 제거)
+        markers.forEach(marker => marker.setMap(null));
+
+        if (index) {
+            const stored = localStorage.getItem(`schedule_${index}`);
+            if (stored && stored.length > 0) {
+                const parsedStore = JSON.parse(stored);
+                const newMarkers: any[] = [];
+
+                parsedStore.forEach((items: any) => {
+                    const markerPosition = new window.kakao.maps.LatLng(
+                        items.y || items.latitude, 
+                        items.x || items.longitude
+                    );
+
+                    const marker = new window.kakao.maps.Marker({
+                        position: markerPosition
+                    });
+
+                    // 지도에 마커를 표시
+                    marker.setMap(map);
+
+                    // 새 마커 배열에 추가
+                    newMarkers.push(marker);
+
+                    // 마커 이벤트 추가
+                    window.kakao.maps.event.addListener(marker, 'mouseover', () => {
+                        infowindow.current.setContent(`<div style="padding:5px;">${items.place_name||items.placeName}</div>`);
+                        infowindow.current.open(map, marker);
+                    });
+
+                    window.kakao.maps.event.addListener(marker, 'mouseout', () => {
+                        infowindow.current.close();
+                    });
+                });
+
+                // 마커 상태를 새로운 마커 배열로 업데이트
+                setMarkers(newMarkers);
+            }
+        }
+    }, [storedData, index, map]); // map도 의존성 배열에 포함해야 제대로 작동)
 
     // 장소 검색 함수
     const searchPlaces = () => {
