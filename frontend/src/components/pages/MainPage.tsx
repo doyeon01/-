@@ -17,7 +17,7 @@ const MainPage: React.FC = () => {
   const [currentSection, setCurrentSection] = useState(0);
   const [isScrolling, setIsScrolling] = useState(false);
   const sections = ['carousel', 'section1', 'section2', 'section3', 'section4'];
-  const [page,setPage] = useState(1)
+  const [page,setPage] = useState(0)
   const [userId, setUserId] = useRecoilState(UserIdAtom);  
   const [myAge,setMyAge] = useState('')
   const [myResidence,setMyResidence] = useState('')

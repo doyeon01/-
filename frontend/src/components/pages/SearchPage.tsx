@@ -20,7 +20,10 @@ export const SearchPage: React.FC = () => {
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
       try {
-        const response = await postFeedRecommend(1, 10);
+        const response = await postFeedRecommend(0, 10);
+        console.log('서치페이지 리스폰:');
+        console.log(response.data);
+        
         if (response.data.response.feeds.length === 0) {
           setHasMore(false);
         } else {
@@ -156,7 +159,6 @@ export const SearchPage: React.FC = () => {
         />
       )}
       <div ref={loaderRef} className="h-10"></div> 
-
     </div>
   );
 };
