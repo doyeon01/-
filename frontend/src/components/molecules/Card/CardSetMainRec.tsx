@@ -1,46 +1,64 @@
 import React, { useEffect, useState } from 'react';
 import { FeedsType } from '../../../model/FeedType';
-import { postFeedRecommend } from '../../../services/api/FeedService';
-import useLike from '../../../hooks/useLike';
+import { postFeedRecommend, postLike, postUnlike } from '../../../services/api/FeedService';
+import { useRecoilState } from 'recoil';
+import { UserId as UserIdAtom } from '../../../Recoil/atoms/Auth';
 
 interface CardSetMainRecProps {
   page: number;
   onClick: (id: number) => void;
-
 }
 
-const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page,onClick }) => {
+const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page, onClick }) => {
   const [hoveredIndex, setHoveredIndex] = useState<number | null>(0);
-  const [hoveredItem, setHoveredItem] = useState<FeedsType | null>(null);
+  const [_, setHoveredItem] = useState<FeedsType | null>(null);
   const [recommendedFeeds, setRecommendedFeeds] = useState<FeedsType[]>([]);
-  const { isLike, toggleLike } = useLike(hoveredItem?.isLiked ?? false, hoveredItem?.id ?? null);
+  const [likeStates, setLikeStates] = useState<{ [key: number]: boolean }>({});
+  const [userId] = useRecoilState(UserIdAtom);
 
   useEffect(() => {
     console.log(page);
-    
+
     const fetchRecommendedFeeds = async () => {
       try {
         const response = await postFeedRecommend(page, 10);
-        console.log('메인페이지 리스폰:');
-        console.log(response.data);
+        console.log('메인페이지 리스폰:', response.data);
         
-        setRecommendedFeeds(response.data.response.feeds.slice(0, 5));
+        const feeds = response.data.response.feeds.slice(0, 5);
+        setRecommendedFeeds(feeds);
+
+        // 좋아요 상태 초기화
+        const newLikeStates = feeds.reduce((acc: { [key: number]: boolean }, feed: FeedsType) => {
+          acc[feed.id] = feed.isLiked;
+          return acc;
+        }, {} as { [key: number]: boolean });
+        setLikeStates(newLikeStates);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
     };
 
-    fetchRecommendedFeeds(); 
+    fetchRecommendedFeeds();
   }, [page]);
+
+  const toggleLike = async (id: number) => {
+    try {
+      const currentLike = likeStates[id];
+      const response = currentLike ? await postUnlike(userId, id) : await postLike(userId, id);
+
+      if (response && response.success) {
+        setLikeStates((prev) => ({ ...prev, [id]: !currentLike }));
+      }
+    } catch (error) {
+      console.error('좋아요 처리 중 오류 발생:', error);
+    }
+  };
 
   return (
     <div className="flex gap-4">
       {recommendedFeeds.map((item, index) => {
         const isHovered = hoveredIndex === index;
-
-        const widthClass = isHovered
-          ? 'flex-[3]' 
-          : 'flex-[1]'; 
+        const widthClass = isHovered ? 'flex-[3]' : 'flex-[1]';
 
         return (
           <div
@@ -48,10 +66,10 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page,onClick }) => {
             className={`relative transition-all duration-300 ease-in-out ${widthClass} overflow-hidden cursor-pointer`}
             onMouseEnter={() => {
               setHoveredIndex(index);
-              setHoveredItem(item); 
+              setHoveredItem(item);
             }}
             onClick={() => onClick(item.id)}
-            >
+          >
             <img
               src={item.imageUrl}
               alt={item.title}
@@ -63,8 +81,14 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page,onClick }) => {
             </div>
             {isHovered && (
               <div className="absolute top-2 right-2">
-                <button className="bg-white rounded-full p-2 shadow-md" onClick={toggleLike}>
-                  {isLike ? '❤️' : '🤍'} 
+                <button
+                  className="bg-white rounded-full p-2 shadow-md z-20"
+                  onClick={(e) => {
+                    e.stopPropagation(); 
+                    toggleLike(item.id);
+                  }}
+                >
+                  {likeStates[item.id] ? '❤️' : '🤍'}
                 </button>
               </div>
             )}
