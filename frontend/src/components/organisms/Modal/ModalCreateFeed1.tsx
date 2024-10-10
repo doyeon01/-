@@ -3,7 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { PlanListApi } from '../../../services/api/PlanService'
 import { PlanListType, PlanListResponseType } from '../../../model/MyPageType'; 
 import { OutIcon } from '../../../assets/icons/svg';
-export { OutIcon } from '../../../assets/icons/svg'
    
 
 const ModalCreateFeed1: React.FC<{ onSelectSchedule: (id: number, title: string) => void, onClose: () => void }> = ({ onSelectSchedule, onClose }) => {
