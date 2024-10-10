@@ -1,0 +1,14 @@
+[[chatroom-getChatMessages]]
+=== 채팅방 채팅 조회 API
+
+==== HTTP Request
+
+include::{snippets}/chatroom-getChatMessages/http-request.adoc[]
+include::{snippets}/chatroom-getChatMessages/request-cookies.adoc[]
+include::{snippets}/chatroom-getChatMessages/path-parameters.adoc[]
+
+
+==== HTTP Response
+
+include::{snippets}/chatroom-getChatMessages/http-response.adoc[]
+include::{snippets}/chatroom-getChatMessages/response-fields.adoc[]

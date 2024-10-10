@@ -1,0 +1,11 @@
+[[create-feed]]
+=== 피드 생성 API
+
+==== HTTP Request
+
+include::{snippets}/create-feed/http-request.adoc[]
+include::{snippets}/create-feed/request-parts.adoc[]
+==== HTTP Response
+
+include::{snippets}/create-feed/http-response.adoc[]
+include::{snippets}/create-feed/response-fields.adoc[]

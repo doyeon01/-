@@ -1,0 +1,188 @@
+def skipRemainingStages = true
+
+pipeline {
+    agent any
+
+    triggers {
+        // GitLab Webhook을 통해 backend 브랜치로의 push 이벤트 시 트리거.
+        gitlab(
+            triggerOnPush: true,
+        )
+    }
+
+    environment {
+        USER_PORT = '8081'
+        DOCKER_USERINFO = credentials('DOCKER_USER')
+        DOCKER_REPO = credentials('DOCKER_REPO')
+        EC2_IP = credentials('EC2_SERVER1_IP')
+        SSH_INFO = credentials('EC2_SERVER1_SSH')
+    }
+
+    stages {
+
+        stage('Checkout Code') {
+            steps {
+                // backend 브랜치의 user 폴더만 체크아웃
+                checkout([$class: 'GitSCM',
+                    branches: [[name: '*/backend']],
+                    userRemoteConfigs: [[
+                        url: 'https://lab.ssafy.com/s11-bigdata-dist-sub1/S11P21C205.git',
+                        credentialsId: 'PERSONAL_ACCESS_TOKEN'
+                    ]],
+                    extensions: [[$class: 'SparseCheckoutPaths', sparseCheckoutPaths: [[path: 'user/']]]]
+                ])
+            }
+        }
+
+//         stage('Check for user Changes') {
+//             steps {
+//                 script {
+//                     // 최근 커밋과 그 이전 커밋 비교, user 폴더에 변경된 파일이 있는지 확인
+// //                     def changes = sh(script: "git diff --name-only HEAD~1 HEAD -- user/", returnStdout: true).trim()
+//                     if (changes == '') {
+// //                         echo 'No changes in user folder, skipping build and deploy.'
+// //                         currentBuild.result = 'SUCCESS'
+//                         skipRemainingStages = true
+//                         return
+//                     } else {
+//                         echo "Changes detected in user folder. Proceeding with build and deploy."
+//                     }
+//                 }
+//             }
+//         }
+
+        stage('Build Docker Image') {
+            when {
+                changeset "backend/user/**"
+            }
+            steps {
+                script {
+                     withCredentials([
+                          string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                          string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
+                          string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
+                     ]) {
+                          skipRemainingStages = false
+                          sh """
+                           cd backend/user
+                           chmod +x ./gradlew
+                           ./gradlew build -x test
+                           ls build/libs
+                           docker build \
+                           --build-arg SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                           --build-arg CLIENT_ID=${CLIENT_ID} \
+                           --build-arg CLIENT_SECRET=${CLIENT_SECRET} \
+                           -t user:latest .
+                           """
+                     }
+                }
+            }
+        }
+
+        stage('Login to Docker Registry') {
+            when {
+                changeset "backend/user/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker login -u $DOCKER_USERINFO_USR -p $DOCKER_USERINFO_PSW
+                    """
+                }
+            }
+        }
+
+        stage('Push Docker Image to Repository') {
+            when {
+                changeset "backend/user/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker tag user:latest $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                    docker push $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                    """
+                }
+            }
+        }
+
+        stage('Deploy to EC2') {
+            when {
+                changeset "backend/user/**"
+            }
+            steps {
+                script {
+                    withCredentials([
+                         string(credentialsId: 'SPRING_JWT_SECRET', variable: 'SPRING_JWT_SECRET'),
+                         string(credentialsId: 'client-id', variable: 'CLIENT_ID'),
+                         string(credentialsId: 'client-secret', variable: 'CLIENT_SECRET')
+                    ]){
+                        sh """
+                             ssh -o StrictHostKeyChecking=no -i $SSH_INFO $SSH_INFO_USR@$EC2_IP <<-EOF
+                             export SPRING_JWT_SECRET=${SPRING_JWT_SECRET}
+                             export CLIENT_ID=${CLIENT_ID}
+                             export CLIENT_SECRET=${CLIENT_SECRET}
+                             docker stop user || true
+                             docker rm user || true
+                             docker rmi $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest || true
+                             docker system prune -f --volumes
+                             docker pull $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                             docker run -it -d --name user -p $USER_PORT:$USER_PORT \
+                                     -e SPRING_JWT_SECRET=${SPRING_JWT_SECRET} \
+                                     -e CLIENT_ID=${CLIENT_ID} \
+                                     -e CLIENT_SECRET=${CLIENT_SECRET} \
+                             $DOCKER_REPO_USR/$DOCKER_REPO_PSW:user-latest
+                            EOF
+                        """.stripIndent()
+
+                    }
+
+                }
+            }
+        }
+
+        stage('Logout from Docker Registry') {
+            when {
+                changeset "backend/user/**"
+            }
+            steps {
+                script {
+                    sh """
+                    docker logout
+                    """
+                }
+            }
+        }
+    }
+
+    post {
+        always {
+            echo 'Pipeline finished!'
+        }
+        success {
+            script{
+                if (skipRemainingStages) {
+                    echo "No changes in user folder, skipping build and deploy."
+                } else {
+                    echo "Deployed successfully on port ${USER_PORT}!"
+                    def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+                    mattermostSend (
+                        color: 'good',
+                        message: "${user}님의 ${env.JOB_NAME} 서버 배포 성공. (#${env.BUILD_NUMBER}) ",
+                    )
+                }
+            }
+        }
+        failure {
+            echo 'Deployment failed!'
+            script{
+                def user = sh(script: 'git log -1 --pretty=format:"%an"', returnStdout: true).trim()
+                mattermostSend (
+                    color: 'danger',
+                    message: "${user}님? ${env.JOB_NAME} 서버 터졌는데요? (#${env.BUILD_NUMBER}) ",
+                )
+            }
+        }
+    }
+
+}

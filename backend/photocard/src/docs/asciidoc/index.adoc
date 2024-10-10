@@ -1,0 +1,38 @@
+:snippets: ../../../build/generated-snippets
+:doctype: book
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 3
+:sectlinks:
+
+= 여행한담 Rest API 문서
+
+== 포토카드 API
+
+
+=== 특정 피드의 포토카드 생성
+
+==== HTTP Request
+include::{snippets}/create-photocard/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/create-photocard/http-response.adoc[]
+include::{snippets}/create-photocard/request-fields.adoc[]
+include::{snippets}/create-photocard/response-fields.adoc[]
+
+
+=== 특정 피드의 포토카드 조회
+==== HTTP Request
+include::{snippets}/get-photocard/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-photocard/http-response.adoc[]
+include::{snippets}/get-photocard/path-parameters.adoc[]
+include::{snippets}/get-photocard/response-fields.adoc[]
+
+
+=== 특정 사용자의 전체 포토카드 조회
+==== HTTP Request
+include::{snippets}/get-photocards-by-user/http-request.adoc[]
+==== HTTP Response
+include::{snippets}/get-photocards-by-user/http-response.adoc[]
+include::{snippets}/get-photocards-by-user/path-parameters.adoc[]
+include::{snippets}/get-photocards-by-user/response-fields.adoc[]

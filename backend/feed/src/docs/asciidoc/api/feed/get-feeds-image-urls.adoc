@@ -1,0 +1,12 @@
+[[feeds-image-urls]]
+=== 댓글 생성 API
+
+==== HTTP Request
+
+include::{snippets}/get-feeds-image-urls/http-request.adoc[]
+include::{snippets}/get-feeds-image-urls/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-feeds-image-urls/http-response.adoc[]
+include::{snippets}/get-feeds-image-urls/response-fields.adoc[]
