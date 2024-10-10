@@ -6,7 +6,7 @@ import { UserIconMini } from '../../../assets/icons/svg';
 interface CardSetSearchPlaceProps {
   keyword: string;
   onItemClick: (id: number) => void;
-  loaderRef: React.RefObject<HTMLDivElement>; // loaderRef를 props로 받습니다.
+  loaderRef: React.RefObject<HTMLDivElement>; 
 }
 
 const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItemClick, loaderRef }) => {
@@ -20,7 +20,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         const response = await getFeed(keyword, 0, 10);
         setPlaces(response.response.feeds);
         setPage(0);
-        setHasMore(response.response.hasNextPage); // hasNextPage에 따른 설정
+        setHasMore(response.response.hasNextPage);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
@@ -36,9 +36,9 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         console.log(response);
 
         if (!response.response.hasNextPage) {
-          setHasMore(false); // 더 이상 불러올 페이지가 없을 때
+          setHasMore(false); 
         }
-        setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); // 이전 데이터에 새로운 데이터 추가
+        setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); 
       } catch (error) {
         console.error('Error fetching more feeds:', error);
       }

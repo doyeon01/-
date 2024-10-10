@@ -48,7 +48,7 @@ export const SearchPage: React.FC = () => {
       },
       {
         root: null,
-        rootMargin: '0px', // 스크롤 성능 최적화를 위해 0px로 변경
+        rootMargin: '0px',
         threshold: 1.0,
       }
     );
@@ -64,11 +64,11 @@ export const SearchPage: React.FC = () => {
 
   // 검색 핸들러
   const handleSearch = () => {
-    const trimmedSearchTerm = searchTerm.trim(); // 공백 제거된 검색어 처리
+    const trimmedSearchTerm = searchTerm.trim();
     if (trimmedSearchTerm) {
       setSearchClicked(true);
       setSearchTerm(trimmedSearchTerm);
-      setRecommendedFeeds([]); // 검색할 때 상태 초기화
+      setRecommendedFeeds([]); 
       setPage(0);
       setHasMore(true);
     }
