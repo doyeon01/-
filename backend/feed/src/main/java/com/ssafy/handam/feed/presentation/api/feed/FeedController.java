@@ -23,7 +23,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageInfoResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -198,7 +198,7 @@ public class FeedController {
     }
 
     @GetMapping("/search/images/{totalPlanId}")
-    public ApiResult<FeedsImageUrlResponse> getFeedsImageUrlsByTotalPlanId(@PathVariable Long totalPlanId) {
+    public ApiResult<FeedsImageInfoResponse> getFeedsImageUrlsByTotalPlanId(@PathVariable Long totalPlanId) {
 
         FeedsByTotalPlanIdServiceRequest request = FeedsByTotalPlanIdRequest.toService(totalPlanId);
         return success(feedService.getFeedsImageUrlsByTotalPlanId(request));

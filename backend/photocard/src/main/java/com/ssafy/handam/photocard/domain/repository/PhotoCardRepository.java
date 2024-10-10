@@ -12,4 +12,5 @@ public interface PhotoCardRepository {
     PhotoCard save(PhotoCard photocard);
     PhotoCard findByTotalPlanId(Long totalPlanId);
     Page<PhotoCard> findByUserId(Long userId, Pageable pageable);
+    boolean existsByFeedId(Long feedId);
 }

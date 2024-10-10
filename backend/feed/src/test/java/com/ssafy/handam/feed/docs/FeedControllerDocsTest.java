@@ -24,6 +24,7 @@ import static org.springframework.restdocs.request.RequestDocumentation.requestP
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.ssafy.handam.feed.application.dto.CommentDto;
+import com.ssafy.handam.feed.application.dto.FeedImageInfoDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.request.comment.CreateCommentServiceRequest;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedsByTotalPlanIdServiceRequest;
@@ -38,7 +39,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageInfoResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -946,7 +947,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                 1L
         );
         Long requestTotalPlanId = 1L;
-        FeedsImageUrlResponse response = FeedsImageUrlResponse.of(List.of("feed-image-url"));
+
+        FeedImageInfoDto feedImageInfoDto = FeedImageInfoDto.of(1L, "feed-image-url");
+        FeedsImageInfoResponse response = FeedsImageInfoResponse.of(List.of(feedImageInfoDto));
 
         given(feedService.getFeedsImageUrlsByTotalPlanId(feedsByTotalPlanIdServiceRequest)).willReturn(response);
 
@@ -963,7 +966,9 @@ class FeedControllerDocsTest extends RestDocsSupport {
                         ),
                         responseFields(
                                 fieldWithPath("success").description("성공 여부"),
-                                fieldWithPath("response.feedImageUrls[]").type(JsonFieldType.ARRAY)
+                                fieldWithPath("response.feedImageInfo[].feedId").type(JsonFieldType.NUMBER)
+                                        .description("피드 ID"),
+                                fieldWithPath("response.feedImageInfo[].feedImageUrl").type(JsonFieldType.STRING)
                                         .description("피드 이미지 url"),
                                 fieldWithPath("error").description("에러 메시지")
                         )

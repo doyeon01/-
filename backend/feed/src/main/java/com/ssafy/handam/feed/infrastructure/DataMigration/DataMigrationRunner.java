@@ -21,7 +21,7 @@ public class DataMigrationRunner implements ApplicationRunner {
     }
 
     // 3분마다 데이터 마이그레이션 실행
-    @Scheduled(fixedRate = 180000)
+//    @Scheduled(fixedRate = 180000)
     public void scheduleDataMigration() {
         dataMigrationService.migrateData();
     }

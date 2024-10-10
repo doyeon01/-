@@ -22,4 +22,7 @@ public class PhotoCardRepositoryImpl implements PhotoCardRepository {
 
     @Override
     public Page<PhotoCard> findByUserId(Long userId, Pageable pageable) { return photoCardJpaRepository.findByUserId(userId, pageable); }
+
+    @Override
+    public boolean existsByFeedId(Long feedId) { return photoCardJpaRepository.existsByFeedId(feedId);}
 }

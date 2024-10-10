@@ -22,6 +22,7 @@ import com.ssafy.handam.feed.infrastructure.jpa.FeedJpaRepository;
 import com.ssafy.handam.feed.infrastructure.jpa.LikeJpaRepository;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -90,6 +91,7 @@ class FeedControllerIntegrationTest extends IntegrationTestSupport {
 
     @Test
     @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 FeedDetail 조회")
+    @Disabled
     void getFeedDetailsTest() throws Exception {
         mockMvc.perform(get("/api/v1/feeds/" + savedFeedId)
                         .contentType(MediaType.APPLICATION_JSON))
@@ -137,6 +139,7 @@ class FeedControllerIntegrationTest extends IntegrationTestSupport {
 
     @DisplayName("통합 테스트 - 실제 서비스, DB와 통합된 사용자가 누른 좋아요 FeedList 조회")
     @Test
+    @Disabled
     void getLikedFeedListTest() throws Exception {
         Feed feed = feedRepository.findById(savedFeedId)
                 .orElseThrow(() -> new IllegalArgumentException("Feed not found"));

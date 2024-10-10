@@ -7,6 +7,7 @@ import com.ssafy.handam.chat.controller.response.ChatRoomsResponse;
 import com.ssafy.handam.chat.domain.ChatMessage;
 import com.ssafy.handam.chat.domain.ChatRoom;
 import com.ssafy.handam.chat.dto.ChatMessageDto;
+import com.ssafy.handam.chat.dto.ChatUserDto;
 import com.ssafy.handam.chat.repository.ChatMessageRepository;
 import com.ssafy.handam.chat.repository.ChatRoomRepository;
 import jakarta.transaction.Transactional;
@@ -41,7 +42,8 @@ public class ChatService {
             String nickname;
             String content;
             LocalDateTime createdDate;
-            List<UserDto> users;
+            UserDto user = userApiClient.getUserById(partnerId, token);
+            ChatUserDto chatUserDto = ChatUserDto.from(user);
 
             if (latestMessageOpt.isPresent()) {
                 ChatMessage latestMessage = latestMessageOpt.get();
@@ -57,17 +59,12 @@ public class ChatService {
                 createdDate = null;
             }
 
-            users = List.of(
-                    userApiClient.getUserById(userId, token),
-                    userApiClient.getUserById(partnerId, token)
-            );
-
             return ChatRoomsResponse.of(
                     chatRoom.getChatRoomId(),
                     nickname,
                     content,
                     createdDate,
-                    users
+                    chatUserDto
             );
         }).toList();
     }

@@ -1,15 +1,14 @@
 package com.ssafy.handam.chat.controller.response;
 
-import com.ssafy.handam.chat.client.UserDto;
+import com.ssafy.handam.chat.dto.ChatUserDto;
 import java.time.LocalDateTime;
-import java.util.List;
 
 public record ChatRoomsResponse(
         Long chatRoomId,
         String lastUserName,
         String lastMessage,
         LocalDateTime lastMessageTime,
-        List<UserDto> users
+        ChatUserDto user
 ) {
 
     public static ChatRoomsResponse of(
@@ -17,11 +16,12 @@ public record ChatRoomsResponse(
             String lastUserName,
             String lastMessage,
             LocalDateTime lastMessageTime,
-            List<UserDto> users) {
+            ChatUserDto user) {
         return new ChatRoomsResponse(
                 chatRoomId,
                 lastUserName,
                 lastMessage,
-                lastMessageTime, users);
+                lastMessageTime,
+                user);
     }
 }

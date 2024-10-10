@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.ssafy.handam.feed.application.dto.FeedDetailDto;
+import com.ssafy.handam.feed.application.dto.FeedImageInfoDto;
 import com.ssafy.handam.feed.application.dto.FeedPreviewDto;
 import com.ssafy.handam.feed.application.dto.UserDetailDto;
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
@@ -24,7 +25,7 @@ import com.ssafy.handam.feed.presentation.response.feed.CreatedFeedsByUserRespon
 import com.ssafy.handam.feed.presentation.response.feed.FeedDetailResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedLikeResponse;
 import com.ssafy.handam.feed.presentation.response.feed.FeedResponse;
-import com.ssafy.handam.feed.presentation.response.feed.FeedsImageUrlResponse;
+import com.ssafy.handam.feed.presentation.response.feed.FeedsImageInfoResponse;
 import com.ssafy.handam.feed.presentation.response.feed.LikedFeedsByUserResponse;
 import com.ssafy.handam.feed.presentation.response.feed.NearbyClusterCenterResponse;
 import com.ssafy.handam.feed.presentation.response.feed.RecommendedFeedsForUserResponse;
@@ -42,12 +43,16 @@ import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
+import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
+import org.springframework.retry.annotation.Backoff;
+import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -111,7 +116,8 @@ public class FeedService {
     public FeedDetailResponse getFeedDetails(Long feedId, String accessToken) {
         Feed feed = feedDomainService.findById(feedId);
         UserDetailDto userDetailDto = getUserDetailDto(feed.getUserId(), accessToken);
-        return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDetailDto.id())),
+        UserDto userDto = userApiClient.getUserByToken(accessToken);
+        return FeedDetailResponse.of(FeedDetailDto.of(feed, isLikedFeed(feed, userDto.id())),
                 userDetailDto.nickname(), userDetailDto.profileImageUrl());
     }
 
@@ -137,6 +143,11 @@ public class FeedService {
         return "https://j11c205a.p.ssafy.io/images/" + fileName;
     }
 
+    @Retryable(
+        maxAttempts = 30,
+        backoff = @Backoff(delay = 1000)
+    )
+//    @Transactional
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
         int likeCount = feedDomainService.likeFeed(feedId, userId);
         updateLikeCountInElasticsearch(feedId, likeCount);
@@ -145,7 +156,7 @@ public class FeedService {
 
     public FeedLikeResponse unlikeFeed(Long feedId, Long userId) {
         int likeCount = feedDomainService.unlikeFeed(feedId, userId);
-        updateLikeCountInElasticsearch(feedId, likeCount);
+//        updateLikeCountInElasticsearch(feedId, likeCount);
         return FeedLikeResponse.of(feedId, false, likeCount);
     }
 
@@ -161,11 +172,10 @@ public class FeedService {
         List<Long> feedIds = likesBy.getContent().stream()
                 .map(like -> like.getFeed().getId())
                 .toList();
-        List<Feed> likedFeedsByUser = feedDomainService.getFeedByIds(feedIds);
+        List<FeedDocument> likedFeedsByUser = feedDomainService.getFeedDocumentsByIds(feedIds);
         boolean hasNextPage = likesBy.hasNext();
         int currentPage = likesBy.getNumber();
-        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser,
-                userApiClient.getUserById(userId, accessToken));
+        List<FeedPreviewDto> likedFeeds = getFeedPreviewDtoList(likedFeedsByUser, accessToken);
         return LikedFeedsByUserResponse.of(likedFeeds, currentPage, hasNextPage);
     }
 
@@ -250,9 +260,9 @@ public class FeedService {
         );
     }
 
-    public FeedsImageUrlResponse getFeedsImageUrlsByTotalPlanId(FeedsByTotalPlanIdServiceRequest request) {
-        return FeedsImageUrlResponse.of(
-                getFeedsImageUrlList(
+    public FeedsImageInfoResponse getFeedsImageUrlsByTotalPlanId(FeedsByTotalPlanIdServiceRequest request) {
+        return FeedsImageInfoResponse.of(
+                getFeedsImageInfoList(
                         feedDomainService.getFeedsByTotalPlanId(
                                 request.totalPlanId()
                         )
@@ -327,7 +337,18 @@ public class FeedService {
                 .toList();
     }
 
+    private List<FeedPreviewDto> getFeedPreviewDtoList(List<FeedDocument> feeds, String token) {
+        UserDto userByToken = userApiClient.getUserByToken(token);
+        return feeds.stream()
+                .map(feed -> FeedPreviewDto.fromDocument(feed, isLikedFeed(feed, userByToken.id())))
+                .toList();
+    }
+
     private boolean isLikedFeed(Feed feed, Long userId) {
+        return feedDomainService.isLikedFeed(feed.getId(), userId);
+    }
+
+    private boolean isLikedFeed(FeedDocument feed, Long userId) {
         return feedDomainService.isLikedFeed(feed.getId(), userId);
     }
 
@@ -446,9 +467,10 @@ public class FeedService {
                 })
                 .toList();
     }
-    private List<String> getFeedsImageUrlList(List<Feed> feedsBytotalPlanId) {
+
+    private List<FeedImageInfoDto> getFeedsImageInfoList(List<Feed> feedsBytotalPlanId) {
         return feedsBytotalPlanId.stream()
-                .map(Feed::getImageUrl)
+                .map(feed -> FeedImageInfoDto.of(feed.getId(), feed.getImageUrl()))
                 .toList();
     }
 }
