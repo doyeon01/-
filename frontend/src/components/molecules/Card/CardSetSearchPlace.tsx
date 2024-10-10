@@ -20,7 +20,7 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         const response = await getFeed(keyword, 0, 10);
         setPlaces(response.response.feeds); 
         setPage(0);
-        setHasMore(response.response.feeds.length > 0);
+        setHasMore(response.response.hasNextPage);
       } catch (error) {
         console.error('Error fetching recommended feeds:', error);
       }
@@ -32,7 +32,10 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
     const fetchMoreData = async () => {
       try {
         const response = await getFeed(keyword, page, 10);
-        if (response.response.feeds.length === 0) {
+        console.log('서치페이지 장소:');
+        console.log(response);
+        
+        if (response.response.hasNextPage) {
           setHasMore(false);
         } else {
           setPlaces((prevPlaces) => [...prevPlaces, ...response.response.feeds]); 
@@ -41,16 +44,15 @@ const CardSetSearchPlace: React.FC<CardSetSearchPlaceProps> = ({ keyword, onItem
         console.error('Error fetching recommended feeds:', error);
       }
     };
-  
-    if (page > 1) {
-      fetchMoreData();
-    }
+
+    fetchMoreData();
   }, [page]);
   
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting && hasMore) {
+          console.log(hasMore);
           setPage((prevPage) => prevPage + 1);
         }
       },

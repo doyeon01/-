@@ -14,9 +14,11 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
   const { isLike, toggleLike } = useLike(hoveredItem?.isLiked ?? false, hoveredItem?.id ?? null);
 
   useEffect(() => {
+    console.log(page);
+    
     const fetchRecommendedFeeds = async () => {
       try {
-        const response = await postFeedRecommend(page, 6);
+        const response = await postFeedRecommend(page, 10);
         console.log('메인페이지 리스폰:');
         console.log(response.data);
         

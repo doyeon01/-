@@ -24,7 +24,7 @@ export const SearchPage: React.FC = () => {
         console.log('서치페이지 리스폰:');
         console.log(response.data);
         
-        if (response.data.response.feeds.length === 0) {
+        if (response.data.response.hasNextPage) {
           setHasMore(false);
         } else {
           setRecommendedFeeds((prevPlaces) => [...prevPlaces, ...response.data.response.feeds]);
