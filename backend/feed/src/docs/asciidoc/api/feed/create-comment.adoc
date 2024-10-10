@@ -1,0 +1,13 @@
+[[create-comment]]
+=== 댓글 생성 API
+
+==== HTTP Request
+
+include::{snippets}/create-comment/http-request.adoc[]
+include::{snippets}/create-comment/request-cookies.adoc[]
+include::{snippets}/create-comment/path-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/create-comment/http-response.adoc[]
+include::{snippets}/create-comment/response-fields.adoc[]

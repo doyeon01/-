@@ -1,0 +1,12 @@
+[[get-nearby-cluster-center]]
+=== 좌표 기반 가까운 피드 검색
+
+==== HTTP Request
+
+include::{snippets}/get-nearby-cluster-center/http-request.adoc[]
+include::{snippets}/get-nearby-cluster-center/query-parameters.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-nearby-cluster-center/http-response.adoc[]
+include::{snippets}/get-nearby-cluster-center/response-fields.adoc[]
