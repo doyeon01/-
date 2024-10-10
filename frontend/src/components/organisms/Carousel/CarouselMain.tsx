@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import img1 from '../../../assets/statics/경주.jpeg';
-import img2 from '../../../assets/statics/부산.png';
-import img3 from '../../../assets/statics/부천 아트벙커.png';
-import img4 from '../../../assets/statics/서울.jpeg';
-import img5 from '../../../assets/statics/충남태안.png';
-import img6 from '../../../assets/statics/평창 무이 예술관.png';
-import img7 from '../../../assets/statics/홍천.png';
+import img1 from '../../../assets/statics/경주.webp';
+import img2 from '../../../assets/statics/부산.webp';
+import img3 from '../../../assets/statics/부천아트벙커.webp';
+import img4 from '../../../assets/statics/서울.webp';
+import img5 from '../../../assets/statics/충남태안.webp';
+import img6 from '../../../assets/statics/평창무이예술관.webp';
+import img7 from '../../../assets/statics/홍천.webp';
 import {PlayIcon,PauseIcon,ArrowLeftIcon,ArrowRightIcon} from '../../../assets/icons/svg'
 
 interface TravelItem {

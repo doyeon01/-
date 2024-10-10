@@ -14,6 +14,7 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
   const { isFollowed, toggleFollow, loading, setIsFollowed } = useFollow();
   const navigate = useNavigate(); 
   useEffect(() => {
+
     const fetchData = async () => {
       try {
         const response = await getUserSearch(keyword);
@@ -30,7 +31,7 @@ const CardSetSearchUser: React.FC<CardSetSearchUserProps> = ({ keyword }) => {
       }
     };
     fetchData();
-  }, [keyword]);
+  }, []);
 
   const handleUserClick = (userId: number) => {
     navigate(`/your/${userId}`);
