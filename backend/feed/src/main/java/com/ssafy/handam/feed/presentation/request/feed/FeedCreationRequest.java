@@ -7,7 +7,7 @@ import lombok.Builder;
 
 @Builder
 public record FeedCreationRequest(
-        Long totalPlanId,
+        String totalPlanId,
         String placeName,
         String title,
         String content,
@@ -20,7 +20,7 @@ public record FeedCreationRequest(
 ) {
     public static FeedCreationServiceRequest toServiceRequest(FeedCreationRequest request) {
         return FeedCreationServiceRequest.builder()
-                .totalPlanId(request.totalPlanId())
+                .totalPlanId(Long.parseLong(request.totalPlanId()))
                 .placeName(request.placeName())
                 .title(request.title())
                 .content(request.content())
