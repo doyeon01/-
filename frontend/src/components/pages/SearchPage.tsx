@@ -4,6 +4,7 @@ import CardSetSearchPlace from '../../components/molecules/Card/CardSetSearchPla
 import ModalFeedDetail from '../../components/organisms/Modal/ModalFeedDetail';
 import { postFeedRecommend } from '../../services/api/FeedService';
 import { FeedsType } from '../../model/FeedType';
+import { UserIconMini } from '../../assets/icons/svg';
 
 export const SearchPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -138,11 +139,14 @@ export const SearchPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
           {recommendedFeeds.map((recommendedFeed) => (
             <div key={recommendedFeed.id} className="relative group" onClick={() => handleItemClick(recommendedFeed.id)}>
+              {recommendedFeed.imageUrl ? (
               <img
                 src={recommendedFeed.imageUrl}
                 alt={recommendedFeed.title}
                 className="w-full h-full object-cover"
-              />
+              />) : (
+                  <UserIconMini />
+                )}
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300">
                 <div className="absolute bottom-2 left-2 flex items-center space-x-2 text-white opacity-0 group-hover:opacity-100">
                   <img
