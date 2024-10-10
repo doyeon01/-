@@ -156,7 +156,7 @@ public class FeedService {
 
     public FeedLikeResponse unlikeFeed(Long feedId, Long userId) {
         int likeCount = feedDomainService.unlikeFeed(feedId, userId);
-//        updateLikeCountInElasticsearch(feedId, likeCount);
+        updateLikeCountInElasticsearch(feedId, likeCount);
         return FeedLikeResponse.of(feedId, false, likeCount);
     }
 

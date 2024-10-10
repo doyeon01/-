@@ -2,11 +2,12 @@ package com.ssafy.handam.feed.presentation.request.feed;
 
 import com.ssafy.handam.feed.application.dto.request.feed.FeedCreationServiceRequest;
 import com.ssafy.handam.feed.domain.PlaceType;
+import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
 
 @Builder
 public record FeedCreationRequest(
-        Long totalPlanId,
+        @NotNull Long totalPlanId,
         String placeName,
         String title,
         String content,
