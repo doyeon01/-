@@ -5,7 +5,7 @@ import { FeedClusterType } from '../../model/SearchingFeedType';
 
 export interface Props {
     isSearch:Boolean
-    clusters?: FeedClusterType[]|null
+    clusters?: FeedClusterType[]
     index?: number
 }
 
