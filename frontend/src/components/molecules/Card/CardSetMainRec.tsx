@@ -16,7 +16,7 @@ const CardSetMainRec: React.FC<CardSetMainRecProps> = ({ page }) => {
   useEffect(() => {
     const fetchRecommendedFeeds = async () => {
       try {
-        const response = await postFeedRecommend(page, 5);
+        const response = await postFeedRecommend(page, 6);
         console.log('메인페이지 리스폰:');
         console.log(response.data);
         
