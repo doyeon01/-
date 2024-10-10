@@ -139,21 +139,22 @@ export const SearchPage: React.FC = () => {
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
           {recommendedFeeds.map((recommendedFeed) => (
             <div key={recommendedFeed.id} className="relative group" onClick={() => handleItemClick(recommendedFeed.id)}>
-              {recommendedFeed.imageUrl ? (
               <img
                 src={recommendedFeed.imageUrl}
                 alt={recommendedFeed.title}
                 className="w-full h-full object-cover"
-              />) : (
-                  <UserIconMini />
-                )}
+              />
               <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-50 transition duration-300">
                 <div className="absolute bottom-2 left-2 flex items-center space-x-2 text-white opacity-0 group-hover:opacity-100">
+                {recommendedFeed.userProfileImageUrl ? (
                   <img
                     src={recommendedFeed.userProfileImageUrl}
                     alt={recommendedFeed.nickName}
                     className="w-8 h-8 rounded-full object-cover"
-                  />
+                  />)
+                  : (
+                  <UserIconMini />
+                )}
                   <p className="text-lg font-bold">{recommendedFeed.nickName}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100">
