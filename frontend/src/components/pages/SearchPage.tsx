@@ -34,7 +34,7 @@ export const SearchPage: React.FC = () => {
       }
     };
     fetchRecommendedFeeds();
-  }, [ page]);
+  }, [page]);
 
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -144,7 +144,7 @@ export const SearchPage: React.FC = () => {
                   <p className="text-lg font-bold">{recommendedFeed.nickName}</p>
                 </div>
                 <div className="absolute inset-0 flex items-center justify-center text-white opacity-0 group-hover:opacity-100">
-                  <p className="text-2xl">❤️</p>
+                  <p className="text-2xl">{recommendedFeed.title}</p>
                 </div>
               </div>
             </div>
