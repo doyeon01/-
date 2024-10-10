@@ -23,8 +23,9 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
 
     private final JwtUtil jwtUtil;
     private final UserService userService;
+
     @Value("${oauth2.success-redirect-url}")
-    private String surveyRedirectUrl;
+    private String successRedirectUrl;
 
 //    @Value("${oauth2.main-redirect-url}")
 //    private String mainRedirectUrl;
@@ -45,7 +46,7 @@ public class OAuth2LoginSuccessHandler extends SimpleUrlAuthenticationSuccessHan
         CookieUtil.addTokenToCookie(response, token);
 
 //        User user = userService.getUserById(userId);
-        response.sendRedirect(surveyRedirectUrl);
+        response.sendRedirect(successRedirectUrl);
 //        System.out.println(user.getTravelStyl1()+user.getName());
 //        if (user.getTravelStyl1() == null || user.getTravelStyl1().isEmpty()) {
 //            response.sendRedirect(surveyRedirectUrl);
