@@ -148,7 +148,7 @@ public class FeedDomainService {
         int numRandom = (int) (pageSize * randomRatio);
 
 
-        int offset = (page - 1) * pageSize;
+        int offset = page * pageSize;
 
         List<FeedPreviewDto> resultFeeds = new ArrayList<>();
         Set<Long> selectedFeedIds = new HashSet<>(); // 중복 체크를 위한 Set
