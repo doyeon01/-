@@ -31,14 +31,15 @@ const App: React.FC = () => {
           <Route path="/plan" element={<PlanPage />} />
           <Route path="/companion" element={<CompanionPage />} />
           <Route path="/my" element={<MyPage />} />
-          <Route path="/your" element={<YourPage />} />
+          <Route path="/your/:targetId" element={<YourPage />} />
           <Route path="/schedule" element={<ScheduleDetail />} />
           <Route path="/poca" element={<PocaPage />} />
         </Routes>
       </div>
       
+      {location.pathname !== '/' && location.pathname !== '/survey' && <ButtonChat />}
 
-      <ButtonChat/>
+     
     </>
   );
 };

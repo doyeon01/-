@@ -1,0 +1,11 @@
+[[get-feed-detail]]
+=== 피드 상세 조회 API
+
+==== HTTP Request
+
+include::{snippets}/get-feed-detail/http-request.adoc[]
+
+==== HTTP Response
+
+include::{snippets}/get-feed-detail/http-response.adoc[]
+include::{snippets}/get-feed-detail/response-fields.adoc[]

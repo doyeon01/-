@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: plan
+  datasource:
+    url: jdbc:mysql://j11c205a.p.ssafy.io:3307/plan_db
+    username: handam
+    password: ssafy
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jwt:
+    secret: ${SPRING_JWT_SECRET:saaaaaaaanggggggmiiiiiinnnnnnnnnninininiinininini}
+  jpa:
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL8Dialect
+
+server:
+  port: 8082

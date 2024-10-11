@@ -1,6 +1,23 @@
-import React from 'react';
+import React, { useState } from 'react';
+// import { createArticles } from '../../../services/api/AccompanyBoardAPI';
 
 export const ModalCompanionWrite: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const [newTitle,setNewTitle] = useState<string>('')
+  const [newContent,setNewContent] = useState<string>('')
+
+  const handleWrite=(()=>{
+    const data = {
+      userId : 1,
+      scheduleId : 1,
+      title : newTitle,
+      description : newContent
+    }
+    console.log(data);
+    // createArticles(data)
+  })
+
+
+  
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
       <div className="bg-[#F4F4EE] rounded-lg shadow-lg w-[800px] h-[650px] p-6 relative">
@@ -20,7 +37,7 @@ export const ModalCompanionWrite: React.FC<{ onClose: () => void }> = ({ onClose
         {/* 작성하기 버튼 */}
         <button 
           className="absolute top-5 right-4 bg-[#707C60] text-white py-2 px-4 rounded-md hover:bg-[#5d633f]"
-          onClick={onClose} 
+          onClick={handleWrite} 
         >
           작성하기
         </button>
@@ -29,12 +46,14 @@ export const ModalCompanionWrite: React.FC<{ onClose: () => void }> = ({ onClose
         <input 
           type="text" 
           placeholder="제목을 입력해주세요." 
+          onChange={(e) => setNewTitle(e.target.value)}
           className="w-full border rounded-md p-2 mb-6 mt-10 focus:outline-none focus:ring-2 focus:ring-gray-400"
         />
         
         {/* 내용 입력란 */}
         <textarea 
           placeholder="내용을 입력해주세요." 
+          onChange={(e) => setNewContent(e.target.value)}
           className="w-full h-[400px] border rounded-md p-2 mb-4 focus:outline-none focus:ring-2 focus:ring-gray-400 resize-none"
         />
       </div>

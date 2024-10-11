@@ -1,0 +1,30 @@
+ifndef::snippets[]
+:snippets: ../../build/generated-snippets
+
+endif::[]
+
+= 여행한담 Rest API 문서
+[[place-detail]]
+:doctype: book
+:icons: font
+:source-highlighter: highlightjs
+:toc: left
+:toclevels: 2
+:sectlinks:
+
+== 피드 API
+
+include::api/feed/recommended-feeds-for-user.adoc[]
+include::api/feed/get-feeds-by-filter.adoc[]
+include::api/feed/get-feed-detail.adoc[]
+include::api/feed/create-feed.adoc[]
+include::api/feed/like-feed.adoc[]
+include::api/feed/unlike-feed.adoc[]
+include::api/feed/get-liked-feeds-by-user.adoc[]
+include::api/feed/get-created-feeds-by-user.adoc[]
+include::api/feed/create-comment.adoc[]
+include::api/feed/get-comments.adoc[]
+include::api/feed/get-feed-cluster.adoc[]
+include::api/feed/get-feed-cluster-refresh.adoc[]
+include::api/feed/get-nearby-cluster-center.adoc[]
+include::api/feed/get-feeds-image-urls.adoc[]

@@ -1,0 +1,110 @@
+spring:
+  application:
+    name: SCG
+
+  jwt:
+    secret: ${SPRING_JWT_SECRET}
+  cloud:
+    gateway:
+      routes:
+        - id: user-login-signup
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+              - Path=/login,/oauth2/**
+
+        - id: user
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/api/v1/users/**
+
+        - id: user-docs
+          uri: http://j11c205.p.ssafy.io:8081
+          predicates:
+            - Path=/users/docs/**
+          filters:
+            - RewritePath=/user/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: feed
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/api/v1/feeds/**
+
+        - id: feed-docs
+          uri: http://j11c205a.p.ssafy.io:8080
+          predicates:
+            - Path=/feeds/docs/**
+          filters:
+            - RewritePath=/feeds/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: accompanyboard
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/accompanyboards/**
+
+        - id: accompanyboard-docs
+          uri: http://j11c205.p.ssafy.io:8082
+          predicates:
+            - Path=/accompanyboards/docs/**
+          filters:
+            - RewritePath=/accompanyboards/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: plan
+          uri: http://j11c205a.p.ssafy.io:8082
+          predicates:
+            - Path=/api/v1/plans/**
+
+
+        - id: chat
+          uri: http://j11c205.p.ssafy.io:8083
+          predicates:
+            - Path=/api/v1/chat/**
+
+        - id: chat-websocket
+          uri: http://j11c205.p.ssafy.io:8083
+          predicates:
+            - Path=/chat-websocket/**
+
+        - id: chat-docs
+          uri: http://j11c205.p.ssafy.io:8083
+          predicates:
+            - Path=/chat/docs/**
+          filters:
+            - RewritePath=/chat/docs/(?<remaining>.*),/docs/${remaining}
+
+        - id: photocard
+          uri: http://j11c205.p.ssafy.io:8084
+          predicates:
+            - Path=/api/v1/photocards/**
+
+        - id: photocard-docs
+          uri: http://j11c205.p.ssafy.io:8084
+          predicates:
+            - Path=/photocards/docs/**
+          filters:
+            - RewritePath=/photocards/docs/(?<remaining>.*),/docs/${remaining}
+  data:
+    redis:
+      host: j11c205a.p.ssafy.io
+      port: 6379
+
+logging:
+  level:
+    org.springframework.security: DEBUG
+    com.ssafy.handam.scg.filters.LoggingGlobalFilter: DEBUG
+
+frontend:
+  servers:
+    - "http://localhost:5173"
+    - "https://j11c205.p.ssafy.io"
+
+server:
+  port: 8080
+
+management:
+  endpoint:
+    gateway:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: gateway
