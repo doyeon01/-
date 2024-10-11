@@ -55,7 +55,7 @@
 | **Language**  |    JavaScript(ES6+), TypeScript        |            Java17                         |          python          |
 | **IDE**       |       Visual Studio Code             |             IntelliJ                        |        Jupyter Lab       |
 | **Framework** |         React, Vite                   | Spring Boot, Fast API, Spark | Pytorch, fastAPI               |
-| **Library**   |  |                                          |  transformers, diffusers, boto |   
+| **Library**   | intersection-observer, daum-postcode, sweetalert2, tailwind, storybook    ||  transformers, diffusers, boto |   
 
 | DB           |               CI/CD              |        Tools         |
 | :----------- |  :-----------------------------: | :------------------: |
