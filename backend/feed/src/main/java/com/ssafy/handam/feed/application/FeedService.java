@@ -245,7 +245,7 @@ public class FeedService {
         int distance = nearByClusterCenterServiceReuqest.distance();
         String accessToken = nearByClusterCenterServiceReuqest.token();
 
-        Pageable pageable = PageRequest.of(page, size);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
 //        String distanceString = distance + "km";
         String distanceString = 5 + "km";
         Page<FeedDocument> nearbyClusterCenter = feedDomainService.getNearbyClusterCenter(latitude, longitude,
