@@ -1,6 +1,6 @@
-# 🍳 에그 인 헬스(Egg In Health) 🏃‍♂️
+# 🍳 여행한담
 
-삼성 청년 소프트웨어 아카데미 11기 공통 프로젝트
+삼성 청년 소프트웨어 아카데미 11기 특화 프로젝트
 
 ## 📚 목차
 
@@ -43,14 +43,14 @@
 
 |               | Front                                   | Back                                     | AI                       |
 | ------------- | --------------------------------------- | ---------------------------------------- | ------------------------ |
-| **Language**  |            |                                |             |
-| **IDE**       |                    |                                 |                   |
-| **Framework** |                            |  |                   |
+| **Language**  |    JavaScript(ES6+), TypeScript        |            Java17                    |             |
+| **IDE**       |       Visual Studio Code             |             IntelliJ                    |                   |
+| **Framework** |         React, Vite                   | Spring Boot, Fast API, Spark |                   |
 | **Library**   |  |                                          | |
 
-| DB           |  WebRTC  |              CI/CD              |        Tools         |
-| :----------- | :------: | :-----------------------------: | :------------------: |
-|  |  |  |  |
+| DB           |               CI/CD              |        Tools         |
+| :----------- |  :-----------------------------: | :------------------: |
+| MySQL, Hadoop, Redis, Elasticsearch | Jenkins, Docker, Dockerhub, Mattermost | GitLab, Jira, Notion, RestDoc |
 
 ### ERD
 
