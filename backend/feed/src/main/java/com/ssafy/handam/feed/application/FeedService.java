@@ -36,21 +36,24 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.math3.ml.clustering.Cluster;
 import org.apache.commons.math3.ml.clustering.DBSCANClusterer;
 import org.apache.commons.math3.ml.clustering.DoublePoint;
-import org.springframework.dao.OptimisticLockingFailureException;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.retry.annotation.Backoff;
 import org.springframework.retry.annotation.Retryable;
 import org.springframework.stereotype.Service;
@@ -144,8 +147,8 @@ public class FeedService {
     }
 
     @Retryable(
-        maxAttempts = 30,
-        backoff = @Backoff(delay = 1000)
+            maxAttempts = 30,
+            backoff = @Backoff(delay = 1000)
     )
 //    @Transactional
     public FeedLikeResponse likeFeed(Long feedId, Long userId) {
@@ -242,9 +245,9 @@ public class FeedService {
         int distance = nearByClusterCenterServiceReuqest.distance();
         String accessToken = nearByClusterCenterServiceReuqest.token();
 
-        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "likeCount"));
+        Pageable pageable = PageRequest.of(page, size);
 //        String distanceString = distance + "km";
-                String distanceString = 5 + "km";
+        String distanceString = 5 + "km";
         Page<FeedDocument> nearbyClusterCenter = feedDomainService.getNearbyClusterCenter(latitude, longitude,
                 distanceString, pageable);
         UserDto userDto = userApiClient.getUserByToken(accessToken);
@@ -397,7 +400,8 @@ public class FeedService {
         int numRandom = (int) (pageSize * randomRatio);
 
         // Redis에서 피드 ID들을 가져옴
-        List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page, numRecommended);
+        List<String> recommendedFeedIds = getFeedIdsFromRedis("user:" + userId + ":recommended_feeds", page,
+                numRecommended);
         List<String> topLikedFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", page, numTopLiked);
         List<String> trendingFeedIds = getFeedIdsFromRedis("user:" + userId + ":trending_feeds", page, numTrending);
         List<String> randomFeedIds = getFeedIdsFromRedis("user:" + userId + ":random_feeds", page, numRandom);
@@ -426,7 +430,8 @@ public class FeedService {
         // 중복되지 않게 랜덤 피드에서 추가로 가져오기
 
         while (feedsToFill > 0) {
-            List<String> additionalTopLikeFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds", topLikePage, feedsToFill);
+            List<String> additionalTopLikeFeedIds = getFeedIdsFromRedis("user:" + userId + ":top_liked_feeds",
+                    topLikePage, feedsToFill);
             List<Long> additionalTopLikeFeedIdsLong = convertStringIdsToLong(additionalTopLikeFeedIds);
 
             // 중복되지 않는 피드를 추가
@@ -447,7 +452,7 @@ public class FeedService {
         }
 
         // feedDomainService로 feedId들을 넘겨서 추천 피드를 가져옴
-        return feedDomainService.getRecommendedFeeds(uniqueFeedIds,page);
+        return feedDomainService.getRecommendedFeeds(uniqueFeedIds, page);
     }
 
     // 중복되지 않는 피드들을 추가하는 헬퍼 메서드
