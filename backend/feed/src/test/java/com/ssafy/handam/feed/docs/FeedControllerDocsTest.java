@@ -315,7 +315,7 @@ class FeedControllerDocsTest extends RestDocsSupport {
     @Test
     void createFeedTest() throws Exception {
         FeedCreationRequest request = FeedCreationRequest.builder()
-                .totalPlanId(1L)
+                .totalPlanId("1")
                 .userId(1L)
                 .title("Test Title")
                 .content("Test Content")
