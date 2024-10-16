@@ -16,6 +16,8 @@ spring:
           uri: http://j11c205.p.ssafy.io:8081
           predicates:
             - Path=/api/v1/users/**
+          filters:
+            - name: JwtAuthFilter
 
         - id: user-docs
           uri: http://j11c205.p.ssafy.io:8081
@@ -23,6 +25,7 @@ spring:
             - Path=/users/docs/**
           filters:
             - RewritePath=/user/docs/(?<remaining>.*),/docs/${remaining}
+            - name: JwtAuthFilter
 
         - id: feed
           uri: http://j11c205a.p.ssafy.io:8080
