@@ -87,7 +87,7 @@ spring:
             - Path=/api/v1/photocards/**
           filters:
             - name: JwtAuthFilter
-              
+
         - id: photocard-docs
           uri: http://j11c205.p.ssafy.io:8084
           predicates:
